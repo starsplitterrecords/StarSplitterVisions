@@ -401,6 +401,25 @@ a.primary-button {
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
 
+.admin-limitations {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.admin-limitations li {
+  border: 1px solid var(--border-soft);
+  border-radius: 999px;
+  padding: 0.28rem 0.6rem;
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
 .admin-card {
   padding: 0.95rem;
   display: grid;
