@@ -49,3 +49,10 @@ p { margin: 0 0 1rem; color: #c9ccf8; }
 .visual-fallback { width: 100%; aspect-ratio: 16 / 9; display: grid; place-items: center; padding: 1rem; background: linear-gradient(145deg, rgba(59,73,128,.32), rgba(16,22,44,.9)); color: #eef0ff; font-weight: 700; text-align: center; }
 .release-card h3,.series-card h3 { margin-bottom: .35rem; }
 @media (max-width: 767px) { .rail-row { grid-auto-columns: minmax(230px, 78vw); } }
+.release-card-compact .release-image,
+.release-grid-compact .visual-fallback { aspect-ratio: 4 / 3; }
+.release-grid-compact .release-detail { display: none; }
+.world-card { border: 1px solid rgba(184,194,255,.2); border-radius: 14px; background: linear-gradient(180deg, rgba(24,31,53,.95), rgba(12,17,30,.95)); padding: 1rem; display: grid; gap: 1rem; }
+.world-meta { margin: 0; padding-left: 1.15rem; display: grid; gap: .45rem; color: #d6dcff; }
+.related-series { list-style: none; margin: .4rem 0 0; padding: 0; display: grid; gap: .45rem; }
+.related-series a { color: #dbe0ff; text-decoration: none; border-bottom: 1px solid rgba(219,224,255,.3); width: fit-content; }
