@@ -1,7 +1,25 @@
 import { useEffect, useMemo, useState } from 'react';
 
+function parseDate(value) {
+  if (!value) {
+    return null;
+  }
+
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) {
+    return null;
+  }
+
+  return parsed;
+}
+
 function formatDate(value) {
-  return new Date(value).toLocaleDateString(undefined, {
+  const parsed = parseDate(value);
+  if (!parsed) {
+    return null;
+  }
+
+  return parsed.toLocaleDateString(undefined, {
     year: 'numeric',
     month: 'short',
     day: 'numeric'
@@ -35,30 +53,61 @@ function SearchField({ query, onChange }) {
   );
 }
 
-function ReleaseCard({ release }) {
+function ReleaseCard({ release, seriesBySlug }) {
+  const imageSrc = release.coverImage || release.heroImage || release.image;
+  const releaseDate = formatDate(release.releaseDate);
+  const seriesTitle = seriesBySlug.get(release.seriesSlug)?.title || release.seriesSlug;
+
   return (
     <li className="release-card">
-      <a href={`/releases/${release.id}`}>
-        <img src={release.coverImage || release.image} alt="" className="release-image" />
-        <div className="release-meta">
-          <p className="release-date">{formatDate(release.releaseDate)}</p>
-          <h3>{release.title}</h3>
+      {release.id ? (
+        <a href={`/releases/${release.id}`}>
+          {imageSrc ? (
+            <img src={imageSrc} alt={`${release.title} cover`} className="release-image" />
+          ) : (
+            <div className="visual-fallback" aria-hidden="true">
+              <span>{release.title}</span>
+            </div>
+          )}
+          <div className="release-meta">
+            {seriesTitle ? <p className="release-eyebrow">{seriesTitle}</p> : null}
+            <h3>{release.title}</h3>
+            {release.issueNumber !== undefined ? <p className="release-detail">Issue #{release.issueNumber}</p> : null}
+            {release.description ? <p className="release-detail">{release.description}</p> : null}
+            {releaseDate ? <p className="release-date">{releaseDate}</p> : null}
+          </div>
+        </a>
+      ) : (
+        <div>
+          <div className="visual-fallback" aria-hidden="true"><span>{release.title}</span></div>
+          <div className="release-meta"><h3>{release.title}</h3></div>
         </div>
-      </a>
+      )}
     </li>
   );
 }
 
 function SeriesCard({ item }) {
+  const imageSrc = item.heroImage || item.image;
+  const supportText = item.tagline || item.shortDescription || item.longDescription;
+
   return (
     <li className="series-card">
-      <a href={`/series/${item.slug}`}>
-        <img src={item.heroImage} alt="" className="release-image" />
-        <div className="release-meta">
-          <h3>{item.title}</h3>
-          <p>{item.tagline}</p>
-        </div>
-      </a>
+      {item.slug ? (
+        <a href={`/series/${item.slug}`}>
+          {imageSrc ? (
+            <img src={imageSrc} alt={`${item.title} series art`} className="release-image" />
+          ) : (
+            <div className="visual-fallback" aria-hidden="true">
+              <span>{item.logoText || item.title}</span>
+            </div>
+          )}
+          <div className="release-meta">
+            <h3>{item.title}</h3>
+            {supportText ? <p className="release-detail">{supportText}</p> : null}
+          </div>
+        </a>
+      ) : null}
     </li>
   );
 }
@@ -75,75 +124,88 @@ function Rail({ title, children }) {
 }
 
 function HomePage({ series, releases, continueRelease }) {
-  const [query, setQuery] = useState('');
+  const seriesBySlug = useMemo(() => new Map(series.map((item) => [item.slug, item])), [series]);
 
-  const now = new Date();
-  const publishedReleases = useMemo(
-    () => releases.filter((item) => new Date(item.releaseDate) <= now),
-    [releases, now]
-  );
+  const visibleReleases = useMemo(() => {
+    const now = new Date();
 
-  const latestReleases = useMemo(
-    () => [...publishedReleases].sort((a, b) => new Date(b.releaseDate) - new Date(a.releaseDate)).slice(0, 6),
-    [publishedReleases]
-  );
+    return releases
+      .map((item, index) => ({ item, index }))
+      .filter(({ item }) => {
+        if (item.status === 'draft') {
+          return false;
+        }
 
-  const filteredSeries = useMemo(() => {
-    if (!query.trim()) {
-      return series;
-    }
-    return series.filter((item) => item.title.toLowerCase().includes(query.toLowerCase()));
-  }, [query, series]);
+        if (item.status === 'scheduled') {
+          const releaseDate = parseDate(item.releaseDate);
+          if (releaseDate && releaseDate > now) {
+            return false;
+          }
+        }
 
-  const filteredReleases = useMemo(() => {
-    if (!query.trim()) {
-      return latestReleases;
-    }
-    return latestReleases.filter((item) => item.title.toLowerCase().includes(query.toLowerCase()));
-  }, [latestReleases, query]);
+        return true;
+      })
+      .sort((a, b) => {
+        const aDate = parseDate(a.item.releaseDate);
+        const bDate = parseDate(b.item.releaseDate);
+
+        if (aDate && bDate) {
+          return bDate - aDate;
+        }
+
+        if (aDate && !bDate) {
+          return -1;
+        }
+
+        if (!aDate && bDate) {
+          return 1;
+        }
+
+        return a.index - b.index;
+      })
+      .map(({ item }) => item);
+  }, [releases]);
 
   return (
     <main className="page page-home">
-      <header>
+      <header className="home-header">
         <h1>Star Splitter Visions</h1>
-        <p>Original series lineup</p>
+        <p>Browse new releases and cinematic worlds across the Star Splitter slate.</p>
       </header>
-
-      <SearchField query={query} onChange={setQuery} />
 
       {continueRelease && (
         <section className="continue-module">
           <p className="release-date">Continue Reading</p>
           <a href={`/read/${continueRelease.id}`}>
-            <img src={continueRelease.coverImage || continueRelease.image} alt="" className="release-image" />
+            <img src={continueRelease.coverImage || continueRelease.image} alt={`${continueRelease.title} cover`} className="release-image" />
             <h2>{continueRelease.title}</h2>
-            <p>{formatDate(continueRelease.releaseDate)}</p>
+            {formatDate(continueRelease.releaseDate) ? <p>{formatDate(continueRelease.releaseDate)}</p> : null}
           </a>
         </section>
       )}
 
       <Rail title="Latest Releases">
-        {filteredReleases.length === 0 ? (
+        {visibleReleases.length === 0 ? (
           <div className="empty-rail">
-            <p>No matching releases yet.</p>
+            <p>No releases available yet.</p>
           </div>
         ) : (
-          <ul className="release-grid">
-            {filteredReleases.map((release) => (
-              <ReleaseCard key={release.id} release={release} />
+          <ul className="rail-row">
+            {visibleReleases.map((release) => (
+              <ReleaseCard key={release.id} release={release} seriesBySlug={seriesBySlug} />
             ))}
           </ul>
         )}
       </Rail>
 
       <Rail title="Series">
-        {filteredSeries.length === 0 ? (
+        {series.length === 0 ? (
           <div className="empty-rail">
-            <p>No matching series found.</p>
+            <p>No series available yet.</p>
           </div>
         ) : (
-          <ul className="release-grid">
-            {filteredSeries.map((item) => (
+          <ul className="rail-row">
+            {series.map((item) => (
               <SeriesCard key={item.slug} item={item} />
             ))}
           </ul>
@@ -204,7 +266,7 @@ function SeriesPage({ series, releases }) {
         {latestIssues.length === 0 ? (
           <div className="empty-rail"><p>No released issues match yet.</p></div>
         ) : (
-          <ul className="release-grid">{latestIssues.map((release) => <ReleaseCard key={release.id} release={release} />)}</ul>
+          <ul className="release-grid">{latestIssues.map((release) => <ReleaseCard key={release.id} release={release} seriesBySlug={new Map()} />)}</ul>
         )}
       </Rail>
 
@@ -212,7 +274,7 @@ function SeriesPage({ series, releases }) {
         {archive.length === 0 ? (
           <div className="empty-rail"><p>Archive expands as new issues arrive.</p></div>
         ) : (
-          <ul className="release-grid">{archive.map((release) => <ReleaseCard key={release.id} release={release} />)}</ul>
+          <ul className="release-grid">{archive.map((release) => <ReleaseCard key={release.id} release={release} seriesBySlug={new Map()} />)}</ul>
         )}
       </Rail>
 
@@ -222,141 +284,96 @@ function SeriesPage({ series, releases }) {
   );
 }
 
-function ReleasePage({ release, series }) { return <main className="page"><p className="eyebrow"><a href={`/series/${series.slug}`}>← Back to {series.title}</a></p><h1>{release.title}</h1><p>Issue #{release.issueNumber}</p><p>{formatDate(release.releaseDate)}</p><img src={release.coverImage || release.image} alt="" className="release-image" /><p>{release.description}</p><p><a href={`/read/${release.id}`} className="primary-button">{release.ctaLabel || 'Read'}</a></p></main>; }
-
 function ReaderPage({ release, pages }) {
   const [index, setIndex] = useState(0);
-  const [hasImageError, setHasImageError] = useState(false);
 
   useEffect(() => {
     setIndex(0);
   }, [release.id]);
 
-  useEffect(() => {
-    setHasImageError(false);
-  }, [index, release.id]);
-
-  useEffect(() => {
-    localStorage.setItem('ssv:last-read-release', release.id);
-  }, [release.id]);
-
-  const releasePages = useMemo(
-    () =>
-      pages
-        .filter((page) => {
-          if (page.releaseSlug !== release.id) return false;
-          if (!page.status || page.status === 'released') return true;
-          if (page.status === 'draft') return false;
-          if (page.status === 'scheduled') {
-            if (!page.releaseDate) return false;
-            return new Date(page.releaseDate) <= new Date();
-          }
-          return false;
-        })
-        .sort((a, b) => {
-          const aNumber = Number.isFinite(a.pageNumber) ? a.pageNumber : Number.POSITIVE_INFINITY;
-          const bNumber = Number.isFinite(b.pageNumber) ? b.pageNumber : Number.POSITIVE_INFINITY;
-          return aNumber - bNumber;
-        }),
-    [pages, release.id]
-  );
-
-  const currentPage = releasePages[index];
-
-  if (releasePages.length === 0) {
-    return (
-      <main className="page">
-        <p className="eyebrow"><a href={`/releases/${release.id}`}>← Back to release</a></p>
-        <h1>{release.title}</h1>
-        <p>No released pages are available for this release yet.</p>
-      </main>
-    );
-  }
+  const page = pages[index];
 
   return (
     <main className="page page-reader">
       <p className="eyebrow"><a href={`/releases/${release.id}`}>← Back to release</a></p>
       <h1>{release.title}</h1>
-      <p className="reader-count">Page {index + 1} of {releasePages.length}</p>
-      <h2>{currentPage.title || `Page ${currentPage.pageNumber || index + 1}`}</h2>
-      <p>{currentPage.caption}</p>
+      <p className="reader-count">Page {index + 1} of {pages.length}</p>
       <div className="reader-image-frame">
-        {!currentPage.image || hasImageError ? (
-          <div className="reader-image-fallback">Page image unavailable.</div>
+        {page?.image ? (
+          <img src={page.image} alt={`${release.title} page ${index + 1}`} className="reader-image" />
         ) : (
-          <img
-            src={currentPage.image}
-            alt={currentPage.title || `Page ${index + 1}`}
-            className="reader-image"
-            onError={() => setHasImageError(true)}
-          />
+          <div className="reader-image-fallback">No page image available yet.</div>
         )}
       </div>
-      <p><button type="button" onClick={() => setIndex(index - 1)} disabled={index === 0}>Previous</button>{' '}<button type="button" onClick={() => setIndex(index + 1)} disabled={index === releasePages.length - 1}>Next</button></p>
+      <div className="reader-controls">
+        <button type="button" onClick={() => setIndex((value) => Math.max(0, value - 1))} disabled={index === 0}>Previous</button>
+        <button type="button" onClick={() => setIndex((value) => Math.min(pages.length - 1, value + 1))} disabled={index >= pages.length - 1}>Next</button>
+      </div>
     </main>
   );
 }
 
-function NotFound() { return <main className="page"><h1>Not found</h1><p>We couldn't find that page.</p><p><a href="/">Return home</a></p></main>; }
+function ReleasePage({ release, series, pages }) {
+  const releasePages = pages.filter((page) => page.releaseId === release.id);
+  return (
+    <main className="page page-release">
+      <p className="eyebrow"><a href={`/series/${series.slug}`}>← Back to {series.title}</a></p>
+      <header className="series-hero">
+        <img src={release.coverImage || release.image} alt="" className="series-hero-image" />
+        <div className="series-hero-content">
+          <p className="release-date">{formatDate(release.releaseDate)}</p>
+          <h1>{release.title}</h1>
+          <p>{release.description}</p>
+          {releasePages.length > 0 ? (
+            <a className="primary-button" href={`/read/${release.id}`}>{release.ctaLabel || 'Read now'}</a>
+          ) : null}
+        </div>
+      </header>
+    </main>
+  );
+}
 
 export default function App() {
-  const [series, setSeries] = useState([]);
-  const [releases, setReleases] = useState([]);
-  const [pages, setPages] = useState([]);
-  const [hasError, setHasError] = useState(false);
-  const [continueReleaseId, setContinueReleaseId] = useState('');
+  const [data, setData] = useState({ series: [], releases: [], pages: [] });
 
   useEffect(() => {
     Promise.all([
-      fetch('/content/series.json').then((response) => response.json()),
-      fetch('/content/releases.json').then((response) => response.json()),
-      fetch('/content/pages.json').then((response) => response.json())
-    ])
-      .then(([seriesData, releasesData, pagesData]) => {
-        setSeries(seriesData.series ?? []);
-        setReleases(releasesData.releases ?? []);
-        setPages(pagesData.pages ?? []);
-      })
-      .catch(() => {
-        setSeries([]); setReleases([]); setPages([]); setHasError(true);
+      fetch('/content/series.json').then((res) => res.json()),
+      fetch('/content/releases.json').then((res) => res.json()),
+      fetch('/content/pages.json').then((res) => res.json())
+    ]).then(([seriesData, releasesData, pagesData]) => {
+      setData({
+        series: seriesData.series || [],
+        releases: releasesData.releases || [],
+        pages: pagesData.pages || []
       });
-
-    setContinueReleaseId(localStorage.getItem('ssv:last-read-release') || '');
-    const onFocus = () => setContinueReleaseId(localStorage.getItem('ssv:last-read-release') || '');
-    window.addEventListener('focus', onFocus);
-    return () => window.removeEventListener('focus', onFocus);
+    });
   }, []);
 
   const path = window.location.pathname;
-  const seriesMatch = path.match(/^\/series\/([^/]+)$/);
-  const releaseMatch = path.match(/^\/releases\/([^/]+)$/);
-  const readMatch = path.match(/^\/read\/([^/]+)$/);
+  const releaseId = path.startsWith('/releases/') ? path.replace('/releases/', '') : null;
+  const seriesSlug = path.startsWith('/series/') ? path.replace('/series/', '') : null;
+  const readReleaseId = path.startsWith('/read/') ? path.replace('/read/', '') : null;
 
-  if (hasError) return <NotFound />;
-  if (path === '/') return <HomePage series={series} releases={releases} continueRelease={releases.find((r) => r.id === continueReleaseId)} />;
-  if (seriesMatch) {
-    const selectedSeries = series.find((item) => item.slug === seriesMatch[1]);
-    if (!selectedSeries) return <NotFound />;
-    return <SeriesPage series={selectedSeries} releases={releases} />;
+  const series = data.series.find((item) => item.slug === seriesSlug);
+  const release = data.releases.find((item) => item.id === releaseId || item.id === readReleaseId);
+  const continueRelease = data.releases
+    .filter((item) => new Date(item.releaseDate) <= new Date())
+    .sort((a, b) => new Date(b.releaseDate) - new Date(a.releaseDate))[0];
+
+  if (series && !release && !readReleaseId) {
+    return <SeriesPage series={series} releases={data.releases} />;
   }
-  if (releaseMatch) {
-    const selectedRelease = releases.find((item) => item.id === releaseMatch[1]);
-    if (!selectedRelease) return <NotFound />;
-    const parentSeries = series.find((item) => item.slug === selectedRelease.seriesSlug);
-    if (!parentSeries) return <NotFound />;
-    return <ReleasePage release={selectedRelease} series={parentSeries} />;
+
+  if (releaseId && release) {
+    const parentSeries = data.series.find((item) => item.slug === release.seriesSlug) || { slug: '', title: 'Series' };
+    return <ReleasePage release={release} series={parentSeries} pages={data.pages} />;
   }
-  if (readMatch) {
-    const selectedRelease = releases.find((item) => item.id === readMatch[1]);
-    if (!selectedRelease) {
-      return (
-        <main className="page">
-          <h1>Release not found.</h1>
-          <p><a href="/">Return home</a></p>
-        </main>
-      );
-    }
-    return <ReaderPage release={selectedRelease} pages={pages} />;
+
+  if (readReleaseId && release) {
+    const releasePages = data.pages.filter((page) => page.releaseId === release.id);
+    return <ReaderPage release={release} pages={releasePages} />;
   }
-  return <NotFound />;
+
+  return <HomePage series={data.series} releases={data.releases} continueRelease={continueRelease} />;
 }

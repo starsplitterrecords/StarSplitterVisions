@@ -40,3 +40,12 @@ p { margin: 0 0 1rem; color: #c9ccf8; }
   .series-hero-image { height: 100%; max-height: none; }
   .series-hero-content { padding: 1.75rem; }
 }
+
+.home-header { border: 1px solid rgba(195, 203, 255, 0.2); border-radius: 20px; padding: 1.4rem; background: linear-gradient(145deg, rgba(20,28,50,.86), rgba(9,13,24,.9)); box-shadow: 0 18px 44px rgba(0,0,0,.4); }
+.rail-row { list-style: none; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(250px, 320px); gap: 1rem; overflow-x: auto; padding: 0 0 .4rem; margin: 0; scroll-snap-type: x proximity; }
+.rail-row > li { scroll-snap-align: start; }
+.release-eyebrow { margin-bottom: .25rem; font-size: .8rem; color: #9ba7de; text-transform: uppercase; letter-spacing: .06em; }
+.release-detail { margin-bottom: .5rem; color: #c9ccf8; }
+.visual-fallback { width: 100%; aspect-ratio: 16 / 9; display: grid; place-items: center; padding: 1rem; background: linear-gradient(145deg, rgba(59,73,128,.32), rgba(16,22,44,.9)); color: #eef0ff; font-weight: 700; text-align: center; }
+.release-card h3,.series-card h3 { margin-bottom: .35rem; }
+@media (max-width: 767px) { .rail-row { grid-auto-columns: minmax(230px, 78vw); } }
