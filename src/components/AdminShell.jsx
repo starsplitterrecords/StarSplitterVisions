@@ -68,9 +68,16 @@ export default function AdminShell() {
         <p>
           This is a static/local helper only. Authentication is not implemented,
           saving is not implemented, no backend is connected, and it does not write
-          files or publish content.
+          files, connect to GitHub, or publish content.
         </p>
       </section>
+
+      <ul className="admin-limitations" aria-label="Current admin limitations">
+        <li>Authentication not implemented</li>
+        <li>Saving disabled</li>
+        <li>No backend connected</li>
+        <li>No file or GitHub writes</li>
+      </ul>
 
       <section className="admin-sections" aria-label="Admin content areas">
         {ADMIN_SECTIONS.map((section) => (
