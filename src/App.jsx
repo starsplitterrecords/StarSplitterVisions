@@ -222,21 +222,42 @@ function SeriesPage({ series, releases }) {
   );
 }
 
-function ReleasePage({ release, series }) { return <main className="page"><p className="eyebrow"><a href={`/series/${series.slug}`}>← Back to {series.title}</a></p><h1>{release.title}</h1><p>Issue #{release.issueNumber}</p><p>{formatDate(release.releaseDate)}</p><img src={release.coverImage || release.image} alt="" className="release-image" /><p>{release.description}</p><p><a href={`/read/${release.id}`}>Read</a></p><p>{release.ctaLabel}</p></main>; }
+function ReleasePage({ release, series }) { return <main className="page"><p className="eyebrow"><a href={`/series/${series.slug}`}>← Back to {series.title}</a></p><h1>{release.title}</h1><p>Issue #{release.issueNumber}</p><p>{formatDate(release.releaseDate)}</p><img src={release.coverImage || release.image} alt="" className="release-image" /><p>{release.description}</p><p><a href={`/read/${release.id}`} className="primary-button">{release.ctaLabel || 'Read'}</a></p></main>; }
 
 function ReaderPage({ release, pages }) {
   const [index, setIndex] = useState(0);
+  const [hasImageError, setHasImageError] = useState(false);
 
   useEffect(() => {
     setIndex(0);
   }, [release.id]);
 
   useEffect(() => {
+    setHasImageError(false);
+  }, [index, release.id]);
+
+  useEffect(() => {
     localStorage.setItem('ssv:last-read-release', release.id);
   }, [release.id]);
 
   const releasePages = useMemo(
-    () => pages.filter((page) => page.releaseSlug === release.id).sort((a, b) => a.pageNumber - b.pageNumber),
+    () =>
+      pages
+        .filter((page) => {
+          if (page.releaseSlug !== release.id) return false;
+          if (!page.status || page.status === 'released') return true;
+          if (page.status === 'draft') return false;
+          if (page.status === 'scheduled') {
+            if (!page.releaseDate) return false;
+            return new Date(page.releaseDate) <= new Date();
+          }
+          return false;
+        })
+        .sort((a, b) => {
+          const aNumber = Number.isFinite(a.pageNumber) ? a.pageNumber : Number.POSITIVE_INFINITY;
+          const bNumber = Number.isFinite(b.pageNumber) ? b.pageNumber : Number.POSITIVE_INFINITY;
+          return aNumber - bNumber;
+        }),
     [pages, release.id]
   );
 
@@ -247,18 +268,30 @@ function ReaderPage({ release, pages }) {
       <main className="page">
         <p className="eyebrow"><a href={`/releases/${release.id}`}>← Back to release</a></p>
         <h1>{release.title}</h1>
-        <p>No pages available yet.</p>
+        <p>No released pages are available for this release yet.</p>
       </main>
     );
   }
 
   return (
-    <main className="page">
+    <main className="page page-reader">
       <p className="eyebrow"><a href={`/releases/${release.id}`}>← Back to release</a></p>
       <h1>{release.title}</h1>
-      <h2>Page {currentPage.pageNumber}: {currentPage.title}</h2>
+      <p className="reader-count">Page {index + 1} of {releasePages.length}</p>
+      <h2>{currentPage.title || `Page ${currentPage.pageNumber || index + 1}`}</h2>
       <p>{currentPage.caption}</p>
-      <img src={currentPage.image} alt={currentPage.title} className="release-image" />
+      <div className="reader-image-frame">
+        {!currentPage.image || hasImageError ? (
+          <div className="reader-image-fallback">Page image unavailable.</div>
+        ) : (
+          <img
+            src={currentPage.image}
+            alt={currentPage.title || `Page ${index + 1}`}
+            className="reader-image"
+            onError={() => setHasImageError(true)}
+          />
+        )}
+      </div>
       <p><button type="button" onClick={() => setIndex(index - 1)} disabled={index === 0}>Previous</button>{' '}<button type="button" onClick={() => setIndex(index + 1)} disabled={index === releasePages.length - 1}>Next</button></p>
     </main>
   );
@@ -315,7 +348,14 @@ export default function App() {
   }
   if (readMatch) {
     const selectedRelease = releases.find((item) => item.id === readMatch[1]);
-    if (!selectedRelease) return <NotFound />;
+    if (!selectedRelease) {
+      return (
+        <main className="page">
+          <h1>Release not found.</h1>
+          <p><a href="/">Return home</a></p>
+        </main>
+      );
+    }
     return <ReaderPage release={selectedRelease} pages={pages} />;
   }
   return <NotFound />;
