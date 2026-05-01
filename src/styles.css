@@ -353,3 +353,96 @@ a.primary-button {
 .release-card-compact .release-image,
 .release-grid-compact .visual-fallback { aspect-ratio: 4 / 3; }
 .release-grid-compact .release-detail { display: none; }
+
+.page-admin {
+  display: grid;
+  gap: 1rem;
+  max-width: 1080px;
+}
+
+.admin-header,
+.admin-banner,
+.admin-card,
+.admin-note {
+  border: 1px solid var(--border-soft);
+  border-radius: 14px;
+  background: linear-gradient(180deg, var(--bg-surface-2), var(--bg-surface));
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.26);
+}
+
+.admin-header,
+.admin-banner,
+.admin-note {
+  padding: 1rem 1.1rem;
+}
+
+.admin-header p:last-child,
+.admin-banner p:last-child,
+.admin-note p:last-child {
+  margin-bottom: 0;
+}
+
+.admin-banner {
+  border-color: rgba(163, 255, 18, 0.35);
+}
+
+.admin-banner-label {
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.35rem;
+}
+
+.admin-sections {
+  display: grid;
+  gap: 0.9rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.admin-card {
+  padding: 0.95rem;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.admin-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.admin-card h2 {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.admin-card p {
+  margin: 0;
+}
+
+.admin-status {
+  border: 1px solid var(--border-soft);
+  border-radius: 999px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+}
+
+.admin-action {
+  border: 1px dashed rgba(163, 255, 18, 0.2);
+  border-radius: 9px;
+  background: rgba(5, 7, 13, 0.35);
+  color: var(--text-muted);
+  padding: 0.5rem 0.65rem;
+  text-align: left;
+}
+
+.admin-action:disabled {
+  cursor: not-allowed;
+  opacity: 0.8;
+}
