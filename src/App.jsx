@@ -4,6 +4,7 @@ import MediaCard from './components/MediaCard';
 import ReleaseCard from './components/ReleaseCard';
 import SeriesHero from './components/SeriesHero';
 import ReaderShell from './components/ReaderShell';
+import AdminShell from './components/AdminShell';
 
 const LATEST_ISSUES_LIMIT = 4;
 const DEFAULT_SERIES_IDENTITY = {
@@ -121,6 +122,7 @@ export default function App() {
   const releaseId = path.startsWith('/releases/') ? path.replace('/releases/', '') : null;
   const seriesSlug = path.startsWith('/series/') ? path.replace('/series/', '') : null;
   const readReleaseId = path.startsWith('/read/') ? path.replace('/read/', '') : null;
+  if (path === '/admin') return <AdminShell />;
   const series = data.series.find((item) => item.slug === seriesSlug);
   const release = data.releases.find((item) => item.id === releaseId || item.id === readReleaseId);
   const continueRelease = data.releases.filter((item) => parseDate(item.releaseDate) && parseDate(item.releaseDate) <= new Date()).sort((a, b) => sortReleasesByNewest(a, b, 0, 0))[0];
