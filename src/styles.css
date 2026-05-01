@@ -93,3 +93,82 @@ p { margin: 0 0 1rem; color: #c9ccf8; }
   background: linear-gradient(135deg, color-mix(in srgb, var(--series-accent) 35%, transparent), color-mix(in srgb, var(--series-secondary) 45%, #0f172a));
 }
 .series-logo-text { font-size: .82rem; letter-spacing: .08em; text-transform: uppercase; margin-bottom: .45rem; }
+
+.page-reader {
+  max-width: 1200px;
+  min-height: 100vh;
+  background: #05070f;
+  border-radius: 20px;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 1rem;
+}
+.page-reader-empty { display: block; background: transparent; min-height: auto; }
+.reader-overlay {
+  display: grid;
+  gap: .45rem;
+  padding: .75rem .25rem;
+}
+.reader-back-link { color: #bcc4ff; text-decoration: none; font-size: .95rem; width: fit-content; }
+.reader-overlay-text { margin: 0; color: #e7ebff; font-size: .95rem; line-height: 1.4; }
+.reader-count { margin: 0; color: #9aa3d8; font-size: .9rem; }
+.reader-stage {
+  display: grid;
+  place-items: center;
+  padding: .5rem 0;
+}
+.reader-image-frame {
+  border: 1px solid rgba(184,194,255,.2);
+  border-radius: 14px;
+  background: #070b16;
+  padding: .75rem;
+  width: 100%;
+  max-width: min(1000px, 96vw);
+}
+.reader-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: calc(100vh - 280px);
+  object-fit: contain;
+  margin: 0 auto;
+}
+.reader-controls {
+  position: sticky;
+  bottom: .5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .75rem;
+  padding: .5rem;
+  background: rgba(7, 11, 22, .92);
+  border: 1px solid rgba(184,194,255,.22);
+  border-radius: 14px;
+}
+.reader-controls button {
+  min-height: 44px;
+  border-radius: 10px;
+  border: 1px solid rgba(184,194,255,.4);
+  background: rgba(22, 31, 56, .96);
+  color: #f4f5ff;
+  font-weight: 600;
+}
+.reader-controls button:disabled { opacity: .45; }
+.reader-empty-state,.reader-image-fallback {
+  min-height: 220px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  color: #d3d9ff;
+  border-radius: 10px;
+  background: rgba(255,255,255,.03);
+  padding: 1rem;
+}
+
+@media (min-width: 768px) {
+  .reader-overlay { padding: .25rem 0 0; }
+  .reader-controls {
+    position: static;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+}

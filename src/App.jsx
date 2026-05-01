@@ -42,11 +42,74 @@ function SeriesPage({ series, releases, allSeries }) {
   return <main className={`page page-series ${toneClass(series.backgroundTone)}`} style={{ '--series-accent': accent, '--series-secondary': secondary, '--series-background': background }}><SeriesHero series={series} /><ContentRail title="Latest Issues" emptyMessage="No released issues are available yet."><ul className="rail-row">{latestIssues.map((release) => <ReleaseCard key={release.id} release={release} seriesTitle={seriesBySlug.get(release.seriesSlug)?.title || release.seriesSlug} />)}</ul></ContentRail><ContentRail title="Archive" emptyMessage="The archive will appear here as releases are added."><ul className="release-grid release-grid-compact">{archiveIssues.map((release) => <ReleaseCard key={release.id} release={release} seriesTitle={seriesBySlug.get(release.seriesSlug)?.title || release.seriesSlug} variant="compact" />)}</ul></ContentRail><ContentRail title="World" emptyMessage="World details are coming soon.">{worldDetails.length === 0 && relatedSeries.length === 0 ? null : <div className="world-card"><ul className="world-meta">{worldDetails.map((detail, index) => <li key={`${detail}-${index}`}>{detail}</li>)}</ul>{relatedSeries.length > 0 ? <div><h3>Related Series</h3><ul className="related-series">{relatedSeries.map((item) => <li key={item.slug}><a href={`/series/${item.slug}`}>{item.title}</a></li>)}</ul></div> : null}</div>}</ContentRail><ContentRail title="Extras" emptyMessage="Extras will appear here as they are added."><ul className="rail-row">{extraItems.map((extra, idx) => <MediaCard key={`${extra.title || 'extra'}-${idx}`} href={extra.url || extra.href} eyebrow={extra.type || extra.label || 'Extra'} title={extra.title || `Extra ${idx + 1}`} description={extra.description} fallbackText={extra.title || `Extra ${idx + 1}`} />)}</ul></ContentRail></main>;
 }
 
-function ReaderPage({ release, pages }) {
+function ReaderPage({ release, pages, series }) {
   const [index, setIndex] = useState(0);
   useEffect(() => { setIndex(0); }, [release.id]);
+
+  const totalPages = pages.length;
   const page = pages[index];
-  return <ReaderShell releaseTitle={release.title} releaseHref={`/releases/${release.id}`} currentPage={index + 1} totalPages={pages.length} onPrevious={() => setIndex((value) => Math.max(0, value - 1))} onNext={() => setIndex((value) => Math.min(pages.length - 1, value + 1))} canPrevious={index > 0} canNext={index < pages.length - 1}><div className="reader-image-frame">{page?.image ? <img src={page.image} alt={`${release.title} page ${index + 1}`} className="reader-image" /> : <div className="reader-image-fallback">No page image available yet.</div>}</div></ReaderShell>;
+  const canPrevious = index > 0;
+  const canNext = index < totalPages - 1;
+  const [imageFailed, setImageFailed] = useState(false);
+
+  useEffect(() => { setImageFailed(false); }, [index, release.id]);
+
+  useEffect(() => {
+    if (totalPages === 0) return;
+    const preloadTargets = [pages[index - 1]?.image, pages[index + 1]?.image].filter((image) => typeof image === 'string' && image.trim().length > 0);
+    preloadTargets.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, [index, pages, totalPages]);
+
+  useEffect(() => {
+    if (totalPages === 0) return;
+    const onKeyDown = (event) => {
+      const element = event.target;
+      if (element instanceof HTMLElement && (element.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(element.tagName))) return;
+      if ((event.key === 'ArrowRight' || event.key.toLowerCase() === 'd' || event.key.toLowerCase() === 'j') && canNext) {
+        event.preventDefault();
+        setIndex((value) => Math.min(totalPages - 1, value + 1));
+      }
+      if ((event.key === 'ArrowLeft' || event.key.toLowerCase() === 'a' || event.key.toLowerCase() === 'k') && canPrevious) {
+        event.preventDefault();
+        setIndex((value) => Math.max(0, value - 1));
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [canNext, canPrevious, totalPages]);
+
+  const identityParts = [series?.title, release.title || release.id, totalPages > 0 ? `Page ${index + 1} of ${totalPages}` : null].filter(Boolean);
+
+  return (
+    <ReaderShell
+      releaseHref={`/releases/${release.id}`}
+      overlayText={identityParts.join(' · ')}
+      currentPage={index + 1}
+      totalPages={totalPages}
+      onPrevious={() => setIndex((value) => Math.max(0, value - 1))}
+      onNext={() => setIndex((value) => Math.min(totalPages - 1, value + 1))}
+      canPrevious={canPrevious}
+      canNext={canNext}
+    >
+      {totalPages === 0 ? (
+        <div className="reader-empty-state">
+          <p>No released pages are available for this release yet.</p>
+          <a href={`/releases/${release.id}`}>Back to release</a>
+        </div>
+      ) : (
+        <div className="reader-image-frame">
+          {page?.image && !imageFailed ? (
+            <img src={page.image} alt={`${release.title || 'Release'} page ${index + 1}`} className="reader-image" onError={() => setImageFailed(true)} />
+          ) : (
+            <div className="reader-image-fallback" role="status">Page image unavailable.</div>
+          )}
+        </div>
+      )}
+    </ReaderShell>
+  );
 }
 
 function ReleasePage({ release, series, pages }) { const releasePages = pages.filter((page) => page.releaseId === release.id); return <main className="page page-release"><p className="eyebrow"><a href={`/series/${series.slug}`}>← Back to {series.title}</a></p><header className="series-hero"><img src={release.coverImage || release.image} alt="" className="series-hero-image" /><div className="series-hero-content"><p className="release-date">{formatDate(release.releaseDate)}</p><h1>{release.title}</h1><p>{release.description}</p>{releasePages.length > 0 ? <a className="primary-button" href={`/read/${release.id}`}>{release.ctaLabel || 'Read now'}</a> : null}</div></header></main>; }
@@ -64,6 +127,7 @@ export default function App() {
 
   if (series && !release && !readReleaseId) return <SeriesPage series={series} releases={data.releases} allSeries={data.series} />;
   if (releaseId && release) { const parentSeries = data.series.find((item) => item.slug === release.seriesSlug) || { slug: '', title: 'Series' }; return <ReleasePage release={release} series={parentSeries} pages={data.pages} />; }
-  if (readReleaseId && release) { const releasePages = data.pages.filter((page) => page.releaseId === release.id); return <ReaderPage release={release} pages={releasePages} />; }
+  if (readReleaseId && release) { const releasePages = data.pages.filter((page) => page.releaseSlug === release.id && (!parseDate(page.releaseDate) || parseDate(page.releaseDate) <= new Date())).sort((a, b) => Number(a.pageNumber || 0) - Number(b.pageNumber || 0)); const parentSeries = data.series.find((item) => item.slug === release.seriesSlug); return <ReaderPage release={release} pages={releasePages} series={parentSeries} />; }
+  if (readReleaseId && !release) return <main className="page page-reader page-reader-empty"><h1>Release not found.</h1><p><a href="/">Return home</a></p></main>;
   return <HomePage series={data.series} releases={data.releases} continueRelease={continueRelease} />;
 }
