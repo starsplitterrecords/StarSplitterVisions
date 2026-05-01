@@ -3,29 +3,29 @@
     {
       "slug": "vikings-2026",
       "title": "Vikings 2026!",
-      "tagline": "Saga-era honor collides with deep-space survival.",
-      "shortDescription": "A lost Norse expedition returns from a wormhole with living star-charts, pulling modern factions into a brutal contest over ancestry, faith, and control of the frontier lanes.",
+      "tagline": "Longships return from the void to reclaim the frontier.",
+      "shortDescription": "After vanishing in a wormhole centuries ago, a Norse fleet reappears with living star-maps and ancestral claims that ignite a three-way conflict over trade lanes, belief, and sovereignty.",
       "heroImage": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1600&q=80"
     },
     {
       "slug": "stardust-station",
       "title": "Stardust Station",
-      "tagline": "Every ship can dock. Not every crew leaves whole.",
-      "shortDescription": "On the largest neutral transfer hub in contested space, dispatchers, engineers, and medics hold together fragile truces while spies, refugees, and war fleets cycle through the same airlocks.",
+      "tagline": "The neutral hub where peace is negotiated one docking at a time.",
+      "shortDescription": "At the busiest transfer station in contested space, operators and medics keep traffic moving while smugglers, diplomats, and covert agents turn every arrival into a potential flashpoint.",
       "heroImage": "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1600&q=80"
     },
     {
       "slug": "azure-reach",
       "title": "Azure Reach",
-      "tagline": "An ocean world keeps its oldest maps underwater.",
-      "shortDescription": "Explorers chart a planet of floating citadels and abyssal ruins where each discovery rewrites human history and forces uneasy alliances between scientists, locals, and extraction guilds.",
+      "tagline": "Beneath sapphire seas, a drowned archive can rewrite civilization.",
+      "shortDescription": "On an ocean world of floating cities and abyssal ruins, survey crews race to recover submerged records that challenge accepted history and strain alliances between locals, scientists, and mining syndicates.",
       "heroImage": "https://images.unsplash.com/photo-1473116763249-2faaef81ccda?auto=format&fit=crop&w=1600&q=80"
     },
     {
       "slug": "sunforge-outlaw",
       "title": "Sunforge Outlaw",
-      "tagline": "In the furnace lanes, rebellion is forged at stellar heat.",
-      "shortDescription": "Branded a traitor by a solar-industrial regime, a former forge pilot hijacks core convoys and sparks worker uprisings across orbiting foundries powered directly by a captive star.",
+      "tagline": "A fugitive pilot turns solar industry into a revolution.",
+      "shortDescription": "Hunted by a star-powered industrial state, a former convoy ace raids sunforge supply lines and rallies orbital workers to seize the foundries that run on captured stellar fire.",
       "heroImage": "https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?auto=format&fit=crop&w=1600&q=80"
     }
   ]
