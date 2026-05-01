@@ -1,4 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+
+function formatDate(value) {
+  return new Date(value).toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
+}
 
 function HomePage({ series }) {
   return (
@@ -16,36 +24,78 @@ function HomePage({ series }) {
   );
 }
 
+function SeriesHero({ series }) {
+  return (
+    <header className="series-hero">
+      <img src={series.heroImage} alt="" className="series-hero-image" />
+      <div className="series-hero-content">
+        <p className="eyebrow">
+          <a href="/">← All series</a>
+        </p>
+        <h1>{series.title}</h1>
+        <p className="tagline">{series.tagline}</p>
+        <p>{series.shortDescription}</p>
+      </div>
+    </header>
+  );
+}
+
+function ReleaseCard({ release }) {
+  return (
+    <li className="release-card">
+      <a href={`/releases/${release.id}`}>
+        <img src={release.image} alt="" className="release-image" />
+        <div className="release-meta">
+          <p className="release-date">{formatDate(release.releaseDate)}</p>
+          <h3>{release.title}</h3>
+        </div>
+      </a>
+    </li>
+  );
+}
+
 function SeriesPage({ series, releases }) {
-  const visibleReleases = releases.filter(
-    (release) =>
-      release.seriesSlug === series.slug && new Date(release.releaseDate) <= new Date()
+  const visibleReleases = useMemo(
+    () =>
+      releases
+        .filter(
+          (release) =>
+            release.seriesSlug === series.slug &&
+            new Date(release.releaseDate) <= new Date()
+        )
+        .sort((a, b) => new Date(b.releaseDate) - new Date(a.releaseDate)),
+    [releases, series.slug]
   );
 
   return (
-    <main className="page">
-      <p className="eyebrow">
-        <a href="/">← All series</a>
-      </p>
-      <h1>{series.title}</h1>
-      <p className="tagline">{series.tagline}</p>
-      <p>{series.shortDescription}</p>
+    <main className="page page-series">
+      <SeriesHero series={series} />
 
       <section>
         <h2>Releases</h2>
         {visibleReleases.length === 0 ? (
           <p>No releases yet.</p>
         ) : (
-          <ul className="release-list">
+          <ul className="release-grid">
             {visibleReleases.map((release) => (
-              <li key={release.id}>
-                <strong>{release.title}</strong>
-                <span>{new Date(release.releaseDate).toLocaleDateString()}</span>
-              </li>
+              <ReleaseCard key={release.id} release={release} />
             ))}
           </ul>
         )}
       </section>
+    </main>
+  );
+}
+
+function ReleasePage({ release, series }) {
+  return (
+    <main className="page">
+      <p className="eyebrow">
+        <a href={`/series/${series.slug}`}>← Back to {series.title}</a>
+      </p>
+      <h1>{release.title}</h1>
+      <p>{formatDate(release.releaseDate)}</p>
+      <img src={release.image} alt="" className="release-image" />
     </main>
   );
 }
@@ -84,21 +134,42 @@ export default function App() {
   }, []);
 
   const path = window.location.pathname;
-  const match = path.match(/^\/series\/([^/]+)$/);
+  const seriesMatch = path.match(/^\/series\/([^/]+)$/);
+  const releaseMatch = path.match(/^\/releases\/([^/]+)$/);
 
   if (hasError) {
     return <NotFound />;
   }
 
-  if (!match) {
+  if (path === '/') {
     return <HomePage series={series} />;
   }
 
-  const selectedSeries = series.find((item) => item.slug === match[1]);
+  if (seriesMatch) {
+    const selectedSeries = series.find((item) => item.slug === seriesMatch[1]);
 
-  if (!selectedSeries) {
-    return <NotFound />;
+    if (!selectedSeries) {
+      return <NotFound />;
+    }
+
+    return <SeriesPage series={selectedSeries} releases={releases} />;
   }
 
-  return <SeriesPage series={selectedSeries} releases={releases} />;
+  if (releaseMatch) {
+    const selectedRelease = releases.find((item) => item.id === releaseMatch[1]);
+
+    if (!selectedRelease) {
+      return <NotFound />;
+    }
+
+    const parentSeries = series.find((item) => item.slug === selectedRelease.seriesSlug);
+
+    if (!parentSeries) {
+      return <NotFound />;
+    }
+
+    return <ReleasePage release={selectedRelease} series={parentSeries} />;
+  }
+
+  return <NotFound />;
 }

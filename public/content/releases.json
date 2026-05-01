@@ -4,43 +4,50 @@
       "id": "vikings-ep1",
       "seriesSlug": "vikings-2026",
       "title": "Episode 1: Frostwake",
-      "releaseDate": "2025-03-10"
+      "releaseDate": "2025-03-10",
+      "image": "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=1200&q=80"
     },
     {
       "id": "vikings-ep2",
       "seriesSlug": "vikings-2026",
       "title": "Episode 2: Oath Signal",
-      "releaseDate": "2026-02-14"
+      "releaseDate": "2026-02-14",
+      "image": "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=1200&q=80"
     },
     {
       "id": "vikings-ep3",
       "seriesSlug": "vikings-2026",
       "title": "Episode 3: The Last Fjord",
-      "releaseDate": "2026-09-01"
+      "releaseDate": "2026-09-01",
+      "image": "https://images.unsplash.com/photo-1518391846015-55a9cc003b25?auto=format&fit=crop&w=1200&q=80"
     },
     {
       "id": "station-pilot",
       "seriesSlug": "stardust-station",
       "title": "Pilot: Docking Rights",
-      "releaseDate": "2024-11-05"
+      "releaseDate": "2024-11-05",
+      "image": "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=1200&q=80"
     },
     {
       "id": "station-ep2",
       "seriesSlug": "stardust-station",
       "title": "Episode 2: Silent Orbit",
-      "releaseDate": "2026-04-18"
+      "releaseDate": "2026-04-18",
+      "image": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80"
     },
     {
       "id": "azure-teaser",
       "seriesSlug": "azure-reach",
       "title": "Teaser: Blue Horizon",
-      "releaseDate": "2026-06-01"
+      "releaseDate": "2026-06-01",
+      "image": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80"
     },
     {
       "id": "sunforge-trailer",
       "seriesSlug": "sunforge-outlaw",
       "title": "Trailer: Heat Debt",
-      "releaseDate": "2025-08-22"
+      "releaseDate": "2025-08-22",
+      "image": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80"
     }
   ]
 }

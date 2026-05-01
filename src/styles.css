@@ -1,7 +1,7 @@
 :root {
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
   color: #f4f5ff;
-  background: #0f1224;
+  background: #0a0d17;
 }
 
 * {
@@ -11,6 +11,7 @@
 body {
   margin: 0;
   min-height: 100vh;
+  background: radial-gradient(circle at top, #181f35 0%, #0a0d17 45%, #07090f 100%);
 }
 
 a {
@@ -18,18 +19,24 @@ a {
 }
 
 .page {
-  max-width: 680px;
+  max-width: 1040px;
   margin: 0 auto;
   padding: 4rem 1.5rem;
 }
 
+.page-series {
+  display: grid;
+  gap: 2rem;
+}
+
 h1,
-h2 {
+h2,
+h3 {
   margin: 0 0 0.5rem;
 }
 
 p {
-  margin: 0 0 1.5rem;
+  margin: 0 0 1rem;
   color: #c9ccf8;
 }
 
@@ -38,7 +45,7 @@ p {
 }
 
 .tagline {
-  color: #dde1ff;
+  color: #e5e8ff;
   font-weight: 600;
 }
 
@@ -51,13 +58,84 @@ li {
   margin: 0.5rem 0;
 }
 
-.release-list li {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
+.series-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+  border: 1px solid rgba(195, 203, 255, 0.2);
+  border-radius: 20px;
+  overflow: hidden;
+  background: rgba(16, 21, 38, 0.88);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
 }
 
-.release-list span {
-  color: #c9ccf8;
-  white-space: nowrap;
+.series-hero-image {
+  width: 100%;
+  max-height: 340px;
+  object-fit: cover;
+}
+
+.series-hero-content {
+  padding: 1.25rem 1.25rem 1.5rem;
+}
+
+.release-grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 1rem;
+  padding: 0;
+}
+
+.release-card {
+  margin: 0;
+  border: 1px solid rgba(184, 194, 255, 0.2);
+  border-radius: 14px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(24, 31, 53, 0.95) 0%, rgba(16, 21, 37, 0.95) 100%);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+
+.release-card a {
+  color: inherit;
+  text-decoration: none;
+  display: block;
+}
+
+.release-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(2, 6, 17, 0.55);
+  border-color: rgba(210, 217, 255, 0.4);
+}
+
+.release-image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.release-meta {
+  padding: 0.9rem;
+}
+
+.release-date {
+  margin-bottom: 0.35rem;
+  color: #9aa3d8;
+  font-size: 0.88rem;
+}
+
+@media (min-width: 768px) {
+  .series-hero {
+    grid-template-columns: 1.1fr 1fr;
+  }
+
+  .series-hero-image {
+    height: 100%;
+    max-height: none;
+  }
+
+  .series-hero-content {
+    padding: 1.75rem;
+  }
 }
