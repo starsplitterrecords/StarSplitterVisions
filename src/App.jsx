@@ -5,6 +5,7 @@ import ReleaseCard from './components/ReleaseCard';
 import SeriesHero from './components/SeriesHero';
 import ReaderShell from './components/ReaderShell';
 import AdminShell from './components/AdminShell';
+import { clearContinueReading, getContinueReading, setContinueReading } from './lib/continueReading';
 
 const LATEST_ISSUES_LIMIT = 4;
 const DEFAULT_SERIES_IDENTITY = {
@@ -21,11 +22,17 @@ const COLOR_PATTERN = /^(#[0-9a-fA-F]{3}|#[0-9a-fA-F]{6}|rgb\(|rgba\(|hsl\(|hsla
 const safeColor = (value, fallback) => (typeof value === 'string' && COLOR_PATTERN.test(value.trim()) ? value.trim() : fallback);
 const toneClass = (tone) => ['dark', 'deep', 'ocean', 'cosmic', 'bureaucratic', 'sunforge', 'neutral'].includes(tone) ? `series-tone-${tone}` : 'series-tone-dark';
 
-function HomePage({ series, releases, continueRelease }) {
+function ContinueReadingModule({ item, onClear }) {
+  const title = item.releaseTitle || 'Continue Reading';
+
+  return <section className="continue-module" aria-label="Continue reading"><div className="continue-module-art">{item.image ? <img src={item.image} alt={`${title} cover`} className="release-image" /> : <div className="visual-fallback">Continue Reading</div>}</div><div className="continue-module-content"><p className="release-date">Continue Reading</p>{item.seriesTitle ? <p className="release-eyebrow">{item.seriesTitle}</p> : null}<h2>{title}</h2>{item.issueNumber ? <p className="release-detail">Issue {item.issueNumber}</p> : null}{item.pageNumber && item.totalPages ? <p className="release-detail">Page {item.pageNumber} of {item.totalPages}</p> : null}<div className="continue-module-actions"><a className="primary-button" href={`/read/${item.releaseSlug}`}>Continue Reading</a><button type="button" className="text-button" onClick={onClear}>Clear</button></div></div></section>;
+}
+
+function HomePage({ series, releases, continueReading, onClearContinueReading }) {
   const seriesBySlug = useMemo(() => new Map(series.map((item) => [item.slug, item])), [series]);
   const visibleReleases = useMemo(() => releases.map((item, index) => ({ item, index })).filter(({ item }) => isVisibleRelease(item)).sort((a, b) => sortReleasesByNewest(a.item, b.item, a.index, b.index)).map(({ item }) => item), [releases]);
 
-  return <main className="page page-home"><header className="home-header"><h1>Star Splitter Visions</h1><p>Browse new releases and cinematic worlds across the Star Splitter slate.</p></header>{continueRelease && <section className="continue-module"><p className="release-date">Continue Reading</p><a href={`/read/${continueRelease.id}`}><img src={continueRelease.coverImage || continueRelease.image} alt={`${continueRelease.title} cover`} className="release-image" /><h2>{continueRelease.title}</h2>{formatDate(continueRelease.releaseDate) ? <p>{formatDate(continueRelease.releaseDate)}</p> : null}</a></section>}<ContentRail title="Latest Releases" emptyMessage="No releases available yet."><ul className="rail-row">{visibleReleases.map((release) => <ReleaseCard key={release.id} release={release} seriesTitle={seriesBySlug.get(release.seriesSlug)?.title || release.seriesSlug} />)}</ul></ContentRail><ContentRail title="Series" emptyMessage="No series available yet."><ul className="rail-row">{series.map((item) => <MediaCard key={item.slug} className="series-card" href={item.slug ? `/series/${item.slug}` : undefined} image={item.thumbnailImage || item.heroImage || item.image} alt={`${item.title} series art`} title={item.title} description={item.tagline || item.shortDescription || item.longDescription} fallbackText={item.logoText || item.title} />)}</ul></ContentRail></main>;
+  return <main className="page page-home"><header className="home-header"><h1>Star Splitter Visions</h1><p>Browse new releases and cinematic worlds across the Star Splitter slate.</p></header>{continueReading ? <ContinueReadingModule item={continueReading} onClear={onClearContinueReading} /> : null}<ContentRail title="Latest Releases" emptyMessage="No releases available yet."><ul className="rail-row">{visibleReleases.map((release) => <ReleaseCard key={release.id} release={release} seriesTitle={seriesBySlug.get(release.seriesSlug)?.title || release.seriesSlug} />)}</ul></ContentRail><ContentRail title="Series" emptyMessage="No series available yet."><ul className="rail-row">{series.map((item) => <MediaCard key={item.slug} className="series-card" href={item.slug ? `/series/${item.slug}` : undefined} image={item.thumbnailImage || item.heroImage || item.image} alt={`${item.title} series art`} title={item.title} description={item.tagline || item.shortDescription || item.longDescription} fallbackText={item.logoText || item.title} />)}</ul></ContentRail></main>;
 }
 
 function SeriesPage({ series, releases, allSeries }) {
@@ -45,7 +52,23 @@ function SeriesPage({ series, releases, allSeries }) {
 
 function ReaderPage({ release, pages, series }) {
   const [index, setIndex] = useState(0);
-  useEffect(() => { setIndex(0); }, [release.id]);
+
+  useEffect(() => {
+    const saved = getContinueReading();
+    if (!saved || saved.releaseSlug !== release.id || pages.length === 0) {
+      setIndex(0);
+      return;
+    }
+
+    const boundedIndex = Math.max(0, Math.min(saved.pageIndex, pages.length - 1));
+    const page = pages[boundedIndex];
+    if (!page) {
+      setIndex(0);
+      return;
+    }
+
+    setIndex(boundedIndex);
+  }, [release.id, pages]);
 
   const totalPages = pages.length;
   const page = pages[index];
@@ -82,6 +105,18 @@ function ReaderPage({ release, pages, series }) {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [canNext, canPrevious, totalPages]);
 
+
+  useEffect(() => {
+    if (!release?.id || totalPages === 0 || !pages[index]) return;
+
+    setContinueReading({
+      releaseSlug: release.id,
+      pageNumber: Number(pages[index].pageNumber) || index + 1,
+      pageIndex: index,
+      updatedAt: new Date().toISOString(),
+    });
+  }, [index, pages, release?.id, totalPages]);
+
   const identityParts = [series?.title, release.title || release.id, totalPages > 0 ? `Page ${index + 1} of ${totalPages}` : null].filter(Boolean);
 
   return (
@@ -117,7 +152,9 @@ function ReleasePage({ release, series, pages }) { const releasePages = pages.fi
 
 export default function App() {
   const [data, setData] = useState({ series: [], releases: [], pages: [] });
+  const [continueRecord, setContinueRecord] = useState(null);
   useEffect(() => { Promise.all([fetch('/content/series.json').then((res) => res.json()), fetch('/content/releases.json').then((res) => res.json()), fetch('/content/pages.json').then((res) => res.json())]).then(([seriesData, releasesData, pagesData]) => setData({ series: seriesData.series || [], releases: releasesData.releases || [], pages: pagesData.pages || [] })); }, []);
+  useEffect(() => { setContinueRecord(getContinueReading()); }, []);
   const path = window.location.pathname;
   const releaseId = path.startsWith('/releases/') ? path.replace('/releases/', '') : null;
   const seriesSlug = path.startsWith('/series/') ? path.replace('/series/', '') : null;
@@ -125,11 +162,36 @@ export default function App() {
   if (path === '/admin') return <AdminShell />;
   const series = data.series.find((item) => item.slug === seriesSlug);
   const release = data.releases.find((item) => item.id === releaseId || item.id === readReleaseId);
-  const continueRelease = data.releases.filter((item) => parseDate(item.releaseDate) && parseDate(item.releaseDate) <= new Date()).sort((a, b) => sortReleasesByNewest(a, b, 0, 0))[0];
+  const continueReading = useMemo(() => {
+    if (!continueRecord) return null;
+
+    const matchedRelease = data.releases.find((item) => item.id === continueRecord.releaseSlug && isVisibleRelease(item));
+    if (!matchedRelease) return null;
+
+    const releasePages = data.pages
+      .filter((page) => page.releaseSlug === matchedRelease.id && (!parseDate(page.releaseDate) || parseDate(page.releaseDate) <= new Date()))
+      .sort((a, b) => Number(a.pageNumber || 0) - Number(b.pageNumber || 0));
+    if (releasePages.length === 0) return null;
+
+    const safeIndex = Math.max(0, Math.min(continueRecord.pageIndex, releasePages.length - 1));
+    const page = releasePages[safeIndex];
+    if (!page) return null;
+
+    const parentSeries = data.series.find((item) => item.slug === matchedRelease.seriesSlug);
+    return {
+      releaseSlug: matchedRelease.id,
+      releaseTitle: matchedRelease.title,
+      seriesTitle: parentSeries?.title || null,
+      issueNumber: matchedRelease.issueNumber,
+      image: matchedRelease.coverImage || matchedRelease.image || page.image || null,
+      pageNumber: Number(page.pageNumber) || safeIndex + 1,
+      totalPages: releasePages.length,
+    };
+  }, [continueRecord, data.pages, data.releases, data.series]);
 
   if (series && !release && !readReleaseId) return <SeriesPage series={series} releases={data.releases} allSeries={data.series} />;
   if (releaseId && release) { const parentSeries = data.series.find((item) => item.slug === release.seriesSlug) || { slug: '', title: 'Series' }; return <ReleasePage release={release} series={parentSeries} pages={data.pages} />; }
   if (readReleaseId && release) { const releasePages = data.pages.filter((page) => page.releaseSlug === release.id && (!parseDate(page.releaseDate) || parseDate(page.releaseDate) <= new Date())).sort((a, b) => Number(a.pageNumber || 0) - Number(b.pageNumber || 0)); const parentSeries = data.series.find((item) => item.slug === release.seriesSlug); return <ReaderPage release={release} pages={releasePages} series={parentSeries} />; }
   if (readReleaseId && !release) return <main className="page page-reader page-reader-empty"><h1>Release not found.</h1><p><a href="/">Return home</a></p></main>;
-  return <HomePage series={data.series} releases={data.releases} continueRelease={continueRelease} />;
+  return <HomePage series={data.series} releases={data.releases} continueReading={continueReading} onClearContinueReading={() => { clearContinueReading(); setContinueRecord(null); }} />;
 }
