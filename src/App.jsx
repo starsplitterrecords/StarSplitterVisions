@@ -1,4 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+
+function formatDate(value) {
+  return new Date(value).toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
+}
 
 function HomePage({ series }) {
   return (
@@ -16,32 +24,59 @@ function HomePage({ series }) {
   );
 }
 
+function SeriesHero({ series }) {
+  return (
+    <header className="series-hero">
+      <img src={series.heroImage} alt="" className="series-hero-image" />
+      <div className="series-hero-content">
+        <p className="eyebrow">
+          <a href="/">← All series</a>
+        </p>
+        <h1>{series.title}</h1>
+        <p className="tagline">{series.tagline}</p>
+        <p>{series.shortDescription}</p>
+      </div>
+    </header>
+  );
+}
+
+function ReleaseCard({ release }) {
+  return (
+    <li className="release-card">
+      <img src={release.image} alt="" className="release-image" />
+      <div className="release-meta">
+        <p className="release-date">{formatDate(release.releaseDate)}</p>
+        <h3>{release.title}</h3>
+      </div>
+    </li>
+  );
+}
+
 function SeriesPage({ series, releases }) {
-  const visibleReleases = releases.filter(
-    (release) =>
-      release.seriesSlug === series.slug && new Date(release.releaseDate) <= new Date()
+  const visibleReleases = useMemo(
+    () =>
+      releases
+        .filter(
+          (release) =>
+            release.seriesSlug === series.slug &&
+            new Date(release.releaseDate) <= new Date()
+        )
+        .sort((a, b) => new Date(b.releaseDate) - new Date(a.releaseDate)),
+    [releases, series.slug]
   );
 
   return (
-    <main className="page">
-      <p className="eyebrow">
-        <a href="/">← All series</a>
-      </p>
-      <h1>{series.title}</h1>
-      <p className="tagline">{series.tagline}</p>
-      <p>{series.shortDescription}</p>
+    <main className="page page-series">
+      <SeriesHero series={series} />
 
       <section>
         <h2>Releases</h2>
         {visibleReleases.length === 0 ? (
           <p>No releases yet.</p>
         ) : (
-          <ul className="release-list">
+          <ul className="release-grid">
             {visibleReleases.map((release) => (
-              <li key={release.id}>
-                <strong>{release.title}</strong>
-                <span>{new Date(release.releaseDate).toLocaleDateString()}</span>
-              </li>
+              <ReleaseCard key={release.id} release={release} />
             ))}
           </ul>
         )}

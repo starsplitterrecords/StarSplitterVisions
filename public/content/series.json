@@ -4,25 +4,29 @@
       "slug": "vikings-2026",
       "title": "Vikings 2026!",
       "tagline": "A forgotten fleet wakes in ice and starlight.",
-      "shortDescription": "When ancient longships surface near a wormhole fringe, modern scouts must decide whether to fight, flee, or forge a new pact."
+      "shortDescription": "When ancient longships surface near a wormhole fringe, modern scouts must decide whether to fight, flee, or forge a new pact.",
+      "heroImage": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1600&q=80"
     },
     {
       "slug": "stardust-station",
       "title": "Stardust Station",
       "tagline": "One outpost. A thousand quiet catastrophes.",
-      "shortDescription": "A relay station at the edge of mapped space becomes the crossroads for drifters, diplomats, and disasters."
+      "shortDescription": "A relay station at the edge of mapped space becomes the crossroads for drifters, diplomats, and disasters.",
+      "heroImage": "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1600&q=80"
     },
     {
       "slug": "azure-reach",
       "title": "Azure Reach",
       "tagline": "The ocean world remembers every footprint.",
-      "shortDescription": "Explorers descend into floating cities and abyssal ruins where every discovery rewrites their mission charter."
+      "shortDescription": "Explorers descend into floating cities and abyssal ruins where every discovery rewrites their mission charter.",
+      "heroImage": "https://images.unsplash.com/photo-1473116763249-2faaef81ccda?auto=format&fit=crop&w=1600&q=80"
     },
     {
       "slug": "sunforge-outlaw",
       "title": "Sunforge Outlaw",
       "tagline": "Heists are easy. Escaping a star is harder.",
-      "shortDescription": "A rogue engineer steals fusion cores from military foundries and sparks a rebellion in the furnace lanes."
+      "shortDescription": "A rogue engineer steals fusion cores from military foundries and sparks a rebellion in the furnace lanes.",
+      "heroImage": "https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?auto=format&fit=crop&w=1600&q=80"
     }
   ]
 }
