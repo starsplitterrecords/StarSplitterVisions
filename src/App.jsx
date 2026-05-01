@@ -6,6 +6,7 @@ import SeriesHero from './components/SeriesHero';
 import ReaderShell from './components/ReaderShell';
 import AdminShell from './components/AdminShell';
 import { clearContinueReading, getContinueReading, setContinueReading } from './lib/continueReading';
+import { validateExtraList, validatePageList, validateReleaseList, validateSeriesList, validateSoundtrackList } from './lib/contentValidation';
 
 const LATEST_ISSUES_LIMIT = 4;
 const DEFAULT_SERIES_IDENTITY = {
@@ -14,7 +15,9 @@ const DEFAULT_SERIES_IDENTITY = {
   background: '#0a0d17',
 };
 
-function parseDate(value) { if (!value) return null; const parsed = new Date(value); return Number.isNaN(parsed.getTime()) ? null : parsed; }
+const warnedInvalidDates = new Set();
+
+function parseDate(value, context = 'date') { if (!value) return null; const parsed = new Date(value); if (Number.isNaN(parsed.getTime())) { const key = `${context}:${value}`; if (!warnedInvalidDates.has(key)) { warnedInvalidDates.add(key); console.warn(`[content] Invalid ${context}:`, value); } return null; } return parsed; }
 function formatDate(value) { const parsed = parseDate(value); if (!parsed) return null; return parsed.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }); }
 function isVisibleRelease(release) { if (release.status === 'draft') return false; if (release.status === 'scheduled') { const releaseDate = parseDate(release.releaseDate); if (releaseDate && releaseDate > new Date()) return false; } return true; }
 function sortReleasesByNewest(a, b, aIndex, bIndex) { const aDate = parseDate(a.releaseDate); const bDate = parseDate(b.releaseDate); if (aDate && bDate) return bDate - aDate; if (aDate && !bDate) return -1; if (!aDate && bDate) return 1; const aIssue = Number(a.issueNumber); const bIssue = Number(b.issueNumber); if (Number.isFinite(aIssue) && Number.isFinite(bIssue)) return bIssue - aIssue; return aIndex - bIndex; }
@@ -42,12 +45,13 @@ function SeriesPage({ series, releases, allSeries }) {
   const archiveIssues = visibleSeriesReleases.slice(LATEST_ISSUES_LIMIT);
   const worldDetails = [series.worldTitle || series.worldName, series.worldPremise, series.longDescription, series.genre, series.tone, series.audiencePromise, series.coreConflict, series.seriesEngine].filter(Boolean);
   const relatedSeries = allSeries.filter((item) => item.slug !== series.slug && series.worldSlug && item.worldSlug === series.worldSlug);
-  const extraItems = (series.extras || series.relatedLinks || series.links || []).filter(Boolean);
+  const extraItems = validateExtraList(series.extras || series.relatedLinks || series.links);
+  const soundtrackItems = validateSoundtrackList(series.soundtracks);
   const accent = safeColor(series.accentColor, DEFAULT_SERIES_IDENTITY.accent);
   const secondary = safeColor(series.secondaryColor, DEFAULT_SERIES_IDENTITY.secondary);
   const background = safeColor(series.backgroundColor, DEFAULT_SERIES_IDENTITY.background);
 
-  return <main className={`page page-series ${toneClass(series.backgroundTone)}`} style={{ '--series-accent': accent, '--series-secondary': secondary, '--series-background': background }}><SeriesHero series={series} /><ContentRail title="Latest Issues" emptyMessage="No released issues are available yet."><ul className="rail-row">{latestIssues.map((release) => <ReleaseCard key={release.id} release={release} seriesTitle={seriesBySlug.get(release.seriesSlug)?.title || release.seriesSlug} />)}</ul></ContentRail><ContentRail title="Archive" emptyMessage="The archive will appear here as releases are added."><ul className="release-grid release-grid-compact">{archiveIssues.map((release) => <ReleaseCard key={release.id} release={release} seriesTitle={seriesBySlug.get(release.seriesSlug)?.title || release.seriesSlug} variant="compact" />)}</ul></ContentRail><ContentRail title="World" emptyMessage="World details are coming soon.">{worldDetails.length === 0 && relatedSeries.length === 0 ? null : <div className="world-card"><ul className="world-meta">{worldDetails.map((detail, index) => <li key={`${detail}-${index}`}>{detail}</li>)}</ul>{relatedSeries.length > 0 ? <div><h3>Related Series</h3><ul className="related-series">{relatedSeries.map((item) => <li key={item.slug}><a href={`/series/${item.slug}`}>{item.title}</a></li>)}</ul></div> : null}</div>}</ContentRail><ContentRail title="Extras" emptyMessage="Extras will appear here as they are added."><ul className="rail-row">{extraItems.map((extra, idx) => <MediaCard key={`${extra.title || 'extra'}-${idx}`} href={extra.url || extra.href} eyebrow={extra.type || extra.label || 'Extra'} title={extra.title || `Extra ${idx + 1}`} description={extra.description} fallbackText={extra.title || `Extra ${idx + 1}`} />)}</ul></ContentRail></main>;
+  return <main className={`page page-series ${toneClass(series.backgroundTone)}`} style={{ '--series-accent': accent, '--series-secondary': secondary, '--series-background': background }}><SeriesHero series={series} /><ContentRail title="Latest Issues" emptyMessage="No released issues are available yet."><ul className="rail-row">{latestIssues.map((release) => <ReleaseCard key={release.id} release={release} seriesTitle={seriesBySlug.get(release.seriesSlug)?.title || release.seriesSlug} />)}</ul></ContentRail><ContentRail title="Archive" emptyMessage="The archive will appear here as releases are added."><ul className="release-grid release-grid-compact">{archiveIssues.map((release) => <ReleaseCard key={release.id} release={release} seriesTitle={seriesBySlug.get(release.seriesSlug)?.title || release.seriesSlug} variant="compact" />)}</ul></ContentRail><ContentRail title="World" emptyMessage="World details are coming soon.">{worldDetails.length === 0 && relatedSeries.length === 0 ? null : <div className="world-card"><ul className="world-meta">{worldDetails.map((detail, index) => <li key={`${detail}-${index}`}>{detail}</li>)}</ul>{relatedSeries.length > 0 ? <div><h3>Related Series</h3><ul className="related-series">{relatedSeries.map((item) => <li key={item.slug}><a href={`/series/${item.slug}`}>{item.title}</a></li>)}</ul></div> : null}</div>}</ContentRail><ContentRail title="Extras" emptyMessage="Extras will appear here as they are added."><ul className="rail-row">{extraItems.map((extra, idx) => <MediaCard key={`${extra.title || 'extra'}-${idx}`} href={extra.url || extra.href} eyebrow={extra.type || extra.label || 'Extra'} title={extra.title || `Extra ${idx + 1}`} description={extra.description} fallbackText={extra.title || `Extra ${idx + 1}`} />)}</ul></ContentRail><ContentRail title="Soundtracks" emptyMessage="Soundtracks will appear here as they are added."><ul className="rail-row">{soundtrackItems.map((soundtrack, idx) => <MediaCard key={`${soundtrack.title}-${idx}`} href={soundtrack.playlistUrl || soundtrack.url || soundtrack.href} eyebrow={soundtrack.artist || 'Soundtrack'} title={soundtrack.title || `Soundtrack ${idx + 1}`} description={soundtrack.description || soundtrack.mood} fallbackText={soundtrack.title || `Soundtrack ${idx + 1}`} />)}</ul></ContentRail></main>;
 }
 
 function ReaderPage({ release, pages, series }) {
@@ -153,7 +157,7 @@ function ReleasePage({ release, series, pages }) { const releasePages = pages.fi
 export default function App() {
   const [data, setData] = useState({ series: [], releases: [], pages: [] });
   const [continueRecord, setContinueRecord] = useState(null);
-  useEffect(() => { Promise.all([fetch('/content/series.json').then((res) => res.json()), fetch('/content/releases.json').then((res) => res.json()), fetch('/content/pages.json').then((res) => res.json())]).then(([seriesData, releasesData, pagesData]) => setData({ series: seriesData.series || [], releases: releasesData.releases || [], pages: pagesData.pages || [] })); }, []);
+  useEffect(() => { Promise.all([fetch('/content/series.json').then((res) => res.json()), fetch('/content/releases.json').then((res) => res.json()), fetch('/content/pages.json').then((res) => res.json())]).then(([seriesData, releasesData, pagesData]) => setData({ series: validateSeriesList(seriesData?.series), releases: validateReleaseList(releasesData?.releases), pages: validatePageList(pagesData?.pages) })); }, []);
   useEffect(() => { setContinueRecord(getContinueReading()); }, []);
   const path = window.location.pathname;
   const releaseId = path.startsWith('/releases/') ? path.replace('/releases/', '') : null;
@@ -170,7 +174,7 @@ export default function App() {
 
     const releasePages = data.pages
       .filter((page) => page.releaseSlug === matchedRelease.id && (!parseDate(page.releaseDate) || parseDate(page.releaseDate) <= new Date()))
-      .sort((a, b) => Number(a.pageNumber || 0) - Number(b.pageNumber || 0));
+      .sort((a, b) => (Number.isFinite(a.pageNumber) ? a.pageNumber : Number.MAX_SAFE_INTEGER) - (Number.isFinite(b.pageNumber) ? b.pageNumber : Number.MAX_SAFE_INTEGER));
     if (releasePages.length === 0) return null;
 
     const safeIndex = Math.max(0, Math.min(continueRecord.pageIndex, releasePages.length - 1));
@@ -191,7 +195,7 @@ export default function App() {
 
   if (series && !release && !readReleaseId) return <SeriesPage series={series} releases={data.releases} allSeries={data.series} />;
   if (releaseId && release) { const parentSeries = data.series.find((item) => item.slug === release.seriesSlug) || { slug: '', title: 'Series' }; return <ReleasePage release={release} series={parentSeries} pages={data.pages} />; }
-  if (readReleaseId && release) { const releasePages = data.pages.filter((page) => page.releaseSlug === release.id && (!parseDate(page.releaseDate) || parseDate(page.releaseDate) <= new Date())).sort((a, b) => Number(a.pageNumber || 0) - Number(b.pageNumber || 0)); const parentSeries = data.series.find((item) => item.slug === release.seriesSlug); return <ReaderPage release={release} pages={releasePages} series={parentSeries} />; }
+  if (readReleaseId && release) { const releasePages = data.pages.filter((page) => page.releaseSlug === release.id && (!parseDate(page.releaseDate) || parseDate(page.releaseDate) <= new Date())).sort((a, b) => (Number.isFinite(a.pageNumber) ? a.pageNumber : Number.MAX_SAFE_INTEGER) - (Number.isFinite(b.pageNumber) ? b.pageNumber : Number.MAX_SAFE_INTEGER)); const parentSeries = data.series.find((item) => item.slug === release.seriesSlug); return <ReaderPage release={release} pages={releasePages} series={parentSeries} />; }
   if (readReleaseId && !release) return <main className="page page-reader page-reader-empty"><h1>Release not found.</h1><p><a href="/">Return home</a></p></main>;
   return <HomePage series={data.series} releases={data.releases} continueReading={continueReading} onClearContinueReading={() => { clearContinueReading(); setContinueRecord(null); }} />;
 }
