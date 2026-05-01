@@ -1,0 +1,46 @@
+{
+  "releases": [
+    {
+      "id": "vikings-ep1",
+      "seriesSlug": "vikings-2026",
+      "title": "Episode 1: Frostwake",
+      "releaseDate": "2025-03-10"
+    },
+    {
+      "id": "vikings-ep2",
+      "seriesSlug": "vikings-2026",
+      "title": "Episode 2: Oath Signal",
+      "releaseDate": "2026-02-14"
+    },
+    {
+      "id": "vikings-ep3",
+      "seriesSlug": "vikings-2026",
+      "title": "Episode 3: The Last Fjord",
+      "releaseDate": "2026-09-01"
+    },
+    {
+      "id": "station-pilot",
+      "seriesSlug": "stardust-station",
+      "title": "Pilot: Docking Rights",
+      "releaseDate": "2024-11-05"
+    },
+    {
+      "id": "station-ep2",
+      "seriesSlug": "stardust-station",
+      "title": "Episode 2: Silent Orbit",
+      "releaseDate": "2026-04-18"
+    },
+    {
+      "id": "azure-teaser",
+      "seriesSlug": "azure-reach",
+      "title": "Teaser: Blue Horizon",
+      "releaseDate": "2026-06-01"
+    },
+    {
+      "id": "sunforge-trailer",
+      "seriesSlug": "sunforge-outlaw",
+      "title": "Trailer: Heat Debt",
+      "releaseDate": "2025-08-22"
+    }
+  ]
+}
