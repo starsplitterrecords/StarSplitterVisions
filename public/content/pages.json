@@ -1,13 +1,13 @@
 {
   "pages": [
     {
-      "seriesSlug": "vikings-2026",
-      "releaseSlug": "vikings-ep1",
-      "pageNumber": 1,
-      "releaseDate": "2025-03-10",
-      "title": "Arrival in Time",
-      "caption": "The 9th century longship and they guess this is their home now.",
-      "image": "/images/vikings-2026/vikings-ep1/page-001.jpg"
+  "seriesSlug": "vikings-2026",
+  "releaseSlug": "vikings-ep1",
+  "pageNumber": 1,
+  "title": "Page 1",
+  "caption": "",
+  "releaseDate": "2026-05-01",
+  "image": "/images/vikings-2026/vikings-ep1/page-001.jpg"
     },
     {
       "seriesSlug": "vikings-2026",
