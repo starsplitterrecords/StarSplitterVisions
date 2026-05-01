@@ -446,3 +446,43 @@ a.primary-button {
   cursor: not-allowed;
   opacity: 0.8;
 }
+
+.continue-module {
+  display: grid;
+  grid-template-columns: minmax(180px, 320px) minmax(0, 1fr);
+  padding: 0;
+}
+
+.continue-module-art .release-image,
+.continue-module-art .visual-fallback {
+  height: 100%;
+  min-height: 170px;
+}
+
+.continue-module-content {
+  padding: 1rem;
+  display: grid;
+  gap: .45rem;
+}
+
+.continue-module-actions {
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  margin-top: .45rem;
+}
+
+.text-button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--text-muted);
+  padding: .3rem;
+  cursor: pointer;
+}
+
+.text-button:hover { color: var(--text-primary); }
+
+@media (max-width: 760px) {
+  .continue-module { grid-template-columns: 1fr; }
+}
