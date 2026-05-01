@@ -540,3 +540,67 @@ a.primary-button {
 
 .search-hint { margin: 0; color: var(--text-secondary); }
 .search-results { display: grid; gap: 1.1rem; }
+
+.admin-helper-card {
+  border: 1px solid var(--border-soft);
+  border-radius: 14px;
+  background: linear-gradient(180deg, var(--bg-surface-2), var(--bg-surface));
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.26);
+  padding: 1rem 1.1rem;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.admin-helper-note,
+.admin-helper-tip {
+  margin: 0;
+}
+
+.admin-helper-tip {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.admin-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+.admin-form-grid label,
+.admin-field-full {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.admin-form-grid input,
+.admin-form-grid textarea,
+.admin-json-output {
+  border: 1px solid var(--border-soft);
+  border-radius: 10px;
+  background: rgba(11, 18, 32, 0.92);
+  color: var(--text-primary);
+  padding: 0.55rem 0.7rem;
+}
+
+.admin-field-full {
+  grid-column: 1 / -1;
+}
+
+.admin-json-output {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.admin-warnings {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: #fbbf24;
+}
+
+.admin-action-note {
+  border: 1px dashed rgba(163, 255, 18, 0.2);
+  border-radius: 9px;
+  background: rgba(5, 7, 13, 0.35);
+  color: var(--text-muted);
+  padding: 0.5rem 0.65rem;
+}
