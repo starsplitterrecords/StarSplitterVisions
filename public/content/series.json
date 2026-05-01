@@ -1,8 +1,28 @@
 {
   "series": [
-    "Vikings 2026!",
-    "Stardust Station",
-    "Azure Reach",
-    "Sunforge Outlaw"
+    {
+      "slug": "vikings-2026",
+      "title": "Vikings 2026!",
+      "tagline": "A forgotten fleet wakes in ice and starlight.",
+      "shortDescription": "When ancient longships surface near a wormhole fringe, modern scouts must decide whether to fight, flee, or forge a new pact."
+    },
+    {
+      "slug": "stardust-station",
+      "title": "Stardust Station",
+      "tagline": "One outpost. A thousand quiet catastrophes.",
+      "shortDescription": "A relay station at the edge of mapped space becomes the crossroads for drifters, diplomats, and disasters."
+    },
+    {
+      "slug": "azure-reach",
+      "title": "Azure Reach",
+      "tagline": "The ocean world remembers every footprint.",
+      "shortDescription": "Explorers descend into floating cities and abyssal ruins where every discovery rewrites their mission charter."
+    },
+    {
+      "slug": "sunforge-outlaw",
+      "title": "Sunforge Outlaw",
+      "tagline": "Heists are easy. Escaping a star is harder.",
+      "shortDescription": "A rogue engineer steals fusion cores from military foundries and sparks a rebellion in the furnace lanes."
+    }
   ]
 }

@@ -13,19 +13,33 @@ body {
   min-height: 100vh;
 }
 
+a {
+  color: #a9b0ff;
+}
+
 .page {
   max-width: 680px;
   margin: 0 auto;
   padding: 4rem 1.5rem;
 }
 
-h1 {
+h1,
+h2 {
   margin: 0 0 0.5rem;
 }
 
 p {
   margin: 0 0 1.5rem;
   color: #c9ccf8;
+}
+
+.eyebrow {
+  margin-bottom: 1rem;
+}
+
+.tagline {
+  color: #dde1ff;
+  font-weight: 600;
 }
 
 ul {
@@ -35,4 +49,15 @@ ul {
 
 li {
   margin: 0.5rem 0;
+}
+
+.release-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.release-list span {
+  color: #c9ccf8;
+  white-space: nowrap;
 }
