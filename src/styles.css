@@ -29,6 +29,12 @@ p { margin: 0 0 1rem; color: #c9ccf8; }
 .search-field input { border: 1px solid rgba(184,194,255,.35); border-radius: 10px; background: rgba(13,18,33,.8); color: #f4f5ff; padding: .65rem .8rem; }
 .continue-module { border: 1px solid rgba(255,255,255,.15); border-radius: 16px; padding: 1rem; background: linear-gradient(150deg, rgba(64,83,172,.23), rgba(12,17,30,.86)); }
 .empty-rail { border: 1px dashed rgba(184,194,255,.35); border-radius: 12px; padding: 1rem; background: rgba(14,19,35,.5); }
+.primary-button { display: inline-block; padding: .6rem 1rem; border-radius: 10px; text-decoration: none; color: #fff; background: linear-gradient(135deg, #5f73ff, #7f5dff); font-weight: 600; }
+.page-reader { max-width: 900px; }
+.reader-count { margin-bottom: .5rem; color: #9aa3d8; }
+.reader-image-frame { border: 1px solid rgba(184,194,255,.25); border-radius: 12px; background: rgba(8,12,22,.85); padding: .75rem; }
+.reader-image { display: block; width: 100%; height: auto; max-height: 80vh; object-fit: contain; margin: 0 auto; }
+.reader-image-fallback { min-height: 260px; display: grid; place-items: center; color: #c9ccf8; background: rgba(255,255,255,.03); border-radius: 8px; text-align: center; padding: 1rem; }
 @media (min-width: 768px) {
   .series-hero { grid-template-columns: 1.1fr 1fr; }
   .series-hero-image { height: 100%; max-height: none; }
