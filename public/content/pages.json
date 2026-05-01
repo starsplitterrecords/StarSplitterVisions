@@ -6,7 +6,7 @@
       "pageNumber": 1,
       "title": "Page 1",
       "caption": "",
-      "releaseDate": "2026-05-01",
+      "releaseDate": "2026-04-29",
       "image": "/images/vikings-2026/vikings-ep1/page-001.jpg"
     },
     {
@@ -15,7 +15,7 @@
       "pageNumber": 2,
       "title": "Page 2",
       "caption": "",
-      "releaseDate": "2026-05-02",
+      "releaseDate": "2026-04-30",
       "image": "/images/vikings-2026/vikings-ep1/page-002.jpg"
     },
     {
@@ -24,17 +24,8 @@
       "pageNumber": 3,
       "title": "Page 3",
       "caption": "",
-      "releaseDate": "2026-05-02",
+      "releaseDate": "2026-05-1",
       "image": "/images/vikings-2026/vikings-ep1/page-003.jpg"
-    },
-    {
-      "seriesSlug": "vikings-2026",
-      "releaseSlug": "vikings-ep2",
-      "pageNumber": 1,
-      "releaseDate": "2026-02-14",
-      "title": "Oathfire Relay",
-      "caption": "Clan heralds ignite an oathfire beacon that can summon allies or rivals.",
-      "image": "/images/vikings-2026/vikings-ep2/page-001.jpg"
     },
     {
       "seriesSlug": "stardust-station",
