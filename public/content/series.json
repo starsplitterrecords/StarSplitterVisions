@@ -5,28 +5,52 @@
       "title": "Vikings 2026!",
       "tagline": "Longships return from the void to reclaim the frontier.",
       "shortDescription": "After vanishing in a wormhole centuries ago, a Norse fleet reappears with living star-maps and ancestral claims that ignite a three-way conflict over trade lanes, belief, and sovereignty.",
-      "heroImage": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1600&q=80"
+      "heroImage": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1600&q=80",
+      "accentColor": "#facc15",
+      "secondaryColor": "#1e3a8a",
+      "backgroundTone": "bureaucratic",
+      "logoText": "VIKINGS 2026!",
+      "coverImage": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1600&q=80",
+      "thumbnailImage": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1600&q=80"
     },
     {
       "slug": "stardust-station",
       "title": "Stardust Station",
       "tagline": "The neutral hub where peace is negotiated one docking at a time.",
       "shortDescription": "At the busiest transfer station in contested space, operators and medics keep traffic moving while smugglers, diplomats, and covert agents turn every arrival into a potential flashpoint.",
-      "heroImage": "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1600&q=80"
+      "heroImage": "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1600&q=80",
+      "accentColor": "#c084fc",
+      "secondaryColor": "#38bdf8",
+      "backgroundTone": "cosmic",
+      "logoText": "STARDUST STATION",
+      "coverImage": "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1600&q=80",
+      "thumbnailImage": "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1600&q=80"
     },
     {
       "slug": "azure-reach",
       "title": "Azure Reach",
       "tagline": "Beneath sapphire seas, a drowned archive can rewrite civilization.",
       "shortDescription": "On an ocean world of floating cities and abyssal ruins, survey crews race to recover submerged records that challenge accepted history and strain alliances between locals, scientists, and mining syndicates.",
-      "heroImage": "https://images.unsplash.com/photo-1473116763249-2faaef81ccda?auto=format&fit=crop&w=1600&q=80"
+      "heroImage": "https://images.unsplash.com/photo-1473116763249-2faaef81ccda?auto=format&fit=crop&w=1600&q=80",
+      "accentColor": "#22d3ee",
+      "secondaryColor": "#0f766e",
+      "backgroundTone": "ocean",
+      "logoText": "AZURE REACH",
+      "coverImage": "https://images.unsplash.com/photo-1473116763249-2faaef81ccda?auto=format&fit=crop&w=1600&q=80",
+      "thumbnailImage": "https://images.unsplash.com/photo-1473116763249-2faaef81ccda?auto=format&fit=crop&w=1600&q=80"
     },
     {
       "slug": "sunforge-outlaw",
       "title": "Sunforge Outlaw",
       "tagline": "A fugitive pilot turns solar industry into a revolution.",
       "shortDescription": "Hunted by a star-powered industrial state, a former convoy ace raids sunforge supply lines and rallies orbital workers to seize the foundries that run on captured stellar fire.",
-      "heroImage": "https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?auto=format&fit=crop&w=1600&q=80"
+      "heroImage": "https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?auto=format&fit=crop&w=1600&q=80",
+      "accentColor": "#fb923c",
+      "secondaryColor": "#b45309",
+      "backgroundTone": "sunforge",
+      "logoText": "SUNFORGE OUTLAW",
+      "coverImage": "https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?auto=format&fit=crop&w=1600&q=80",
+      "thumbnailImage": "https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?auto=format&fit=crop&w=1600&q=80"
     }
   ]
 }

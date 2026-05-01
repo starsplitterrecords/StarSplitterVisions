@@ -56,3 +56,40 @@ p { margin: 0 0 1rem; color: #c9ccf8; }
 .world-meta { margin: 0; padding-left: 1.15rem; display: grid; gap: .45rem; color: #d6dcff; }
 .related-series { list-style: none; margin: .4rem 0 0; padding: 0; display: grid; gap: .45rem; }
 .related-series a { color: #dbe0ff; text-decoration: none; border-bottom: 1px solid rgba(219,224,255,.3); width: fit-content; }
+
+.page-series {
+  --series-accent: #7f8cff;
+  --series-secondary: #3a4d80;
+  --series-background: #0a0d17;
+  background:
+    radial-gradient(circle at top right, color-mix(in srgb, var(--series-secondary) 35%, transparent) 0%, transparent 55%),
+    radial-gradient(circle at top left, color-mix(in srgb, var(--series-accent) 20%, transparent) 0%, transparent 45%),
+    linear-gradient(180deg, color-mix(in srgb, var(--series-background) 70%, #101a2f 30%), var(--series-background));
+  border-radius: 20px;
+}
+.series-tone-cosmic { --series-background: #0a0820; }
+.series-tone-ocean { --series-background: #061a20; }
+.series-tone-bureaucratic { --series-background: #111827; }
+.series-tone-sunforge { --series-background: #22120b; }
+.series-tone-neutral { --series-background: #141414; }
+.series-tone-deep { --series-background: #090d22; }
+.series-tone-dark { --series-background: #0a0d17; }
+
+.page-series .rail-header h2,
+.page-series .tagline,
+.page-series .series-logo-text { color: var(--series-accent); }
+.page-series .release-card,
+.page-series .series-card,
+.page-series .world-card,
+.page-series .series-hero { border-color: color-mix(in srgb, var(--series-secondary) 45%, #d7deff 18%); }
+.page-series .release-card:hover,
+.page-series .series-card:hover { box-shadow: 0 12px 28px color-mix(in srgb, var(--series-secondary) 35%, transparent); }
+.page-series .release-eyebrow { color: color-mix(in srgb, var(--series-accent) 68%, #d8e0ff); }
+.page-series .primary-button {
+  background: linear-gradient(135deg, var(--series-accent), var(--series-secondary));
+  color: #fff;
+}
+.series-logo-fallback {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--series-accent) 35%, transparent), color-mix(in srgb, var(--series-secondary) 45%, #0f172a));
+}
+.series-logo-text { font-size: .82rem; letter-spacing: .08em; text-transform: uppercase; margin-bottom: .45rem; }

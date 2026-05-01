@@ -1,6 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
 
 const LATEST_ISSUES_LIMIT = 4;
+const DEFAULT_SERIES_IDENTITY = {
+  accent: '#7f8cff',
+  secondary: '#3a4d80',
+  background: '#0a0d17',
+  tone: 'dark',
+};
 
 function parseDate(value) {
   if (!value) return null;
@@ -38,6 +44,10 @@ function sortReleasesByNewest(a, b, aIndex, bIndex) {
   return aIndex - bIndex;
 }
 
+const COLOR_PATTERN = /^(#[0-9a-fA-F]{3}|#[0-9a-fA-F]{6}|rgb\(|rgba\(|hsl\(|hsla\()/;
+const safeColor = (value, fallback) => (typeof value === 'string' && COLOR_PATTERN.test(value.trim()) ? value.trim() : fallback);
+const toneClass = (tone) => ['dark', 'deep', 'ocean', 'cosmic', 'bureaucratic', 'sunforge', 'neutral'].includes(tone) ? `series-tone-${tone}` : 'series-tone-dark';
+
 function EmptyRail({ title, message }) {
   return <section className="rail"><div className="rail-header"><h2>{title}</h2></div><div className="empty-rail"><p>{message}</p></div></section>;
 }
@@ -66,7 +76,15 @@ function ReleaseCard({ release, seriesBySlug, compact = false }) {
   );
 }
 
-function SeriesCard({ item }) { const imageSrc = item.heroImage || item.image; const supportText = item.tagline || item.shortDescription || item.longDescription; return <li className="series-card">{item.slug ? <a href={`/series/${item.slug}`}>{imageSrc ? <img src={imageSrc} alt={`${item.title} series art`} className="release-image" /> : <div className="visual-fallback" aria-hidden="true"><span>{item.logoText || item.title}</span></div>}<div className="release-meta"><h3>{item.title}</h3>{supportText ? <p className="release-detail">{supportText}</p> : null}</div></a> : null}</li>; }
+function SeriesCard({ item }) {
+  const imageSrc = item.thumbnailImage || item.heroImage || item.image;
+  const supportText = item.tagline || item.shortDescription || item.longDescription;
+  const logoText = item.logoText || item.title;
+  const accent = safeColor(item.accentColor, DEFAULT_SERIES_IDENTITY.accent);
+  const secondary = safeColor(item.secondaryColor, DEFAULT_SERIES_IDENTITY.secondary);
+
+  return <li className="series-card" style={{ '--series-accent': accent, '--series-secondary': secondary }}>{item.slug ? <a href={`/series/${item.slug}`}>{imageSrc ? <img src={imageSrc} alt={`${item.title} series art`} className="release-image" /> : <div className="visual-fallback series-logo-fallback" aria-label={`${item.title} branded card`}><span>{logoText}</span></div>}<div className="release-meta"><h3>{item.title}</h3>{supportText ? <p className="release-detail">{supportText}</p> : null}</div></a> : null}</li>;
+}
 
 function Rail({ title, children }) { return <section className="rail"><div className="rail-header"><h2>{title}</h2></div>{children}</section>; }
 
@@ -76,7 +94,12 @@ function HomePage({ series, releases, continueRelease }) {
   return (<main className="page page-home"><header className="home-header"><h1>Star Splitter Visions</h1><p>Browse new releases and cinematic worlds across the Star Splitter slate.</p></header>{continueRelease && <section className="continue-module"><p className="release-date">Continue Reading</p><a href={`/read/${continueRelease.id}`}><img src={continueRelease.coverImage || continueRelease.image} alt={`${continueRelease.title} cover`} className="release-image" /><h2>{continueRelease.title}</h2>{formatDate(continueRelease.releaseDate) ? <p>{formatDate(continueRelease.releaseDate)}</p> : null}</a></section>}<Rail title="Latest Releases">{visibleReleases.length === 0 ? <div className="empty-rail"><p>No releases available yet.</p></div> : <ul className="rail-row">{visibleReleases.map((release) => <ReleaseCard key={release.id} release={release} seriesBySlug={seriesBySlug} />)}</ul>}</Rail><Rail title="Series">{series.length === 0 ? <div className="empty-rail"><p>No series available yet.</p></div> : <ul className="rail-row">{series.map((item) => <SeriesCard key={item.slug} item={item} />)}</ul>}</Rail></main>);
 }
 
-function SeriesHero({ series }) { return <header className="series-hero"><img src={series.heroImage} alt="" className="series-hero-image" /><div className="series-hero-content"><p className="eyebrow"><a href="/">← All series</a></p><h1>{series.title}</h1><p className="tagline">{series.tagline}</p><p>{series.shortDescription}</p></div></header>; }
+function SeriesHero({ series }) {
+  const logoText = series.logoText || series.title;
+  const coverImage = series.coverImage || series.heroImage || series.image;
+
+  return <header className="series-hero">{coverImage ? <img src={coverImage} alt={`${series.title} cover art`} className="series-hero-image" /> : <div className="series-hero-image visual-fallback series-logo-fallback" role="img" aria-label={`${series.title} cover placeholder`}><span>{logoText}</span></div>}<div className="series-hero-content"><p className="eyebrow"><a href="/">← All series</a></p><p className="series-logo-text">{logoText}</p><h1>{series.title}</h1><p className="tagline">{series.tagline}</p><p>{series.shortDescription}</p></div></header>;
+}
 
 function SeriesPage({ series, releases, allSeries }) {
   const seriesBySlug = useMemo(() => new Map(allSeries.map((item) => [item.slug, item])), [allSeries]);
@@ -88,9 +111,12 @@ function SeriesPage({ series, releases, allSeries }) {
   const relatedSeries = allSeries.filter((item) => item.slug !== series.slug && series.worldSlug && item.worldSlug === series.worldSlug);
 
   const extraItems = (series.extras || series.relatedLinks || series.links || []).filter(Boolean);
+  const accent = safeColor(series.accentColor, DEFAULT_SERIES_IDENTITY.accent);
+  const secondary = safeColor(series.secondaryColor, DEFAULT_SERIES_IDENTITY.secondary);
+  const background = safeColor(series.backgroundColor, DEFAULT_SERIES_IDENTITY.background);
 
   return (
-    <main className="page page-series">
+    <main className={`page page-series ${toneClass(series.backgroundTone)}`} style={{ '--series-accent': accent, '--series-secondary': secondary, '--series-background': background }}>
       <SeriesHero series={series} />
 
       <Rail title="Latest Issues">
