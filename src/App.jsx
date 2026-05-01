@@ -94,8 +94,70 @@ function ReleasePage({ release, series }) {
         <a href={`/series/${series.slug}`}>← Back to {series.title}</a>
       </p>
       <h1>{release.title}</h1>
+      <p>Issue #{release.issueNumber}</p>
       <p>{formatDate(release.releaseDate)}</p>
-      <img src={release.image} alt="" className="release-image" />
+      <img src={release.coverImage || release.image} alt="" className="release-image" />
+      <p>{release.description}</p>
+      <p>
+        <a href={`/read/${release.id}`}>Read</a>
+      </p>
+      <p>{release.ctaLabel}</p>
+    </main>
+  );
+}
+
+function ReaderPage({ release, pages }) {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    setIndex(0);
+  }, [release.id]);
+
+  const releasePages = useMemo(
+    () =>
+      pages
+        .filter((page) => page.releaseSlug === release.id)
+        .sort((a, b) => a.pageNumber - b.pageNumber),
+    [pages, release.id]
+  );
+
+  const currentPage = releasePages[index];
+
+  if (releasePages.length === 0) {
+    return (
+      <main className="page">
+        <p className="eyebrow">
+          <a href={`/releases/${release.id}`}>← Back to release</a>
+        </p>
+        <h1>{release.title}</h1>
+        <p>No pages available yet.</p>
+      </main>
+    );
+  }
+
+  return (
+    <main className="page">
+      <p className="eyebrow">
+        <a href={`/releases/${release.id}`}>← Back to release</a>
+      </p>
+      <h1>{release.title}</h1>
+      <h2>
+        Page {currentPage.pageNumber}: {currentPage.title}
+      </h2>
+      <p>{currentPage.caption}</p>
+      <img src={currentPage.image} alt={currentPage.title} className="release-image" />
+      <p>
+        <button type="button" onClick={() => setIndex(index - 1)} disabled={index === 0}>
+          Previous
+        </button>{' '}
+        <button
+          type="button"
+          onClick={() => setIndex(index + 1)}
+          disabled={index === releasePages.length - 1}
+        >
+          Next
+        </button>
+      </p>
     </main>
   );
 }
@@ -115,20 +177,24 @@ function NotFound() {
 export default function App() {
   const [series, setSeries] = useState([]);
   const [releases, setReleases] = useState([]);
+  const [pages, setPages] = useState([]);
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     Promise.all([
       fetch('/content/series.json').then((response) => response.json()),
-      fetch('/content/releases.json').then((response) => response.json())
+      fetch('/content/releases.json').then((response) => response.json()),
+      fetch('/content/pages.json').then((response) => response.json())
     ])
-      .then(([seriesData, releasesData]) => {
+      .then(([seriesData, releasesData, pagesData]) => {
         setSeries(seriesData.series ?? []);
         setReleases(releasesData.releases ?? []);
+        setPages(pagesData.pages ?? []);
       })
       .catch(() => {
         setSeries([]);
         setReleases([]);
+        setPages([]);
         setHasError(true);
       });
   }, []);
@@ -136,6 +202,7 @@ export default function App() {
   const path = window.location.pathname;
   const seriesMatch = path.match(/^\/series\/([^/]+)$/);
   const releaseMatch = path.match(/^\/releases\/([^/]+)$/);
+  const readMatch = path.match(/^\/read\/([^/]+)$/);
 
   if (hasError) {
     return <NotFound />;
@@ -169,6 +236,16 @@ export default function App() {
     }
 
     return <ReleasePage release={selectedRelease} series={parentSeries} />;
+  }
+
+  if (readMatch) {
+    const selectedRelease = releases.find((item) => item.id === readMatch[1]);
+
+    if (!selectedRelease) {
+      return <NotFound />;
+    }
+
+    return <ReaderPage release={selectedRelease} pages={pages} />;
   }
 
   return <NotFound />;

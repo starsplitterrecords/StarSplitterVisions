@@ -1,0 +1,76 @@
+{
+  "pages": [
+    {
+      "seriesSlug": "vikings-2026",
+      "releaseSlug": "vikings-ep1",
+      "pageNumber": 1,
+      "releaseDate": "2025-03-10",
+      "title": "Frostwake Arrival",
+      "caption": "The longship Drakkar-7 enters the ice ring to answer an impossible distress rune.",
+      "image": "/images/vikings-2026/vikings-ep1/page-001.jpg"
+    },
+    {
+      "seriesSlug": "vikings-2026",
+      "releaseSlug": "vikings-ep1",
+      "pageNumber": 2,
+      "releaseDate": "2025-03-10",
+      "title": "Ghost Archive",
+      "caption": "A preserved skald vault opens, broadcasting a map encoded in old verse.",
+      "image": "/images/vikings-2026/vikings-ep1/page-002.jpg"
+    },
+    {
+      "seriesSlug": "stardust-station",
+      "releaseSlug": "station-pilot",
+      "pageNumber": 1,
+      "releaseDate": "2024-11-05",
+      "title": "Docking Gridlock",
+      "caption": "Three rival fleets demand priority berths as emergency sirens roll across Ring C.",
+      "image": "/images/stardust-station/station-pilot/page-001.jpg"
+    },
+    {
+      "seriesSlug": "stardust-station",
+      "releaseSlug": "station-pilot",
+      "pageNumber": 2,
+      "releaseDate": "2024-11-05",
+      "title": "Airlock Negotiation",
+      "caption": "Station marshals broker a ceasefire in an airlock lined with cargo mechs.",
+      "image": "/images/stardust-station/station-pilot/page-002.jpg"
+    },
+    {
+      "seriesSlug": "azure-reach",
+      "releaseSlug": "azure-teaser",
+      "pageNumber": 1,
+      "releaseDate": "2026-06-01",
+      "title": "Mirror Sea",
+      "caption": "Survey craft glide over an unnaturally still ocean reflecting a double sunrise.",
+      "image": "/images/azure-reach/azure-teaser/page-001.jpg"
+    },
+    {
+      "seriesSlug": "azure-reach",
+      "releaseSlug": "azure-teaser",
+      "pageNumber": 2,
+      "releaseDate": "2026-06-01",
+      "title": "Signal Below",
+      "caption": "A pulse from the abyss outlines the buried geometry of a submerged city.",
+      "image": "/images/azure-reach/azure-teaser/page-002.jpg"
+    },
+    {
+      "seriesSlug": "sunforge-outlaw",
+      "releaseSlug": "sunforge-trailer",
+      "pageNumber": 1,
+      "releaseDate": "2025-08-22",
+      "title": "Core Heist",
+      "caption": "Outlaw pilot Kael intercepts a reactor convoy in the flare shadow of the Sunforge.",
+      "image": "/images/sunforge-outlaw/sunforge-trailer/page-001.jpg"
+    },
+    {
+      "seriesSlug": "sunforge-outlaw",
+      "releaseSlug": "sunforge-trailer",
+      "pageNumber": 2,
+      "releaseDate": "2025-08-22",
+      "title": "Foundry Uprising",
+      "caption": "Workers cut the heat shields and raise rebel beacons across the orbital furnaces.",
+      "image": "/images/sunforge-outlaw/sunforge-trailer/page-002.jpg"
+    }
+  ]
+}
