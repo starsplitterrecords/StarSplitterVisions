@@ -48,6 +48,96 @@ const slugify = (value) =>
 
 const padPageNumber = (value) => String(value).padStart(3, '0');
 
+
+const PUBLISHING_STEPS = [
+  {
+    title: 'Step 1 — Add image files in /public/images',
+    body: 'Add new page and cover images directly in the repository under the public image folder before updating JSON.',
+    details: [
+      'Repo path example: public/images/{seriesSlug}/{releaseSlug}/page-001.jpg',
+      'JSON path example: /images/{seriesSlug}/{releaseSlug}/page-001.jpg',
+      'Do not use /public/images/... inside JSON fields.',
+    ],
+  },
+  {
+    title: 'Step 2 — Generate JSON snippets in this admin helper',
+    body: 'Use the generators below to produce valid JSON snippets for content updates. Generation does not save anything.',
+    details: [
+      'Series generator output is for series.json',
+      'Release generator output is for releases.json',
+      'Page generator output is for pages.json',
+    ],
+  },
+  {
+    title: 'Step 3 — Paste JSON into the correct content file',
+    body: 'Copy generated output and paste it into the matching file in public/content while keeping JSON syntax valid.',
+    details: [
+      'Series JSON → public/content/series.json',
+      'Release JSON → public/content/releases.json',
+      'Page JSON → public/content/pages.json',
+      'Extras and soundtrack data currently live in series.json if used.',
+    ],
+  },
+  {
+    title: 'Step 4 — Commit changes on a branch',
+    body: 'After image files and JSON files are updated, commit the changes on a branch created from the latest main branch.',
+    details: [],
+  },
+  {
+    title: 'Step 5 — Open a pull request',
+    body: 'Open a pull request so content changes can be reviewed before production.',
+    details: [],
+  },
+  {
+    title: 'Step 6 — Verify the Vercel preview',
+    body: 'Before merge, confirm the preview behaves correctly across key routes and reading flows.',
+    details: [
+      'Homepage loads',
+      'Series page loads',
+      'Release page loads',
+      'Read button works',
+      'Reader opens the correct release',
+      'Page images appear',
+      'Pages are ordered correctly',
+      'Previous / Next controls work',
+      'Mobile layout is usable',
+      'No broken images appear',
+      'No undefined/null text appears',
+    ],
+  },
+  {
+    title: 'Step 7 — Merge after verification',
+    body: 'After preview checks pass, merge the PR. If Vercel deploys from main, production should update from the merged branch.',
+    details: [],
+  },
+];
+
+function AdminPublishingChecklist() {
+  return (
+    <section className="admin-checklist-card" aria-labelledby="admin-publishing-checklist-title">
+      <h2 id="admin-publishing-checklist-title">Publishing Checklist</h2>
+      <p className="admin-helper-note">Use the generators to create valid JSON, then copy and paste the output into the matching JSON file in the repo.</p>
+      <p className="admin-helper-tip">This checklist is manual. The admin helper does not upload files, write JSON, open PRs, or deploy changes.</p>
+
+      <ol className="admin-checklist-list">
+        {PUBLISHING_STEPS.map((step) => (
+          <li key={step.title}>
+            <h3>{step.title}</h3>
+            <p>{step.body}</p>
+            {step.details.length > 0 ? (
+              <ul>
+                {step.details.map((detail) => (
+                  <li key={detail}>{detail}</li>
+                ))}
+              </ul>
+            ) : null}
+          </li>
+        ))}
+      </ol>
+    </section>
+  );
+}
+
 function AdminSectionCard({ title, description, status, action }) {
   return (
     <section className="admin-card" aria-labelledby={`admin-${title.toLowerCase()}-title`}>
@@ -457,6 +547,8 @@ export default function AdminShell() {
           files, connect to GitHub, or publish content.
         </p>
       </section>
+
+      <AdminPublishingChecklist />
 
       <ul className="admin-limitations" aria-label="Current admin limitations">
         <li>Authentication not implemented</li>

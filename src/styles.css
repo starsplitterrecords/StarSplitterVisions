@@ -604,3 +604,40 @@ a.primary-button {
   color: var(--text-muted);
   padding: 0.5rem 0.65rem;
 }
+
+.admin-checklist-card {
+  border: 1px solid rgba(163, 255, 18, 0.28);
+  border-radius: 14px;
+  background: linear-gradient(180deg, var(--bg-surface-2), var(--bg-surface));
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.26);
+  padding: 1rem 1.1rem;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.admin-checklist-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.admin-checklist-list li {
+  border-left: 1px solid var(--border-soft);
+  padding-left: 0.8rem;
+}
+
+.admin-checklist-list h3 {
+  margin: 0 0 0.35rem;
+  font-size: 0.98rem;
+}
+
+.admin-checklist-list p {
+  margin: 0;
+}
+
+.admin-checklist-list ul {
+  margin: 0.5rem 0 0;
+  padding-left: 1.05rem;
+  color: var(--text-secondary);
+}
