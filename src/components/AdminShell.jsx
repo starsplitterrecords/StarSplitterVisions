@@ -162,6 +162,176 @@ function ReleaseJsonGenerator() {
   );
 }
 
+const BACKGROUND_TONE_OPTIONS = ['dark', 'deep', 'ocean', 'cosmic', 'bureaucratic', 'sunforge', 'neutral'];
+const HEX_COLOR_PATTERN = /^#[0-9a-fA-F]{6}$/;
+
+function SeriesJsonGenerator() {
+  const [form, setForm] = useState({
+    title: '',
+    slug: '',
+    tagline: '',
+    shortDescription: '',
+    accentColor: '#facc15',
+    secondaryColor: '#1e3a8a',
+    backgroundTone: 'dark',
+    heroImage: '',
+    coverImage: '',
+    thumbnailImage: '',
+    status: 'ongoing',
+  });
+  const [copied, setCopied] = useState(false);
+  const [slugEdited, setSlugEdited] = useState(false);
+
+  const setField = (key, value) => setForm((current) => ({ ...current, [key]: value }));
+
+  const updateSlugDependentImages = (slugValue) => {
+    const trimmedSlug = slugValue.trim();
+    const imageBase = `/images/${trimmedSlug}`;
+    setForm((current) => ({
+      ...current,
+      heroImage: current.heroImage.trim() ? current.heroImage : `${imageBase}/hero.jpg`,
+      coverImage: current.coverImage.trim() ? current.coverImage : `${imageBase}/cover.jpg`,
+      thumbnailImage: current.thumbnailImage.trim() ? current.thumbnailImage : `${imageBase}/thumb.jpg`,
+    }));
+  };
+
+  const onTitleChange = (value) => {
+    if (!slugEdited) {
+      const nextSlug = slugify(value);
+      setForm((current) => ({ ...current, title: value, slug: nextSlug }));
+      if (nextSlug) updateSlugDependentImages(nextSlug);
+      return;
+    }
+
+    setField('title', value);
+  };
+
+  const onSlugChange = (value) => {
+    const normalizedSlug = slugify(value);
+    setSlugEdited(true);
+    setForm((current) => ({ ...current, slug: normalizedSlug }));
+    if (normalizedSlug) updateSlugDependentImages(normalizedSlug);
+  };
+
+  const warnings = useMemo(() => {
+    const items = [];
+    if (!form.title.trim()) items.push('title is missing.');
+    if (!form.slug.trim()) items.push('slug is missing.');
+    if (form.accentColor.trim() && !HEX_COLOR_PATTERN.test(form.accentColor.trim())) items.push('accentColor should be a hex color like #facc15.');
+    if (form.secondaryColor.trim() && !HEX_COLOR_PATTERN.test(form.secondaryColor.trim())) items.push('secondaryColor should be a hex color like #1e3a8a.');
+
+    ['heroImage', 'coverImage', 'thumbnailImage'].forEach((field) => {
+      const value = form[field].trim();
+      if (!value) return;
+      if (value.startsWith('/public/images/')) items.push(`${field} should start with /images/, not /public/images/.`);
+      else if (!value.startsWith('/images/')) items.push(`${field} should start with /images/.`);
+    });
+
+    return items;
+  }, [form]);
+
+  const seriesJson = useMemo(() => {
+    if (!form.title.trim() || !form.slug.trim()) return '';
+
+    const output = {
+      title: form.title.trim(),
+      slug: form.slug.trim(),
+      logoText: form.title.trim().toUpperCase(),
+      tagline: form.tagline.trim(),
+      shortDescription: form.shortDescription.trim(),
+      accentColor: form.accentColor.trim(),
+      secondaryColor: form.secondaryColor.trim(),
+      backgroundTone: form.backgroundTone.trim() || 'dark',
+      heroImage: form.heroImage.trim(),
+      coverImage: form.coverImage.trim(),
+      thumbnailImage: form.thumbnailImage.trim(),
+      status: form.status.trim() || 'ongoing',
+    };
+
+    return JSON.stringify(output, null, 2);
+  }, [form]);
+
+  const copyJson = async () => {
+    if (!seriesJson || !navigator?.clipboard?.writeText) return;
+    try {
+      await navigator.clipboard.writeText(seriesJson);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1400);
+    } catch {
+      setCopied(false);
+    }
+  };
+
+  return (
+    <section className="admin-helper-card" aria-labelledby="series-json-generator-title">
+      <h2 id="series-json-generator-title">Series JSON Generator</h2>
+      <p className="admin-helper-note">This only generates JSON. It does not save or publish changes. Copy this JSON and paste it into series.json manually.</p>
+      <p className="admin-helper-tip">Slug should be lowercase, hyphen-separated, and stable after publishing.</p>
+      <p className="admin-helper-tip">Use hex colors like #facc15. Accent color is used for highlights, buttons, borders, and chips.</p>
+      <p className="admin-helper-tip">Use public web paths beginning with /images/, not /public/images/. Example: /images/vikings-2026/hero.jpg</p>
+
+      <div className="admin-form-grid">
+        <label>
+          <span>title</span>
+          <input type="text" value={form.title} onChange={(event) => onTitleChange(event.target.value)} />
+        </label>
+        <label>
+          <span>slug</span>
+          <input type="text" value={form.slug} onChange={(event) => onSlugChange(event.target.value)} />
+        </label>
+        <label className="admin-field-full">
+          <span>tagline</span>
+          <input type="text" value={form.tagline} onChange={(event) => setField('tagline', event.target.value)} />
+        </label>
+        <label className="admin-field-full">
+          <span>shortDescription</span>
+          <textarea value={form.shortDescription} onChange={(event) => setField('shortDescription', event.target.value)} rows={4} />
+        </label>
+        <label>
+          <span>accentColor</span>
+          <input type="text" value={form.accentColor} onChange={(event) => setField('accentColor', event.target.value)} />
+        </label>
+        <label>
+          <span>secondaryColor</span>
+          <input type="text" value={form.secondaryColor} onChange={(event) => setField('secondaryColor', event.target.value)} />
+        </label>
+        <label>
+          <span>backgroundTone</span>
+          <select value={form.backgroundTone} onChange={(event) => setField('backgroundTone', event.target.value)}>
+            {BACKGROUND_TONE_OPTIONS.map((tone) => (
+              <option key={tone} value={tone}>{tone}</option>
+            ))}
+          </select>
+        </label>
+        <label>
+          <span>status</span>
+          <input type="text" value={form.status} onChange={(event) => setField('status', event.target.value)} />
+        </label>
+        <label>
+          <span>heroImage</span>
+          <input type="text" value={form.heroImage} onChange={(event) => setField('heroImage', event.target.value)} />
+        </label>
+        <label>
+          <span>coverImage</span>
+          <input type="text" value={form.coverImage} onChange={(event) => setField('coverImage', event.target.value)} />
+        </label>
+        <label>
+          <span>thumbnailImage</span>
+          <input type="text" value={form.thumbnailImage} onChange={(event) => setField('thumbnailImage', event.target.value)} />
+        </label>
+      </div>
+
+      {warnings.length > 0 ? <ul className="admin-warnings">{warnings.map((warning) => <li key={warning}>{warning}</li>)}</ul> : null}
+
+      <label className="admin-field-full">
+        <span>Generated JSON</span>
+        <textarea className="admin-json-output" value={seriesJson} readOnly rows={16} placeholder="Fill title and slug to generate JSON." />
+      </label>
+      <button type="button" className="primary-button" onClick={copyJson} disabled={!seriesJson}>Copy JSON{copied ? ' ✓' : ''}</button>
+    </section>
+  );
+}
+
 function PageJsonGenerator() {
   const [form, setForm] = useState({
     seriesSlug: '',
@@ -301,6 +471,7 @@ export default function AdminShell() {
         ))}
       </section>
 
+      <SeriesJsonGenerator />
       <ReleaseJsonGenerator />
       <PageJsonGenerator />
 
