@@ -16,6 +16,7 @@ Static content is served from `public/content`:
 - `public/content/series.json`
 - `public/content/releases.json`
 - `public/content/pages.json`
+- `public/content/extras.json`
 
 ## Publishing Workflow
 
@@ -72,7 +73,7 @@ Depending on the package, Codex may update:
 - `public/content/releases.json`
 - `public/content/pages.json`
 
-Codex may also update fields that control release/page ordering, image references, and optional extras/soundtrack metadata that are stored in those content files.
+Codex may also update fields that control release/page ordering, image references, and optional extras/soundtrack metadata stored in those content files.
 
 ## Codex Content Publishing Package (Standard Shape)
 

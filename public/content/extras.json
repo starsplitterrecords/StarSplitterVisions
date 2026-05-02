@@ -1,0 +1,18 @@
+{
+  "extras": [
+    {
+      "title": "Vikings 2026! Press Kit",
+      "seriesSlug": "vikings-2026",
+      "type": "Press Kit",
+      "description": "Character bios, world notes, and visual references for Vikings 2026!.",
+      "url": "/extras/vikings-2026/press-kit"
+    },
+    {
+      "title": "Stardust Station Crew Roster",
+      "seriesSlug": "stardust-station",
+      "type": "Reference",
+      "description": "A quick guide to departments, roles, and crew dynamics across the station.",
+      "url": "/extras/stardust-station/crew-roster"
+    }
+  ]
+}
