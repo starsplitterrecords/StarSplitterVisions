@@ -48,6 +48,12 @@ const slugify = (value) =>
 
 const padPageNumber = (value) => String(value).padStart(3, '0');
 
+export const SCAFFOLD_ASSET_PROMPT_RULES = `This image is a production asset for a web publishing system.
+It must prioritize clarity, readability, and consistency.
+It should not attempt to be stylistically expressive or experimental.
+Avoid visual complexity that reduces usability at small sizes.`;
+const SCAFFOLD_ONLY_GENERATOR_COPY = 'These generators create scaffold/interface assets for the website. They do not generate comic pages or sequential art.';
+
 
 const PUBLISHING_STEPS = [
   {
@@ -117,6 +123,7 @@ function AdminPublishingChecklist() {
     <section className="admin-checklist-card" aria-labelledby="admin-publishing-checklist-title">
       <h2 id="admin-publishing-checklist-title">Admin Publishing Checklist</h2>
       <p className="admin-helper-note">Use the generators to create valid JSON, then copy and paste the output into the matching JSON file in the repo.</p>
+      <p className="admin-helper-tip">{SCAFFOLD_ONLY_GENERATOR_COPY}</p>
       <p className="admin-helper-tip">This checklist is manual. The admin helper does not upload files, write JSON, open PRs, or deploy changes.</p>
 
       <ol className="admin-checklist-list">
@@ -221,6 +228,11 @@ function ReleaseJsonGenerator() {
       image,
       coverImage,
       heroImage,
+      socialImage: `/images/${normalizedSeriesSlug}/${normalizedSlug}/social.jpg`,
+      thumbnailImage: `/images/${normalizedSeriesSlug}/${normalizedSlug}/thumbnail.jpg`,
+      mobileImage: `/images/${normalizedSeriesSlug}/${normalizedSlug}/mobile.jpg`,
+      assetRole: 'scaffold',
+      promptRules: SCAFFOLD_ASSET_PROMPT_RULES,
       ctaLabel: form.ctaLabel.trim() || DEFAULT_RELEASE_CTA_LABEL,
     };
 
@@ -250,6 +262,8 @@ function ReleaseJsonGenerator() {
     <section className="admin-helper-card" aria-labelledby="release-json-generator-title">
       <h2 id="release-json-generator-title">Release JSON Generator</h2>
       <p className="admin-helper-note">This only generates JSON. It does not save or publish changes. Copy this JSON and paste it into releases.json manually.</p>
+      <p className="admin-helper-tip">{SCAFFOLD_ONLY_GENERATOR_COPY}</p>
+      <p className="admin-helper-tip">Release scaffold assets: cover.jpg, hero.jpg, social.jpg, thumbnail.jpg, mobile.jpg.</p>
       <p className="admin-helper-tip">Use public web paths beginning with /images/, not /public/images/.</p>
 
       <div className="admin-form-grid">
@@ -371,6 +385,8 @@ function SeriesJsonGenerator() {
       heroImage: form.heroImage.trim(),
       coverImage: form.coverImage.trim(),
       thumbnailImage: form.thumbnailImage.trim(),
+      assetRole: 'scaffold',
+      promptRules: SCAFFOLD_ASSET_PROMPT_RULES,
       status: form.status.trim() || 'ongoing',
     };
 
@@ -392,6 +408,7 @@ function SeriesJsonGenerator() {
     <section className="admin-helper-card" aria-labelledby="series-json-generator-title">
       <h2 id="series-json-generator-title">Series JSON Generator</h2>
       <p className="admin-helper-note">This only generates JSON. It does not save or publish changes. Copy this JSON and paste it into series.json manually.</p>
+      <p className="admin-helper-tip">{SCAFFOLD_ONLY_GENERATOR_COPY}</p>
       <p className="admin-helper-tip">Slug should be lowercase, hyphen-separated, and stable after publishing.</p>
       <p className="admin-helper-tip">Use hex colors like #facc15. Accent color is used for highlights, buttons, borders, and chips.</p>
       <p className="admin-helper-tip">Use public web paths beginning with /images/, not /public/images/. Example: /images/vikings-2026/hero.jpg</p>
@@ -470,7 +487,9 @@ const IMAGE_TYPE_CONFIG = {
   releaseHero: { label: 'Release hero image', filenameBase: 'hero', requiresRelease: true, requiresPage: false, jsonField: 'heroImage' },
   releaseCover: { label: 'Release cover image', filenameBase: 'cover', requiresRelease: true, requiresPage: false, jsonField: 'coverImage' },
   releaseCard: { label: 'Release card image', filenameBase: 'card', requiresRelease: true, requiresPage: false, jsonField: 'image' },
-  dailyPage: { label: 'Daily page image', filenameBase: 'page', requiresRelease: true, requiresPage: true, jsonField: 'image' },
+  releaseSocial: { label: 'Release social image', filenameBase: 'social', requiresRelease: true, requiresPage: false, jsonField: 'socialImage' },
+  releaseThumbnail: { label: 'Release thumbnail image', filenameBase: 'thumbnail', requiresRelease: true, requiresPage: false, jsonField: 'thumbnailImage' },
+  releaseMobile: { label: 'Release mobile image', filenameBase: 'mobile', requiresRelease: true, requiresPage: false, jsonField: 'mobileImage' },
 };
 const SUPPORTED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp'];
 
@@ -536,6 +555,7 @@ function ImageFilingHelper() {
     <section className="admin-helper-card" aria-labelledby="image-filing-helper-title">
       <h2 id="image-filing-helper-title">Image Filing Helper</h2>
       <p className="admin-helper-note">This helper prepares correct image names and paths. It does not upload to GitHub or save files yet.</p>
+      <p className="admin-helper-tip">{SCAFFOLD_ONLY_GENERATOR_COPY}</p>
       <p className="admin-helper-tip">This helper prepares the correct filename and paths for images. It does not save files. After generating the path, manually place the image in the repo at the shown repo path, then use the JSON path in the matching content file.</p>
 
       <div className="admin-form-grid">
@@ -625,6 +645,7 @@ function PageJsonGenerator() {
       title: form.title.trim() || `Page ${Number(form.pageNumber)}`,
       caption: form.caption.trim(),
       image: effectiveImage,
+      assetRole: 'external-comic-art',
     };
 
     return JSON.stringify(output, null, 2);
@@ -645,6 +666,7 @@ function PageJsonGenerator() {
     <section className="admin-helper-card" aria-labelledby="page-json-generator-title">
       <h2 id="page-json-generator-title">Page JSON Generator</h2>
       <p className="admin-helper-note">This only generates JSON. It does not save or publish changes. Copy this JSON and paste it into pages.json manually.</p>
+      <p className="admin-helper-tip">This generator stores references to externally produced comic art only.</p>
       <p className="admin-helper-tip">Image path pattern: /images/{'{seriesSlug}'}/{'{releaseSlug}'}/page-001.jpg (not /public/images/...)</p>
 
       <div className="admin-form-grid">
