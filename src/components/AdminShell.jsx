@@ -1,12 +1,12 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 const ADMIN_SECTIONS = [
   {
     title: 'Series',
     description:
       'Manage series identity, descriptions, artwork, colors, and publishing metadata.',
-    status: 'Shell only',
-    action: 'Edit series — coming soon',
+    status: 'Editor available',
+    action: 'Edit series in the workspace below',
   },
   {
     title: 'Releases',
@@ -285,6 +285,119 @@ function ReleaseJsonGenerator() {
       <button type="button" className="primary-button" onClick={copyJson} disabled={!releaseJson}>Copy Codex JSON{copied ? ' ✓' : ''}</button>
     </section>
   );
+}
+
+
+
+function normalizeStringArray(value) {
+  return value.split(',').map((item) => item.trim()).filter(Boolean);
+}
+
+function SeriesMetadataEditor() {
+  const [seriesList, setSeriesList] = useState([]);
+  const [selectedSlug, setSelectedSlug] = useState('');
+  const [draft, setDraft] = useState(null);
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    fetch('/content/series.json')
+      .then((response) => response.json())
+      .then((payload) => {
+        const items = Array.isArray(payload?.series) ? payload.series : [];
+        setSeriesList(items);
+        if (items[0]?.slug) setSelectedSlug(items[0].slug);
+      })
+      .catch(() => setSeriesList([]));
+  }, []);
+
+  useEffect(() => {
+    const active = seriesList.find((item) => item.slug === selectedSlug);
+    if (!active) {
+      setDraft(null);
+      return;
+    }
+    setDraft({ ...active });
+  }, [selectedSlug, seriesList]);
+
+  const setField = (key, value) => setDraft((current) => ({ ...current, [key]: value }));
+
+  const normalizedRecord = useMemo(() => {
+    if (!draft) return null;
+    const output = { ...draft };
+    Object.keys(output).forEach((key) => {
+      if (typeof output[key] === 'string') output[key] = output[key].trim();
+    });
+    output.genre = normalizeStringArray(Array.isArray(draft.genre) ? draft.genre.join(', ') : String(draft.genre || ''));
+    output.tone = normalizeStringArray(Array.isArray(draft.tone) ? draft.tone.join(', ') : String(draft.tone || ''));
+    return output;
+  }, [draft]);
+
+  const warnings = useMemo(() => {
+    if (!draft || !normalizedRecord) return [];
+    const items = [];
+    if (!normalizedRecord.slug) items.push('slug is required.');
+    if (normalizedRecord.slug && !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(normalizedRecord.slug)) items.push('slug must be URL-safe lowercase kebab-case.');
+    if (!normalizedRecord.title) items.push('title is required.');
+    ['heroImage', 'coverImage', 'thumbnailImage'].forEach((field) => {
+      const value = normalizedRecord[field];
+      if (!value) return;
+      if (value.startsWith('/public/images/')) items.push(`${field} must use /images/... JSON paths, not /public/images/...`);
+      else if (!value.startsWith('/images/')) items.push(`${field} should start with /images/.`);
+    });
+    ['accentColor', 'secondaryColor'].forEach((field) => {
+      const value = normalizedRecord[field];
+      if (!value) return;
+      if (!HEX_COLOR_PATTERN.test(value)) items.push(`${field} must be a valid hex color like #f59e0b.`);
+    });
+    return items;
+  }, [draft, normalizedRecord]);
+
+  const packageOutput = useMemo(() => {
+    if (!normalizedRecord || warnings.length > 0) return '';
+    return `# Codex Content Publishing Package
+
+## Task
+Update series \`${normalizedRecord.slug}\`.
+
+## Goal
+Apply the edited series metadata from this admin-generated package.
+
+## Files to inspect
+- Locate canonical series content file.
+- Likely file: \`public/content/series.json\`
+
+## Files to update
+- \`public/content/series.json\`
+
+## Series record to update
+Find the record with slug \`${normalizedRecord.slug}\` and replace or merge with:
+
+\`\`\`json
+${JSON.stringify(normalizedRecord, null, 2)}
+\`\`\`
+
+## Artwork path rules
+- JSON paths must use \`/images/{seriesSlug}/...\`
+- Never use \`/public/images/...\` inside JSON values.
+
+## Validation checklist
+- Confirm app builds
+- Confirm series page renders
+- Confirm no unrelated routes broke
+- Confirm image paths resolve
+- Confirm JSON remains valid
+- Confirm no unrelated series records changed
+
+## Expected result
+The selected series reflects the edited metadata in public and admin views.`;
+  }, [normalizedRecord, warnings.length]);
+
+  const copyPackage = async () => {
+    if (!packageOutput || !navigator?.clipboard?.writeText) return;
+    try { await navigator.clipboard.writeText(packageOutput); setCopied(true); setTimeout(() => setCopied(false), 1400); } catch { setCopied(false); }
+  };
+
+  return <section className="admin-helper-card" aria-labelledby="series-metadata-editor-title"><h2 id="series-metadata-editor-title">Edit Series</h2><p className="admin-helper-note">Select an existing series, edit metadata, preview normalized JSON, and generate a Codex package. This does not write files or publish.</p><div className="admin-form-grid"><label><span>series</span><select value={selectedSlug} onChange={(event) => setSelectedSlug(event.target.value)}>{seriesList.map((series) => <option key={series.slug} value={series.slug}>{series.title} ({series.slug})</option>)}</select></label>{draft ? <><label><span>slug</span><input type="text" value={draft.slug || ''} onChange={(event) => setField('slug', slugify(event.target.value))} /></label><label><span>title</span><input type="text" value={draft.title || ''} onChange={(event) => setField('title', event.target.value)} /></label><label><span>logoText</span><input type="text" value={draft.logoText || ''} onChange={(event) => setField('logoText', event.target.value)} /></label><label><span>status</span><input type="text" value={draft.status || ''} onChange={(event) => setField('status', event.target.value)} /></label><label><span>format</span><input type="text" value={draft.format || ''} onChange={(event) => setField('format', event.target.value)} /></label><label className="admin-field-full"><span>tagline</span><input type="text" value={draft.tagline || ''} onChange={(event) => setField('tagline', event.target.value)} /></label><label className="admin-field-full"><span>shortDescription</span><textarea rows={3} value={draft.shortDescription || ''} onChange={(event) => setField('shortDescription', event.target.value)} /></label><label className="admin-field-full"><span>longDescription</span><textarea rows={5} value={draft.longDescription || ''} onChange={(event) => setField('longDescription', event.target.value)} /></label><label><span>genre (comma-separated)</span><input type="text" value={Array.isArray(draft.genre) ? draft.genre.join(', ') : (draft.genre || '')} onChange={(event) => setField('genre', event.target.value)} /></label><label><span>tone (comma-separated)</span><input type="text" value={Array.isArray(draft.tone) ? draft.tone.join(', ') : (draft.tone || '')} onChange={(event) => setField('tone', event.target.value)} /></label><label><span>heroImage</span><input type="text" value={draft.heroImage || ''} onChange={(event) => setField('heroImage', event.target.value)} /></label><label><span>coverImage</span><input type="text" value={draft.coverImage || ''} onChange={(event) => setField('coverImage', event.target.value)} /></label><label><span>thumbnailImage</span><input type="text" value={draft.thumbnailImage || ''} onChange={(event) => setField('thumbnailImage', event.target.value)} /></label><label><span>accentColor</span><input type="text" value={draft.accentColor || ''} onChange={(event) => setField('accentColor', event.target.value)} /></label><label><span>secondaryColor</span><input type="text" value={draft.secondaryColor || ''} onChange={(event) => setField('secondaryColor', event.target.value)} /></label></> : null}</div>{warnings.length > 0 ? <ul className="admin-warnings">{warnings.map((warning) => <li key={warning}>{warning}</li>)}</ul> : null}<label className="admin-field-full"><span>Normalized JSON preview</span><textarea className="admin-json-output" rows={16} readOnly value={normalizedRecord ? JSON.stringify(normalizedRecord, null, 2) : ''} /></label><label className="admin-field-full"><span>Generated Codex package</span><textarea className="admin-json-output" rows={24} readOnly value={packageOutput} /></label><button type="button" className="primary-button" onClick={copyPackage} disabled={!packageOutput}>Copy Package{copied ? ' ✓' : ''}</button></section>;
 }
 
 const BACKGROUND_TONE_OPTIONS = ['dark', 'deep', 'ocean', 'cosmic', 'bureaucratic', 'sunforge', 'neutral'];
@@ -1071,6 +1184,8 @@ export default function AdminShell() {
           <AdminSectionCard key={section.title} {...section} />
         ))}
       </section>
+
+      <SeriesMetadataEditor />
 
       <XtrasPackageGenerator />
 
