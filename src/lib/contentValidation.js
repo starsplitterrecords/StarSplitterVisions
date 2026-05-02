@@ -1,4 +1,5 @@
 const warnedMessages = new Set();
+const RELEASE_STATUSES = new Set(['draft', 'scheduled', 'published']);
 
 const isNonEmptyString = (value) => typeof value === 'string' && value.trim().length > 0;
 const asArray = (value) => (Array.isArray(value) ? value : []);
@@ -50,6 +51,7 @@ export function validateReleaseList(value) {
     const routeId = id || slug;
     const seriesSlug = isNonEmptyString(item.seriesSlug) ? item.seriesSlug.trim() : '';
     const title = isNonEmptyString(item.title) ? item.title.trim() : '';
+    const status = isNonEmptyString(item.status) ? item.status.trim().toLowerCase() : '';
 
     if (!routeId) {
       warnField('Release', 'id/slug', item);
@@ -60,8 +62,14 @@ export function validateReleaseList(value) {
       return [];
     }
     if (!title) warnField('Release', 'title', item);
+    if (status && !RELEASE_STATUSES.has(status)) {
+      warnOnce(`[content] Release has unsupported status "${status}" (${itemContext(item)}):`, item);
+    }
+    if (status === 'scheduled' && !isNonEmptyString(item.releaseDate)) {
+      warnOnce(`[content] Scheduled release is missing required field "releaseDate" (${itemContext(item)}):`, item);
+    }
 
-    return [{ ...item, id: routeId, seriesSlug, title: title || 'Untitled Release' }];
+    return [{ ...item, id: routeId, seriesSlug, title: title || 'Untitled Release', status: status || item.status }];
   });
 }
 
@@ -110,4 +118,32 @@ export function validateExtraList(value) {
 
 export function validateSoundtrackList(value) {
   return validateSimpleList('Soundtrack', value, 'title');
+}
+
+
+export function validateReaderSoundtrackList(value) {
+  return asArray(value).flatMap((item) => {
+    if (!item || typeof item !== 'object') {
+      warnOnce('[content] Reader soundtrack item is not an object:', item);
+      return [];
+    }
+
+    const id = isNonEmptyString(item.id) ? item.id.trim() : '';
+    const seriesSlug = isNonEmptyString(item.seriesSlug) ? item.seriesSlug.trim() : '';
+    const title = isNonEmptyString(item.title) ? item.title.trim() : '';
+
+    if (!id) {
+      warnField('Reader soundtrack', 'id', item);
+      return [];
+    }
+
+    if (!seriesSlug) {
+      warnField('Reader soundtrack', 'seriesSlug', item);
+      return [];
+    }
+
+    if (!title) warnField('Reader soundtrack', 'title', item);
+
+    return [{ ...item, id, seriesSlug, title: title || 'Untitled Soundtrack' }];
+  });
 }
