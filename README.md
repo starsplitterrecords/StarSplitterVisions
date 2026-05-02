@@ -39,6 +39,11 @@ Codex then applies that package to the repository by adding image files, updatin
 
 This keeps GitHub credentials, repository mutation, pull requests, and deployment outside the app itself. The admin helper remains a safe package generator instead of becoming a publishing backend.
 
+
+## Planning Documents
+
+- [GitHub-backed admin planning document](./docs_github_backed_admin_planning.md)
+
 ## Image Path Rules
 
 Image files belong in the repository under:
