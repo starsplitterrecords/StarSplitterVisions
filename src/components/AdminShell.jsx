@@ -747,7 +747,9 @@ function CodexContentPackageGenerator() {
     if (!normalizedSeriesSlug || !normalizedReleaseId || !clean(form.releaseTitle) || !clean(form.releaseDate)) return null;
     const parsedIssue = Number(form.issueNumber);
     const issueValue = clean(form.issueNumber) && Number.isFinite(parsedIssue) ? parsedIssue : clean(form.issueNumber);
-    const output = {
+    const coverFilename = clean(form.coverFilename) || 'cover.jpg';
+    const heroFilename = clean(form.heroFilename) || 'hero.jpg';
+    return {
       id: normalizedReleaseId,
       seriesSlug: normalizedSeriesSlug,
       title: clean(form.releaseTitle),
@@ -755,13 +757,12 @@ function CodexContentPackageGenerator() {
       description: clean(form.description),
       releaseDate: clean(form.releaseDate),
       status: PACKAGE_STATUS_OPTIONS.includes(clean(form.status)) ? clean(form.status) : 'draft',
-      image: clean(form.coverFilename) ? toJsonPath(clean(form.coverFilename)) : '',
+      image: toJsonPath(coverFilename),
+      coverImage: toJsonPath(coverFilename),
+      heroImage: toJsonPath(heroFilename),
       ctaLabel: clean(form.ctaLabel) || DEFAULT_RELEASE_CTA_LABEL,
     };
-    if (clean(form.coverFilename)) output.coverImage = toJsonPath(clean(form.coverFilename));
-    if (clean(form.heroFilename)) output.heroImage = toJsonPath(clean(form.heroFilename));
-    return output;
-  }, [form, normalizedReleaseId, normalizedSeriesSlug, pageRecords]);
+  }, [form, normalizedReleaseId, normalizedSeriesSlug]);
 
   const pageJsonArray = pageRecords.map((page) => ({
     seriesSlug: normalizedSeriesSlug,
