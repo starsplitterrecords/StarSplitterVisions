@@ -9,6 +9,16 @@ npm install
 npm run dev
 ```
 
+## Quality Checks
+
+Run the required repository quality gate before opening or merging a PR:
+
+```bash
+npm run check
+```
+
+This command runs linting and production build validation.
+
 ## Content files
 
 Static content is served from `public/content`:
