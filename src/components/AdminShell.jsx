@@ -151,6 +151,21 @@ function AdminSectionCard({ title, description, status, action }) {
   );
 }
 
+const RELEASE_STATUSES = ['draft', 'scheduled', 'published'];
+const DEFAULT_RELEASE_CTA_LABEL = 'Read Issue';
+
+function normalizePublicImagePath(path) {
+  return path.trim().replace(/^\/public/, '');
+}
+
+function releaseCoverPath(seriesSlug, releaseSlug) {
+  return `/images/${seriesSlug}/${releaseSlug}/cover.jpg`;
+}
+
+function releaseHeroPath(seriesSlug, releaseSlug) {
+  return `/images/${seriesSlug}/${releaseSlug}/hero.jpg`;
+}
+
 function ReleaseJsonGenerator() {
   const [form, setForm] = useState({
     seriesSlug: '',
@@ -159,9 +174,11 @@ function ReleaseJsonGenerator() {
     issueNumber: '',
     description: '',
     releaseDate: '',
+    status: 'draft',
+    image: '',
     coverImage: '',
     heroImage: '',
-    ctaLabel: 'Read',
+    ctaLabel: DEFAULT_RELEASE_CTA_LABEL,
   });
   const [copied, setCopied] = useState(false);
 
@@ -171,8 +188,12 @@ function ReleaseJsonGenerator() {
     if (!form.slug.trim()) items.push('slug / id is missing.');
     if (!form.title.trim()) items.push('title is missing.');
     if (!form.releaseDate.trim()) items.push('releaseDate is missing.');
-    if (form.coverImage && !form.coverImage.startsWith('/images/')) items.push('coverImage should start with /images/.');
-    if (form.heroImage && !form.heroImage.startsWith('/images/')) items.push('heroImage should start with /images/.');
+    if (!RELEASE_STATUSES.includes(form.status)) items.push('status must be draft, scheduled, or published.');
+    ['image', 'coverImage', 'heroImage'].forEach((field) => {
+      const normalizedPath = normalizePublicImagePath(form[field]);
+      if (normalizedPath && !normalizedPath.startsWith('/images/')) items.push(`${field} should start with /images/.`);
+    });
+    if (!form.ctaLabel.trim()) items.push('ctaLabel is missing.');
     return items;
   }, [form]);
 
@@ -182,18 +203,26 @@ function ReleaseJsonGenerator() {
     }
 
     const parsedIssueNumber = Number(form.issueNumber);
+    const normalizedSeriesSlug = form.seriesSlug.trim();
+    const normalizedSlug = form.slug.trim();
+    const defaultCoverImage = releaseCoverPath(normalizedSeriesSlug, normalizedSlug);
+    const defaultHeroImage = releaseHeroPath(normalizedSeriesSlug, normalizedSlug);
+    const coverImage = normalizePublicImagePath(form.coverImage) || defaultCoverImage;
+    const image = normalizePublicImagePath(form.image) || coverImage;
+    const heroImage = normalizePublicImagePath(form.heroImage) || defaultHeroImage;
     const output = {
-      id: form.slug.trim(),
-      seriesSlug: form.seriesSlug.trim(),
+      id: normalizedSlug,
+      seriesSlug: normalizedSeriesSlug,
       title: form.title.trim(),
       issueNumber: Number.isFinite(parsedIssueNumber) && form.issueNumber.trim() ? parsedIssueNumber : form.issueNumber.trim(),
       description: form.description.trim(),
       releaseDate: form.releaseDate,
-      coverImage: form.coverImage.trim(),
-      ctaLabel: form.ctaLabel.trim() || 'Read',
+      status: RELEASE_STATUSES.includes(form.status) ? form.status : 'draft',
+      image,
+      coverImage,
+      heroImage,
+      ctaLabel: form.ctaLabel.trim() || DEFAULT_RELEASE_CTA_LABEL,
     };
-
-    if (form.heroImage.trim()) output.heroImage = form.heroImage.trim();
 
     return JSON.stringify(output, null, 2);
   }, [form]);
@@ -224,7 +253,7 @@ function ReleaseJsonGenerator() {
       <p className="admin-helper-tip">Use public web paths beginning with /images/, not /public/images/.</p>
 
       <div className="admin-form-grid">
-        {['seriesSlug', 'slug', 'title', 'issueNumber', 'releaseDate', 'coverImage', 'heroImage', 'ctaLabel'].map((field) => (
+        {['seriesSlug', 'slug', 'title', 'issueNumber', 'releaseDate', 'image', 'coverImage', 'heroImage', 'ctaLabel'].map((field) => (
           <label key={field}>
             <span>{field === 'slug' ? 'slug / id' : field}</span>
             <input
@@ -235,6 +264,12 @@ function ReleaseJsonGenerator() {
             />
           </label>
         ))}
+        <label>
+          <span>status</span>
+          <select value={form.status} onChange={(event) => setField('status', event.target.value)}>
+            {RELEASE_STATUSES.map((status) => <option key={status} value={status}>{status}</option>)}
+          </select>
+        </label>
         <label className="admin-field-full">
           <span>description</span>
           <textarea value={form.description} onChange={(event) => setField('description', event.target.value)} rows={3} />
@@ -651,8 +686,7 @@ function PageJsonGenerator() {
 }
 
 const DEFAULT_PAGE_FILENAMES = ['page-001.jpg', 'page-002.jpg', 'page-003.jpg'].join('\n');
-const PACKAGE_STATUS_OPTIONS = ['published', 'scheduled', 'draft'];
-const RELEASE_STATUS_OPTIONS = ['released', 'published', 'scheduled', 'draft'];
+const PACKAGE_STATUS_OPTIONS = RELEASE_STATUSES;
 
 function CodexContentPackageGenerator() {
   const [form, setForm] = useState({
@@ -662,8 +696,8 @@ function CodexContentPackageGenerator() {
     issueNumber: '',
     description: '',
     releaseDate: '',
-    status: 'published',
-    ctaLabel: 'Read',
+    status: 'draft',
+    ctaLabel: DEFAULT_RELEASE_CTA_LABEL,
     coverFilename: 'cover.jpg',
     heroFilename: 'hero.jpg',
     pageFilenames: DEFAULT_PAGE_FILENAMES,
@@ -705,7 +739,7 @@ function CodexContentPackageGenerator() {
       if (toJsonPath(filename).startsWith('/public/images/')) items.push('JSON paths must not start with /public/images/.');
       if (!parsePageNumber(filename, 1).inferred) items.push(`Could not infer page number from "${filename}" so line order will be used.`);
     });
-    if (!PACKAGE_STATUS_OPTIONS.includes(form.status) && RELEASE_STATUS_OPTIONS.includes(form.status)) items.push(`Status "${form.status}" may not match the current visibility convention.`);
+    if (!PACKAGE_STATUS_OPTIONS.includes(form.status)) items.push('status must be draft, scheduled, or published.');
     return [...new Set(items)];
   }, [form, normalizedReleaseId, normalizedSeriesSlug, parsedPageFiles]);
 
@@ -720,9 +754,9 @@ function CodexContentPackageGenerator() {
       issueNumber: issueValue,
       description: clean(form.description),
       releaseDate: clean(form.releaseDate),
-      status: clean(form.status) || 'published',
-      image: pageRecords[0]?.jsonPath ?? '',
-      ctaLabel: clean(form.ctaLabel) || 'Read',
+      status: PACKAGE_STATUS_OPTIONS.includes(clean(form.status)) ? clean(form.status) : 'draft',
+      image: clean(form.coverFilename) ? toJsonPath(clean(form.coverFilename)) : '',
+      ctaLabel: clean(form.ctaLabel) || DEFAULT_RELEASE_CTA_LABEL,
     };
     if (clean(form.coverFilename)) output.coverImage = toJsonPath(clean(form.coverFilename));
     if (clean(form.heroFilename)) output.heroImage = toJsonPath(clean(form.heroFilename));
@@ -789,7 +823,7 @@ ${JSON.stringify(pageJsonArray, null, 2)}
 
   const resetForm = () => {
     setForm({
-      seriesSlug: '', releaseId: '', releaseTitle: '', issueNumber: '', description: '', releaseDate: '', status: 'published', ctaLabel: 'Read', coverFilename: 'cover.jpg', heroFilename: 'hero.jpg', pageFilenames: DEFAULT_PAGE_FILENAMES,
+      seriesSlug: '', releaseId: '', releaseTitle: '', issueNumber: '', description: '', releaseDate: '', status: 'draft', ctaLabel: DEFAULT_RELEASE_CTA_LABEL, coverFilename: 'cover.jpg', heroFilename: 'hero.jpg', pageFilenames: DEFAULT_PAGE_FILENAMES,
     });
     setCopied(false);
   };
