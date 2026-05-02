@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
+import { getReleaseAssetPublicPath, getReleaseAssetRepoPath, getSeriesAssetPublicPath, getSeriesAssetRepoPath } from '../../lib/paths';
 
 const ADMIN_SECTIONS = [
   {
@@ -844,8 +845,8 @@ function CodexContentPackageGenerator() {
   const normalizedSeriesSlug = slugify(form.seriesSlug);
   const normalizedReleaseId = slugify(form.releaseId);
   const isFilenameOnly = (value) => value && !value.includes('/') && !value.includes('\\');
-  const toRepoPath = (filename) => `public/images/${normalizedSeriesSlug}/${normalizedReleaseId}/${filename}`;
-  const toJsonPath = (filename) => `/images/${normalizedSeriesSlug}/${normalizedReleaseId}/${filename}`;
+  const toRepoPath = (filename) => getReleaseAssetRepoPath(normalizedSeriesSlug, normalizedReleaseId, filename);
+  const toJsonPath = (filename) => getReleaseAssetPublicPath(normalizedSeriesSlug, normalizedReleaseId, filename);
 
   const parsedPageFiles = clean(form.pageFilenames).split('\n').map((line) => clean(line)).filter(Boolean);
   const parsePageNumber = (filename, fallback) => {
@@ -1077,8 +1078,8 @@ const kebabCasePattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 const normalizeFileName = (value) => value.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9._-]/g, '');
 const deriveXtraId = (seriesSlug, releaseSlug, xtraSlug) => releaseSlug ? `${seriesSlug}__${releaseSlug}__${xtraSlug}` : `${seriesSlug}__${xtraSlug}`;
-const deriveXtraBaseRepoPath = (seriesSlug, releaseSlug, xtraSlug) => releaseSlug ? `public/images/${seriesSlug}/${releaseSlug}/xtras/${xtraSlug}` : `public/images/${seriesSlug}/xtras/${xtraSlug}`;
-const deriveXtraBasePublicPath = (seriesSlug, releaseSlug, xtraSlug) => releaseSlug ? `/images/${seriesSlug}/${releaseSlug}/xtras/${xtraSlug}` : `/images/${seriesSlug}/xtras/${xtraSlug}`;
+const deriveXtraBaseRepoPath = (seriesSlug, releaseSlug, xtraSlug) => releaseSlug ? getReleaseAssetRepoPath(seriesSlug, releaseSlug, `xtras/${xtraSlug}`) : getSeriesAssetRepoPath(seriesSlug, `xtras/${xtraSlug}`);
+const deriveXtraBasePublicPath = (seriesSlug, releaseSlug, xtraSlug) => releaseSlug ? getReleaseAssetPublicPath(seriesSlug, releaseSlug, `xtras/${xtraSlug}`) : getSeriesAssetPublicPath(seriesSlug, `xtras/${xtraSlug}`);
 
 function XtrasPackageGenerator() {
   const [form, setForm] = useState({ seriesSlug: '', releaseSlug: '', type: 'bonus-material', title: '', slug: '', description: '', displayTitle: '', shortLabel: '', sortOrder: '', visibility: 'draft', featured: false, tags: '', body: '', editorialNote: '', productionNote: '', creatorCommentary: '' });
