@@ -1,0 +1,38 @@
+{
+  "manifestVersion": "1.0.0",
+  "manifestId": "release-vikings-2026-ep1-scaffold-v1",
+  "generatedAt": "2026-05-02T16:46:00Z",
+  "seriesSlug": "vikings-2026",
+  "releaseSlug": "vikings-ep1",
+  "assetSet": "release",
+  "assets": [
+    {
+      "id": "release-vikings-ep1-cover",
+      "assetType": "release-cover",
+      "assetRole": "scaffold",
+      "prompt": "High-impact cover illustration for Vikings Episode 1 release card.",
+      "width": 1600,
+      "height": 2400,
+      "format": "jpg",
+      "stagingPath": "staging/releases/vikings-2026/vikings-ep1/cover.jpg",
+      "finalRepoPath": "public/images/vikings-2026/vikings-ep1/cover.jpg",
+      "finalPublicPath": "/images/vikings-2026/vikings-ep1/cover.jpg",
+      "required": true,
+      "allowRegeneration": true
+    },
+    {
+      "id": "release-vikings-ep1-social-banner",
+      "assetType": "release-social-banner",
+      "assetRole": "scaffold",
+      "prompt": "Landscape promotional banner optimized for social media release announcement.",
+      "width": 1920,
+      "height": 1080,
+      "format": "webp",
+      "stagingPath": "staging/releases/vikings-2026/vikings-ep1/social-banner.webp",
+      "finalRepoPath": "public/images/vikings-2026/vikings-ep1/social-banner.webp",
+      "finalPublicPath": "/images/vikings-2026/vikings-ep1/social-banner.webp",
+      "required": false,
+      "allowRegeneration": true
+    }
+  ]
+}
