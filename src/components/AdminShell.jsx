@@ -69,8 +69,8 @@ const PUBLISHING_STEPS = [
     ],
   },
   {
-    title: 'Step 3 — Paste JSON into the correct content file',
-    body: 'Copy generated output and paste it into the matching file in public/content while keeping JSON syntax valid.',
+    title: 'Step 3 — Export a Codex-ready publishing handoff',
+    body: 'Copy generated output into a Codex prompt so Codex can update the matching files in public/content while preserving valid JSON syntax.',
     details: [
       'Series JSON → public/content/series.json',
       'Release JSON → public/content/releases.json',
@@ -79,13 +79,13 @@ const PUBLISHING_STEPS = [
     ],
   },
   {
-    title: 'Step 4 — Commit changes on a branch',
-    body: 'After image files and JSON files are updated, commit the changes on a branch created from the latest main branch.',
+    title: 'Step 4 — Codex applies the package on a branch',
+    body: 'Codex adds image files, updates content JSON files, and commits the requested changes on a branch from the latest main branch.',
     details: [],
   },
   {
-    title: 'Step 5 — Open a pull request',
-    body: 'Open a pull request so content changes can be reviewed before production.',
+    title: 'Step 5 — Codex opens a pull request',
+    body: 'Codex opens a pull request so content changes can be reviewed before production.',
     details: [],
   },
   {
@@ -115,7 +115,7 @@ const PUBLISHING_STEPS = [
 function AdminPublishingChecklist() {
   return (
     <section className="admin-checklist-card" aria-labelledby="admin-publishing-checklist-title">
-      <h2 id="admin-publishing-checklist-title">Publishing Checklist</h2>
+      <h2 id="admin-publishing-checklist-title">Admin Publishing Checklist</h2>
       <p className="admin-helper-note">Use the generators to create valid JSON, then copy and paste the output into the matching JSON file in the repo.</p>
       <p className="admin-helper-tip">This checklist is manual. The admin helper does not upload files, write JSON, open PRs, or deploy changes.</p>
 
@@ -247,7 +247,7 @@ function ReleaseJsonGenerator() {
         <span>Generated JSON</span>
         <textarea className="admin-json-output" value={releaseJson} readOnly rows={14} placeholder="Fill required fields to generate JSON." />
       </label>
-      <button type="button" className="primary-button" onClick={copyJson} disabled={!releaseJson}>Copy JSON{copied ? ' ✓' : ''}</button>
+      <button type="button" className="primary-button" onClick={copyJson} disabled={!releaseJson}>Copy Codex JSON{copied ? ' ✓' : ''}</button>
     </section>
   );
 }
@@ -422,7 +422,7 @@ function SeriesJsonGenerator() {
         <span>Generated JSON</span>
         <textarea className="admin-json-output" value={seriesJson} readOnly rows={16} placeholder="Fill title and slug to generate JSON." />
       </label>
-      <button type="button" className="primary-button" onClick={copyJson} disabled={!seriesJson}>Copy JSON{copied ? ' ✓' : ''}</button>
+      <button type="button" className="primary-button" onClick={copyJson} disabled={!seriesJson}>Copy Codex JSON{copied ? ' ✓' : ''}</button>
     </section>
   );
 }
@@ -534,8 +534,8 @@ function ImageFilingHelper() {
       <div className="admin-copy-row">
         <button type="button" className="text-button" onClick={() => copyText('name', normalizedFilename)}>Copy normalized filename{copiedField === 'name' ? ' ✓' : ''}</button>
         <button type="button" className="text-button" onClick={() => copyText('repo', repoPath)}>Copy repo path{copiedField === 'repo' ? ' ✓' : ''}</button>
-        <button type="button" className="text-button" onClick={() => copyText('json', jsonPath)}>Copy JSON path{copiedField === 'json' ? ' ✓' : ''}</button>
-        <button type="button" className="text-button" onClick={() => copyText('snippet', jsonSnippet)}>Copy JSON snippet{copiedField === 'snippet' ? ' ✓' : ''}</button>
+        <button type="button" className="text-button" onClick={() => copyText('json', jsonPath)}>Copy Codex JSON path{copiedField === 'json' ? ' ✓' : ''}</button>
+        <button type="button" className="text-button" onClick={() => copyText('snippet', jsonSnippet)}>Copy Codex JSON snippet{copiedField === 'snippet' ? ' ✓' : ''}</button>
       </div>
 
       <label className="admin-field-full"><span>JSON snippet preview</span><textarea className="admin-json-output" readOnly rows={4} value={jsonSnippet} /></label>
@@ -645,7 +645,7 @@ function PageJsonGenerator() {
         <span>Generated JSON</span>
         <textarea className="admin-json-output" value={pageJson} readOnly rows={14} placeholder="Fill required fields to generate JSON." />
       </label>
-      <button type="button" className="primary-button" onClick={copyJson} disabled={!pageJson}>Copy JSON{copied ? ' ✓' : ''}</button>
+      <button type="button" className="primary-button" onClick={copyJson} disabled={!pageJson}>Copy Codex JSON{copied ? ' ✓' : ''}</button>
     </section>
   );
 }
@@ -885,7 +885,7 @@ Add xtras collateral for series \`${seriesSlug}\`.
 Related release: \`${releaseSlug || 'Series-level extra'}\`.
 
 ## Context
-This package was generated by the admin xtras organizer. The admin does not publish directly. Implement these changes in the repository and open a PR.
+This package was generated by the admin xtras organizer as a Codex handoff. The admin does not publish directly. Apply these changes in the repository and open a PR.
 
 ## Xtras to add
 
@@ -949,7 +949,7 @@ export default function AdminShell() {
         <h1>Static Publishing Helper</h1>
         <p>
           A local helper workspace for preparing Star Splitter Visions content updates.
-          This page does not save or publish changes yet.
+          This page prepares Codex handoff packages and does not publish directly.
         </p>
       </header>
 
@@ -958,7 +958,7 @@ export default function AdminShell() {
         <p>
           This is a static/local helper only. Authentication is not implemented,
           saving is not implemented, no backend is connected, and it does not write
-          files, connect to GitHub, or publish content.
+          files, connect to GitHub, mutate the repository, or publish content.
         </p>
       </section>
 
