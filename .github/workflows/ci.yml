@@ -17,6 +17,7 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
+        # Repo policy: no committed npm lockfile, so use npm install instead of npm ci.
         run: npm install
 
       - name: Lint
