@@ -44,6 +44,7 @@ This keeps GitHub credentials, repository mutation, pull requests, and deploymen
 ## Planning Documents
 
 - [GitHub-backed admin planning document](./docs_github_backed_admin_planning.md)
+- [Artwork requirements reference](./docs/artwork-requirements.md)
 
 ## Image Path Rules
 
