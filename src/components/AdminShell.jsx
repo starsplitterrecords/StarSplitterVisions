@@ -253,6 +253,7 @@ function ReleaseJsonGenerator() {
 }
 
 const BACKGROUND_TONE_OPTIONS = ['dark', 'deep', 'ocean', 'cosmic', 'bureaucratic', 'sunforge', 'neutral'];
+const SERIES_STATUS_OPTIONS = ['ongoing', 'in development', 'complete'];
 const HEX_COLOR_PATTERN = /^#[0-9a-fA-F]{6}$/;
 
 function SeriesJsonGenerator() {
@@ -395,7 +396,11 @@ function SeriesJsonGenerator() {
         </label>
         <label>
           <span>status</span>
-          <input type="text" value={form.status} onChange={(event) => setField('status', event.target.value)} />
+          <select value={form.status} onChange={(event) => setField('status', event.target.value)}>
+            {SERIES_STATUS_OPTIONS.map((status) => (
+              <option key={status} value={status}>{status}</option>
+            ))}
+          </select>
         </label>
         <label>
           <span>heroImage</span>
