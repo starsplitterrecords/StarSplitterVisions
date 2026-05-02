@@ -256,6 +256,14 @@ Notes:
 
 - `id` is the route slug used by `/releases/{id}` and `/read/{id}`.
 - Public UI must not show `draft` releases.
+- `scheduled` releases are hidden until `releaseDate` is in the past or present.
+- `scheduled` releases should always include a `releaseDate`.
+
+Status visibility checks:
+
+- `draft`: hidden from homepage, series archives, search, release routes, and reader routes.
+- `scheduled`: hidden while `releaseDate` is in the future; visible once `releaseDate` is reached.
+- `published`: visible immediately.
 
 ### 3) Page schema (`public/content/pages.json`)
 
