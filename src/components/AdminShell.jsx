@@ -689,6 +689,7 @@ const DEFAULT_PAGE_FILENAMES = ['page-001.jpg', 'page-002.jpg', 'page-003.jpg'].
 const PACKAGE_STATUS_OPTIONS = RELEASE_STATUSES;
 
 function CodexContentPackageGenerator() {
+  const [mode, setMode] = useState('edit');
   const [form, setForm] = useState({
     seriesSlug: '',
     releaseId: '',
@@ -742,6 +743,46 @@ function CodexContentPackageGenerator() {
     if (!PACKAGE_STATUS_OPTIONS.includes(form.status)) items.push('status must be draft, scheduled, or published.');
     return [...new Set(items)];
   }, [form, normalizedReleaseId, normalizedSeriesSlug, parsedPageFiles]);
+
+  const previewIssues = useMemo(() => {
+    const items = [];
+    const warn = (section, message) => items.push({ level: 'warning', section, message });
+    if (!normalizedReleaseId) warn('Release', 'Missing slug.');
+    if (!normalizedSeriesSlug) warn('Release', 'Missing seriesSlug.');
+    if (!clean(form.releaseTitle)) warn('Release', 'Missing title.');
+    if (!clean(form.status)) warn('Release', 'Missing status.');
+    if (!PACKAGE_STATUS_OPTIONS.includes(clean(form.status))) warn('Release', 'Invalid status value.');
+    if (!clean(form.coverFilename)) warn('Release', 'Missing coverImage filename.');
+    if (!clean(form.ctaLabel)) warn('Release', 'Missing ctaLabel.');
+    if (clean(form.coverFilename) && toJsonPath(clean(form.coverFilename)).includes('/public/images')) warn('Release', 'coverImage JSON path should not include /public/images.');
+    if (clean(form.heroFilename) && toJsonPath(clean(form.heroFilename)).includes('/public/images')) warn('Release', 'heroImage JSON path should not include /public/images.');
+    const pageNumCounts = new Map();
+    pageRecords.forEach((page, index) => {
+      pageNumCounts.set(page.pageNumber, (pageNumCounts.get(page.pageNumber) ?? 0) + 1);
+      if (!page.filename) warn('Pages', `Page ${index + 1} is missing image filename.`);
+      if (!page.jsonPath.startsWith('/images/')) warn('Pages', `Page ${page.pageNumber} image path should start with /images/.`);
+      if (page.jsonPath.includes('/public/images')) warn('Pages', `Page ${page.pageNumber} image path should not include /public/images.`);
+    });
+    pageNumCounts.forEach((count, pageNumber) => {
+      if (count > 1) warn('Pages', `Duplicate page number ${pageNumber}.`);
+    });
+    pageRecords.forEach((page, index) => {
+      if (index > 0 && page.pageNumber !== pageRecords[index - 1].pageNumber + 1) {
+        warn('Pages', 'Page numbers are non-sequential.');
+      }
+    });
+    imageEntries.forEach((entry) => {
+      if (entry.jsonPath.includes('/public')) warn('Images', `${entry.filename}: JSON path contains /public.`);
+      if (!entry.repoPath.includes('public/images')) warn('Images', `${entry.filename}: repo path should include public/images.`);
+      if (!/\.[a-z0-9]+$/i.test(entry.filename)) warn('Images', `${entry.filename}: missing file extension.`);
+      if (normalizedSeriesSlug && !entry.repoPath.includes(`/${normalizedSeriesSlug}/`)) warn('Images', `${entry.filename}: path should include series slug.`);
+      if (normalizedReleaseId && !entry.repoPath.includes(`/${normalizedReleaseId}/`)) warn('Images', `${entry.filename}: release asset path should include release slug.`);
+    });
+    if (!packageOutput) warn('Package', 'No generated package available or package is empty.');
+    if (packageOutput && !packageOutput.includes('## Files to add')) warn('Package', 'Package does not mention files to add.');
+    if (packageOutput && !packageOutput.includes('## Update releases.json')) warn('Package', 'Package does not mention JSON files to update.');
+    return items;
+  }, [clean, form.coverFilename, form.ctaLabel, form.heroFilename, form.releaseTitle, form.status, imageEntries, normalizedReleaseId, normalizedSeriesSlug, packageOutput, pageRecords]);
 
   const releaseJsonObject = useMemo(() => {
     if (!normalizedSeriesSlug || !normalizedReleaseId || !clean(form.releaseTitle) || !clean(form.releaseDate)) return null;
@@ -843,7 +884,13 @@ ${JSON.stringify(pageJsonArray, null, 2)}
       <p className="admin-helper-tip">This generates a Codex package only. It does not upload images, save JSON, call GitHub, create PRs, or deploy the site.</p>
       <p className="admin-helper-tip">After copying this package, paste it into Codex along with the image files or after placing the image files where Codex can access them.</p>
 
-      <div className="admin-form-grid">
+      <div className="admin-copy-row">
+        <button type="button" className="text-button" onClick={() => setMode('edit')}>Edit</button>
+        <button type="button" className="text-button" onClick={() => setMode('preview')}>Preview content</button>
+        <button type="button" className="text-button" onClick={() => setMode('export')}>Export</button>
+      </div>
+
+      {mode === 'edit' ? <div className="admin-form-grid">
         <label><span>seriesSlug</span><input type="text" value={form.seriesSlug} onChange={(event) => setField('seriesSlug', event.target.value)} /></label>
         <label><span>releaseId</span><input type="text" value={form.releaseId} onChange={(event) => setField('releaseId', event.target.value)} /></label>
         <label><span>releaseTitle</span><input type="text" value={form.releaseTitle} onChange={(event) => setField('releaseTitle', event.target.value)} /></label>
@@ -855,17 +902,31 @@ ${JSON.stringify(pageJsonArray, null, 2)}
         <label><span>heroFilename</span><input type="text" value={form.heroFilename} onChange={(event) => setField('heroFilename', event.target.value)} /></label>
         <label className="admin-field-full"><span>description</span><textarea rows={3} value={form.description} onChange={(event) => setField('description', event.target.value)} /></label>
         <label className="admin-field-full"><span>page image filenames (one per line)</span><textarea rows={5} value={form.pageFilenames} onChange={(event) => setField('pageFilenames', event.target.value)} /></label>
-      </div>
+      </div> : null}
 
       {warnings.length > 0 ? <ul className="admin-warnings">{warnings.map((warning) => <li key={warning}>{warning}</li>)}</ul> : null}
+      {mode === 'preview' ? (
+        <>
+          <p className="admin-helper-note">Preview mode</p>
+          <p className="admin-helper-tip">Warnings: {previewIssues.length}</p>
+          {previewIssues.length ? <ul className="admin-warnings">{previewIssues.map((issue) => <li key={`${issue.section}-${issue.message}`}>[{issue.section}] {issue.message}</li>)}</ul> : null}
+          <label className="admin-field-full"><span>Release Preview</span><textarea className="admin-json-output" rows={12} readOnly value={JSON.stringify(releaseJsonObject, null, 2)} /></label>
+          <label className="admin-field-full"><span>Page Preview (ordered)</span><textarea className="admin-json-output" rows={12} readOnly value={JSON.stringify(pageJsonArray, null, 2)} /></label>
+          <label className="admin-field-full"><span>Image Assets</span><textarea className="admin-json-output" rows={10} readOnly value={imageEntries.map((entry) => `Source file: ${entry.filename}\nTarget repo path: ${entry.repoPath}\nJSON path: ${entry.jsonPath}`).join('\n\n')} /></label>
+          <label className="admin-field-full"><span>Series Metadata</span><textarea className="admin-json-output" rows={8} readOnly value={JSON.stringify({ slug: normalizedSeriesSlug, status: form.status, format: 'n/a', genre: 'n/a', tone: 'n/a' }, null, 2)} /></label>
+          <label className="admin-field-full"><span>Extras</span><textarea className="admin-json-output" rows={4} readOnly value={'No extras in this package draft.'} /></label>
+          <label className="admin-field-full"><span>Soundtracks</span><textarea className="admin-json-output" rows={4} readOnly value={'No soundtrack data in this package draft.'} /></label>
+          <label className="admin-field-full"><span>Codex Package Preview</span><textarea className="admin-json-output" rows={18} readOnly value={packageOutput} /></label>
+        </>
+      ) : null}
       <div className="admin-copy-row">
         <button type="button" className="primary-button" disabled={!packageOutput} onClick={copyPackage}>Copy Package{copied ? ' ✓ Copied' : ''}</button>
         <button type="button" className="text-button" onClick={resetForm}>Reset</button>
       </div>
-      <label className="admin-field-full">
+      {mode !== 'preview' ? <label className="admin-field-full">
         <span>Generated Codex Package</span>
         <textarea className="admin-json-output" rows={26} readOnly value={packageOutput} placeholder="Fill required fields and page filenames to generate the package." />
-      </label>
+      </label> : null}
     </section>
   );
 }
