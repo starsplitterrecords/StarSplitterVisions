@@ -6,8 +6,8 @@ const ADMIN_SECTIONS = [
     title: 'Series',
     description:
       'Manage series identity, descriptions, artwork, colors, and publishing metadata.',
-    status: 'Shell only',
-    action: 'Edit series — coming soon',
+    status: 'Editor available',
+    action: 'Edit series in the workspace below',
   },
   {
     title: 'Releases',
@@ -34,8 +34,8 @@ const ADMIN_SECTIONS = [
     title: 'Soundtracks',
     description:
       'Manage soundtrack entries, track listings, playlist links, mood notes, and audio companion material.',
-    status: 'Not connected',
-    action: 'Manage soundtracks — coming soon',
+    status: 'Package generator',
+    action: 'Open soundtrack manager',
   },
 ];
 
@@ -48,6 +48,12 @@ const slugify = (value) =>
     .replace(/-+/g, '-');
 
 const padPageNumber = (value) => String(value).padStart(3, '0');
+
+export const SCAFFOLD_ASSET_PROMPT_RULES = `This image is a production asset for a web publishing system.
+It must prioritize clarity, readability, and consistency.
+It should not attempt to be stylistically expressive or experimental.
+Avoid visual complexity that reduces usability at small sizes.`;
+const SCAFFOLD_ONLY_GENERATOR_COPY = 'These generators create scaffold/interface assets for the website. They do not generate comic pages or sequential art.';
 
 
 const PUBLISHING_STEPS = [
@@ -118,6 +124,7 @@ function AdminPublishingChecklist() {
     <section className="admin-checklist-card" aria-labelledby="admin-publishing-checklist-title">
       <h2 id="admin-publishing-checklist-title">Admin Publishing Checklist</h2>
       <p className="admin-helper-note">Use the generators to create valid JSON, then copy and paste the output into the matching JSON file in the repo.</p>
+      <p className="admin-helper-tip">{SCAFFOLD_ONLY_GENERATOR_COPY}</p>
       <p className="admin-helper-tip">This checklist is manual. The admin helper does not upload files, write JSON, open PRs, or deploy changes.</p>
 
       <ol className="admin-checklist-list">
@@ -147,7 +154,7 @@ function AdminSectionCard({ title, description, status, action }) {
         <span className="admin-status">{status}</span>
       </div>
       <p>{description}</p>
-      <p className="admin-action-note">{action}</p>
+      <p className="admin-action-note">{title === 'Soundtracks' ? <a href="#soundtracks-package-generator">{action}</a> : action}</p>
     </section>
   );
 }
@@ -222,6 +229,11 @@ function ReleaseJsonGenerator() {
       image,
       coverImage,
       heroImage,
+      socialImage: `/images/${normalizedSeriesSlug}/${normalizedSlug}/social.jpg`,
+      thumbnailImage: `/images/${normalizedSeriesSlug}/${normalizedSlug}/thumbnail.jpg`,
+      mobileImage: `/images/${normalizedSeriesSlug}/${normalizedSlug}/mobile.jpg`,
+      assetRole: 'scaffold',
+      promptRules: SCAFFOLD_ASSET_PROMPT_RULES,
       ctaLabel: form.ctaLabel.trim() || DEFAULT_RELEASE_CTA_LABEL,
     };
 
@@ -251,6 +263,8 @@ function ReleaseJsonGenerator() {
     <section className="admin-helper-card" aria-labelledby="release-json-generator-title">
       <h2 id="release-json-generator-title">Release JSON Generator</h2>
       <p className="admin-helper-note">This only generates JSON. It does not save or publish changes. Copy this JSON and paste it into releases.json manually.</p>
+      <p className="admin-helper-tip">{SCAFFOLD_ONLY_GENERATOR_COPY}</p>
+      <p className="admin-helper-tip">Release scaffold assets: cover.jpg, hero.jpg, social.jpg, thumbnail.jpg, mobile.jpg.</p>
       <p className="admin-helper-tip">Use public web paths beginning with /images/, not /public/images/.</p>
 
       <div className="admin-form-grid">
@@ -286,6 +300,119 @@ function ReleaseJsonGenerator() {
       <button type="button" className="primary-button" onClick={copyJson} disabled={!releaseJson}>Copy Codex JSON{copied ? ' ✓' : ''}</button>
     </section>
   );
+}
+
+
+
+function normalizeStringArray(value) {
+  return value.split(',').map((item) => item.trim()).filter(Boolean);
+}
+
+function SeriesMetadataEditor() {
+  const [seriesList, setSeriesList] = useState([]);
+  const [selectedSlug, setSelectedSlug] = useState('');
+  const [draft, setDraft] = useState(null);
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    fetch('/content/series.json')
+      .then((response) => response.json())
+      .then((payload) => {
+        const items = Array.isArray(payload?.series) ? payload.series : [];
+        setSeriesList(items);
+        if (items[0]?.slug) setSelectedSlug(items[0].slug);
+      })
+      .catch(() => setSeriesList([]));
+  }, []);
+
+  useEffect(() => {
+    const active = seriesList.find((item) => item.slug === selectedSlug);
+    if (!active) {
+      setDraft(null);
+      return;
+    }
+    setDraft({ ...active });
+  }, [selectedSlug, seriesList]);
+
+  const setField = (key, value) => setDraft((current) => ({ ...current, [key]: value }));
+
+  const normalizedRecord = useMemo(() => {
+    if (!draft) return null;
+    const output = { ...draft };
+    Object.keys(output).forEach((key) => {
+      if (typeof output[key] === 'string') output[key] = output[key].trim();
+    });
+    output.genre = normalizeStringArray(Array.isArray(draft.genre) ? draft.genre.join(', ') : String(draft.genre || ''));
+    output.tone = normalizeStringArray(Array.isArray(draft.tone) ? draft.tone.join(', ') : String(draft.tone || ''));
+    return output;
+  }, [draft]);
+
+  const warnings = useMemo(() => {
+    if (!draft || !normalizedRecord) return [];
+    const items = [];
+    if (!normalizedRecord.slug) items.push('slug is required.');
+    if (normalizedRecord.slug && !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(normalizedRecord.slug)) items.push('slug must be URL-safe lowercase kebab-case.');
+    if (!normalizedRecord.title) items.push('title is required.');
+    ['heroImage', 'coverImage', 'thumbnailImage'].forEach((field) => {
+      const value = normalizedRecord[field];
+      if (!value) return;
+      if (value.startsWith('/public/images/')) items.push(`${field} must use /images/... JSON paths, not /public/images/...`);
+      else if (!value.startsWith('/images/')) items.push(`${field} should start with /images/.`);
+    });
+    ['accentColor', 'secondaryColor'].forEach((field) => {
+      const value = normalizedRecord[field];
+      if (!value) return;
+      if (!HEX_COLOR_PATTERN.test(value)) items.push(`${field} must be a valid hex color like #f59e0b.`);
+    });
+    return items;
+  }, [draft, normalizedRecord]);
+
+  const packageOutput = useMemo(() => {
+    if (!normalizedRecord || warnings.length > 0) return '';
+    return `# Codex Content Publishing Package
+
+## Task
+Update series \`${normalizedRecord.slug}\`.
+
+## Goal
+Apply the edited series metadata from this admin-generated package.
+
+## Files to inspect
+- Locate canonical series content file.
+- Likely file: \`public/content/series.json\`
+
+## Files to update
+- \`public/content/series.json\`
+
+## Series record to update
+Find the record with slug \`${normalizedRecord.slug}\` and replace or merge with:
+
+\`\`\`json
+${JSON.stringify(normalizedRecord, null, 2)}
+\`\`\`
+
+## Artwork path rules
+- JSON paths must use \`/images/{seriesSlug}/...\`
+- Never use \`/public/images/...\` inside JSON values.
+
+## Validation checklist
+- Confirm app builds
+- Confirm series page renders
+- Confirm no unrelated routes broke
+- Confirm image paths resolve
+- Confirm JSON remains valid
+- Confirm no unrelated series records changed
+
+## Expected result
+The selected series reflects the edited metadata in public and admin views.`;
+  }, [normalizedRecord, warnings.length]);
+
+  const copyPackage = async () => {
+    if (!packageOutput || !navigator?.clipboard?.writeText) return;
+    try { await navigator.clipboard.writeText(packageOutput); setCopied(true); setTimeout(() => setCopied(false), 1400); } catch { setCopied(false); }
+  };
+
+  return <section className="admin-helper-card" aria-labelledby="series-metadata-editor-title"><h2 id="series-metadata-editor-title">Edit Series</h2><p className="admin-helper-note">Select an existing series, edit metadata, preview normalized JSON, and generate a Codex package. This does not write files or publish.</p><div className="admin-form-grid"><label><span>series</span><select value={selectedSlug} onChange={(event) => setSelectedSlug(event.target.value)}>{seriesList.map((series) => <option key={series.slug} value={series.slug}>{series.title} ({series.slug})</option>)}</select></label>{draft ? <><label><span>slug</span><input type="text" value={draft.slug || ''} onChange={(event) => setField('slug', slugify(event.target.value))} /></label><label><span>title</span><input type="text" value={draft.title || ''} onChange={(event) => setField('title', event.target.value)} /></label><label><span>logoText</span><input type="text" value={draft.logoText || ''} onChange={(event) => setField('logoText', event.target.value)} /></label><label><span>status</span><input type="text" value={draft.status || ''} onChange={(event) => setField('status', event.target.value)} /></label><label><span>format</span><input type="text" value={draft.format || ''} onChange={(event) => setField('format', event.target.value)} /></label><label className="admin-field-full"><span>tagline</span><input type="text" value={draft.tagline || ''} onChange={(event) => setField('tagline', event.target.value)} /></label><label className="admin-field-full"><span>shortDescription</span><textarea rows={3} value={draft.shortDescription || ''} onChange={(event) => setField('shortDescription', event.target.value)} /></label><label className="admin-field-full"><span>longDescription</span><textarea rows={5} value={draft.longDescription || ''} onChange={(event) => setField('longDescription', event.target.value)} /></label><label><span>genre (comma-separated)</span><input type="text" value={Array.isArray(draft.genre) ? draft.genre.join(', ') : (draft.genre || '')} onChange={(event) => setField('genre', event.target.value)} /></label><label><span>tone (comma-separated)</span><input type="text" value={Array.isArray(draft.tone) ? draft.tone.join(', ') : (draft.tone || '')} onChange={(event) => setField('tone', event.target.value)} /></label><label><span>heroImage</span><input type="text" value={draft.heroImage || ''} onChange={(event) => setField('heroImage', event.target.value)} /></label><label><span>coverImage</span><input type="text" value={draft.coverImage || ''} onChange={(event) => setField('coverImage', event.target.value)} /></label><label><span>thumbnailImage</span><input type="text" value={draft.thumbnailImage || ''} onChange={(event) => setField('thumbnailImage', event.target.value)} /></label><label><span>accentColor</span><input type="text" value={draft.accentColor || ''} onChange={(event) => setField('accentColor', event.target.value)} /></label><label><span>secondaryColor</span><input type="text" value={draft.secondaryColor || ''} onChange={(event) => setField('secondaryColor', event.target.value)} /></label></> : null}</div>{warnings.length > 0 ? <ul className="admin-warnings">{warnings.map((warning) => <li key={warning}>{warning}</li>)}</ul> : null}<label className="admin-field-full"><span>Normalized JSON preview</span><textarea className="admin-json-output" rows={16} readOnly value={normalizedRecord ? JSON.stringify(normalizedRecord, null, 2) : ''} /></label><label className="admin-field-full"><span>Generated Codex package</span><textarea className="admin-json-output" rows={24} readOnly value={packageOutput} /></label><button type="button" className="primary-button" onClick={copyPackage} disabled={!packageOutput}>Copy Package{copied ? ' ✓' : ''}</button></section>;
 }
 
 const BACKGROUND_TONE_OPTIONS = ['dark', 'deep', 'ocean', 'cosmic', 'bureaucratic', 'sunforge', 'neutral'];
@@ -372,6 +499,8 @@ function SeriesJsonGenerator() {
       heroImage: form.heroImage.trim(),
       coverImage: form.coverImage.trim(),
       thumbnailImage: form.thumbnailImage.trim(),
+      assetRole: 'scaffold',
+      promptRules: SCAFFOLD_ASSET_PROMPT_RULES,
       status: form.status.trim() || 'ongoing',
     };
 
@@ -393,6 +522,7 @@ function SeriesJsonGenerator() {
     <section className="admin-helper-card" aria-labelledby="series-json-generator-title">
       <h2 id="series-json-generator-title">Series JSON Generator</h2>
       <p className="admin-helper-note">This only generates JSON. It does not save or publish changes. Copy this JSON and paste it into series.json manually.</p>
+      <p className="admin-helper-tip">{SCAFFOLD_ONLY_GENERATOR_COPY}</p>
       <p className="admin-helper-tip">Slug should be lowercase, hyphen-separated, and stable after publishing.</p>
       <p className="admin-helper-tip">Use hex colors like #facc15. Accent color is used for highlights, buttons, borders, and chips.</p>
       <p className="admin-helper-tip">Use public web paths beginning with /images/, not /public/images/. Example: /images/vikings-2026/hero.jpg</p>
@@ -471,7 +601,9 @@ const IMAGE_TYPE_CONFIG = {
   releaseHero: { label: 'Release hero image', filenameBase: 'hero', requiresRelease: true, requiresPage: false, jsonField: 'heroImage' },
   releaseCover: { label: 'Release cover image', filenameBase: 'cover', requiresRelease: true, requiresPage: false, jsonField: 'coverImage' },
   releaseCard: { label: 'Release card image', filenameBase: 'card', requiresRelease: true, requiresPage: false, jsonField: 'image' },
-  dailyPage: { label: 'Daily page image', filenameBase: 'page', requiresRelease: true, requiresPage: true, jsonField: 'image' },
+  releaseSocial: { label: 'Release social image', filenameBase: 'social', requiresRelease: true, requiresPage: false, jsonField: 'socialImage' },
+  releaseThumbnail: { label: 'Release thumbnail image', filenameBase: 'thumbnail', requiresRelease: true, requiresPage: false, jsonField: 'thumbnailImage' },
+  releaseMobile: { label: 'Release mobile image', filenameBase: 'mobile', requiresRelease: true, requiresPage: false, jsonField: 'mobileImage' },
 };
 const SUPPORTED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp'];
 
@@ -537,6 +669,7 @@ function ImageFilingHelper() {
     <section className="admin-helper-card" aria-labelledby="image-filing-helper-title">
       <h2 id="image-filing-helper-title">Image Filing Helper</h2>
       <p className="admin-helper-note">This helper prepares correct image names and paths. It does not upload to GitHub or save files yet.</p>
+      <p className="admin-helper-tip">{SCAFFOLD_ONLY_GENERATOR_COPY}</p>
       <p className="admin-helper-tip">This helper prepares the correct filename and paths for images. It does not save files. After generating the path, manually place the image in the repo at the shown repo path, then use the JSON path in the matching content file.</p>
 
       <div className="admin-form-grid">
@@ -626,6 +759,7 @@ function PageJsonGenerator() {
       title: form.title.trim() || `Page ${Number(form.pageNumber)}`,
       caption: form.caption.trim(),
       image: effectiveImage,
+      assetRole: 'external-comic-art',
     };
 
     return JSON.stringify(output, null, 2);
@@ -646,6 +780,7 @@ function PageJsonGenerator() {
     <section className="admin-helper-card" aria-labelledby="page-json-generator-title">
       <h2 id="page-json-generator-title">Page JSON Generator</h2>
       <p className="admin-helper-note">This only generates JSON. It does not save or publish changes. Copy this JSON and paste it into pages.json manually.</p>
+      <p className="admin-helper-tip">This generator stores references to externally produced comic art only.</p>
       <p className="admin-helper-tip">Image path pattern: /images/{'{seriesSlug}'}/{'{releaseSlug}'}/page-001.jpg (not /public/images/...)</p>
 
       <div className="admin-form-grid">
@@ -789,7 +924,9 @@ function CodexContentPackageGenerator() {
     if (!normalizedSeriesSlug || !normalizedReleaseId || !clean(form.releaseTitle) || !clean(form.releaseDate)) return null;
     const parsedIssue = Number(form.issueNumber);
     const issueValue = clean(form.issueNumber) && Number.isFinite(parsedIssue) ? parsedIssue : clean(form.issueNumber);
-    const output = {
+    const coverFilename = clean(form.coverFilename) || 'cover.jpg';
+    const heroFilename = clean(form.heroFilename) || 'hero.jpg';
+    return {
       id: normalizedReleaseId,
       seriesSlug: normalizedSeriesSlug,
       title: clean(form.releaseTitle),
@@ -797,13 +934,12 @@ function CodexContentPackageGenerator() {
       description: clean(form.description),
       releaseDate: clean(form.releaseDate),
       status: PACKAGE_STATUS_OPTIONS.includes(clean(form.status)) ? clean(form.status) : 'draft',
-      image: clean(form.coverFilename) ? toJsonPath(clean(form.coverFilename)) : '',
+      image: toJsonPath(coverFilename),
+      coverImage: toJsonPath(coverFilename),
+      heroImage: toJsonPath(heroFilename),
       ctaLabel: clean(form.ctaLabel) || DEFAULT_RELEASE_CTA_LABEL,
     };
-    if (clean(form.coverFilename)) output.coverImage = toJsonPath(clean(form.coverFilename));
-    if (clean(form.heroFilename)) output.heroImage = toJsonPath(clean(form.heroFilename));
-    return output;
-  }, [form, normalizedReleaseId, normalizedSeriesSlug, pageRecords]);
+  }, [form, normalizedReleaseId, normalizedSeriesSlug]);
 
   const pageJsonArray = pageRecords.map((page) => ({
     seriesSlug: normalizedSeriesSlug,
@@ -1037,6 +1173,68 @@ npm run build
   return <section className="admin-helper-card" aria-labelledby="xtras-package-generator-title"><h2 id="xtras-package-generator-title">Xtras Package Generator</h2><p className="admin-helper-note">Organize xtras collateral and generate a Codex-ready package.</p><div className="admin-form-grid"><label><span>seriesSlug</span><input type="text" value={form.seriesSlug} onChange={(event) => setField('seriesSlug', event.target.value)} /></label><label><span>releaseSlug (optional)</span><input type="text" value={form.releaseSlug} onChange={(event) => setField('releaseSlug', event.target.value)} /></label><label><span>type</span><select value={form.type} onChange={(event) => setField('type', event.target.value)}>{XTRA_TYPES.map((value) => <option key={value} value={value}>{value}</option>)}</select></label><label><span>title</span><input type="text" value={form.title} onChange={(event) => setField('title', event.target.value)} /></label><label><span>slug</span><input type="text" value={form.slug} onChange={(event) => setField('slug', event.target.value)} placeholder={slugify(form.title)} /></label><label><span>visibility</span><select value={form.visibility} onChange={(event) => setField('visibility', event.target.value)}>{XTRA_VISIBILITY.map((value) => <option key={value} value={value}>{value}</option>)}</select></label><label><span>sortOrder</span><input type="number" value={form.sortOrder} onChange={(event) => setField('sortOrder', event.target.value)} /></label><label><span>tags (comma-separated)</span><input type="text" value={form.tags} onChange={(event) => setField('tags', event.target.value)} /></label><label className="admin-field-full"><span>description</span><textarea rows={2} value={form.description} onChange={(event) => setField('description', event.target.value)} /></label></div><h3>Assets</h3>{assets.map((asset, index) => <div key={`asset-${index}`} className="admin-form-grid"><label><span>sourceFileName</span><input type="text" value={asset.sourceFileName} onChange={(event) => setAssets((current) => current.map((item, idx) => idx === index ? { ...item, sourceFileName: event.target.value } : item))} /></label><label><span>targetFileName</span><input type="text" value={asset.targetFileName} onChange={(event) => setAssets((current) => current.map((item, idx) => idx === index ? { ...item, targetFileName: event.target.value } : item))} /></label><label><span>kind</span><select value={asset.kind} onChange={(event) => setAssets((current) => current.map((item, idx) => idx === index ? { ...item, kind: event.target.value } : item))}>{XTRA_ASSET_KINDS.map((value) => <option key={value} value={value}>{value}</option>)}</select></label></div>)}<button type="button" className="text-button" onClick={() => setAssets((current) => [...current, { sourceFileName: '', targetFileName: '', kind: 'image', altText: '', caption: '', credit: '' }])}>Add asset</button><h3>Links</h3>{links.map((link, index) => <div key={`link-${index}`} className="admin-form-grid"><label><span>url</span><input type="text" value={link.url} onChange={(event) => setLinks((current) => current.map((item, idx) => idx === index ? { ...item, url: event.target.value } : item))} /></label><label><span>label</span><input type="text" value={link.label} onChange={(event) => setLinks((current) => current.map((item, idx) => idx === index ? { ...item, label: event.target.value } : item))} /></label></div>)}<button type="button" className="text-button" onClick={() => setLinks((current) => [...current, { url: '', label: '', provider: '', embedUrl: '' }])}>Add link</button>{warnings.length > 0 ? <ul className="admin-warnings">{warnings.map((warning) => <li key={warning}>{warning}</li>)}</ul> : null}<label className="admin-field-full"><span>Generated Codex Package</span><textarea className="admin-json-output" rows={24} readOnly value={packageOutput} /></label><button type="button" className="primary-button" onClick={copyPackage} disabled={!packageOutput}>Copy package{copied ? ' ✓' : ''}</button></section>;
 }
 
+
+
+const SOUNDTRACK_STATUSES = ['draft', 'planned', 'published', 'archived'];
+const SOUNDTRACK_TYPES = ['series', 'release', 'episode', 'issue', 'scene', 'character', 'mood', 'companion'];
+
+function SoundtracksPackageGenerator() {
+  const [form, setForm] = useState({ soundtrackSlug: '', title: '', associatedSeriesSlug: '', subtitle: '', description: '', status: 'draft', soundtrackType: 'series', associatedReleaseSlug: '', associatedEpisodeSlug: '', associatedIssueSlug: '', associatedSceneId: '', coverImageSourceFile: '', coverImageTargetPath: '', coverImageJsonPath: '', canonicalPlaylistUrl: '', spotifyUrl: '', appleMusicUrl: '', youtubeUrl: '', soundcloudUrl: '', bandcampUrl: '', moodNotes: '', editorialNotes: '', productionNotes: '', audioCompanionNotes: '', internalNotes: '' });
+  const [tracks, setTracks] = useState([{ trackNumber: 1, title: '', artist: '', duration: '', description: '', mood: '', sceneOrBeatReference: '', lyricsExcerpt: '', audioUrl: '', notes: '' }]);
+  const [otherLinks, setOtherLinks] = useState([{ label: '', url: '', notes: '' }]);
+  const [copied, setCopied] = useState(false);
+  const setField = (key, value) => setForm((current) => ({ ...current, [key]: value }));
+  const updateTrack = (index, key, value) => setTracks((current) => current.map((item, idx) => (idx === index ? { ...item, [key]: value } : item)));
+  const moveTrack = (index, direction) => setTracks((current) => { const next = [...current]; const target = index + direction; if (target < 0 || target >= next.length) return current; [next[index], next[target]] = [next[target], next[index]]; return next; });
+  const warnings = useMemo(() => { const issues = []; if (!form.soundtrackSlug.trim()) issues.push('soundtrackSlug is required.'); if (!form.title.trim()) issues.push('title is required.'); if (!form.associatedSeriesSlug.trim()) issues.push('associatedSeriesSlug is required.'); tracks.forEach((track, index) => { if (!track.title.trim()) issues.push(`Track ${index + 1} title is required.`); }); if (form.coverImageJsonPath.trim().startsWith('/public/images/')) issues.push('coverImageJsonPath must use /images/... not /public/images/...'); return issues; }, [form, tracks]);
+  const onTitleBlur = () => { if (!form.soundtrackSlug.trim() && form.title.trim()) { const base = slugify(form.title); const slug = form.associatedSeriesSlug.trim() ? `${slugify(form.associatedSeriesSlug)}-${base}` : base; setField('soundtrackSlug', slug); } };
+  const suggestImagePaths = () => { if (!form.associatedSeriesSlug.trim() || !form.coverImageSourceFile.trim()) return; const releasePart = form.associatedReleaseSlug.trim() || 'soundtracks'; const ext = form.coverImageSourceFile.trim().split('.').pop() || 'jpg'; const repo = `public/images/${form.associatedSeriesSlug.trim()}/${releasePart}/soundtrack-cover.${ext}`; setForm((current) => ({ ...current, coverImageTargetPath: current.coverImageTargetPath.trim() || repo, coverImageJsonPath: current.coverImageJsonPath.trim() || repo.replace(/^public/, '') })); };
+  const soundtrackEntry = useMemo(() => { const payload = { slug: form.soundtrackSlug.trim(), title: form.title.trim(), status: form.status, type: form.soundtrackType, associatedSeriesSlug: form.associatedSeriesSlug.trim(), tracks: tracks.filter((item) => item.title.trim()).map((item, idx) => ({ ...(item.trackNumber ? { trackNumber: Number(item.trackNumber) || idx + 1 } : {}), title: item.title.trim(), ...(item.artist.trim() ? { artist: item.artist.trim() } : {}), ...(item.duration.trim() ? { duration: item.duration.trim() } : {}), ...(item.description.trim() ? { description: item.description.trim() } : {}), ...(item.mood.trim() ? { mood: item.mood.trim() } : {}), ...(item.sceneOrBeatReference.trim() ? { sceneOrBeatReference: item.sceneOrBeatReference.trim() } : {}), ...(item.lyricsExcerpt.trim() ? { lyricsExcerpt: item.lyricsExcerpt.trim() } : {}), ...(item.audioUrl.trim() ? { audioUrl: item.audioUrl.trim() } : {}), ...(item.notes.trim() ? { notes: item.notes.trim() } : {}) })) };
+      return { ...payload, ...(form.subtitle.trim() ? { subtitle: form.subtitle.trim() } : {}), ...(form.description.trim() ? { description: form.description.trim() } : {}), ...(form.associatedReleaseSlug.trim() ? { associatedReleaseSlug: form.associatedReleaseSlug.trim() } : {}), ...(form.associatedEpisodeSlug.trim() ? { associatedEpisodeSlug: form.associatedEpisodeSlug.trim() } : {}), ...(form.associatedIssueSlug.trim() ? { associatedIssueSlug: form.associatedIssueSlug.trim() } : {}), ...(form.associatedSceneId.trim() ? { associatedSceneId: form.associatedSceneId.trim() } : {}), ...((form.coverImageSourceFile.trim() || form.coverImageTargetPath.trim() || form.coverImageJsonPath.trim()) ? { coverImage: { ...(form.coverImageSourceFile.trim() ? { sourceFile: form.coverImageSourceFile.trim() } : {}), ...(form.coverImageTargetPath.trim() ? { targetRepoPath: form.coverImageTargetPath.trim() } : {}), ...(form.coverImageJsonPath.trim() ? { jsonPath: form.coverImageJsonPath.trim() } : {}) } } : {}), links: { ...(form.canonicalPlaylistUrl.trim() ? { canonicalPlaylistUrl: form.canonicalPlaylistUrl.trim() } : {}), ...(form.spotifyUrl.trim() ? { spotifyUrl: form.spotifyUrl.trim() } : {}), ...(form.appleMusicUrl.trim() ? { appleMusicUrl: form.appleMusicUrl.trim() } : {}), ...(form.youtubeUrl.trim() ? { youtubeUrl: form.youtubeUrl.trim() } : {}), ...(form.soundcloudUrl.trim() ? { soundcloudUrl: form.soundcloudUrl.trim() } : {}), ...(form.bandcampUrl.trim() ? { bandcampUrl: form.bandcampUrl.trim() } : {}), other: otherLinks.filter((item) => item.url.trim()).map((item) => ({ label: item.label.trim() || 'Additional link', url: item.url.trim(), ...(item.notes.trim() ? { notes: item.notes.trim() } : {}) })) }, ...(form.moodNotes.trim() ? { moodNotes: form.moodNotes } : {}), ...(form.editorialNotes.trim() ? { editorialNotes: form.editorialNotes } : {}), ...(form.productionNotes.trim() ? { productionNotes: form.productionNotes } : {}), ...(form.audioCompanionNotes.trim() ? { audioCompanionNotes: form.audioCompanionNotes } : {}), ...(form.internalNotes.trim() ? { internalNotes: form.internalNotes } : {}) };
+  }, [form, otherLinks, tracks]);
+  const packageOutput = warnings.length === 0 ? `# Codex Soundtrack Content Package
+
+## Task
+Add or update soundtrack \`${form.soundtrackSlug.trim()}\` for \`${form.associatedSeriesSlug.trim()}\`.
+
+## Intent
+This package was generated from the local admin helper. The app should not publish directly to GitHub. Apply the content changes in the repository, then open a PR.
+
+## Files to add
+${form.coverImageSourceFile.trim() || form.coverImageTargetPath.trim() || form.coverImageJsonPath.trim() ? `
+### Cover artwork
+- Source file: \`${form.coverImageSourceFile.trim() || 'n/a'}\`
+- Target repo path: \`${form.coverImageTargetPath.trim() || 'n/a'}\`
+- JSON path: \`${form.coverImageJsonPath.trim() || 'n/a'}\`
+` : `
+- No cover artwork provided.
+`}
+
+## Data files to update
+Update or create the soundtrack data file used by the project.
+
+Likely target:
+- \`public/content/soundtracks.json\` (or existing content location if different)
+
+## Soundtrack JSON entry
+\`\`\`json
+${JSON.stringify(soundtrackEntry, null, 2)}
+\`\`\`
+
+## Track listing
+\`\`\`json
+${JSON.stringify(soundtrackEntry.tracks, null, 2)}
+\`\`\`
+
+## Playlist links
+\`\`\`json
+${JSON.stringify(soundtrackEntry.links, null, 2)}
+\`\`\`
+` : '';
+  const copyPackage = async () => { if (!packageOutput || !navigator?.clipboard?.writeText) return; await navigator.clipboard.writeText(packageOutput); setCopied(true); setTimeout(() => setCopied(false), 1200); };
+  return <section className="admin-helper-card" id="soundtracks-package-generator"><h2>Soundtracks</h2><p className="admin-helper-note">Manage soundtrack entries, track listings, playlist links, mood notes, and audio companion material.</p><div className="admin-form-grid"><label><span>soundtrackSlug</span><input value={form.soundtrackSlug} onChange={(e)=>setField('soundtrackSlug', e.target.value)} /></label><label><span>title</span><input value={form.title} onChange={(e)=>setField('title', e.target.value)} onBlur={onTitleBlur} /></label><label><span>associatedSeriesSlug</span><input value={form.associatedSeriesSlug} onChange={(e)=>setField('associatedSeriesSlug', e.target.value)} /></label><label><span>status</span><select value={form.status} onChange={(e)=>setField('status', e.target.value)}>{SOUNDTRACK_STATUSES.map((s)=><option key={s} value={s}>{s}</option>)}</select></label><label><span>soundtrackType</span><select value={form.soundtrackType} onChange={(e)=>setField('soundtrackType', e.target.value)}>{SOUNDTRACK_TYPES.map((s)=><option key={s} value={s}>{s}</option>)}</select></label></div><h3>Track Listing</h3>{tracks.map((track,index)=><div key={index} className="admin-form-grid"><label><span>trackNumber</span><input value={track.trackNumber} onChange={(e)=>updateTrack(index,'trackNumber',e.target.value)} /></label><label><span>title</span><input value={track.title} onChange={(e)=>updateTrack(index,'title',e.target.value)} /></label><label><span>artist</span><input value={track.artist} onChange={(e)=>updateTrack(index,'artist',e.target.value)} /></label><button type="button" className="text-button" onClick={()=>moveTrack(index,-1)}>↑</button><button type="button" className="text-button" onClick={()=>moveTrack(index,1)}>↓</button><button type="button" className="text-button" onClick={()=>setTracks((c)=>c.filter((_,i)=>i!==index))} disabled={tracks.length===1}>Remove</button></div>)}<button type="button" className="text-button" onClick={()=>setTracks((c)=>[...c,{ trackNumber: c.length+1, title: '', artist: '', duration: '', description: '', mood: '', sceneOrBeatReference: '', lyricsExcerpt: '', audioUrl: '', notes: '' }])}>Add track</button><h3>Cover / Artwork</h3><div className="admin-form-grid"><label><span>coverImageSourceFile</span><input value={form.coverImageSourceFile} onChange={(e)=>setField('coverImageSourceFile', e.target.value)} onBlur={suggestImagePaths} /></label><label><span>coverImageTargetPath</span><input value={form.coverImageTargetPath} onChange={(e)=>setField('coverImageTargetPath', e.target.value)} /></label><label><span>coverImageJsonPath</span><input value={form.coverImageJsonPath} onChange={(e)=>setField('coverImageJsonPath', e.target.value)} /></label></div>{warnings.length>0?<ul className="admin-warnings">{warnings.map((w)=><li key={w}>{w}</li>)}</ul>:null}<label className="admin-field-full"><span>Generated Codex Package</span><textarea className="admin-json-output" rows={20} readOnly value={packageOutput || ''} /></label><button type="button" className="primary-button" onClick={copyPackage} disabled={!packageOutput}>Copy package{copied ? ' ✓' : ''}</button></section>;
+}
+
 export default function AdminShell() {
   return (
     <main className="page page-admin">
@@ -1072,6 +1270,8 @@ export default function AdminShell() {
           <AdminSectionCard key={section.title} {...section} />
         ))}
       </section>
+
+      <SoundtracksPackageGenerator />
 
       <XtrasPackageGenerator />
 

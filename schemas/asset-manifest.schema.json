@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://starsplittervisions.dev/schemas/asset-manifest.schema.json",
+  "title": "Scaffold Asset Manifest",
+  "description": "Manifest contract for scaffold/interface asset generation, staging, and install workflows.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "manifestVersion",
+    "manifestId",
+    "generatedAt",
+    "seriesSlug",
+    "assetSet",
+    "assets"
+  ],
+  "properties": {
+    "manifestVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "manifestId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "seriesSlug": {
+      "type": "string",
+      "minLength": 1
+    },
+    "releaseSlug": {
+      "type": "string",
+      "minLength": 1
+    },
+    "assetSet": {
+      "type": "string",
+      "enum": [
+        "site",
+        "series",
+        "release",
+        "extras",
+        "soundtrack",
+        "character-support"
+      ]
+    },
+    "assets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/assetSpec"
+      }
+    }
+  },
+  "$defs": {
+    "assetSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "assetType",
+        "assetRole",
+        "prompt",
+        "width",
+        "height",
+        "format",
+        "stagingPath",
+        "finalRepoPath",
+        "finalPublicPath",
+        "required",
+        "allowRegeneration"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "assetType": {
+          "type": "string",
+          "minLength": 1
+        },
+        "assetRole": {
+          "type": "string",
+          "enum": [
+            "scaffold",
+            "external-comic-art",
+            "reference"
+          ]
+        },
+        "prompt": {
+          "type": "string",
+          "minLength": 1
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "format": {
+          "type": "string",
+          "enum": [
+            "jpg",
+            "png",
+            "webp",
+            "svg"
+          ]
+        },
+        "stagingPath": {
+          "type": "string",
+          "minLength": 1
+        },
+        "finalRepoPath": {
+          "type": "string",
+          "minLength": 1
+        },
+        "finalPublicPath": {
+          "type": "string",
+          "minLength": 1
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "allowRegeneration": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

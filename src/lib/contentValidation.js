@@ -119,3 +119,31 @@ export function validateExtraList(value) {
 export function validateSoundtrackList(value) {
   return validateSimpleList('Soundtrack', value, 'title');
 }
+
+
+export function validateReaderSoundtrackList(value) {
+  return asArray(value).flatMap((item) => {
+    if (!item || typeof item !== 'object') {
+      warnOnce('[content] Reader soundtrack item is not an object:', item);
+      return [];
+    }
+
+    const id = isNonEmptyString(item.id) ? item.id.trim() : '';
+    const seriesSlug = isNonEmptyString(item.seriesSlug) ? item.seriesSlug.trim() : '';
+    const title = isNonEmptyString(item.title) ? item.title.trim() : '';
+
+    if (!id) {
+      warnField('Reader soundtrack', 'id', item);
+      return [];
+    }
+
+    if (!seriesSlug) {
+      warnField('Reader soundtrack', 'seriesSlug', item);
+      return [];
+    }
+
+    if (!title) warnField('Reader soundtrack', 'title', item);
+
+    return [{ ...item, id, seriesSlug, title: title || 'Untitled Soundtrack' }];
+  });
+}

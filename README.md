@@ -16,7 +16,7 @@ Static content is served from `public/content`:
 - `public/content/series.json`
 - `public/content/releases.json`
 - `public/content/pages.json`
-- `public/content/soundtracks.json`
+- `public/content/extras.json`
 
 ## Publishing Workflow
 
@@ -44,6 +44,7 @@ This keeps GitHub credentials, repository mutation, pull requests, and deploymen
 ## Planning Documents
 
 - [GitHub-backed admin planning document](./docs_github_backed_admin_planning.md)
+- [Artwork requirements reference](./docs/artwork-requirements.md)
 
 ## Image Path Rules
 
@@ -79,7 +80,7 @@ Depending on the package, Codex may update:
 - `public/content/pages.json`
 - `public/content/soundtracks.json`
 
-Codex may also update fields that control release/page ordering, image references, and optional extras/soundtrack metadata that are stored in those content files.
+Codex may also update fields that control release/page ordering, image references, and optional extras/soundtrack metadata stored in those content files.
 
 ## Codex Content Publishing Package (Standard Shape)
 
