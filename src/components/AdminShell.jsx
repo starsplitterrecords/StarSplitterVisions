@@ -1,12 +1,12 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 const ADMIN_SECTIONS = [
   {
     title: 'Series',
     description:
       'Manage series identity, descriptions, artwork, colors, and publishing metadata.',
-    status: 'Shell only',
-    action: 'Edit series — coming soon',
+    status: 'Editor available',
+    action: 'Edit series in the workspace below',
   },
   {
     title: 'Releases',
@@ -47,6 +47,12 @@ const slugify = (value) =>
     .replace(/-+/g, '-');
 
 const padPageNumber = (value) => String(value).padStart(3, '0');
+
+export const SCAFFOLD_ASSET_PROMPT_RULES = `This image is a production asset for a web publishing system.
+It must prioritize clarity, readability, and consistency.
+It should not attempt to be stylistically expressive or experimental.
+Avoid visual complexity that reduces usability at small sizes.`;
+const SCAFFOLD_ONLY_GENERATOR_COPY = 'These generators create scaffold/interface assets for the website. They do not generate comic pages or sequential art.';
 
 
 const PUBLISHING_STEPS = [
@@ -117,6 +123,7 @@ function AdminPublishingChecklist() {
     <section className="admin-checklist-card" aria-labelledby="admin-publishing-checklist-title">
       <h2 id="admin-publishing-checklist-title">Admin Publishing Checklist</h2>
       <p className="admin-helper-note">Use the generators to create valid JSON, then copy and paste the output into the matching JSON file in the repo.</p>
+      <p className="admin-helper-tip">{SCAFFOLD_ONLY_GENERATOR_COPY}</p>
       <p className="admin-helper-tip">This checklist is manual. The admin helper does not upload files, write JSON, open PRs, or deploy changes.</p>
 
       <ol className="admin-checklist-list">
@@ -221,6 +228,11 @@ function ReleaseJsonGenerator() {
       image,
       coverImage,
       heroImage,
+      socialImage: `/images/${normalizedSeriesSlug}/${normalizedSlug}/social.jpg`,
+      thumbnailImage: `/images/${normalizedSeriesSlug}/${normalizedSlug}/thumbnail.jpg`,
+      mobileImage: `/images/${normalizedSeriesSlug}/${normalizedSlug}/mobile.jpg`,
+      assetRole: 'scaffold',
+      promptRules: SCAFFOLD_ASSET_PROMPT_RULES,
       ctaLabel: form.ctaLabel.trim() || DEFAULT_RELEASE_CTA_LABEL,
     };
 
@@ -250,6 +262,8 @@ function ReleaseJsonGenerator() {
     <section className="admin-helper-card" aria-labelledby="release-json-generator-title">
       <h2 id="release-json-generator-title">Release JSON Generator</h2>
       <p className="admin-helper-note">This only generates JSON. It does not save or publish changes. Copy this JSON and paste it into releases.json manually.</p>
+      <p className="admin-helper-tip">{SCAFFOLD_ONLY_GENERATOR_COPY}</p>
+      <p className="admin-helper-tip">Release scaffold assets: cover.jpg, hero.jpg, social.jpg, thumbnail.jpg, mobile.jpg.</p>
       <p className="admin-helper-tip">Use public web paths beginning with /images/, not /public/images/.</p>
 
       <div className="admin-form-grid">
@@ -285,6 +299,119 @@ function ReleaseJsonGenerator() {
       <button type="button" className="primary-button" onClick={copyJson} disabled={!releaseJson}>Copy Codex JSON{copied ? ' ✓' : ''}</button>
     </section>
   );
+}
+
+
+
+function normalizeStringArray(value) {
+  return value.split(',').map((item) => item.trim()).filter(Boolean);
+}
+
+function SeriesMetadataEditor() {
+  const [seriesList, setSeriesList] = useState([]);
+  const [selectedSlug, setSelectedSlug] = useState('');
+  const [draft, setDraft] = useState(null);
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    fetch('/content/series.json')
+      .then((response) => response.json())
+      .then((payload) => {
+        const items = Array.isArray(payload?.series) ? payload.series : [];
+        setSeriesList(items);
+        if (items[0]?.slug) setSelectedSlug(items[0].slug);
+      })
+      .catch(() => setSeriesList([]));
+  }, []);
+
+  useEffect(() => {
+    const active = seriesList.find((item) => item.slug === selectedSlug);
+    if (!active) {
+      setDraft(null);
+      return;
+    }
+    setDraft({ ...active });
+  }, [selectedSlug, seriesList]);
+
+  const setField = (key, value) => setDraft((current) => ({ ...current, [key]: value }));
+
+  const normalizedRecord = useMemo(() => {
+    if (!draft) return null;
+    const output = { ...draft };
+    Object.keys(output).forEach((key) => {
+      if (typeof output[key] === 'string') output[key] = output[key].trim();
+    });
+    output.genre = normalizeStringArray(Array.isArray(draft.genre) ? draft.genre.join(', ') : String(draft.genre || ''));
+    output.tone = normalizeStringArray(Array.isArray(draft.tone) ? draft.tone.join(', ') : String(draft.tone || ''));
+    return output;
+  }, [draft]);
+
+  const warnings = useMemo(() => {
+    if (!draft || !normalizedRecord) return [];
+    const items = [];
+    if (!normalizedRecord.slug) items.push('slug is required.');
+    if (normalizedRecord.slug && !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(normalizedRecord.slug)) items.push('slug must be URL-safe lowercase kebab-case.');
+    if (!normalizedRecord.title) items.push('title is required.');
+    ['heroImage', 'coverImage', 'thumbnailImage'].forEach((field) => {
+      const value = normalizedRecord[field];
+      if (!value) return;
+      if (value.startsWith('/public/images/')) items.push(`${field} must use /images/... JSON paths, not /public/images/...`);
+      else if (!value.startsWith('/images/')) items.push(`${field} should start with /images/.`);
+    });
+    ['accentColor', 'secondaryColor'].forEach((field) => {
+      const value = normalizedRecord[field];
+      if (!value) return;
+      if (!HEX_COLOR_PATTERN.test(value)) items.push(`${field} must be a valid hex color like #f59e0b.`);
+    });
+    return items;
+  }, [draft, normalizedRecord]);
+
+  const packageOutput = useMemo(() => {
+    if (!normalizedRecord || warnings.length > 0) return '';
+    return `# Codex Content Publishing Package
+
+## Task
+Update series \`${normalizedRecord.slug}\`.
+
+## Goal
+Apply the edited series metadata from this admin-generated package.
+
+## Files to inspect
+- Locate canonical series content file.
+- Likely file: \`public/content/series.json\`
+
+## Files to update
+- \`public/content/series.json\`
+
+## Series record to update
+Find the record with slug \`${normalizedRecord.slug}\` and replace or merge with:
+
+\`\`\`json
+${JSON.stringify(normalizedRecord, null, 2)}
+\`\`\`
+
+## Artwork path rules
+- JSON paths must use \`/images/{seriesSlug}/...\`
+- Never use \`/public/images/...\` inside JSON values.
+
+## Validation checklist
+- Confirm app builds
+- Confirm series page renders
+- Confirm no unrelated routes broke
+- Confirm image paths resolve
+- Confirm JSON remains valid
+- Confirm no unrelated series records changed
+
+## Expected result
+The selected series reflects the edited metadata in public and admin views.`;
+  }, [normalizedRecord, warnings.length]);
+
+  const copyPackage = async () => {
+    if (!packageOutput || !navigator?.clipboard?.writeText) return;
+    try { await navigator.clipboard.writeText(packageOutput); setCopied(true); setTimeout(() => setCopied(false), 1400); } catch { setCopied(false); }
+  };
+
+  return <section className="admin-helper-card" aria-labelledby="series-metadata-editor-title"><h2 id="series-metadata-editor-title">Edit Series</h2><p className="admin-helper-note">Select an existing series, edit metadata, preview normalized JSON, and generate a Codex package. This does not write files or publish.</p><div className="admin-form-grid"><label><span>series</span><select value={selectedSlug} onChange={(event) => setSelectedSlug(event.target.value)}>{seriesList.map((series) => <option key={series.slug} value={series.slug}>{series.title} ({series.slug})</option>)}</select></label>{draft ? <><label><span>slug</span><input type="text" value={draft.slug || ''} onChange={(event) => setField('slug', slugify(event.target.value))} /></label><label><span>title</span><input type="text" value={draft.title || ''} onChange={(event) => setField('title', event.target.value)} /></label><label><span>logoText</span><input type="text" value={draft.logoText || ''} onChange={(event) => setField('logoText', event.target.value)} /></label><label><span>status</span><input type="text" value={draft.status || ''} onChange={(event) => setField('status', event.target.value)} /></label><label><span>format</span><input type="text" value={draft.format || ''} onChange={(event) => setField('format', event.target.value)} /></label><label className="admin-field-full"><span>tagline</span><input type="text" value={draft.tagline || ''} onChange={(event) => setField('tagline', event.target.value)} /></label><label className="admin-field-full"><span>shortDescription</span><textarea rows={3} value={draft.shortDescription || ''} onChange={(event) => setField('shortDescription', event.target.value)} /></label><label className="admin-field-full"><span>longDescription</span><textarea rows={5} value={draft.longDescription || ''} onChange={(event) => setField('longDescription', event.target.value)} /></label><label><span>genre (comma-separated)</span><input type="text" value={Array.isArray(draft.genre) ? draft.genre.join(', ') : (draft.genre || '')} onChange={(event) => setField('genre', event.target.value)} /></label><label><span>tone (comma-separated)</span><input type="text" value={Array.isArray(draft.tone) ? draft.tone.join(', ') : (draft.tone || '')} onChange={(event) => setField('tone', event.target.value)} /></label><label><span>heroImage</span><input type="text" value={draft.heroImage || ''} onChange={(event) => setField('heroImage', event.target.value)} /></label><label><span>coverImage</span><input type="text" value={draft.coverImage || ''} onChange={(event) => setField('coverImage', event.target.value)} /></label><label><span>thumbnailImage</span><input type="text" value={draft.thumbnailImage || ''} onChange={(event) => setField('thumbnailImage', event.target.value)} /></label><label><span>accentColor</span><input type="text" value={draft.accentColor || ''} onChange={(event) => setField('accentColor', event.target.value)} /></label><label><span>secondaryColor</span><input type="text" value={draft.secondaryColor || ''} onChange={(event) => setField('secondaryColor', event.target.value)} /></label></> : null}</div>{warnings.length > 0 ? <ul className="admin-warnings">{warnings.map((warning) => <li key={warning}>{warning}</li>)}</ul> : null}<label className="admin-field-full"><span>Normalized JSON preview</span><textarea className="admin-json-output" rows={16} readOnly value={normalizedRecord ? JSON.stringify(normalizedRecord, null, 2) : ''} /></label><label className="admin-field-full"><span>Generated Codex package</span><textarea className="admin-json-output" rows={24} readOnly value={packageOutput} /></label><button type="button" className="primary-button" onClick={copyPackage} disabled={!packageOutput}>Copy Package{copied ? ' ✓' : ''}</button></section>;
 }
 
 const BACKGROUND_TONE_OPTIONS = ['dark', 'deep', 'ocean', 'cosmic', 'bureaucratic', 'sunforge', 'neutral'];
@@ -371,6 +498,8 @@ function SeriesJsonGenerator() {
       heroImage: form.heroImage.trim(),
       coverImage: form.coverImage.trim(),
       thumbnailImage: form.thumbnailImage.trim(),
+      assetRole: 'scaffold',
+      promptRules: SCAFFOLD_ASSET_PROMPT_RULES,
       status: form.status.trim() || 'ongoing',
     };
 
@@ -392,6 +521,7 @@ function SeriesJsonGenerator() {
     <section className="admin-helper-card" aria-labelledby="series-json-generator-title">
       <h2 id="series-json-generator-title">Series JSON Generator</h2>
       <p className="admin-helper-note">This only generates JSON. It does not save or publish changes. Copy this JSON and paste it into series.json manually.</p>
+      <p className="admin-helper-tip">{SCAFFOLD_ONLY_GENERATOR_COPY}</p>
       <p className="admin-helper-tip">Slug should be lowercase, hyphen-separated, and stable after publishing.</p>
       <p className="admin-helper-tip">Use hex colors like #facc15. Accent color is used for highlights, buttons, borders, and chips.</p>
       <p className="admin-helper-tip">Use public web paths beginning with /images/, not /public/images/. Example: /images/vikings-2026/hero.jpg</p>
@@ -470,7 +600,9 @@ const IMAGE_TYPE_CONFIG = {
   releaseHero: { label: 'Release hero image', filenameBase: 'hero', requiresRelease: true, requiresPage: false, jsonField: 'heroImage' },
   releaseCover: { label: 'Release cover image', filenameBase: 'cover', requiresRelease: true, requiresPage: false, jsonField: 'coverImage' },
   releaseCard: { label: 'Release card image', filenameBase: 'card', requiresRelease: true, requiresPage: false, jsonField: 'image' },
-  dailyPage: { label: 'Daily page image', filenameBase: 'page', requiresRelease: true, requiresPage: true, jsonField: 'image' },
+  releaseSocial: { label: 'Release social image', filenameBase: 'social', requiresRelease: true, requiresPage: false, jsonField: 'socialImage' },
+  releaseThumbnail: { label: 'Release thumbnail image', filenameBase: 'thumbnail', requiresRelease: true, requiresPage: false, jsonField: 'thumbnailImage' },
+  releaseMobile: { label: 'Release mobile image', filenameBase: 'mobile', requiresRelease: true, requiresPage: false, jsonField: 'mobileImage' },
 };
 const SUPPORTED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp'];
 
@@ -536,6 +668,7 @@ function ImageFilingHelper() {
     <section className="admin-helper-card" aria-labelledby="image-filing-helper-title">
       <h2 id="image-filing-helper-title">Image Filing Helper</h2>
       <p className="admin-helper-note">This helper prepares correct image names and paths. It does not upload to GitHub or save files yet.</p>
+      <p className="admin-helper-tip">{SCAFFOLD_ONLY_GENERATOR_COPY}</p>
       <p className="admin-helper-tip">This helper prepares the correct filename and paths for images. It does not save files. After generating the path, manually place the image in the repo at the shown repo path, then use the JSON path in the matching content file.</p>
 
       <div className="admin-form-grid">
@@ -625,6 +758,7 @@ function PageJsonGenerator() {
       title: form.title.trim() || `Page ${Number(form.pageNumber)}`,
       caption: form.caption.trim(),
       image: effectiveImage,
+      assetRole: 'external-comic-art',
     };
 
     return JSON.stringify(output, null, 2);
@@ -645,6 +779,7 @@ function PageJsonGenerator() {
     <section className="admin-helper-card" aria-labelledby="page-json-generator-title">
       <h2 id="page-json-generator-title">Page JSON Generator</h2>
       <p className="admin-helper-note">This only generates JSON. It does not save or publish changes. Copy this JSON and paste it into pages.json manually.</p>
+      <p className="admin-helper-tip">This generator stores references to externally produced comic art only.</p>
       <p className="admin-helper-tip">Image path pattern: /images/{'{seriesSlug}'}/{'{releaseSlug}'}/page-001.jpg (not /public/images/...)</p>
 
       <div className="admin-form-grid">
@@ -689,6 +824,7 @@ const DEFAULT_PAGE_FILENAMES = ['page-001.jpg', 'page-002.jpg', 'page-003.jpg'].
 const PACKAGE_STATUS_OPTIONS = RELEASE_STATUSES;
 
 function CodexContentPackageGenerator() {
+  const [mode, setMode] = useState('edit');
   const [form, setForm] = useState({
     seriesSlug: '',
     releaseId: '',
@@ -743,11 +879,53 @@ function CodexContentPackageGenerator() {
     return [...new Set(items)];
   }, [form, normalizedReleaseId, normalizedSeriesSlug, parsedPageFiles]);
 
+  const previewIssues = useMemo(() => {
+    const items = [];
+    const warn = (section, message) => items.push({ level: 'warning', section, message });
+    if (!normalizedReleaseId) warn('Release', 'Missing slug.');
+    if (!normalizedSeriesSlug) warn('Release', 'Missing seriesSlug.');
+    if (!clean(form.releaseTitle)) warn('Release', 'Missing title.');
+    if (!clean(form.status)) warn('Release', 'Missing status.');
+    if (!PACKAGE_STATUS_OPTIONS.includes(clean(form.status))) warn('Release', 'Invalid status value.');
+    if (!clean(form.coverFilename)) warn('Release', 'Missing coverImage filename.');
+    if (!clean(form.ctaLabel)) warn('Release', 'Missing ctaLabel.');
+    if (clean(form.coverFilename) && toJsonPath(clean(form.coverFilename)).includes('/public/images')) warn('Release', 'coverImage JSON path should not include /public/images.');
+    if (clean(form.heroFilename) && toJsonPath(clean(form.heroFilename)).includes('/public/images')) warn('Release', 'heroImage JSON path should not include /public/images.');
+    const pageNumCounts = new Map();
+    pageRecords.forEach((page, index) => {
+      pageNumCounts.set(page.pageNumber, (pageNumCounts.get(page.pageNumber) ?? 0) + 1);
+      if (!page.filename) warn('Pages', `Page ${index + 1} is missing image filename.`);
+      if (!page.jsonPath.startsWith('/images/')) warn('Pages', `Page ${page.pageNumber} image path should start with /images/.`);
+      if (page.jsonPath.includes('/public/images')) warn('Pages', `Page ${page.pageNumber} image path should not include /public/images.`);
+    });
+    pageNumCounts.forEach((count, pageNumber) => {
+      if (count > 1) warn('Pages', `Duplicate page number ${pageNumber}.`);
+    });
+    pageRecords.forEach((page, index) => {
+      if (index > 0 && page.pageNumber !== pageRecords[index - 1].pageNumber + 1) {
+        warn('Pages', 'Page numbers are non-sequential.');
+      }
+    });
+    imageEntries.forEach((entry) => {
+      if (entry.jsonPath.includes('/public')) warn('Images', `${entry.filename}: JSON path contains /public.`);
+      if (!entry.repoPath.includes('public/images')) warn('Images', `${entry.filename}: repo path should include public/images.`);
+      if (!/\.[a-z0-9]+$/i.test(entry.filename)) warn('Images', `${entry.filename}: missing file extension.`);
+      if (normalizedSeriesSlug && !entry.repoPath.includes(`/${normalizedSeriesSlug}/`)) warn('Images', `${entry.filename}: path should include series slug.`);
+      if (normalizedReleaseId && !entry.repoPath.includes(`/${normalizedReleaseId}/`)) warn('Images', `${entry.filename}: release asset path should include release slug.`);
+    });
+    if (!packageOutput) warn('Package', 'No generated package available or package is empty.');
+    if (packageOutput && !packageOutput.includes('## Files to add')) warn('Package', 'Package does not mention files to add.');
+    if (packageOutput && !packageOutput.includes('## Update releases.json')) warn('Package', 'Package does not mention JSON files to update.');
+    return items;
+  }, [clean, form.coverFilename, form.ctaLabel, form.heroFilename, form.releaseTitle, form.status, imageEntries, normalizedReleaseId, normalizedSeriesSlug, packageOutput, pageRecords]);
+
   const releaseJsonObject = useMemo(() => {
     if (!normalizedSeriesSlug || !normalizedReleaseId || !clean(form.releaseTitle) || !clean(form.releaseDate)) return null;
     const parsedIssue = Number(form.issueNumber);
     const issueValue = clean(form.issueNumber) && Number.isFinite(parsedIssue) ? parsedIssue : clean(form.issueNumber);
-    const output = {
+    const coverFilename = clean(form.coverFilename) || 'cover.jpg';
+    const heroFilename = clean(form.heroFilename) || 'hero.jpg';
+    return {
       id: normalizedReleaseId,
       seriesSlug: normalizedSeriesSlug,
       title: clean(form.releaseTitle),
@@ -755,13 +933,12 @@ function CodexContentPackageGenerator() {
       description: clean(form.description),
       releaseDate: clean(form.releaseDate),
       status: PACKAGE_STATUS_OPTIONS.includes(clean(form.status)) ? clean(form.status) : 'draft',
-      image: clean(form.coverFilename) ? toJsonPath(clean(form.coverFilename)) : '',
+      image: toJsonPath(coverFilename),
+      coverImage: toJsonPath(coverFilename),
+      heroImage: toJsonPath(heroFilename),
       ctaLabel: clean(form.ctaLabel) || DEFAULT_RELEASE_CTA_LABEL,
     };
-    if (clean(form.coverFilename)) output.coverImage = toJsonPath(clean(form.coverFilename));
-    if (clean(form.heroFilename)) output.heroImage = toJsonPath(clean(form.heroFilename));
-    return output;
-  }, [form, normalizedReleaseId, normalizedSeriesSlug, pageRecords]);
+  }, [form, normalizedReleaseId, normalizedSeriesSlug]);
 
   const pageJsonArray = pageRecords.map((page) => ({
     seriesSlug: normalizedSeriesSlug,
@@ -843,7 +1020,13 @@ ${JSON.stringify(pageJsonArray, null, 2)}
       <p className="admin-helper-tip">This generates a Codex package only. It does not upload images, save JSON, call GitHub, create PRs, or deploy the site.</p>
       <p className="admin-helper-tip">After copying this package, paste it into Codex along with the image files or after placing the image files where Codex can access them.</p>
 
-      <div className="admin-form-grid">
+      <div className="admin-copy-row">
+        <button type="button" className="text-button" onClick={() => setMode('edit')}>Edit</button>
+        <button type="button" className="text-button" onClick={() => setMode('preview')}>Preview content</button>
+        <button type="button" className="text-button" onClick={() => setMode('export')}>Export</button>
+      </div>
+
+      {mode === 'edit' ? <div className="admin-form-grid">
         <label><span>seriesSlug</span><input type="text" value={form.seriesSlug} onChange={(event) => setField('seriesSlug', event.target.value)} /></label>
         <label><span>releaseId</span><input type="text" value={form.releaseId} onChange={(event) => setField('releaseId', event.target.value)} /></label>
         <label><span>releaseTitle</span><input type="text" value={form.releaseTitle} onChange={(event) => setField('releaseTitle', event.target.value)} /></label>
@@ -855,17 +1038,31 @@ ${JSON.stringify(pageJsonArray, null, 2)}
         <label><span>heroFilename</span><input type="text" value={form.heroFilename} onChange={(event) => setField('heroFilename', event.target.value)} /></label>
         <label className="admin-field-full"><span>description</span><textarea rows={3} value={form.description} onChange={(event) => setField('description', event.target.value)} /></label>
         <label className="admin-field-full"><span>page image filenames (one per line)</span><textarea rows={5} value={form.pageFilenames} onChange={(event) => setField('pageFilenames', event.target.value)} /></label>
-      </div>
+      </div> : null}
 
       {warnings.length > 0 ? <ul className="admin-warnings">{warnings.map((warning) => <li key={warning}>{warning}</li>)}</ul> : null}
+      {mode === 'preview' ? (
+        <>
+          <p className="admin-helper-note">Preview mode</p>
+          <p className="admin-helper-tip">Warnings: {previewIssues.length}</p>
+          {previewIssues.length ? <ul className="admin-warnings">{previewIssues.map((issue) => <li key={`${issue.section}-${issue.message}`}>[{issue.section}] {issue.message}</li>)}</ul> : null}
+          <label className="admin-field-full"><span>Release Preview</span><textarea className="admin-json-output" rows={12} readOnly value={JSON.stringify(releaseJsonObject, null, 2)} /></label>
+          <label className="admin-field-full"><span>Page Preview (ordered)</span><textarea className="admin-json-output" rows={12} readOnly value={JSON.stringify(pageJsonArray, null, 2)} /></label>
+          <label className="admin-field-full"><span>Image Assets</span><textarea className="admin-json-output" rows={10} readOnly value={imageEntries.map((entry) => `Source file: ${entry.filename}\nTarget repo path: ${entry.repoPath}\nJSON path: ${entry.jsonPath}`).join('\n\n')} /></label>
+          <label className="admin-field-full"><span>Series Metadata</span><textarea className="admin-json-output" rows={8} readOnly value={JSON.stringify({ slug: normalizedSeriesSlug, status: form.status, format: 'n/a', genre: 'n/a', tone: 'n/a' }, null, 2)} /></label>
+          <label className="admin-field-full"><span>Extras</span><textarea className="admin-json-output" rows={4} readOnly value={'No extras in this package draft.'} /></label>
+          <label className="admin-field-full"><span>Soundtracks</span><textarea className="admin-json-output" rows={4} readOnly value={'No soundtrack data in this package draft.'} /></label>
+          <label className="admin-field-full"><span>Codex Package Preview</span><textarea className="admin-json-output" rows={18} readOnly value={packageOutput} /></label>
+        </>
+      ) : null}
       <div className="admin-copy-row">
         <button type="button" className="primary-button" disabled={!packageOutput} onClick={copyPackage}>Copy Package{copied ? ' ✓ Copied' : ''}</button>
         <button type="button" className="text-button" onClick={resetForm}>Reset</button>
       </div>
-      <label className="admin-field-full">
+      {mode !== 'preview' ? <label className="admin-field-full">
         <span>Generated Codex Package</span>
         <textarea className="admin-json-output" rows={26} readOnly value={packageOutput} placeholder="Fill required fields and page filenames to generate the package." />
-      </label>
+      </label> : null}
     </section>
   );
 }

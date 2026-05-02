@@ -16,6 +16,7 @@ Static content is served from `public/content`:
 - `public/content/series.json`
 - `public/content/releases.json`
 - `public/content/pages.json`
+- `public/content/soundtracks.json`
 
 ## Publishing Workflow
 
@@ -38,6 +39,12 @@ Codex then applies that package to the repository by adding image files, updatin
 9. Merge the PR when the preview is correct.
 
 This keeps GitHub credentials, repository mutation, pull requests, and deployment outside the app itself. The admin helper remains a safe package generator instead of becoming a publishing backend.
+
+
+## Planning Documents
+
+- [GitHub-backed admin planning document](./docs_github_backed_admin_planning.md)
+- [Artwork requirements reference](./docs/artwork-requirements.md)
 
 ## Image Path Rules
 
@@ -71,6 +78,7 @@ Depending on the package, Codex may update:
 - `public/content/series.json`
 - `public/content/releases.json`
 - `public/content/pages.json`
+- `public/content/soundtracks.json`
 
 Codex may also update fields that control release/page ordering, image references, and optional extras/soundtrack metadata that are stored in those content files.
 
@@ -256,6 +264,14 @@ Notes:
 
 - `id` is the route slug used by `/releases/{id}` and `/read/{id}`.
 - Public UI must not show `draft` releases.
+- `scheduled` releases are hidden until `releaseDate` is in the past or present.
+- `scheduled` releases should always include a `releaseDate`.
+
+Status visibility checks:
+
+- `draft`: hidden from homepage, series archives, search, release routes, and reader routes.
+- `scheduled`: hidden while `releaseDate` is in the future; visible once `releaseDate` is reached.
+- `published`: visible immediately.
 
 ### 3) Page schema (`public/content/pages.json`)
 
