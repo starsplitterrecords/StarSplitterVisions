@@ -650,6 +650,192 @@ function PageJsonGenerator() {
   );
 }
 
+const DEFAULT_PAGE_FILENAMES = ['page-001.jpg', 'page-002.jpg', 'page-003.jpg'].join('\n');
+const PACKAGE_STATUS_OPTIONS = ['published', 'scheduled', 'draft'];
+const RELEASE_STATUS_OPTIONS = ['released', 'published', 'scheduled', 'draft'];
+
+function CodexContentPackageGenerator() {
+  const [form, setForm] = useState({
+    seriesSlug: '',
+    releaseId: '',
+    releaseTitle: '',
+    issueNumber: '',
+    description: '',
+    releaseDate: '',
+    status: 'published',
+    ctaLabel: 'Read',
+    coverFilename: 'cover.jpg',
+    heroFilename: 'hero.jpg',
+    pageFilenames: DEFAULT_PAGE_FILENAMES,
+  });
+  const [copied, setCopied] = useState(false);
+  const setField = (key, value) => setForm((current) => ({ ...current, [key]: value }));
+  const clean = (value) => value.trim();
+  const normalizedSeriesSlug = slugify(form.seriesSlug);
+  const normalizedReleaseId = slugify(form.releaseId);
+  const isFilenameOnly = (value) => value && !value.includes('/') && !value.includes('\\');
+  const toRepoPath = (filename) => `public/images/${normalizedSeriesSlug}/${normalizedReleaseId}/${filename}`;
+  const toJsonPath = (filename) => `/images/${normalizedSeriesSlug}/${normalizedReleaseId}/${filename}`;
+
+  const parsedPageFiles = clean(form.pageFilenames).split('\n').map((line) => clean(line)).filter(Boolean);
+  const parsePageNumber = (filename, fallback) => {
+    const match = filename.match(/(\d+)/);
+    if (!match) return { pageNumber: fallback, inferred: false };
+    const parsed = Number(match[1]);
+    if (!Number.isFinite(parsed) || parsed < 1) return { pageNumber: fallback, inferred: false };
+    return { pageNumber: parsed, inferred: true };
+  };
+
+  const pageRecords = parsedPageFiles.map((filename, index) => {
+    const { pageNumber, inferred } = parsePageNumber(filename, index + 1);
+    return { filename, pageNumber, inferred, repoPath: toRepoPath(filename), jsonPath: toJsonPath(filename) };
+  }).sort((a, b) => a.pageNumber - b.pageNumber);
+
+  const warnings = useMemo(() => {
+    const items = [];
+    if (!normalizedSeriesSlug) items.push('seriesSlug is missing.');
+    if (!normalizedReleaseId) items.push('releaseId is missing.');
+    if (!clean(form.releaseTitle)) items.push('releaseTitle is missing.');
+    if (!clean(form.releaseDate)) items.push('releaseDate is missing.');
+    if (parsedPageFiles.length === 0) items.push('No page image filenames are listed.');
+    if (form.coverFilename && !isFilenameOnly(clean(form.coverFilename))) items.push('coverFilename should be a filename only, not a path.');
+    if (form.heroFilename && !isFilenameOnly(clean(form.heroFilename))) items.push('heroFilename should be a filename only, not a path.');
+    parsedPageFiles.forEach((filename) => {
+      if (!isFilenameOnly(filename)) items.push(`Page filename "${filename}" should be a filename only, not a path.`);
+      if (toJsonPath(filename).startsWith('/public/images/')) items.push('JSON paths must not start with /public/images/.');
+      if (!parsePageNumber(filename, 1).inferred) items.push(`Could not infer page number from "${filename}" so line order will be used.`);
+    });
+    if (!PACKAGE_STATUS_OPTIONS.includes(form.status) && RELEASE_STATUS_OPTIONS.includes(form.status)) items.push(`Status "${form.status}" may not match the current visibility convention.`);
+    return [...new Set(items)];
+  }, [form, normalizedReleaseId, normalizedSeriesSlug, parsedPageFiles]);
+
+  const releaseJsonObject = useMemo(() => {
+    if (!normalizedSeriesSlug || !normalizedReleaseId || !clean(form.releaseTitle) || !clean(form.releaseDate)) return null;
+    const parsedIssue = Number(form.issueNumber);
+    const issueValue = clean(form.issueNumber) && Number.isFinite(parsedIssue) ? parsedIssue : clean(form.issueNumber);
+    const output = {
+      id: normalizedReleaseId,
+      seriesSlug: normalizedSeriesSlug,
+      title: clean(form.releaseTitle),
+      issueNumber: issueValue,
+      description: clean(form.description),
+      releaseDate: clean(form.releaseDate),
+      status: clean(form.status) || 'published',
+      image: pageRecords[0]?.jsonPath ?? '',
+      ctaLabel: clean(form.ctaLabel) || 'Read',
+    };
+    if (clean(form.coverFilename)) output.coverImage = toJsonPath(clean(form.coverFilename));
+    if (clean(form.heroFilename)) output.heroImage = toJsonPath(clean(form.heroFilename));
+    return output;
+  }, [form, normalizedReleaseId, normalizedSeriesSlug, pageRecords]);
+
+  const pageJsonArray = pageRecords.map((page) => ({
+    seriesSlug: normalizedSeriesSlug,
+    releaseSlug: normalizedReleaseId,
+    pageNumber: page.pageNumber,
+    releaseDate: clean(form.releaseDate),
+    title: `Page ${page.pageNumber}`,
+    caption: '',
+    image: page.jsonPath,
+  }));
+
+  const imageEntries = [
+    ...(clean(form.coverFilename) ? [{ filename: clean(form.coverFilename), repoPath: toRepoPath(clean(form.coverFilename)), jsonPath: toJsonPath(clean(form.coverFilename)) }] : []),
+    ...(clean(form.heroFilename) ? [{ filename: clean(form.heroFilename), repoPath: toRepoPath(clean(form.heroFilename)), jsonPath: toJsonPath(clean(form.heroFilename)) }] : []),
+    ...pageRecords,
+  ];
+
+  const packageOutput = useMemo(() => {
+    if (!releaseJsonObject || pageJsonArray.length === 0) return '';
+    const filesToAdd = imageEntries.map((entry) => `- Source file: \`${entry.filename}\`\n  Target repo path: \`${entry.repoPath}\`\n  JSON path: \`${entry.jsonPath}\``).join('\n\n');
+    return `# Codex Content Publishing Package
+
+## Task
+Add release \`${normalizedReleaseId}\` for \`${normalizedSeriesSlug}\`.
+
+## Files to add
+Place these images:
+
+${filesToAdd}
+
+## Update releases.json
+Add this object to \`public/content/releases.json\`:
+
+\`\`\`json
+${JSON.stringify(releaseJsonObject, null, 2)}
+\`\`\`
+
+## Update pages.json
+Add these objects to \`public/content/pages.json\`:
+
+\`\`\`json
+${JSON.stringify(pageJsonArray, null, 2)}
+\`\`\`
+
+## Instructions
+* Start from latest \`main\`.
+* Create a new branch and PR.
+* Place image files at the exact target repo paths listed above.
+* Update \`public/content/releases.json\`.
+* Update \`public/content/pages.json\`.
+* If a new series section is included, update \`public/content/series.json\`.
+* Do not change app code.
+* Do not redesign.
+* Do not change routes.
+* Validate JSON references.
+* Do not run \`npm run build\`.
+`;
+  }, [imageEntries, normalizedReleaseId, normalizedSeriesSlug, pageJsonArray, releaseJsonObject]);
+
+  const resetForm = () => {
+    setForm({
+      seriesSlug: '', releaseId: '', releaseTitle: '', issueNumber: '', description: '', releaseDate: '', status: 'published', ctaLabel: 'Read', coverFilename: 'cover.jpg', heroFilename: 'hero.jpg', pageFilenames: DEFAULT_PAGE_FILENAMES,
+    });
+    setCopied(false);
+  };
+
+  const copyPackage = async () => {
+    if (!packageOutput || !navigator?.clipboard?.writeText) return;
+    try { await navigator.clipboard.writeText(packageOutput); setCopied(true); setTimeout(() => setCopied(false), 1400); } catch { setCopied(false); }
+  };
+
+  return (
+    <section className="admin-helper-card" aria-labelledby="codex-package-generator-title">
+      <h2 id="codex-package-generator-title">Codex Content Package Generator</h2>
+      <p className="admin-helper-note">Use this helper to generate a complete Codex-ready publishing package. The admin page does not publish directly. Copy the package into Codex so Codex can update repo files and open a PR.</p>
+      <p className="admin-helper-tip">This does not upload files, save JSON, call GitHub, or deploy the site.</p>
+      <p className="admin-helper-tip">Admin prepares the package. Codex edits the repo. Vercel previews. You merge.</p>
+      <p className="admin-helper-tip">Selecting files here only captures filenames for the package. It does not upload them.</p>
+      <p className="admin-helper-tip">This generates a Codex package only. It does not upload images, save JSON, call GitHub, create PRs, or deploy the site.</p>
+      <p className="admin-helper-tip">After copying this package, paste it into Codex along with the image files or after placing the image files where Codex can access them.</p>
+
+      <div className="admin-form-grid">
+        <label><span>seriesSlug</span><input type="text" value={form.seriesSlug} onChange={(event) => setField('seriesSlug', event.target.value)} /></label>
+        <label><span>releaseId</span><input type="text" value={form.releaseId} onChange={(event) => setField('releaseId', event.target.value)} /></label>
+        <label><span>releaseTitle</span><input type="text" value={form.releaseTitle} onChange={(event) => setField('releaseTitle', event.target.value)} /></label>
+        <label><span>issueNumber</span><input type="text" value={form.issueNumber} onChange={(event) => setField('issueNumber', event.target.value)} /></label>
+        <label><span>releaseDate</span><input type="date" value={form.releaseDate} onChange={(event) => setField('releaseDate', event.target.value)} /></label>
+        <label><span>status</span><select value={form.status} onChange={(event) => setField('status', event.target.value)}>{PACKAGE_STATUS_OPTIONS.map((status) => <option key={status} value={status}>{status}</option>)}</select></label>
+        <label><span>ctaLabel</span><input type="text" value={form.ctaLabel} onChange={(event) => setField('ctaLabel', event.target.value)} /></label>
+        <label><span>coverFilename</span><input type="text" value={form.coverFilename} onChange={(event) => setField('coverFilename', event.target.value)} /></label>
+        <label><span>heroFilename</span><input type="text" value={form.heroFilename} onChange={(event) => setField('heroFilename', event.target.value)} /></label>
+        <label className="admin-field-full"><span>description</span><textarea rows={3} value={form.description} onChange={(event) => setField('description', event.target.value)} /></label>
+        <label className="admin-field-full"><span>page image filenames (one per line)</span><textarea rows={5} value={form.pageFilenames} onChange={(event) => setField('pageFilenames', event.target.value)} /></label>
+      </div>
+
+      {warnings.length > 0 ? <ul className="admin-warnings">{warnings.map((warning) => <li key={warning}>{warning}</li>)}</ul> : null}
+      <div className="admin-copy-row">
+        <button type="button" className="primary-button" disabled={!packageOutput} onClick={copyPackage}>Copy Package{copied ? ' ✓ Copied' : ''}</button>
+        <button type="button" className="text-button" onClick={resetForm}>Reset</button>
+      </div>
+      <label className="admin-field-full">
+        <span>Generated Codex Package</span>
+        <textarea className="admin-json-output" rows={26} readOnly value={packageOutput} placeholder="Fill required fields and page filenames to generate the package." />
+      </label>
+    </section>
+  );
+}
+
 export default function AdminShell() {
   return (
     <main className="page page-admin">
@@ -689,6 +875,7 @@ export default function AdminShell() {
       <SeriesJsonGenerator />
       <ReleaseJsonGenerator />
       <PageJsonGenerator />
+      <CodexContentPackageGenerator />
       <ImageFilingHelper />
 
       <p>
