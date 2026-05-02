@@ -4,10 +4,10 @@ import MediaCard from './components/MediaCard';
 import ReleaseCard from './components/ReleaseCard';
 import SeriesHero from './components/SeriesHero';
 import ReaderShell from './components/ReaderShell';
-import MiniAudioPlayer from './components/MiniAudioPlayer';
+import MiniAudioPlayer from './components/reader/MiniAudioPlayer';
 import AdminShell from './components/AdminShell';
 import { clearContinueReading, getContinueReading, setContinueReading } from './lib/continueReading';
-import { validateExtraList, validatePageList, validateReleaseList, validateSeriesList, validateSoundtrackList } from './lib/contentValidation';
+import { validateExtraList, validatePageList, validateReaderSoundtrackList, validateReleaseList, validateSeriesList, validateSoundtrackList } from './lib/contentValidation';
 import { findSoundtrackForRelease } from './lib/soundtracks';
 
 const LATEST_ISSUES_LIMIT = 4;
@@ -257,7 +257,7 @@ function ReleasePage({ release, series, pages }) { const releasePages = pages.fi
 export default function App() {
   const [data, setData] = useState({ series: [], releases: [], pages: [], soundtracks: [] });
   const [continueRecord, setContinueRecord] = useState(null);
-  useEffect(() => { Promise.all([fetch('/content/series.json').then((res) => res.json()), fetch('/content/releases.json').then((res) => res.json()), fetch('/content/pages.json').then((res) => res.json()), fetch('/content/soundtracks.json').then((res) => res.json()).catch(() => ({ soundtracks: [] }))]).then(([seriesData, releasesData, pagesData, soundtracksData]) => setData({ series: validateSeriesList(seriesData?.series), releases: validateReleaseList(releasesData?.releases), pages: validatePageList(pagesData?.pages), soundtracks: validateSoundtrackList(soundtracksData?.soundtracks) })); }, []);
+  useEffect(() => { Promise.all([fetch('/content/series.json').then((res) => res.json()), fetch('/content/releases.json').then((res) => res.json()), fetch('/content/pages.json').then((res) => res.json()), fetch('/content/soundtracks.json').then((res) => res.json()).catch(() => ({ soundtracks: [] }))]).then(([seriesData, releasesData, pagesData, soundtracksData]) => setData({ series: validateSeriesList(seriesData?.series), releases: validateReleaseList(releasesData?.releases), pages: validatePageList(pagesData?.pages), soundtracks: validateReaderSoundtrackList(soundtracksData?.soundtracks) })); }, []);
   useEffect(() => { setContinueRecord(getContinueReading()); }, []);
   const path = window.location.pathname;
   const releaseId = path.startsWith('/releases/') ? path.replace('/releases/', '') : null;

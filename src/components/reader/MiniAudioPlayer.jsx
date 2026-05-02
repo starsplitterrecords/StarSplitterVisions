@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { getPlayableTracks, getPlaylistLinks } from '../lib/soundtracks';
+import { getPlayableTracks, getPlaylistLinks } from '../../lib/soundtracks';
 
 export default function MiniAudioPlayer({ soundtrack }) {
   const [isExpanded, setIsExpanded] = useState(false);
