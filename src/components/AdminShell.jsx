@@ -26,8 +26,8 @@ const ADMIN_SECTIONS = [
     title: 'Extras',
     description:
       'Manage bonus materials, links, production notes, covers, editorial notes, and related collateral.',
-    status: 'Not connected',
-    action: 'Organize extras — coming soon',
+    status: 'Package generator',
+    action: 'Organize extras',
   },
   {
     title: 'Soundtracks',
@@ -836,6 +836,111 @@ ${JSON.stringify(pageJsonArray, null, 2)}
   );
 }
 
+
+const XTRA_TYPES = [
+  'bonus-material','external-link','production-note','cover','cover-variant','editorial-note','behind-the-scenes','promo-asset','reference','creator-commentary','related-media','supplemental-document','other',
+];
+const XTRA_VISIBILITY = ['public','hidden','draft'];
+const XTRA_ASSET_KINDS = ['image','cover','thumbnail','document','audio','video','other'];
+const kebabCasePattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+const normalizeFileName = (value) => value.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9._-]/g, '');
+const deriveXtraId = (seriesSlug, releaseSlug, xtraSlug) => releaseSlug ? `${seriesSlug}__${releaseSlug}__${xtraSlug}` : `${seriesSlug}__${xtraSlug}`;
+const deriveXtraBaseRepoPath = (seriesSlug, releaseSlug, xtraSlug) => releaseSlug ? `public/images/${seriesSlug}/${releaseSlug}/xtras/${xtraSlug}` : `public/images/${seriesSlug}/xtras/${xtraSlug}`;
+const deriveXtraBasePublicPath = (seriesSlug, releaseSlug, xtraSlug) => releaseSlug ? `/images/${seriesSlug}/${releaseSlug}/xtras/${xtraSlug}` : `/images/${seriesSlug}/xtras/${xtraSlug}`;
+
+function XtrasPackageGenerator() {
+  const [form, setForm] = useState({ seriesSlug: '', releaseSlug: '', type: 'bonus-material', title: '', slug: '', description: '', displayTitle: '', shortLabel: '', sortOrder: '', visibility: 'draft', featured: false, tags: '', body: '', editorialNote: '', productionNote: '', creatorCommentary: '' });
+  const [assets, setAssets] = useState([{ sourceFileName: '', targetFileName: '', kind: 'image', altText: '', caption: '', credit: '' }]);
+  const [links, setLinks] = useState([{ url: '', label: '', provider: '', embedUrl: '' }]);
+  const [copied, setCopied] = useState(false);
+  const setField = (key, value) => setForm((current) => ({ ...current, [key]: value }));
+  const seriesSlug = slugify(form.seriesSlug);
+  const releaseSlug = slugify(form.releaseSlug);
+  const xtraSlug = slugify(form.slug || form.title);
+  const normalizedAssets = assets.filter((item) => item.sourceFileName.trim() || item.targetFileName.trim()).map((item) => {
+    const targetFileName = normalizeFileName(item.targetFileName || item.sourceFileName);
+    const repoPath = `${deriveXtraBaseRepoPath(seriesSlug, releaseSlug || undefined, xtraSlug)}/${targetFileName}`;
+    const publicPath = `${deriveXtraBasePublicPath(seriesSlug, releaseSlug || undefined, xtraSlug)}/${targetFileName}`;
+    return { sourceFileName: item.sourceFileName.trim(), targetFileName, kind: item.kind, repoPath, publicPath, altText: item.altText.trim() || undefined, caption: item.caption.trim() || undefined, credit: item.credit.trim() || undefined };
+  });
+  const normalizedLinks = links.filter((item) => item.url.trim()).map((item) => ({ url: item.url.trim(), label: item.label.trim() || undefined, provider: item.provider.trim() || undefined, embedUrl: item.embedUrl.trim() || undefined }));
+  const entry = { id: deriveXtraId(seriesSlug, releaseSlug || undefined, xtraSlug), seriesSlug, releaseSlug: releaseSlug || undefined, type: form.type, title: form.title.trim(), slug: xtraSlug, displayTitle: form.displayTitle.trim() || undefined, shortLabel: form.shortLabel.trim() || undefined, description: form.description.trim() || undefined, body: form.body.trim() || undefined, editorialNote: form.editorialNote.trim() || undefined, productionNote: form.productionNote.trim() || undefined, creatorCommentary: form.creatorCommentary.trim() || undefined, visibility: form.visibility, featured: Boolean(form.featured), sortOrder: form.sortOrder.trim() ? Number(form.sortOrder) : undefined, tags: form.tags.split(',').map((item) => item.trim()).filter(Boolean), assets: normalizedAssets, links: normalizedLinks };
+  const warnings = [];
+  if (!seriesSlug) warnings.push('seriesSlug is required.');
+  if (!form.type) warnings.push('type is required.');
+  if (!form.title.trim()) warnings.push('title is required.');
+  if (!xtraSlug) warnings.push('slug is required.');
+  if (seriesSlug && !kebabCasePattern.test(seriesSlug)) warnings.push('seriesSlug must be lowercase kebab-case.');
+  if (releaseSlug && !kebabCasePattern.test(releaseSlug)) warnings.push('releaseSlug must be lowercase kebab-case.');
+  if (xtraSlug && !kebabCasePattern.test(xtraSlug)) warnings.push('slug must be lowercase kebab-case.');
+  if ((form.type === 'external-link' || form.type === 'related-media') && normalizedLinks.length === 0) warnings.push('external-link and related-media entries require at least one valid URL.');
+  normalizedLinks.forEach((item) => { if (!/^https?:\/\//.test(item.url)) warnings.push(`URL must start with http:// or https:// (${item.url}).`); });
+  normalizedAssets.forEach((item) => { if (!item.sourceFileName) warnings.push('asset sourceFileName is required.'); if (!item.targetFileName) warnings.push('asset targetFileName is required.'); if (!item.repoPath.startsWith('public/images/')) warnings.push('asset repoPath must start with public/images/.'); if (!item.publicPath.startsWith('/images/')) warnings.push('asset publicPath must start with /images/.'); if (item.publicPath.startsWith('/public/')) warnings.push('asset publicPath must not start with /public/.'); });
+  const packageOutput = seriesSlug && xtraSlug ? `# Codex Xtras Content Package
+
+## Task
+Add xtras collateral for series \`${seriesSlug}\`.
+
+Related release: \`${releaseSlug || 'Series-level extra'}\`.
+
+## Context
+This package was generated by the admin xtras organizer. The admin does not publish directly. Implement these changes in the repository and open a PR.
+
+## Xtras to add
+
+\`\`\`json
+${JSON.stringify([entry], null, 2)}
+\`\`\`
+
+## Files to add
+
+Place the following source files into the repo:
+
+${normalizedAssets.length ? normalizedAssets.map((item) => `- Source file: \`${item.sourceFileName}\`
+  Target repo path: \`${item.repoPath}\`
+  JSON/public path: \`${item.publicPath}\``).join('\n\n') : '- No files required for link-only extra.'}
+
+## Data files to update
+
+Update the project’s xtras data source.
+
+Preferred locations, in order:
+
+1. Use the existing xtras/extras data file if one already exists.
+2. If no file exists, create one following the project’s existing data conventions.
+
+Likely acceptable file names:
+
+- \`src/data/xtras.json\`
+- \`src/data/extras.json\`
+- \`public/data/xtras.json\`
+- \`public/data/extras.json\`
+- Existing series/release JSON file if the repo already nests extras there
+
+Do not create duplicate competing data sources.
+
+## Required implementation rules
+
+- Do not include \`/public\` in JSON/public asset paths.
+- Repo file paths should use \`public/images/...\`.
+- JSON/public paths should use \`/images/...\`.
+
+## Validation
+
+Run:
+\`\`\`bash
+npm run lint
+npm run typecheck
+npm run build
+\`\`\`
+` : '';
+
+  const copyPackage = async () => { if (!packageOutput || !navigator?.clipboard?.writeText) return; try { await navigator.clipboard.writeText(packageOutput); setCopied(true); setTimeout(() => setCopied(false), 1200); } catch { setCopied(false); } };
+
+  return <section className="admin-helper-card" aria-labelledby="xtras-package-generator-title"><h2 id="xtras-package-generator-title">Xtras Package Generator</h2><p className="admin-helper-note">Organize xtras collateral and generate a Codex-ready package.</p><div className="admin-form-grid"><label><span>seriesSlug</span><input type="text" value={form.seriesSlug} onChange={(event) => setField('seriesSlug', event.target.value)} /></label><label><span>releaseSlug (optional)</span><input type="text" value={form.releaseSlug} onChange={(event) => setField('releaseSlug', event.target.value)} /></label><label><span>type</span><select value={form.type} onChange={(event) => setField('type', event.target.value)}>{XTRA_TYPES.map((value) => <option key={value} value={value}>{value}</option>)}</select></label><label><span>title</span><input type="text" value={form.title} onChange={(event) => setField('title', event.target.value)} /></label><label><span>slug</span><input type="text" value={form.slug} onChange={(event) => setField('slug', event.target.value)} placeholder={slugify(form.title)} /></label><label><span>visibility</span><select value={form.visibility} onChange={(event) => setField('visibility', event.target.value)}>{XTRA_VISIBILITY.map((value) => <option key={value} value={value}>{value}</option>)}</select></label><label><span>sortOrder</span><input type="number" value={form.sortOrder} onChange={(event) => setField('sortOrder', event.target.value)} /></label><label><span>tags (comma-separated)</span><input type="text" value={form.tags} onChange={(event) => setField('tags', event.target.value)} /></label><label className="admin-field-full"><span>description</span><textarea rows={2} value={form.description} onChange={(event) => setField('description', event.target.value)} /></label></div><h3>Assets</h3>{assets.map((asset, index) => <div key={`asset-${index}`} className="admin-form-grid"><label><span>sourceFileName</span><input type="text" value={asset.sourceFileName} onChange={(event) => setAssets((current) => current.map((item, idx) => idx === index ? { ...item, sourceFileName: event.target.value } : item))} /></label><label><span>targetFileName</span><input type="text" value={asset.targetFileName} onChange={(event) => setAssets((current) => current.map((item, idx) => idx === index ? { ...item, targetFileName: event.target.value } : item))} /></label><label><span>kind</span><select value={asset.kind} onChange={(event) => setAssets((current) => current.map((item, idx) => idx === index ? { ...item, kind: event.target.value } : item))}>{XTRA_ASSET_KINDS.map((value) => <option key={value} value={value}>{value}</option>)}</select></label></div>)}<button type="button" className="text-button" onClick={() => setAssets((current) => [...current, { sourceFileName: '', targetFileName: '', kind: 'image', altText: '', caption: '', credit: '' }])}>Add asset</button><h3>Links</h3>{links.map((link, index) => <div key={`link-${index}`} className="admin-form-grid"><label><span>url</span><input type="text" value={link.url} onChange={(event) => setLinks((current) => current.map((item, idx) => idx === index ? { ...item, url: event.target.value } : item))} /></label><label><span>label</span><input type="text" value={link.label} onChange={(event) => setLinks((current) => current.map((item, idx) => idx === index ? { ...item, label: event.target.value } : item))} /></label></div>)}<button type="button" className="text-button" onClick={() => setLinks((current) => [...current, { url: '', label: '', provider: '', embedUrl: '' }])}>Add link</button>{warnings.length > 0 ? <ul className="admin-warnings">{warnings.map((warning) => <li key={warning}>{warning}</li>)}</ul> : null}<label className="admin-field-full"><span>Generated Codex Package</span><textarea className="admin-json-output" rows={24} readOnly value={packageOutput} /></label><button type="button" className="primary-button" onClick={copyPackage} disabled={!packageOutput}>Copy package{copied ? ' ✓' : ''}</button></section>;
+}
+
 export default function AdminShell() {
   return (
     <main className="page page-admin">
@@ -871,6 +976,8 @@ export default function AdminShell() {
           <AdminSectionCard key={section.title} {...section} />
         ))}
       </section>
+
+      <XtrasPackageGenerator />
 
       <SeriesJsonGenerator />
       <ReleaseJsonGenerator />
