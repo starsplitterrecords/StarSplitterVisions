@@ -1,4 +1,5 @@
 const warnedMessages = new Set();
+const RELEASE_STATUSES = new Set(['draft', 'scheduled', 'published']);
 
 const isNonEmptyString = (value) => typeof value === 'string' && value.trim().length > 0;
 const asArray = (value) => (Array.isArray(value) ? value : []);
@@ -50,6 +51,7 @@ export function validateReleaseList(value) {
     const routeId = id || slug;
     const seriesSlug = isNonEmptyString(item.seriesSlug) ? item.seriesSlug.trim() : '';
     const title = isNonEmptyString(item.title) ? item.title.trim() : '';
+    const status = isNonEmptyString(item.status) ? item.status.trim().toLowerCase() : '';
 
     if (!routeId) {
       warnField('Release', 'id/slug', item);
@@ -60,8 +62,14 @@ export function validateReleaseList(value) {
       return [];
     }
     if (!title) warnField('Release', 'title', item);
+    if (status && !RELEASE_STATUSES.has(status)) {
+      warnOnce(`[content] Release has unsupported status "${status}" (${itemContext(item)}):`, item);
+    }
+    if (status === 'scheduled' && !isNonEmptyString(item.releaseDate)) {
+      warnOnce(`[content] Scheduled release is missing required field "releaseDate" (${itemContext(item)}):`, item);
+    }
 
-    return [{ ...item, id: routeId, seriesSlug, title: title || 'Untitled Release' }];
+    return [{ ...item, id: routeId, seriesSlug, title: title || 'Untitled Release', status: status || item.status }];
   });
 }
 
