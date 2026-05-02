@@ -427,6 +427,124 @@ function SeriesJsonGenerator() {
   );
 }
 
+
+const IMAGE_TYPE_CONFIG = {
+  seriesHero: { label: 'Series hero image', filenameBase: 'hero', requiresRelease: false, requiresPage: false, jsonField: 'heroImage' },
+  seriesCover: { label: 'Series cover image', filenameBase: 'cover', requiresRelease: false, requiresPage: false, jsonField: 'coverImage' },
+  seriesThumbnail: { label: 'Series thumbnail image', filenameBase: 'thumb', requiresRelease: false, requiresPage: false, jsonField: 'thumbnailImage' },
+  releaseHero: { label: 'Release hero image', filenameBase: 'hero', requiresRelease: true, requiresPage: false, jsonField: 'heroImage' },
+  releaseCover: { label: 'Release cover image', filenameBase: 'cover', requiresRelease: true, requiresPage: false, jsonField: 'coverImage' },
+  releaseCard: { label: 'Release card image', filenameBase: 'card', requiresRelease: true, requiresPage: false, jsonField: 'image' },
+  dailyPage: { label: 'Daily page image', filenameBase: 'page', requiresRelease: true, requiresPage: true, jsonField: 'image' },
+};
+const SUPPORTED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp'];
+
+const normalizeImageFileName = (originalFilename, imageType, pageNumber) => {
+  const config = IMAGE_TYPE_CONFIG[imageType] ?? IMAGE_TYPE_CONFIG.seriesHero;
+  const trimmed = originalFilename.trim().toLowerCase();
+  const match = trimmed.match(/\.([a-z0-9]+)$/);
+  const extension = match && SUPPORTED_EXTENSIONS.includes(match[1]) ? match[1] : 'jpg';
+
+  if (config.requiresPage) {
+    const parsedPage = Number(pageNumber);
+    const safePage = Number.isFinite(parsedPage) && parsedPage > 0 ? parsedPage : 1;
+    return `page-${padPageNumber(safePage)}.jpg`;
+  }
+
+  return `${config.filenameBase}.${extension}`;
+};
+
+function ImageFilingHelper() {
+  const [form, setForm] = useState({ imageType: 'seriesHero', seriesSlug: '', releaseSlug: '', pageNumber: '', originalFilename: '' });
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState('');
+  const [copiedField, setCopiedField] = useState('');
+
+  const config = IMAGE_TYPE_CONFIG[form.imageType] ?? IMAGE_TYPE_CONFIG.seriesHero;
+  const normalizedFilename = normalizeImageFileName(form.originalFilename, form.imageType, form.pageNumber);
+  const normalizedSeriesSlug = slugify(form.seriesSlug);
+  const normalizedReleaseSlug = slugify(form.releaseSlug);
+  const pathSegments = [normalizedSeriesSlug];
+  if (config.requiresRelease) pathSegments.push(normalizedReleaseSlug);
+  pathSegments.push(normalizedFilename);
+  const jsonPath = `/images/${pathSegments.filter(Boolean).join('/')}`;
+  const repoPath = `public${jsonPath}`;
+
+  const warnings = useMemo(() => {
+    const items = [];
+    if (!normalizedSeriesSlug) items.push('seriesSlug is missing.');
+    if (config.requiresRelease && !normalizedReleaseSlug) items.push('releaseSlug is missing for this image type.');
+    if (config.requiresPage && !form.pageNumber.trim()) items.push('pageNumber is missing for daily pages.');
+    if (config.requiresPage && form.pageNumber.trim() && !/^\d+$/.test(form.pageNumber.trim())) items.push('pageNumber must be numeric.');
+    const extMatch = form.originalFilename.trim().toLowerCase().match(/\.([a-z0-9]+)$/);
+    if (form.originalFilename.trim() && extMatch && !SUPPORTED_EXTENSIONS.includes(extMatch[1])) items.push('original filename has unsupported extension. Use .jpg, .jpeg, .png, or .webp.');
+    if (jsonPath.includes('/public/images')) items.push('generated JSON path should not include /public/images.');
+    return items;
+  }, [config.requiresPage, config.requiresRelease, form.originalFilename, form.pageNumber, jsonPath, normalizedReleaseSlug, normalizedSeriesSlug]);
+
+  const jsonSnippet = JSON.stringify({ [config.jsonField]: jsonPath }, null, 2);
+
+  const setField = (key, value) => setForm((current) => ({ ...current, [key]: value }));
+
+  const copyText = async (key, value) => {
+    if (!value || !navigator?.clipboard?.writeText) return;
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopiedField(key);
+      setTimeout(() => setCopiedField(''), 1200);
+    } catch {
+      setCopiedField('');
+    }
+  };
+
+  return (
+    <section className="admin-helper-card" aria-labelledby="image-filing-helper-title">
+      <h2 id="image-filing-helper-title">Image Filing Helper</h2>
+      <p className="admin-helper-note">This helper prepares correct image names and paths. It does not upload to GitHub or save files yet.</p>
+      <p className="admin-helper-tip">This helper prepares the correct filename and paths for images. It does not save files. After generating the path, manually place the image in the repo at the shown repo path, then use the JSON path in the matching content file.</p>
+
+      <div className="admin-form-grid">
+        <label>
+          <span>imageType</span>
+          <select value={form.imageType} onChange={(event) => setField('imageType', event.target.value)}>
+            {Object.entries(IMAGE_TYPE_CONFIG).map(([value, option]) => <option key={value} value={value}>{value} — {option.label}</option>)}
+          </select>
+        </label>
+        <label><span>seriesSlug</span><input type="text" value={form.seriesSlug} onChange={(event) => setField('seriesSlug', event.target.value)} /></label>
+        <label><span>releaseSlug</span><input type="text" value={form.releaseSlug} onChange={(event) => setField('releaseSlug', event.target.value)} disabled={!config.requiresRelease} /></label>
+        <label><span>pageNumber</span><input type="text" value={form.pageNumber} onChange={(event) => setField('pageNumber', event.target.value)} disabled={!config.requiresPage} /></label>
+        <label><span>originalFilename</span><input type="text" value={form.originalFilename} onChange={(event) => setField('originalFilename', event.target.value)} placeholder="My Cover Image.PNG" /></label>
+        <label className="admin-field-full"><span>Select local image (preview only)</span><input type="file" accept="image/*" onChange={(event) => {
+          const file = event.target.files?.[0] ?? null;
+          setSelectedFile(file);
+          setField('originalFilename', file?.name ?? form.originalFilename);
+          if (previewUrl) URL.revokeObjectURL(previewUrl);
+          setPreviewUrl(file ? URL.createObjectURL(file) : '');
+        }} /></label>
+      </div>
+
+      {warnings.length > 0 ? <ul className="admin-warnings">{warnings.map((warning) => <li key={warning}>{warning}</li>)}</ul> : null}
+
+      <div className="admin-output-grid">
+        <p><strong>Normalized filename:</strong> {normalizedFilename}</p>
+        <p><strong>Repo path:</strong> {repoPath}</p>
+        <p><strong>JSON path:</strong> {jsonPath}</p>
+      </div>
+
+      <div className="admin-copy-row">
+        <button type="button" className="text-button" onClick={() => copyText('name', normalizedFilename)}>Copy normalized filename{copiedField === 'name' ? ' ✓' : ''}</button>
+        <button type="button" className="text-button" onClick={() => copyText('repo', repoPath)}>Copy repo path{copiedField === 'repo' ? ' ✓' : ''}</button>
+        <button type="button" className="text-button" onClick={() => copyText('json', jsonPath)}>Copy JSON path{copiedField === 'json' ? ' ✓' : ''}</button>
+        <button type="button" className="text-button" onClick={() => copyText('snippet', jsonSnippet)}>Copy JSON snippet{copiedField === 'snippet' ? ' ✓' : ''}</button>
+      </div>
+
+      <label className="admin-field-full"><span>JSON snippet preview</span><textarea className="admin-json-output" readOnly rows={4} value={jsonSnippet} /></label>
+
+      {previewUrl ? <div className="admin-image-preview"><img src={previewUrl} alt="Selected preview" /><p>Original filename: {selectedFile?.name ?? '—'}</p><p>Normalized filename: {normalizedFilename}</p><p>Target repo path: {repoPath}</p><p>Target JSON path: {jsonPath}</p></div> : null}
+    </section>
+  );
+}
+
 function PageJsonGenerator() {
   const [form, setForm] = useState({
     seriesSlug: '',
@@ -571,6 +689,7 @@ export default function AdminShell() {
       <SeriesJsonGenerator />
       <ReleaseJsonGenerator />
       <PageJsonGenerator />
+      <ImageFilingHelper />
 
       <p>
         <a href="/">Back to site</a>
