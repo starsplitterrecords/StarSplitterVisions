@@ -12,13 +12,18 @@ const FILES = {
   series: 'public/content/series.json',
   releases: 'public/content/releases.json',
   pages: 'public/content/pages.json',
+  extras: 'public/content/extras.json',
   soundtracks: 'public/content/soundtracks.json',
 };
 
 const errors = [];
 
-function readJson(relativePath) {
+function readJson(relativePath, { optional = false } = {}) {
   const filePath = path.join(repoRoot, relativePath);
+  if (optional && !fs.existsSync(filePath)) {
+    return null;
+  }
+
   try {
     const raw = fs.readFileSync(filePath, 'utf8');
     return JSON.parse(raw);
@@ -55,43 +60,58 @@ function isValidYYYYMMDD(value) {
   );
 }
 
-function validateImagePaths(value, context) {
-  if (typeof value === 'string') {
-    if (value.startsWith('/public/images/')) {
-      errors.push(`${context}: image path must not start with /public/images/ (found: ${value})`);
-    }
-    if (value.startsWith('/')) {
-      if (!value.startsWith('/images/')) {
-        errors.push(`${context}: image path must start with /images/ when using root-relative paths (found: ${value})`);
-      }
-    } else if (value.includes('/images/')) {
-      errors.push(`${context}: image path should be root-relative and start with /images/ (found: ${value})`);
-    }
-  } else if (Array.isArray(value)) {
-    value.forEach((item, index) => validateImagePaths(item, `${context}[${index}]`));
-  } else if (isObject(value)) {
-    Object.entries(value).forEach(([key, nested]) => {
-      if (/image|thumbnail|cover|hero/i.test(key)) {
-        validateImagePaths(nested, `${context}.${key}`);
-      }
-    });
+function validateImageFieldPathAndExistence(value, context) {
+  if (value === undefined || value === null || value === '') {
+    return;
+  }
+
+  if (typeof value !== 'string') {
+    errors.push(`${context}: image path must be a string when present`);
+    return;
+  }
+
+  if (value.startsWith('/public/images/')) {
+    errors.push(`${context}: image path must not start with /public/images/ (found: ${value})`);
+    return;
+  }
+
+  if (!value.startsWith('/images/')) {
+    errors.push(`${context}: image path must start with /images/ (found: ${value})`);
+    return;
+  }
+
+  const relativeImagePath = `public${value}`;
+  const absoluteImagePath = path.join(repoRoot, relativeImagePath);
+  if (!fs.existsSync(absoluteImagePath)) {
+    errors.push(`${context}: referenced image file does not exist (${relativeImagePath})`);
+  }
+}
+
+function validateImageFields(item, fields, context) {
+  for (const field of fields) {
+    validateImageFieldPathAndExistence(item[field], `${context}.${field}`);
   }
 }
 
 const seriesData = readJson(FILES.series);
 const releasesData = readJson(FILES.releases);
 const pagesData = readJson(FILES.pages);
+const extrasData = readJson(FILES.extras, { optional: true });
 const soundtracksData = readJson(FILES.soundtracks);
 
 const series = Array.isArray(seriesData?.series) ? seriesData.series : [];
 const releases = Array.isArray(releasesData?.releases) ? releasesData.releases : [];
 const pages = Array.isArray(pagesData?.pages) ? pagesData.pages : [];
+const extras = Array.isArray(extrasData?.extras) ? extrasData.extras : [];
 const soundtracks = Array.isArray(soundtracksData?.soundtracks) ? soundtracksData.soundtracks : [];
 
 if (!Array.isArray(seriesData?.series)) errors.push(`${FILES.series}: missing "series" array`);
 if (!Array.isArray(releasesData?.releases)) errors.push(`${FILES.releases}: missing "releases" array`);
 if (!Array.isArray(pagesData?.pages)) errors.push(`${FILES.pages}: missing "pages" array`);
+if (extrasData !== null && !Array.isArray(extrasData?.extras)) errors.push(`${FILES.extras}: missing "extras" array`);
 if (!Array.isArray(soundtracksData?.soundtracks)) errors.push(`${FILES.soundtracks}: missing "soundtracks" array`);
+
+const commonImageFields = ['image', 'heroImage', 'coverImage', 'thumbnailImage', 'socialImage', 'mobileImage'];
 
 const seriesSlugs = new Set();
 for (const [index, item] of series.entries()) {
@@ -101,7 +121,7 @@ for (const [index, item] of series.entries()) {
     continue;
   }
   hasRequiredFields(item, ['slug', 'title'], context);
-  validateImagePaths(item, context);
+  validateImageFields(item, commonImageFields, context);
 
   if (typeof item.slug === 'string') {
     if (seriesSlugs.has(item.slug)) {
@@ -122,7 +142,7 @@ for (const [index, item] of releases.entries()) {
   }
 
   hasRequiredFields(item, ['id', 'seriesSlug', 'title', 'status'], context);
-  validateImagePaths(item, context);
+  validateImageFields(item, commonImageFields, context);
 
   if (typeof item.id === 'string') {
     if (releaseIds.has(item.id)) {
@@ -158,7 +178,7 @@ for (const [index, item] of pages.entries()) {
   }
 
   hasRequiredFields(item, ['seriesSlug', 'releaseSlug', 'pageNumber', 'title', 'image'], context);
-  validateImagePaths(item, context);
+  validateImageFields(item, commonImageFields, context);
 
   if (item.releaseDate !== undefined && item.releaseDate !== null && item.releaseDate !== '' && !isValidYYYYMMDD(item.releaseDate)) {
     errors.push(`${context}: releaseDate must be a valid YYYY-MM-DD date (found: ${item.releaseDate})`);
@@ -184,6 +204,15 @@ for (const [index, item] of pages.entries()) {
   }
 }
 
+for (const [index, item] of extras.entries()) {
+  const context = `extras[${index}]`;
+  if (!isObject(item)) {
+    errors.push(`${context}: must be an object`);
+    continue;
+  }
+  validateImageFields(item, commonImageFields, context);
+}
+
 for (const [index, item] of soundtracks.entries()) {
   const context = `soundtracks[${index}]`;
   if (!isObject(item)) {
@@ -191,7 +220,7 @@ for (const [index, item] of soundtracks.entries()) {
     continue;
   }
   hasRequiredFields(item, ['id', 'seriesSlug', 'title'], context);
-  validateImagePaths(item, context);
+  validateImageFields(item, commonImageFields, context);
 }
 
 if (errors.length > 0) {
