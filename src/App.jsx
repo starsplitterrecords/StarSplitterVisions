@@ -7,6 +7,8 @@ import HomePage from './pages/HomePage';
 import SeriesPage from './pages/SeriesPage';
 import ReleasePage from './pages/ReleasePage';
 import ReaderPage from './pages/ReaderPage';
+import SoundtracksPage from './pages/SoundtracksPage';
+import SoundtrackDetailPage from './pages/SoundtrackDetailPage';
 
 export default function App() {
   const [data, setData] = useState({ series: [], releases: [], pages: [], extras: [], soundtracks: [] });
@@ -45,9 +47,12 @@ export default function App() {
   const releaseId = path.startsWith('/releases/') ? path.replace('/releases/', '') : null;
   const seriesSlug = path.startsWith('/series/') ? path.replace('/series/', '') : null;
   const readReleaseId = path.startsWith('/read/') ? path.replace('/read/', '') : null;
+  const soundtrackSlug = path.startsWith('/soundtracks/') ? path.replace('/soundtracks/', '') : null;
 
   const series = data.series.find((item) => item.slug === seriesSlug);
   const release = data.releases.find((item) => item.id === releaseId || item.id === readReleaseId);
+  const soundtrack = data.soundtracks.find((item) => item.slug === soundtrackSlug);
+  const seriesBySlug = new Map(data.series.map((item) => [item.slug, item]));
 
   const continueReading = useMemo(() => {
     if (!continueRecord) return null;
@@ -63,6 +68,8 @@ export default function App() {
   }, [continueRecord, data.pages, data.releases, data.series]);
 
   if (path === '/admin') return <AdminShell />;
+  if (path === '/soundtracks') return <SoundtracksPage soundtracks={data.soundtracks} seriesBySlug={seriesBySlug} />;
+  if (soundtrackSlug && soundtrack) return <SoundtrackDetailPage soundtrack={soundtrack} series={seriesBySlug.get(soundtrack.seriesSlug)} release={data.releases.find((item) => item.id === soundtrack.releaseSlug)} />;
 
   if (series && !release && !readReleaseId) return <SeriesPage series={series} releases={data.releases} extras={data.extras} allSeries={data.series} soundtracksBySeries={soundtracksBySeries} />;
   if (releaseId && release) {

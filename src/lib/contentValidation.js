@@ -129,7 +129,9 @@ export function validateReaderSoundtrackList(value) {
     }
 
     const id = isNonEmptyString(item.id) ? item.id.trim() : '';
+    const slug = isNonEmptyString(item.slug) ? item.slug.trim() : id;
     const seriesSlug = isNonEmptyString(item.seriesSlug) ? item.seriesSlug.trim() : '';
+    const releaseSlug = isNonEmptyString(item.releaseSlug) ? item.releaseSlug.trim() : '';
     const title = isNonEmptyString(item.title) ? item.title.trim() : '';
 
     if (!id) {
@@ -144,6 +146,6 @@ export function validateReaderSoundtrackList(value) {
 
     if (!title) warnField('Reader soundtrack', 'title', item);
 
-    return [{ ...item, id, seriesSlug, title: title || 'Untitled Soundtrack' }];
+    return [{ ...item, id, slug, seriesSlug, releaseSlug, title: title || 'Untitled Soundtrack', shortDescription: item.shortDescription || item.description || '', longDescription: item.longDescription || '', coverImage: item.coverImage || item.image || '', tracks: Array.isArray(item.tracks) ? item.tracks : [] }];
   });
 }

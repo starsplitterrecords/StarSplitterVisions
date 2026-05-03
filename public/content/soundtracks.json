@@ -2,10 +2,12 @@
   "soundtracks": [
     {
       "id": "vikings-ep1-companion",
+      "slug": "vikings-ep1-companion",
       "seriesSlug": "vikings-2026",
       "releaseSlug": "vikings-ep1",
       "title": "Issue #1 Companion Mix",
-      "subtitle": "Municipal dread with longboat energy.",
+      "shortDescription": "Optional companion audio while reading issue one.",
+      "longDescription": "A companion mix tuned for the first release, blending municipal dread and longboat energy beats.",
       "description": "Optional companion audio while reading issue one.",
       "playlistLinks": [
         {
@@ -20,13 +22,15 @@
           "title": "Arrival Processing",
           "artist": "Star Splitter Visions",
           "duration": "1:22",
-          "url": "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8d4e2f95f.mp3?filename=ambient-piano-amp-strings-10711.mp3"
+          "url": "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8d4e2f95f.mp3?filename=ambient-piano-amp-strings-10711.mp3",
+          "externalUrl": "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8d4e2f95f.mp3?filename=ambient-piano-amp-strings-10711.mp3"
         },
         {
           "id": "desk-lights",
           "title": "Desk Lights",
           "artist": "Star Splitter Visions",
-          "duration": "1:40"
+          "duration": "1:40",
+          "externalUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
         }
       ],
       "isPublished": true,

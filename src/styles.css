@@ -739,3 +739,10 @@ a.primary-button {
     bottom: 4.6rem;
   }
 }
+
+.page-soundtracks { display: grid; gap: 1rem; }
+.soundtrack-grid { list-style:none; display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1rem; padding:0; margin:0; }
+.soundtrack-card-item { margin:0; }
+.soundtrack-card { display:block; text-decoration:none; border:1px solid var(--border-soft); border-radius:14px; overflow:hidden; background: linear-gradient(180deg, var(--bg-surface-2), var(--bg-surface)); }
+.reader-soundtrack-panel { margin-top: .75rem; }
+@media (max-width: 640px) { .soundtrack-grid { grid-template-columns: 1fr; } }

@@ -4,7 +4,9 @@ export function isPublishedSoundtrack(soundtrack) {
 
 export function getPlayableTracks(soundtrack) {
   if (!soundtrack || !Array.isArray(soundtrack.tracks)) return [];
-  return soundtrack.tracks.filter((track) => typeof track?.audioSrc === 'string' && track.audioSrc.trim().length > 0);
+  return soundtrack.tracks
+    .map((track) => ({ ...track, audioSrc: track?.audioSrc || track?.url || '' }))
+    .filter((track) => typeof track?.audioSrc === 'string' && track.audioSrc.trim().length > 0);
 }
 
 export function getPlaylistLinks(soundtrack) {
