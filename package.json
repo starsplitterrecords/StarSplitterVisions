@@ -10,6 +10,8 @@
     "generate-assets": "tsx scripts/generate-assets.ts",
     "lint": "eslint .",
     "format": "prettier --write .",
+    "check:size": "node scripts/check-size-guardrails.js",
+    "check:size:fail": "node scripts/check-size-guardrails.js --fail",
     "check": "npm run lint && npm run validate:content && npm run build",
     "validate:content": "node scripts/validate-content.js"
   },
