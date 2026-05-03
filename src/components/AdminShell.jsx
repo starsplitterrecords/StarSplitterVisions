@@ -1180,8 +1180,32 @@ function SoundtracksPackageGenerator() {
   const warnings = useMemo(() => { const issues = []; if (!form.soundtrackSlug.trim()) issues.push('soundtrackSlug is required.'); if (!form.title.trim()) issues.push('title is required.'); if (!form.associatedSeriesSlug.trim()) issues.push('associatedSeriesSlug is required.'); tracks.forEach((track, index) => { if (!track.title.trim()) issues.push(`Track ${index + 1} title is required.`); }); if (form.coverImageJsonPath.trim().startsWith('/public/images/')) issues.push('coverImageJsonPath must use /images/... not /public/images/...'); return issues; }, [form, tracks]);
   const onTitleBlur = () => { if (!form.soundtrackSlug.trim() && form.title.trim()) { const base = slugify(form.title); const slug = form.associatedSeriesSlug.trim() ? `${slugify(form.associatedSeriesSlug)}-${base}` : base; setField('soundtrackSlug', slug); } };
   const suggestImagePaths = () => { if (!form.associatedSeriesSlug.trim() || !form.coverImageSourceFile.trim()) return; const releasePart = form.associatedReleaseSlug.trim() || 'soundtracks'; const ext = form.coverImageSourceFile.trim().split('.').pop() || 'jpg'; const repo = `public/images/${form.associatedSeriesSlug.trim()}/${releasePart}/soundtrack-cover.${ext}`; setForm((current) => ({ ...current, coverImageTargetPath: current.coverImageTargetPath.trim() || repo, coverImageJsonPath: current.coverImageJsonPath.trim() || repo.replace(/^public/, '') })); };
-  const soundtrackEntry = useMemo(() => { const payload = { slug: form.soundtrackSlug.trim(), title: form.title.trim(), status: form.status, type: form.soundtrackType, associatedSeriesSlug: form.associatedSeriesSlug.trim(), tracks: tracks.filter((item) => item.title.trim()).map((item, idx) => ({ ...(item.trackNumber ? { trackNumber: Number(item.trackNumber) || idx + 1 } : {}), title: item.title.trim(), ...(item.artist.trim() ? { artist: item.artist.trim() } : {}), ...(item.duration.trim() ? { duration: item.duration.trim() } : {}), ...(item.description.trim() ? { description: item.description.trim() } : {}), ...(item.mood.trim() ? { mood: item.mood.trim() } : {}), ...(item.sceneOrBeatReference.trim() ? { sceneOrBeatReference: item.sceneOrBeatReference.trim() } : {}), ...(item.lyricsExcerpt.trim() ? { lyricsExcerpt: item.lyricsExcerpt.trim() } : {}), ...(item.audioUrl.trim() ? { audioUrl: item.audioUrl.trim() } : {}), ...(item.notes.trim() ? { notes: item.notes.trim() } : {}) })) };
-      return { ...payload, ...(form.subtitle.trim() ? { subtitle: form.subtitle.trim() } : {}), ...(form.description.trim() ? { description: form.description.trim() } : {}), ...(form.associatedReleaseSlug.trim() ? { associatedReleaseSlug: form.associatedReleaseSlug.trim() } : {}), ...(form.associatedEpisodeSlug.trim() ? { associatedEpisodeSlug: form.associatedEpisodeSlug.trim() } : {}), ...(form.associatedIssueSlug.trim() ? { associatedIssueSlug: form.associatedIssueSlug.trim() } : {}), ...(form.associatedSceneId.trim() ? { associatedSceneId: form.associatedSceneId.trim() } : {}), ...((form.coverImageSourceFile.trim() || form.coverImageTargetPath.trim() || form.coverImageJsonPath.trim()) ? { coverImage: { ...(form.coverImageSourceFile.trim() ? { sourceFile: form.coverImageSourceFile.trim() } : {}), ...(form.coverImageTargetPath.trim() ? { targetRepoPath: form.coverImageTargetPath.trim() } : {}), ...(form.coverImageJsonPath.trim() ? { jsonPath: form.coverImageJsonPath.trim() } : {}) } } : {}), links: { ...(form.canonicalPlaylistUrl.trim() ? { canonicalPlaylistUrl: form.canonicalPlaylistUrl.trim() } : {}), ...(form.spotifyUrl.trim() ? { spotifyUrl: form.spotifyUrl.trim() } : {}), ...(form.appleMusicUrl.trim() ? { appleMusicUrl: form.appleMusicUrl.trim() } : {}), ...(form.youtubeUrl.trim() ? { youtubeUrl: form.youtubeUrl.trim() } : {}), ...(form.soundcloudUrl.trim() ? { soundcloudUrl: form.soundcloudUrl.trim() } : {}), ...(form.bandcampUrl.trim() ? { bandcampUrl: form.bandcampUrl.trim() } : {}), other: otherLinks.filter((item) => item.url.trim()).map((item) => ({ label: item.label.trim() || 'Additional link', url: item.url.trim(), ...(item.notes.trim() ? { notes: item.notes.trim() } : {}) })) }, ...(form.moodNotes.trim() ? { moodNotes: form.moodNotes } : {}), ...(form.editorialNotes.trim() ? { editorialNotes: form.editorialNotes } : {}), ...(form.productionNotes.trim() ? { productionNotes: form.productionNotes } : {}), ...(form.audioCompanionNotes.trim() ? { audioCompanionNotes: form.audioCompanionNotes } : {}), ...(form.internalNotes.trim() ? { internalNotes: form.internalNotes } : {}) };
+  const soundtrackEntry = useMemo(() => {
+    const playlistLinks = [
+      ...(form.spotifyUrl.trim() ? [{ label: 'Spotify', url: form.spotifyUrl.trim() }] : []),
+      ...(form.appleMusicUrl.trim() ? [{ label: 'Apple Music', url: form.appleMusicUrl.trim() }] : []),
+      ...(form.youtubeUrl.trim() ? [{ label: 'YouTube', url: form.youtubeUrl.trim() }] : []),
+      ...(form.soundcloudUrl.trim() ? [{ label: 'SoundCloud', url: form.soundcloudUrl.trim() }] : []),
+      ...(form.bandcampUrl.trim() ? [{ label: 'Bandcamp', url: form.bandcampUrl.trim() }] : []),
+      ...otherLinks.filter((item) => item.url.trim()).map((item) => ({ label: item.label.trim() || 'Additional link', url: item.url.trim() })),
+    ];
+
+    return {
+      id: form.soundtrackSlug.trim(),
+      seriesSlug: form.associatedSeriesSlug.trim(),
+      title: form.title.trim(),
+      description: form.description.trim(),
+      coverImage: form.coverImageJsonPath.trim(),
+      mood: form.moodNotes.trim(),
+      ...(form.canonicalPlaylistUrl.trim() ? { playlistUrl: form.canonicalPlaylistUrl.trim() } : {}),
+      ...(playlistLinks.length ? { playlistLinks } : {}),
+      tracks: tracks.filter((item) => item.title.trim()).map((item) => ({
+        title: item.title.trim(),
+        artist: item.artist.trim(),
+        duration: item.duration.trim(),
+        ...(item.audioUrl.trim() ? { url: item.audioUrl.trim() } : {}),
+      })),
+    };
   }, [form, otherLinks, tracks]);
   const packageOutput = warnings.length === 0 ? `# Codex Soundtrack Content Package
 
