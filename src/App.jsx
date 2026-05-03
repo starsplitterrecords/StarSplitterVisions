@@ -147,17 +147,20 @@ function SeriesPage({ series, releases, extras, allSeries, soundtracksBySeries }
   return <main className={`page page-series ${toneClass(series.backgroundTone)}`} style={{ '--series-accent': accent, '--series-secondary': secondary, '--series-background': background }}><SeriesHero series={series} /><ContentRail title="Latest Issues" emptyMessage="No released issues are available yet."><ul className="rail-row">{latestIssues.map((release) => <ReleaseCard key={release.id} release={release} seriesTitle={seriesBySlug.get(release.seriesSlug)?.title || release.seriesSlug} />)}</ul></ContentRail><ContentRail title="Archive" emptyMessage="The archive will appear here as releases are added."><ul className="release-grid release-grid-compact">{archiveIssues.map((release) => <ReleaseCard key={release.id} release={release} seriesTitle={seriesBySlug.get(release.seriesSlug)?.title || release.seriesSlug} variant="compact" />)}</ul></ContentRail><ContentRail title="World" emptyMessage="World details are coming soon.">{worldDetails.length === 0 && relatedSeries.length === 0 ? null : <div className="world-card"><ul className="world-meta">{worldDetails.map((detail, index) => <li key={`${detail}-${index}`}>{detail}</li>)}</ul>{relatedSeries.length > 0 ? <div><h3>Related Series</h3><ul className="related-series">{relatedSeries.map((item) => <li key={item.slug}><a href={`/series/${item.slug}`}>{item.title}</a></li>)}</ul></div> : null}</div>}</ContentRail><ContentRail title="Extras" emptyMessage="Extras will appear here as they are added."><ul className="rail-row">{extraItems.map((extra, idx) => <MediaCard key={`${extra.title || 'extra'}-${idx}`} href={extra.url || extra.href} eyebrow={extra.type || extra.label || 'Extra'} title={extra.title || `Extra ${idx + 1}`} description={extra.description} fallbackText={extra.title || `Extra ${idx + 1}`} />)}</ul></ContentRail><ContentRail title="Soundtracks" emptyMessage="Soundtracks will appear here as they are added."><ul className="rail-row">{soundtrackItems.map((soundtrack, idx) => <MediaCard key={`${soundtrack.title}-${idx}`} href={soundtrack.playlistUrl || soundtrack.url || soundtrack.href} eyebrow={soundtrack.artist || 'Soundtrack'} title={soundtrack.title || `Soundtrack ${idx + 1}`} description={soundtrack.description || soundtrack.mood} fallbackText={soundtrack.title || `Soundtrack ${idx + 1}`} />)}</ul></ContentRail></main>;
 }
 
-function ReaderPage({ release, pages, series, soundtracks }) {
+function ReaderPage({ release, pages, series, soundtracks, initialPageIndex = 0, isLoadingPages = false }) {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    const saved = getContinueReading();
-    if (!saved || saved.releaseSlug !== release.id || pages.length === 0) {
+    if (pages.length === 0) {
       setIndex(0);
       return;
     }
 
-    const boundedIndex = Math.max(0, Math.min(saved.pageIndex, pages.length - 1));
+    const saved = getContinueReading();
+    const savedIndex = saved && saved.releaseSlug === release.id ? saved.pageIndex : null;
+    const requestedIndex = Number.isInteger(initialPageIndex) ? initialPageIndex : 0;
+    const preferredIndex = Number.isInteger(savedIndex) ? savedIndex : requestedIndex;
+    const boundedIndex = Math.max(0, Math.min(preferredIndex, pages.length - 1));
     const page = pages[boundedIndex];
     if (!page) {
       setIndex(0);
@@ -165,7 +168,7 @@ function ReaderPage({ release, pages, series, soundtracks }) {
     }
 
     setIndex(boundedIndex);
-  }, [release.id, pages]);
+  }, [initialPageIndex, release.id, pages]);
 
   const totalPages = pages.length;
   const page = pages[index];
@@ -234,7 +237,11 @@ function ReaderPage({ release, pages, series, soundtracks }) {
       canPrevious={canPrevious}
       canNext={canNext}
     >
-      {totalPages === 0 ? (
+      {isLoadingPages ? (
+        <div className="reader-empty-state" role="status" aria-live="polite">
+          <p>Loading pages…</p>
+        </div>
+      ) : totalPages === 0 ? (
         <div className="reader-empty-state">
           <p>No released pages are available for this release yet.</p>
           <a href={`/releases/${release.id}`}>Back to release</a>
@@ -258,13 +265,16 @@ function ReleasePage({ release, series, pages }) { const releasePages = pages.fi
 export default function App() {
   const [data, setData] = useState({ series: [], releases: [], pages: [], extras: [], soundtracks: [] });
   const [continueRecord, setContinueRecord] = useState(null);
-  useEffect(() => { Promise.all([fetch('/content/series.json').then((res) => res.json()), fetch('/content/releases.json').then((res) => res.json()), fetch('/content/pages.json').then((res) => res.json()), fetch('/content/extras.json').then((res) => res.json()).catch(() => ({ extras: [] })), fetch('/content/soundtracks.json').then((res) => res.json()).catch(() => ({ soundtracks: [] }))]).then(([seriesData, releasesData, pagesData, extrasData, soundtracksData]) => setData({ series: validateSeriesList(seriesData?.series), releases: validateReleaseList(releasesData?.releases), pages: validatePageList(pagesData?.pages), extras: validateExtraList(extrasData?.extras), soundtracks: validateReaderSoundtrackList(soundtracksData?.soundtracks) })); }, []);
+  const [isLoadingContent, setIsLoadingContent] = useState(true);
+  useEffect(() => { Promise.all([fetch('/content/series.json').then((res) => res.json()), fetch('/content/releases.json').then((res) => res.json()), fetch('/content/pages.json').then((res) => res.json()), fetch('/content/extras.json').then((res) => res.json()).catch(() => ({ extras: [] })), fetch('/content/soundtracks.json').then((res) => res.json()).catch(() => ({ soundtracks: [] }))]).then(([seriesData, releasesData, pagesData, extrasData, soundtracksData]) => setData({ series: validateSeriesList(seriesData?.series), releases: validateReleaseList(releasesData?.releases), pages: validatePageList(pagesData?.pages), extras: validateExtraList(extrasData?.extras), soundtracks: validateReaderSoundtrackList(soundtracksData?.soundtracks) })).finally(() => setIsLoadingContent(false)); }, []);
   useEffect(() => { setContinueRecord(getContinueReading()); }, []);
   const path = window.location.pathname;
   const soundtracksBySeries = useMemo(() => (Array.isArray(data.soundtracks) ? data.soundtracks : []).reduce((map, item) => { const seriesSlug = typeof item?.seriesSlug === 'string' ? item.seriesSlug.trim() : ''; if (!seriesSlug) return map; const current = map.get(seriesSlug) || []; current.push(item); map.set(seriesSlug, current); return map; }, new Map()), [data.soundtracks]);
   const releaseId = path.startsWith('/releases/') ? path.replace('/releases/', '') : null;
   const seriesSlug = path.startsWith('/series/') ? path.replace('/series/', '') : null;
   const readReleaseId = path.startsWith('/read/') ? path.replace('/read/', '') : null;
+  const pageQueryValue = Number(new URLSearchParams(window.location.search).get('page'));
+  const initialReaderPageIndex = Number.isFinite(pageQueryValue) && pageQueryValue > 0 ? Math.floor(pageQueryValue) - 1 : 0;
   if (path === '/admin') return <AdminShell />;
   const series = data.series.find((item) => item.slug === seriesSlug);
   const release = data.releases.find((item) => item.id === releaseId || item.id === readReleaseId);
@@ -297,7 +307,7 @@ export default function App() {
 
   if (series && !release && !readReleaseId) return <SeriesPage series={series} releases={data.releases} extras={data.extras} allSeries={data.series} soundtracksBySeries={soundtracksBySeries} />;
   if (releaseId && release) { const parentSeries = data.series.find((item) => item.slug === release.seriesSlug) || { slug: '', title: 'Series' }; return <ReleasePage release={release} series={parentSeries} pages={data.pages} />; }
-  if (readReleaseId && release) { const releasePages = data.pages.filter((page) => page.releaseSlug === release.id && (!parseDate(page.releaseDate) || parseDate(page.releaseDate) <= new Date())).sort((a, b) => (Number.isFinite(a.pageNumber) ? a.pageNumber : Number.MAX_SAFE_INTEGER) - (Number.isFinite(b.pageNumber) ? b.pageNumber : Number.MAX_SAFE_INTEGER)); const parentSeries = data.series.find((item) => item.slug === release.seriesSlug); return <ReaderPage release={release} pages={releasePages} series={parentSeries} soundtracks={data.soundtracks} />; }
+  if (readReleaseId && release) { const releasePages = data.pages.filter((page) => page.releaseSlug === release.id && (!parseDate(page.releaseDate) || parseDate(page.releaseDate) <= new Date())).sort((a, b) => (Number.isFinite(a.pageNumber) ? a.pageNumber : Number.MAX_SAFE_INTEGER) - (Number.isFinite(b.pageNumber) ? b.pageNumber : Number.MAX_SAFE_INTEGER)); const parentSeries = data.series.find((item) => item.slug === release.seriesSlug); return <ReaderPage release={release} pages={releasePages} series={parentSeries} soundtracks={data.soundtracks} initialPageIndex={initialReaderPageIndex} isLoadingPages={isLoadingContent} />; }
   if (readReleaseId && !release) return <main className="page page-reader page-reader-empty"><h1>Release not found.</h1><p><a href="/">Return home</a></p></main>;
   return <HomePage series={data.series} releases={data.releases} extras={data.extras} soundtracksBySeries={soundtracksBySeries} continueReading={continueReading} onClearContinueReading={() => { clearContinueReading(); setContinueRecord(null); }} />;
 }
