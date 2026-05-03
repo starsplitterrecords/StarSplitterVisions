@@ -10,7 +10,8 @@
     "generate-assets": "tsx scripts/generate-assets.ts",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "check": "npm run lint && npm run build"
+    "check": "npm run lint && npm run validate:content && npm run build",
+    "validate:content": "node scripts/validate-content.js"
   },
   "dependencies": {
     "react": "^18.3.1",
