@@ -1,15 +1,21 @@
 import { useEffect, useMemo, useState } from 'react';
 import AdminShell from './components/AdminShell';
 import { clearContinueReading, getContinueReading } from './lib/continueReading';
-import { validateExtraList, validatePageList, validateReaderSoundtrackList, validateReleaseList, validateSeriesList } from './lib/contentValidation';
+import { validateExtraList, validateNewsList, validatePageList, validateReaderSoundtrackList, validateReleaseList, validateSeriesList } from './lib/contentValidation';
 import { isVisibleRelease, getReleasedPagesForRelease } from './lib/releaseVisibility';
 import HomePage from './pages/HomePage';
 import SeriesPage from './pages/SeriesPage';
 import ReleasePage from './pages/ReleasePage';
 import ReaderPage from './pages/ReaderPage';
+import NewsIndexPage from './pages/NewsIndexPage';
+import NewsDetailPage from './pages/NewsDetailPage';
+
+function SiteFooter() {
+  return <footer className="site-footer"><a href="/">Home</a><a href="/news">News</a></footer>;
+}
 
 export default function App() {
-  const [data, setData] = useState({ series: [], releases: [], pages: [], extras: [], soundtracks: [] });
+  const [data, setData] = useState({ series: [], releases: [], pages: [], extras: [], soundtracks: [], news: [] });
   const [continueRecord, setContinueRecord] = useState(null);
 
   useEffect(() => {
@@ -18,21 +24,33 @@ export default function App() {
       fetch('/content/releases.json').then((res) => res.json()),
       fetch('/content/pages.json').then((res) => res.json()),
       fetch('/content/extras.json').then((res) => res.json()).catch(() => ({ extras: [] })),
-      fetch('/content/soundtracks.json').then((res) => res.json()).catch(() => ({ soundtracks: [] }))
-    ]).then(([seriesData, releasesData, pagesData, extrasData, soundtracksData]) => {
+      fetch('/content/soundtracks.json').then((res) => res.json()).catch(() => ({ soundtracks: [] })),
+      fetch('/content/news.json').then((res) => res.json()).catch(() => ({ news: [] }))
+    ]).then(([seriesData, releasesData, pagesData, extrasData, soundtracksData, newsData]) => {
       setData({
         series: validateSeriesList(seriesData?.series),
         releases: validateReleaseList(releasesData?.releases),
         pages: validatePageList(pagesData?.pages),
         extras: validateExtraList(extrasData?.extras),
-        soundtracks: validateReaderSoundtrackList(soundtracksData?.soundtracks)
+        soundtracks: validateReaderSoundtrackList(soundtracksData?.soundtracks),
+        news: validateNewsList(newsData?.news)
       });
     });
   }, []);
-
   useEffect(() => { setContinueRecord(getContinueReading()); }, []);
 
   const path = window.location.pathname;
+  const sortedNews = useMemo(() => [...data.news].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()), [data.news]);
+  useEffect(() => {
+    const pageTitle = 'Star Splitter Visions';
+    if (path === '/news') document.title = 'News | Star Splitter Visions';
+    else if (path.startsWith('/news/')) {
+      const slug = path.replace('/news/', '');
+      const item = sortedNews.find((entry) => entry.slug === slug);
+      document.title = item ? `${item.title} | Star Splitter Visions` : pageTitle;
+    } else document.title = pageTitle;
+  }, [path, sortedNews]);
+
   const soundtracksBySeries = useMemo(() => (Array.isArray(data.soundtracks) ? data.soundtracks : []).reduce((map, item) => {
     const seriesSlug = typeof item?.seriesSlug === 'string' ? item.seriesSlug.trim() : '';
     if (!seriesSlug) return map;
@@ -45,9 +63,11 @@ export default function App() {
   const releaseId = path.startsWith('/releases/') ? path.replace('/releases/', '') : null;
   const seriesSlug = path.startsWith('/series/') ? path.replace('/series/', '') : null;
   const readReleaseId = path.startsWith('/read/') ? path.replace('/read/', '') : null;
+  const newsSlug = path.startsWith('/news/') ? path.replace('/news/', '') : null;
 
   const series = data.series.find((item) => item.slug === seriesSlug);
   const release = data.releases.find((item) => item.id === releaseId || item.id === readReleaseId);
+  const newsItem = sortedNews.find((item) => item.slug === newsSlug);
 
   const continueReading = useMemo(() => {
     if (!continueRecord) return null;
@@ -63,11 +83,13 @@ export default function App() {
   }, [continueRecord, data.pages, data.releases, data.series]);
 
   if (path === '/admin') return <AdminShell />;
-
-  if (series && !release && !readReleaseId) return <SeriesPage series={series} releases={data.releases} extras={data.extras} allSeries={data.series} soundtracksBySeries={soundtracksBySeries} />;
+  if (path === '/news') return <><NewsIndexPage news={sortedNews} /><SiteFooter /></>;
+  if (newsSlug && newsItem) return <><NewsDetailPage item={newsItem} /><SiteFooter /></>;
+  if (newsSlug && !newsItem) return <main className="page"><h1>Update not found.</h1><p><a href="/news">Back to News</a></p></main>;
+  if (series && !release && !readReleaseId) return <><SeriesPage series={series} releases={data.releases} extras={data.extras} allSeries={data.series} soundtracksBySeries={soundtracksBySeries} news={sortedNews} /><SiteFooter /></>;
   if (releaseId && release) {
     const parentSeries = data.series.find((item) => item.slug === release.seriesSlug) || { slug: '', title: 'Series' };
-    return <ReleasePage release={release} series={parentSeries} pages={data.pages} />;
+    return <><ReleasePage release={release} series={parentSeries} pages={data.pages} /><SiteFooter /></>;
   }
   if (readReleaseId && release) {
     const releasePages = getReleasedPagesForRelease(data.pages, release.id);
@@ -76,5 +98,5 @@ export default function App() {
   }
   if (readReleaseId && !release) return <main className="page page-reader page-reader-empty"><h1>Release not found.</h1><p><a href="/">Return home</a></p></main>;
 
-  return <HomePage series={data.series} releases={data.releases} extras={data.extras} soundtracksBySeries={soundtracksBySeries} continueReading={continueReading} onClearContinueReading={() => { clearContinueReading(); setContinueRecord(null); }} />;
+  return <><HomePage series={data.series} releases={data.releases} extras={data.extras} soundtracksBySeries={soundtracksBySeries} continueReading={continueReading} onClearContinueReading={() => { clearContinueReading(); setContinueRecord(null); }} news={sortedNews} /><SiteFooter /></>;
 }

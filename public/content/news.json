@@ -1,0 +1,29 @@
+{
+  "news": [
+    {
+      "id": "sunforge-outlaw-issue-2-release-date",
+      "slug": "sunforge-outlaw-issue-2-release-date",
+      "title": "Sunforge Outlaw Issue 2 arrives May 20",
+      "date": "2026-04-29",
+      "category": "Release",
+      "excerpt": "Issue 2 of Sunforge Outlaw lands May 20 with a longer chase sequence and expanded world notes.",
+      "body": "Sunforge Outlaw Issue 2 is set for release on May 20. This issue widens the frontier map, adds new faction pressure, and pushes Marrow and Lio into a tighter debt spiral. We also tuned panel pacing to improve momentum through the midpoint action stretch.",
+      "image": "/images/sunforge-outlaw/cover.jpg",
+      "imageAlt": "Sunforge Outlaw key art with heated frontier skyline",
+      "relatedSeriesSlug": "sunforge-outlaw",
+      "relatedReleaseSlug": "sunforge-outlaw-issue-2"
+    },
+    {
+      "id": "stardust-production-update-layout-pass",
+      "slug": "stardust-production-update-layout-pass",
+      "title": "Stardust Station layout pass complete",
+      "date": "2026-04-22",
+      "category": "Production",
+      "excerpt": "The team completed a full layout and lettering pass for the next Stardust Station batch.",
+      "body": "We wrapped a full layout and lettering pass for upcoming Stardust Station pages this week. The pass focused on readability in dense multi-character scenes and cleaner visual hierarchy for station UI moments. Color planning starts next.",
+      "image": "/images/stardust-station/thumb.jpg",
+      "imageAlt": "Stardust Station concept panel collage",
+      "relatedSeriesSlug": "stardust-station"
+    }
+  ]
+}

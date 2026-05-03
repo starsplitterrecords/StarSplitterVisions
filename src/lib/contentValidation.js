@@ -121,6 +121,31 @@ export function validateSoundtrackList(value) {
 }
 
 
+export function validateNewsList(value) {
+  return asArray(value).flatMap((item) => {
+    if (!item || typeof item !== 'object') {
+      warnOnce('[content] News item is not an object:', item);
+      return [];
+    }
+
+    const slug = isNonEmptyString(item.slug) ? item.slug.trim() : '';
+    const title = isNonEmptyString(item.title) ? item.title.trim() : '';
+    const date = isNonEmptyString(item.date) ? item.date.trim() : '';
+    const category = isNonEmptyString(item.category) ? item.category.trim() : '';
+    const excerpt = isNonEmptyString(item.excerpt) ? item.excerpt.trim() : '';
+    const body = isNonEmptyString(item.body) ? item.body.trim() : '';
+
+    if (!slug) { warnField('News', 'slug', item); return []; }
+    if (!title) warnField('News', 'title', item);
+    if (!date) warnField('News', 'date', item);
+    if (!category) warnField('News', 'category', item);
+    if (!excerpt) warnField('News', 'excerpt', item);
+    if (!body) warnField('News', 'body', item);
+
+    return [{ ...item, slug, title: title || 'Untitled Update', date, category: category || 'Update', excerpt, body }];
+  });
+}
+
 export function validateReaderSoundtrackList(value) {
   return asArray(value).flatMap((item) => {
     if (!item || typeof item !== 'object') {
