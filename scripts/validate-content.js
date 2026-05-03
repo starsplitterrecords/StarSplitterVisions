@@ -190,8 +190,41 @@ for (const [index, item] of soundtracks.entries()) {
     errors.push(`${context}: must be an object`);
     continue;
   }
-  hasRequiredFields(item, ['id', 'seriesSlug', 'title'], context);
+  hasRequiredFields(item, ['id', 'seriesSlug', 'title', 'description', 'coverImage', 'tracks'], context);
   validateImagePaths(item, context);
+
+  if (typeof item.seriesSlug === 'string' && !seriesSlugs.has(item.seriesSlug)) {
+    errors.push(`${context}: seriesSlug "${item.seriesSlug}" does not match any series.slug`);
+  }
+
+  if (item.playlistUrl && typeof item.playlistUrl !== 'string') {
+    errors.push(`${context}: playlistUrl must be a string when provided`);
+  }
+
+  if (item.playlistLinks !== undefined && !Array.isArray(item.playlistLinks)) {
+    errors.push(`${context}: playlistLinks must be an array when provided`);
+  }
+
+  if (!item.playlistUrl && !Array.isArray(item.playlistLinks)) {
+    errors.push(`${context}: include playlistUrl or playlistLinks`);
+  }
+
+  if (!Array.isArray(item.tracks)) {
+    errors.push(`${context}: tracks must be an array`);
+    continue;
+  }
+
+  for (const [trackIndex, track] of item.tracks.entries()) {
+    const trackContext = `${context}.tracks[${trackIndex}]`;
+    if (!isObject(track)) {
+      errors.push(`${trackContext}: must be an object`);
+      continue;
+    }
+    hasRequiredFields(track, ['title', 'artist', 'duration'], trackContext);
+    if (track.url !== undefined && typeof track.url !== 'string') {
+      errors.push(`${trackContext}: url must be a string when provided`);
+    }
+  }
 }
 
 if (errors.length > 0) {

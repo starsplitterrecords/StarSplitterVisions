@@ -302,6 +302,36 @@ Rules:
 - `pageNumber` should be numeric.
 - Image path convention: `/images/{seriesSlug}/{releaseSlug}/page-001.jpg`.
 
+
+### 4) Soundtrack schema (`public/content/soundtracks.json`)
+
+Top-level shape:
+
+- `soundtracks` (array)
+
+Each object in `soundtracks[]` should include:
+
+- `id` (string)
+- `seriesSlug` (string)
+- `title` (string)
+- `description` (string)
+- `coverImage` (web path)
+- `mood` (string)
+- `playlistUrl` (string) or `playlistLinks` (array)
+- `tracks` (array)
+
+Each track in `tracks[]` should include:
+
+- `title` (string)
+- `artist` (string)
+- `duration` (string)
+- `url` (string, optional)
+
+Rules:
+
+- `seriesSlug` must match an existing `series[].slug`.
+- Image path convention remains `/images/...` (never `/public/images/...`).
+
 ## Relationship map
 
 - `series.slug` ← canonical series identifier.
