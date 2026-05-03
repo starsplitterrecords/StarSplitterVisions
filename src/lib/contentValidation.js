@@ -113,7 +113,25 @@ function validateSimpleList(type, value, requiredField = 'title') {
 }
 
 export function validateExtraList(value) {
-  return validateSimpleList('Extra', value, 'title');
+  return asArray(value).flatMap((item, index) => {
+    if (!item || typeof item !== 'object') {
+      warnOnce('[content] Extra item is not an object:', item);
+      return [];
+    }
+
+    const title = isNonEmptyString(item.title) ? item.title.trim() : '';
+    const seriesSlug = isNonEmptyString(item.seriesSlug) ? item.seriesSlug.trim() : '';
+    const id = isNonEmptyString(item.id) ? item.id.trim() : '';
+    const slug = isNonEmptyString(item.slug) ? item.slug.trim() : id;
+
+    if (!title) {
+      warnField('Extra', 'title', item);
+      return [];
+    }
+    if (!seriesSlug) warnField('Extra', 'seriesSlug', item);
+
+    return [{ ...item, title, seriesSlug, id: id || slug || `extra-${index + 1}`, slug: slug || id || `extra-${index + 1}` }];
+  });
 }
 
 export function validateSoundtrackList(value) {

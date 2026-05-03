@@ -3,8 +3,9 @@ import ReaderShell from '../components/ReaderShell';
 import MiniAudioPlayer from '../components/reader/MiniAudioPlayer';
 import { setContinueReading, getContinueReading } from '../lib/continueReading';
 import { findSoundtrackForRelease } from '../lib/soundtracks';
+import { getExtraHref, sortExtras } from '../lib/extras';
 
-export default function ReaderPage({ release, pages, series, soundtracks }) {
+export default function ReaderPage({ release, pages, series, soundtracks, extras = [] }) {
   const [index, setIndex] = useState(0);
   const [imageFailed, setImageFailed] = useState(false);
 
@@ -21,6 +22,9 @@ export default function ReaderPage({ release, pages, series, soundtracks }) {
   const canNext = index < totalPages - 1;
 
   const soundtrack = useMemo(() => findSoundtrackForRelease({ soundtracks, seriesSlug: release.seriesSlug, releaseSlug: release.id, pageSlug: page?.slug }), [page?.slug, release.id, release.seriesSlug, soundtracks]);
+
+  const relatedExtras = useMemo(() => sortExtras(extras.filter((item) => item.seriesSlug === release.seriesSlug || item.releaseSlug === release.id)).slice(0, 3), [extras, release.id, release.seriesSlug]);
+
   useEffect(() => { setImageFailed(false); }, [index, release.id]);
   useEffect(() => {
     if (totalPages === 0) return;
@@ -44,5 +48,5 @@ export default function ReaderPage({ release, pages, series, soundtracks }) {
   }, [index, pages, release?.id, totalPages]);
 
   const identityParts = [series?.title, release.title || release.id, totalPages > 0 ? `Page ${index + 1} of ${totalPages}` : null].filter(Boolean);
-  return <ReaderShell releaseHref={`/releases/${release.id}`} overlayText={identityParts.join(' · ')} currentPage={index + 1} totalPages={totalPages} onPrevious={() => setIndex((value) => Math.max(0, value - 1))} onNext={() => setIndex((value) => Math.min(totalPages - 1, value + 1))} canPrevious={canPrevious} canNext={canNext}>{totalPages === 0 ? <div className="reader-empty-state"><p>No released pages are available for this release yet.</p><a href={`/releases/${release.id}`}>Back to release</a></div> : <div className="reader-image-frame">{page?.image && !imageFailed ? <img src={page.image} alt={`${release.title || 'Release'} page ${index + 1}`} className="reader-image" onError={() => setImageFailed(true)} /> : <div className="reader-image-fallback" role="status">Page image unavailable.</div>}</div>}{soundtrack ? <MiniAudioPlayer soundtrack={soundtrack} /> : null}</ReaderShell>;
+  return <ReaderShell releaseHref={`/releases/${release.id}`} overlayText={identityParts.join(' · ')} currentPage={index + 1} totalPages={totalPages} onPrevious={() => setIndex((value) => Math.max(0, value - 1))} onNext={() => setIndex((value) => Math.min(totalPages - 1, value + 1))} canPrevious={canPrevious} canNext={canNext}>{totalPages === 0 ? <div className="reader-empty-state"><p>No released pages are available for this release yet.</p><a href={`/releases/${release.id}`}>Back to release</a></div> : <div className="reader-image-frame">{page?.image && !imageFailed ? <img src={page.image} alt={`${release.title || 'Release'} page ${index + 1}`} className="reader-image" onError={() => setImageFailed(true)} /> : <div className="reader-image-fallback" role="status">Page image unavailable.</div>}</div>}{soundtrack ? <MiniAudioPlayer soundtrack={soundtrack} /> : null}{relatedExtras.length > 0 ? <section className="reader-extra-panel"><h3>Related Extras</h3><ul>{relatedExtras.map((item) => <li key={item.slug || item.id}><a href={getExtraHref(item)}>{item.title}</a></li>)}</ul></section> : null}</ReaderShell>;
 }
