@@ -7,6 +7,23 @@ import HomePage from './pages/HomePage';
 import SeriesPage from './pages/SeriesPage';
 import ReleasePage from './pages/ReleasePage';
 import ReaderPage from './pages/ReaderPage';
+import PressPage from './pages/PressPage';
+
+function ensureMetaDescription(content) {
+  const existing = document.querySelector('meta[name="description"]');
+  if (existing) {
+    existing.setAttribute('content', content);
+    return;
+  }
+  const meta = document.createElement('meta');
+  meta.setAttribute('name', 'description');
+  meta.setAttribute('content', content);
+  document.head.appendChild(meta);
+}
+
+function SiteChrome({ children }) {
+  return <><header className="site-header"><a className="site-brand" href="/">Star Splitter Visions</a><nav aria-label="Primary"><a href="/">Home</a><a href="/press">Press Kit</a><a href="/contact">Contact</a></nav></header>{children}<footer className="site-footer"><p>© {new Date().getFullYear()} Star Splitter Visions</p><nav aria-label="Footer"><a href="/">Home</a><a href="/press">Press Kit</a><a href="/contact">Contact</a></nav></footer></>;
+}
 
 export default function App() {
   const [data, setData] = useState({ series: [], releases: [], pages: [], extras: [], soundtracks: [] });
@@ -45,9 +62,20 @@ export default function App() {
   const releaseId = path.startsWith('/releases/') ? path.replace('/releases/', '') : null;
   const seriesSlug = path.startsWith('/series/') ? path.replace('/series/', '') : null;
   const readReleaseId = path.startsWith('/read/') ? path.replace('/read/', '') : null;
+  const isPressRoute = path === '/press';
 
   const series = data.series.find((item) => item.slug === seriesSlug);
   const release = data.releases.find((item) => item.id === releaseId || item.id === readReleaseId);
+
+
+  useEffect(() => {
+    const title = isPressRoute ? 'Press Kit | Star Splitter Visions' : 'Star Splitter Visions';
+    const description = isPressRoute
+      ? 'Official press information, assets, and media resources for Star Splitter Visions.'
+      : 'Browse new releases and cinematic worlds across the Star Splitter slate.';
+    document.title = title;
+    ensureMetaDescription(description);
+  }, [isPressRoute]);
 
   const continueReading = useMemo(() => {
     if (!continueRecord) return null;
@@ -64,17 +92,18 @@ export default function App() {
 
   if (path === '/admin') return <AdminShell />;
 
-  if (series && !release && !readReleaseId) return <SeriesPage series={series} releases={data.releases} extras={data.extras} allSeries={data.series} soundtracksBySeries={soundtracksBySeries} />;
+  if (isPressRoute) return <SiteChrome><PressPage series={data.series} /></SiteChrome>;
+  if (series && !release && !readReleaseId) return <SiteChrome><SeriesPage series={series} releases={data.releases} extras={data.extras} allSeries={data.series} soundtracksBySeries={soundtracksBySeries} /></SiteChrome>;
   if (releaseId && release) {
     const parentSeries = data.series.find((item) => item.slug === release.seriesSlug) || { slug: '', title: 'Series' };
-    return <ReleasePage release={release} series={parentSeries} pages={data.pages} />;
+    return <SiteChrome><ReleasePage release={release} series={parentSeries} pages={data.pages} /></SiteChrome>;
   }
   if (readReleaseId && release) {
     const releasePages = getReleasedPagesForRelease(data.pages, release.id);
     const parentSeries = data.series.find((item) => item.slug === release.seriesSlug);
-    return <ReaderPage release={release} pages={releasePages} series={parentSeries} soundtracks={data.soundtracks} />;
+    return <SiteChrome><ReaderPage release={release} pages={releasePages} series={parentSeries} soundtracks={data.soundtracks} /></SiteChrome>;
   }
-  if (readReleaseId && !release) return <main className="page page-reader page-reader-empty"><h1>Release not found.</h1><p><a href="/">Return home</a></p></main>;
+  if (readReleaseId && !release) return <SiteChrome><main className="page page-reader page-reader-empty"><h1>Release not found.</h1><p><a href="/">Return home</a></p></main></SiteChrome>;
 
-  return <HomePage series={data.series} releases={data.releases} extras={data.extras} soundtracksBySeries={soundtracksBySeries} continueReading={continueReading} onClearContinueReading={() => { clearContinueReading(); setContinueRecord(null); }} />;
+  return <SiteChrome><HomePage series={data.series} releases={data.releases} extras={data.extras} soundtracksBySeries={soundtracksBySeries} continueReading={continueReading} onClearContinueReading={() => { clearContinueReading(); setContinueRecord(null); }} /></SiteChrome>;
 }
