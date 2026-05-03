@@ -1,10 +1,8 @@
 import { useMemo, useState } from 'react';
-import ContentRail from '../components/ContentRail';
-import MediaCard from '../components/MediaCard';
-import ReleaseCard from '../components/ReleaseCard';
+import { ContentRail, MediaCard, ReleaseCard } from '../ui';
 import { validateExtraList } from '../lib/contentValidation';
 import { isVisibleRelease, sortReleasesByNewest } from '../lib/releaseVisibility';
-import { SEARCH_FILTERS, createSearchText } from '../lib/searchUtils';
+import { SEARCH_FILTERS, createSearchText } from '../features/search';
 
 function ContinueReadingModule({ item, onClear }) {
   const title = item.releaseTitle || 'Continue Reading';

@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
-import ReaderShell from '../components/ReaderShell';
-import MiniAudioPlayer from '../components/reader/MiniAudioPlayer';
-import { setContinueReading, getContinueReading } from '../lib/continueReading';
-import { findSoundtrackForRelease } from '../lib/soundtracks';
+import { ReaderShell } from '../features/reader';
+import { MiniAudioPlayer, findSoundtrackForRelease } from '../features/reader/audio';
+import { setContinueReading, getContinueReading } from '../features/continue-reading';
 
 export default function ReaderPage({ release, pages, series, soundtracks }) {
   const [index, setIndex] = useState(0);

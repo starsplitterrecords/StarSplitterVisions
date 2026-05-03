@@ -1,8 +1,5 @@
 import { useMemo } from 'react';
-import ContentRail from '../components/ContentRail';
-import MediaCard from '../components/MediaCard';
-import ReleaseCard from '../components/ReleaseCard';
-import SeriesHero from '../components/SeriesHero';
+import { ContentRail, MediaCard, ReleaseCard, SeriesHero } from '../ui';
 import { validateExtraList, validateSoundtrackList } from '../lib/contentValidation';
 import { isVisibleRelease, sortReleasesByNewest } from '../lib/releaseVisibility';
 

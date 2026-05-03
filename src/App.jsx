@@ -1,12 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
-import AdminShell from './components/AdminShell';
-import { clearContinueReading, getContinueReading } from './lib/continueReading';
+import { AdminShell } from './admin';
+import { clearContinueReading, getContinueReading } from './features/continue-reading';
 import { validateExtraList, validatePageList, validateReaderSoundtrackList, validateReleaseList, validateSeriesList } from './lib/contentValidation';
 import { isVisibleRelease, getReleasedPagesForRelease } from './lib/releaseVisibility';
-import HomePage from './pages/HomePage';
-import SeriesPage from './pages/SeriesPage';
-import ReleasePage from './pages/ReleasePage';
-import ReaderPage from './pages/ReaderPage';
+import { HomePage, SeriesPage, ReleasePage, ReaderPage } from './pages';
 
 export default function App() {
   const [data, setData] = useState({ series: [], releases: [], pages: [], extras: [], soundtracks: [] });
