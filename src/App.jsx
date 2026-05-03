@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import AdminShell from './components/AdminShell';
+import SiteShell from './components/SiteShell';
 import { clearContinueReading, getContinueReading } from './lib/continueReading';
 import { validateExtraList, validatePageList, validateReaderSoundtrackList, validateReleaseList, validateSeriesList } from './lib/contentValidation';
 import { isVisibleRelease, getReleasedPagesForRelease } from './lib/releaseVisibility';
@@ -7,6 +8,23 @@ import HomePage from './pages/HomePage';
 import SeriesPage from './pages/SeriesPage';
 import ReleasePage from './pages/ReleasePage';
 import ReaderPage from './pages/ReaderPage';
+import AboutPage from './pages/AboutPage';
+import ContactPage from './pages/ContactPage';
+import PressPage from './pages/PressPage';
+import CollectionPage from './pages/CollectionPage';
+
+const DEFAULT_META = { title: 'Star Splitter Visions', description: 'Independent comics and illustrated worlds from Star Splitter Visions.' };
+
+function applyMeta(meta) {
+  document.title = meta.title;
+  let description = document.querySelector('meta[name="description"]');
+  if (!description) {
+    description = document.createElement('meta');
+    description.setAttribute('name', 'description');
+    document.head.appendChild(description);
+  }
+  description.setAttribute('content', meta.description);
+}
 
 export default function App() {
   const [data, setData] = useState({ series: [], releases: [], pages: [], extras: [], soundtracks: [] });
@@ -64,17 +82,49 @@ export default function App() {
 
   if (path === '/admin') return <AdminShell />;
 
-  if (series && !release && !readReleaseId) return <SeriesPage series={series} releases={data.releases} extras={data.extras} allSeries={data.series} soundtracksBySeries={soundtracksBySeries} />;
-  if (releaseId && release) {
+  const hasExtras = data.extras.length > 0;
+  let pageContent = <HomePage series={data.series} releases={data.releases} extras={data.extras} soundtracksBySeries={soundtracksBySeries} continueReading={continueReading} onClearContinueReading={() => { clearContinueReading(); setContinueRecord(null); }} />;
+  let meta = DEFAULT_META;
+
+  if (path === '/about') {
+    pageContent = <AboutPage series={data.series} />;
+    meta = { title: 'About | Star Splitter Visions', description: 'Learn about Star Splitter Visions, our creative mission, and featured comic worlds.' };
+  } else if (path === '/contact') {
+    pageContent = <ContactPage />;
+    meta = { title: 'Contact | Star Splitter Visions', description: 'Contact Star Splitter Visions for general, press, and collaboration inquiries.' };
+  } else if (path === '/press') {
+    pageContent = <PressPage series={data.series} />;
+    meta = { title: 'Press | Star Splitter Visions', description: 'Press-ready information, publisher blurb, and featured series from Star Splitter Visions.' };
+  } else if (path === '/privacy' || path === '/terms') {
+    const title = path === '/privacy' ? 'Privacy' : 'Terms';
+    pageContent = <main className="page info-page"><header className="home-header"><h1>{title}</h1><p>This policy page is coming soon.</p></header></main>;
+    meta = { title: `${title} | Star Splitter Visions`, description: `${title} information for Star Splitter Visions.` };
+  } else if (path === '/series') {
+    pageContent = <CollectionPage title="Series" items={data.series} type="series" />;
+    meta = { title: 'Series | Star Splitter Visions', description: 'Explore all comic series published by Star Splitter Visions.' };
+  } else if (path === '/releases') {
+    pageContent = <CollectionPage title="Releases" items={data.releases.filter((item) => isVisibleRelease(item))} type="releases" />;
+    meta = { title: 'Releases | Star Splitter Visions', description: 'Browse released issues and chapters from Star Splitter Visions.' };
+  } else if (path === '/extras') {
+    pageContent = <CollectionPage title="Extras" items={data.extras} type="extras" />;
+    meta = { title: 'Extras | Star Splitter Visions', description: 'Explore extras, companion content, and bonus media.' };
+  } else if (series && !release && !readReleaseId) {
+    pageContent = <SeriesPage series={series} releases={data.releases} extras={data.extras} allSeries={data.series} soundtracksBySeries={soundtracksBySeries} />;
+    meta = { title: `${series.title} | Star Splitter Visions`, description: series.shortDescription || series.tagline || DEFAULT_META.description };
+  } else if (releaseId && release) {
     const parentSeries = data.series.find((item) => item.slug === release.seriesSlug) || { slug: '', title: 'Series' };
-    return <ReleasePage release={release} series={parentSeries} pages={data.pages} />;
-  }
-  if (readReleaseId && release) {
+    pageContent = <ReleasePage release={release} series={parentSeries} pages={data.pages} />;
+    meta = { title: `${release.title} | Star Splitter Visions`, description: release.description || DEFAULT_META.description };
+  } else if (readReleaseId && release) {
     const releasePages = getReleasedPagesForRelease(data.pages, release.id);
     const parentSeries = data.series.find((item) => item.slug === release.seriesSlug);
-    return <ReaderPage release={release} pages={releasePages} series={parentSeries} soundtracks={data.soundtracks} />;
+    pageContent = <ReaderPage release={release} pages={releasePages} series={parentSeries} soundtracks={data.soundtracks} />;
+    meta = { title: `Read ${release.title} | Star Splitter Visions`, description: `Read ${release.title} from Star Splitter Visions.` };
+  } else if (readReleaseId && !release) {
+    pageContent = <main className="page page-reader page-reader-empty"><h1>Release not found.</h1><p><a href="/">Return home</a></p></main>;
   }
-  if (readReleaseId && !release) return <main className="page page-reader page-reader-empty"><h1>Release not found.</h1><p><a href="/">Return home</a></p></main>;
 
-  return <HomePage series={data.series} releases={data.releases} extras={data.extras} soundtracksBySeries={soundtracksBySeries} continueReading={continueReading} onClearContinueReading={() => { clearContinueReading(); setContinueRecord(null); }} />;
+  useEffect(() => { applyMeta(meta); }, [meta]);
+
+  return <SiteShell path={path} hasExtras={hasExtras}>{pageContent}</SiteShell>;
 }

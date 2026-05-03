@@ -1,0 +1,3 @@
+export default function ContactPage() {
+  return <main className="page info-page"><header className="home-header"><h1>Contact</h1><p>We’d love to hear from readers, collaborators, and press partners.</p></header><section className="world-card"><h2>General Inquiries</h2><p>Email: <a href="mailto:hello@starsplittervisions.com">hello@starsplittervisions.com</a></p></section><section className="world-card"><h2>Press Inquiries</h2><p>For interviews, quotes, and media requests, use the same contact address and include “Press” in your subject line.</p></section><section className="world-card"><h2>Collaboration & Licensing</h2><p>For collaboration, adaptation, or licensing conversations, email us with project details and timeline goals.</p></section></main>;
+}
