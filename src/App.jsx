@@ -1,34 +1,19 @@
 import { useEffect, useMemo, useState } from 'react';
 import AdminShell from './components/AdminShell';
 import { clearContinueReading, getContinueReading } from './lib/continueReading';
-import { validateExtraList, validatePageList, validateReaderSoundtrackList, validateReleaseList, validateSeriesList } from './lib/contentValidation';
 import { isVisibleRelease, getReleasedPagesForRelease } from './lib/releaseVisibility';
 import HomePage from './pages/HomePage';
 import SeriesPage from './pages/SeriesPage';
 import ReleasePage from './pages/ReleasePage';
 import ReaderPage from './pages/ReaderPage';
+import useContentData from './app/useContentData';
+import AppLoadingState from './app/AppLoadingState';
+import AppErrorState from './app/AppErrorState';
+import AppEmptyState from './app/AppEmptyState';
 
 export default function App() {
-  const [data, setData] = useState({ series: [], releases: [], pages: [], extras: [], soundtracks: [] });
+  const { data, isLoading, error } = useContentData();
   const [continueRecord, setContinueRecord] = useState(null);
-
-  useEffect(() => {
-    Promise.all([
-      fetch('/content/series.json').then((res) => res.json()),
-      fetch('/content/releases.json').then((res) => res.json()),
-      fetch('/content/pages.json').then((res) => res.json()),
-      fetch('/content/extras.json').then((res) => res.json()).catch(() => ({ extras: [] })),
-      fetch('/content/soundtracks.json').then((res) => res.json()).catch(() => ({ soundtracks: [] }))
-    ]).then(([seriesData, releasesData, pagesData, extrasData, soundtracksData]) => {
-      setData({
-        series: validateSeriesList(seriesData?.series),
-        releases: validateReleaseList(releasesData?.releases),
-        pages: validatePageList(pagesData?.pages),
-        extras: validateExtraList(extrasData?.extras),
-        soundtracks: validateReaderSoundtrackList(soundtracksData?.soundtracks)
-      });
-    });
-  }, []);
 
   useEffect(() => { setContinueRecord(getContinueReading()); }, []);
 
@@ -62,7 +47,12 @@ export default function App() {
     return { releaseSlug: matchedRelease.id, releaseTitle: matchedRelease.title, seriesTitle: parentSeries?.title || null, issueNumber: matchedRelease.issueNumber, image: matchedRelease.coverImage || matchedRelease.image || page.image || null, pageNumber: Number(page.pageNumber) || safeIndex + 1, totalPages: releasePages.length };
   }, [continueRecord, data.pages, data.releases, data.series]);
 
+
   if (path === '/admin') return <AdminShell />;
+
+  if (isLoading) return <AppLoadingState />;
+  if (error) return <AppErrorState />;
+  if (data.series.length === 0 && data.releases.length === 0) return <AppEmptyState />;
 
   if (series && !release && !readReleaseId) return <SeriesPage series={series} releases={data.releases} extras={data.extras} allSeries={data.series} soundtracksBySeries={soundtracksBySeries} />;
   if (releaseId && release) {
