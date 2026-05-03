@@ -1,16 +1,6 @@
-function parseDate(value) {
-  if (!value) return null;
-  const parsed = new Date(value);
-  return Number.isNaN(parsed.getTime()) ? null : parsed;
-}
+import { formatDate } from '../lib/dateUtils';
 
-function formatDate(value) {
-  const parsed = parseDate(value);
-  if (!parsed) return null;
-  return parsed.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
-}
-
-export default function ReleaseCard({ release, seriesTitle, href, variant = 'default', showDescription = true, showDate = true, showSeries = true, className = '' }) {
+export default function ReleaseCard({ release, seriesTitle, href, seriesHref, variant = 'default', showDescription = true, showDate = true, showSeries = true, className = '', showCta = false }) {
   const imageSrc = release.coverImage || release.heroImage || release.image;
   const releaseDate = formatDate(release.releaseDate);
   const cardClassName = variant === 'compact' ? 'release-card release-card-compact' : 'release-card';
@@ -20,11 +10,12 @@ export default function ReleaseCard({ release, seriesTitle, href, variant = 'def
     <>
       {imageSrc ? <img src={imageSrc} alt={`${release.title} cover`} className="release-image" /> : <div className="visual-fallback" aria-hidden="true"><span>{release.title}</span></div>}
       <div className="release-meta">
-        {showSeries && seriesTitle ? <p className="release-eyebrow">{seriesTitle}</p> : null}
+        {showSeries && seriesTitle ? <p className="release-eyebrow">{seriesHref ? <a href={seriesHref}>{seriesTitle}</a> : seriesTitle}</p> : null}
         <h3>{release.title}</h3>
         {release.issueNumber !== undefined ? <p className="release-detail">Issue #{release.issueNumber}</p> : null}
         {showDescription && release.description ? <p className="release-detail">{release.description}</p> : null}
         {showDate && releaseDate ? <p className="release-date">{releaseDate}</p> : null}
+        {showCta ? <p className="release-card-cta">Read</p> : null}
       </div>
     </>
   );

@@ -7,6 +7,8 @@ import HomePage from './pages/HomePage';
 import SeriesPage from './pages/SeriesPage';
 import ReleasePage from './pages/ReleasePage';
 import ReaderPage from './pages/ReaderPage';
+import ReadPage from './pages/ReadPage';
+import SiteShell from './components/SiteShell';
 
 export default function App() {
   const [data, setData] = useState({ series: [], releases: [], pages: [], extras: [], soundtracks: [] });
@@ -44,6 +46,7 @@ export default function App() {
 
   const releaseId = path.startsWith('/releases/') ? path.replace('/releases/', '') : null;
   const seriesSlug = path.startsWith('/series/') ? path.replace('/series/', '') : null;
+  const isReadIndex = path === '/read';
   const readReleaseId = path.startsWith('/read/') ? path.replace('/read/', '') : null;
 
   const series = data.series.find((item) => item.slug === seriesSlug);
@@ -64,17 +67,18 @@ export default function App() {
 
   if (path === '/admin') return <AdminShell />;
 
-  if (series && !release && !readReleaseId) return <SeriesPage series={series} releases={data.releases} extras={data.extras} allSeries={data.series} soundtracksBySeries={soundtracksBySeries} />;
+  if (series && !release && !readReleaseId) return <SiteShell><SeriesPage series={series} releases={data.releases} extras={data.extras} allSeries={data.series} soundtracksBySeries={soundtracksBySeries} /></SiteShell>;
   if (releaseId && release) {
     const parentSeries = data.series.find((item) => item.slug === release.seriesSlug) || { slug: '', title: 'Series' };
-    return <ReleasePage release={release} series={parentSeries} pages={data.pages} />;
+    return <SiteShell><ReleasePage release={release} series={parentSeries} pages={data.pages} /></SiteShell>;
   }
   if (readReleaseId && release) {
     const releasePages = getReleasedPagesForRelease(data.pages, release.id);
     const parentSeries = data.series.find((item) => item.slug === release.seriesSlug);
     return <ReaderPage release={release} pages={releasePages} series={parentSeries} soundtracks={data.soundtracks} />;
   }
-  if (readReleaseId && !release) return <main className="page page-reader page-reader-empty"><h1>Release not found.</h1><p><a href="/">Return home</a></p></main>;
+  if (isReadIndex) return <SiteShell><ReadPage series={data.series} releases={data.releases} /></SiteShell>;
+  if (readReleaseId && !release) return <SiteShell><main className="page page-reader page-reader-empty"><h1>Release not found.</h1><p><a href="/">Return home</a></p></main></SiteShell>;
 
-  return <HomePage series={data.series} releases={data.releases} extras={data.extras} soundtracksBySeries={soundtracksBySeries} continueReading={continueReading} onClearContinueReading={() => { clearContinueReading(); setContinueRecord(null); }} />;
+  return <SiteShell><HomePage series={data.series} releases={data.releases} extras={data.extras} soundtracksBySeries={soundtracksBySeries} continueReading={continueReading} onClearContinueReading={() => { clearContinueReading(); setContinueRecord(null); }} /></SiteShell>;
 }

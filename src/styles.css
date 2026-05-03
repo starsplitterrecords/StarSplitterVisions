@@ -739,3 +739,34 @@ a.primary-button {
     bottom: 4.6rem;
   }
 }
+
+.site-header,
+.site-footer {
+  border-bottom: 1px solid var(--border-soft);
+  background: rgba(5, 7, 13, 0.88);
+}
+.site-footer { border-bottom: 0; border-top: 1px solid var(--border-soft); }
+.site-shell-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0.9rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+.site-brand { font-weight: 700; text-decoration: none; }
+.site-shell-inner nav { display: flex; gap: 1rem; }
+.read-controls { display: flex; flex-wrap: wrap; gap: .75rem; }
+.read-controls label { display: grid; gap: .35rem; color: var(--text-secondary); }
+.read-controls select { background: var(--bg-surface); color: var(--text-primary); border: 1px solid var(--border-soft); border-radius: 8px; padding: .45rem .55rem; }
+.release-card-cta { font-weight: 700; color: var(--accent); margin: 0; }
+.release-eyebrow a { text-decoration: none; }
+@media (max-width: 700px) {
+  .site-shell-inner { padding: 0.8rem 1rem; }
+  .site-shell-inner nav { gap: .6rem; }
+  .release-grid { grid-template-columns: 1fr; }
+}
+@media (min-width: 701px) and (max-width: 980px) {
+  .release-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
