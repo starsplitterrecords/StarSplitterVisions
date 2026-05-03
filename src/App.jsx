@@ -64,6 +64,8 @@ export default function App() {
 
   if (path === '/admin') return <AdminShell />;
 
+  if (path === '/extras') return <main className="page page-home"><header className="home-header"><h1>Extras</h1><p>Behind-the-scenes and bonus material.</p></header>{data.extras.length > 0 ? <ul className="home-grid">{data.extras.map((extra, idx) => <li key={extra.id || idx} className="release-card"><a href={extra.url || '#'}><div>{extra.image ? <img src={extra.image} alt={`${extra.title} art`} className="release-image" /> : <div className="visual-fallback"><span>{extra.title}</span></div>}<div className="release-meta"><p className="release-eyebrow">{extra.type || 'Extra'}</p><h3>{extra.title}</h3><p className="release-detail">{extra.description}</p></div></div></a></li>)}</ul> : <div className="empty-rail">No extras yet. Check back soon.</div>}</main>;
+
   if (series && !release && !readReleaseId) return <SeriesPage series={series} releases={data.releases} extras={data.extras} allSeries={data.series} soundtracksBySeries={soundtracksBySeries} />;
   if (releaseId && release) {
     const parentSeries = data.series.find((item) => item.slug === release.seriesSlug) || { slug: '', title: 'Series' };
