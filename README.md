@@ -88,9 +88,10 @@ Depending on the package, Codex may update:
 - `public/content/series.json`
 - `public/content/releases.json`
 - `public/content/pages.json`
+- `public/content/extras.json`
 - `public/content/soundtracks.json`
 
-Codex may also update fields that control release/page ordering, image references, and optional extras/soundtrack metadata stored in those content files.
+Codex may also update fields that control release/page ordering, image references, and optional extras/soundtrack metadata stored in those content files. Extras are canonicalized in `public/content/extras.json` and should not be nested under series or release records.
 
 ## Codex Content Publishing Package (Standard Shape)
 
@@ -309,3 +310,23 @@ Rules:
 - `releases.id` ← canonical release identifier and route slug.
 - `pages.releaseSlug` → must match `releases.id`.
 - `pages.seriesSlug` → must match the parent release's `seriesSlug`.
+
+
+### 5) Extras schema (`public/content/extras.json`)
+
+Top-level shape:
+
+- `extras` (array)
+
+Each object in `extras[]` should include:
+
+- `id` (string)
+- `seriesSlug` (string, must match an existing `series[].slug`)
+- `title` (string)
+- `type` (string)
+- `description` (string)
+- `image` (web path, usually `/images/...`)
+- one of `url` or `href` (string)
+- `status` (optional string)
+
+Do not treat `series.extras`, `relatedLinks`, or `links` as canonical extras sources in app logic.

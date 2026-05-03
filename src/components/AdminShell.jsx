@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { getReleaseAssetPublicPath, getReleaseAssetRepoPath, getSeriesAssetPublicPath, getSeriesAssetRepoPath } from '../../lib/paths';
 
 const ADMIN_SECTIONS = [
@@ -82,7 +82,7 @@ const PUBLISHING_STEPS = [
       'Series JSON → public/content/series.json',
       'Release JSON → public/content/releases.json',
       'Page JSON → public/content/pages.json',
-      'Extras and soundtrack data currently live in series.json if used.',
+      'Extras and soundtrack data are standalone files in public/content (including extras.json).',
     ],
   },
   {
@@ -1135,22 +1135,13 @@ ${normalizedAssets.length ? normalizedAssets.map((item) => `- Source file: \`${i
 
 ## Data files to update
 
-Update the project’s xtras data source.
+Update \`public/content/extras.json\` (canonical extras source).
 
-Preferred locations, in order:
+Canonical file:
 
-1. Use the existing xtras/extras data file if one already exists.
-2. If no file exists, create one following the project’s existing data conventions.
+- \`public/content/extras.json\`
 
-Likely acceptable file names:
-
-- \`src/data/xtras.json\`
-- \`src/data/extras.json\`
-- \`public/data/xtras.json\`
-- \`public/data/extras.json\`
-- Existing series/release JSON file if the repo already nests extras there
-
-Do not create duplicate competing data sources.
+Do not create duplicate extras sources or nest extras into series/release JSON.
 
 ## Required implementation rules
 

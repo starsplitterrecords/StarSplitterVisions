@@ -13,6 +13,7 @@ const FILES = {
   releases: 'public/content/releases.json',
   pages: 'public/content/pages.json',
   soundtracks: 'public/content/soundtracks.json',
+  extras: 'public/content/extras.json',
 };
 
 const errors = [];
@@ -82,16 +83,19 @@ const seriesData = readJson(FILES.series);
 const releasesData = readJson(FILES.releases);
 const pagesData = readJson(FILES.pages);
 const soundtracksData = readJson(FILES.soundtracks);
+const extrasData = readJson(FILES.extras);
 
 const series = Array.isArray(seriesData?.series) ? seriesData.series : [];
 const releases = Array.isArray(releasesData?.releases) ? releasesData.releases : [];
 const pages = Array.isArray(pagesData?.pages) ? pagesData.pages : [];
 const soundtracks = Array.isArray(soundtracksData?.soundtracks) ? soundtracksData.soundtracks : [];
+const extras = Array.isArray(extrasData?.extras) ? extrasData.extras : [];
 
 if (!Array.isArray(seriesData?.series)) errors.push(`${FILES.series}: missing "series" array`);
 if (!Array.isArray(releasesData?.releases)) errors.push(`${FILES.releases}: missing "releases" array`);
 if (!Array.isArray(pagesData?.pages)) errors.push(`${FILES.pages}: missing "pages" array`);
 if (!Array.isArray(soundtracksData?.soundtracks)) errors.push(`${FILES.soundtracks}: missing "soundtracks" array`);
+if (!Array.isArray(extrasData?.extras)) errors.push(`${FILES.extras}: missing "extras" array`);
 
 const seriesSlugs = new Set();
 for (const [index, item] of series.entries()) {
@@ -181,6 +185,26 @@ for (const [index, item] of pages.entries()) {
       errors.push(`${context}: duplicate pageNumber ${item.pageNumber} for releaseSlug "${item.releaseSlug}"`);
     }
     seenPages.add(item.pageNumber);
+  }
+}
+
+
+for (const [index, item] of extras.entries()) {
+  const context = `extras[${index}]`;
+  if (!isObject(item)) {
+    errors.push(`${context}: must be an object`);
+    continue;
+  }
+
+  hasRequiredFields(item, ['id', 'seriesSlug', 'title', 'type', 'description', 'image'], context);
+  validateImagePaths(item, context);
+
+  if (typeof item.seriesSlug === 'string' && !seriesSlugs.has(item.seriesSlug)) {
+    errors.push(`${context}: seriesSlug "${item.seriesSlug}" does not match any series.slug`);
+  }
+
+  if (!item.url && !item.href) {
+    errors.push(`${context}: must include one of "url" or "href"`);
   }
 }
 
