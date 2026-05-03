@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import AdminShell from './components/AdminShell';
 import { clearContinueReading, getContinueReading } from './lib/continueReading';
 import { validateExtraList, validatePageList, validateReaderSoundtrackList, validateReleaseList, validateSeriesList } from './lib/contentValidation';
-import { isVisibleRelease, getReleasedPagesForRelease } from './lib/releaseVisibility';
+import { getContinueReadingViewModel, getVisibleReleasePages } from './content/contentSelectors';
 import HomePage from './pages/HomePage';
 import SeriesPage from './pages/SeriesPage';
 import ReleasePage from './pages/ReleasePage';
@@ -51,15 +51,7 @@ export default function App() {
 
   const continueReading = useMemo(() => {
     if (!continueRecord) return null;
-    const matchedRelease = data.releases.find((item) => item.id === continueRecord.releaseSlug && isVisibleRelease(item));
-    if (!matchedRelease) return null;
-    const releasePages = getReleasedPagesForRelease(data.pages, matchedRelease.id);
-    if (releasePages.length === 0) return null;
-    const safeIndex = Math.max(0, Math.min(continueRecord.pageIndex, releasePages.length - 1));
-    const page = releasePages[safeIndex];
-    if (!page) return null;
-    const parentSeries = data.series.find((item) => item.slug === matchedRelease.seriesSlug);
-    return { releaseSlug: matchedRelease.id, releaseTitle: matchedRelease.title, seriesTitle: parentSeries?.title || null, issueNumber: matchedRelease.issueNumber, image: matchedRelease.coverImage || matchedRelease.image || page.image || null, pageNumber: Number(page.pageNumber) || safeIndex + 1, totalPages: releasePages.length };
+    return getContinueReadingViewModel({ continueRecord, releases: data.releases, pages: data.pages, series: data.series });
   }, [continueRecord, data.pages, data.releases, data.series]);
 
   if (path === '/admin') return <AdminShell />;
@@ -70,7 +62,7 @@ export default function App() {
     return <ReleasePage release={release} series={parentSeries} pages={data.pages} />;
   }
   if (readReleaseId && release) {
-    const releasePages = getReleasedPagesForRelease(data.pages, release.id);
+    const releasePages = getVisibleReleasePages(data.pages, release.id);
     const parentSeries = data.series.find((item) => item.slug === release.seriesSlug);
     return <ReaderPage release={release} pages={releasePages} series={parentSeries} soundtracks={data.soundtracks} />;
   }

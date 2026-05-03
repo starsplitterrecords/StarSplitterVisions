@@ -3,7 +3,7 @@ import ContentRail from '../components/ContentRail';
 import MediaCard from '../components/MediaCard';
 import ReleaseCard from '../components/ReleaseCard';
 import { validateExtraList } from '../lib/contentValidation';
-import { isVisibleRelease, sortReleasesByNewest } from '../lib/releaseVisibility';
+import { getVisibleReleases } from '../content/contentSelectors';
 import { SEARCH_FILTERS, createSearchText } from '../lib/searchUtils';
 
 function ContinueReadingModule({ item, onClear }) {
@@ -18,7 +18,7 @@ function SearchModule({ series, releases, extras, soundtracksBySeries }) {
   const seriesBySlug = useMemo(() => new Map(series.map((item) => [item.slug, item])), [series]);
   const safeSoundtracksBySeries = soundtracksBySeries || new Map();
   const seriesItems = useMemo(() => series.map((item) => ({ id: `series:${item.slug || item.title}`, type: 'series', title: item.title, description: item.shortDescription || item.tagline || item.longDescription, href: item.slug ? `/series/${item.slug}` : null, image: item.thumbnailImage || item.heroImage || item.image, eyebrow: 'Series', context: item.genre || item.tone, searchable: createSearchText([item.title, item.logoText, item.tagline, item.shortDescription, item.longDescription, item.genre, item.tone]) })), [series]);
-  const visibleReleases = useMemo(() => releases.filter((item) => isVisibleRelease(item)), [releases]);
+  const visibleReleases = useMemo(() => getVisibleReleases(releases), [releases]);
   const releaseItems = useMemo(() => visibleReleases.map((item) => ({ id: `release:${item.id || item.title}`, type: 'releases', title: item.title, description: item.description, href: item.id ? `/releases/${item.id}` : null, image: item.coverImage || item.image, seriesTitle: seriesBySlug.get(item.seriesSlug)?.title, issueNumber: item.issueNumber, searchable: createSearchText([item.title, String(item.issueNumber ?? ''), item.description, item.seriesSlug, item.releaseDate]) })), [visibleReleases, seriesBySlug]);
   const extrasItems = useMemo(() => validateExtraList(extras).map((extra, idx) => ({ id: `extra:${extra.seriesSlug || idx}:${extra.title || idx}`, type: 'extras', title: extra.title, description: extra.description, href: extra.url || extra.href || null, image: extra.image, eyebrow: extra.type || extra.label || 'Extra', seriesTitle: seriesBySlug.get(extra.seriesSlug)?.title || extra.seriesSlug, searchable: createSearchText([extra.title, extra.type, extra.label, extra.description, extra.seriesSlug]) })), [extras, seriesBySlug]);
   const soundtrackItems = useMemo(() => series.flatMap((item) => (safeSoundtracksBySeries.get(item.slug) || []).map((track, idx) => ({ id: `soundtrack:${item.slug || idx}:${track.title || track.trackTitle || idx}`, type: 'soundtracks', title: track.title || track.trackTitle, description: track.description, href: track.url || track.href || null, image: track.image, eyebrow: 'Soundtrack', seriesTitle: item.title, searchable: createSearchText([track.title, track.trackTitle, track.artist, track.description, track.mood, item.slug]) }))), [series, safeSoundtracksBySeries]);
@@ -38,6 +38,6 @@ function SearchModule({ series, releases, extras, soundtracksBySeries }) {
 
 export default function HomePage({ series, releases, extras, soundtracksBySeries, continueReading, onClearContinueReading }) {
   const seriesBySlug = useMemo(() => new Map(series.map((item) => [item.slug, item])), [series]);
-  const visibleReleases = useMemo(() => releases.map((item, index) => ({ item, index })).filter(({ item }) => isVisibleRelease(item)).sort((a, b) => sortReleasesByNewest(a.item, b.item, a.index, b.index)).map(({ item }) => item), [releases]);
+  const visibleReleases = useMemo(() => getVisibleReleases(releases), [releases]);
   return <main className="page page-home"><header className="home-header"><h1>Star Splitter Visions</h1><p>Browse new releases and cinematic worlds across the Star Splitter slate.</p></header>{continueReading ? <ContinueReadingModule item={continueReading} onClear={onClearContinueReading} /> : null}<SearchModule series={series} releases={releases} extras={extras} soundtracksBySeries={soundtracksBySeries} /><ContentRail title="Latest Releases" emptyMessage="No releases available yet."><ul className="rail-row">{visibleReleases.map((release) => <ReleaseCard key={release.id} release={release} seriesTitle={seriesBySlug.get(release.seriesSlug)?.title || release.seriesSlug} />)}</ul></ContentRail><ContentRail title="Series" emptyMessage="No series available yet."><ul className="rail-row">{series.map((item) => <MediaCard key={item.slug} className="series-card" href={item.slug ? `/series/${item.slug}` : undefined} image={item.thumbnailImage || item.heroImage || item.image} alt={`${item.title} series art`} title={item.title} description={item.tagline || item.shortDescription || item.longDescription} fallbackText={item.logoText || item.title} />)}</ul></ContentRail></main>;
 }
