@@ -40,14 +40,28 @@ function createSearchText(fields) {
   return fields.filter((value) => typeof value === 'string' && value.trim()).join(' ').toLowerCase();
 }
 
+async function fetchJsonOrFallback(path, fallback) {
+  try {
+    const response = await fetch(path);
+    if (!response.ok) return fallback;
+    const data = await response.json();
+    return data && typeof data === 'object' ? data : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 function SearchModule({ series, releases, extras, soundtracksBySeries }) {
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('all');
+  const safeSeries = Array.isArray(series) ? series : [];
+  const safeReleases = Array.isArray(releases) ? releases : [];
+  const safeExtras = Array.isArray(extras) ? extras : [];
+  const safeSoundtracksBySeries = soundtracksBySeries instanceof Map ? soundtracksBySeries : new Map();
 
-  const seriesBySlug = useMemo(() => new Map(series.map((item) => [item.slug, item])), [series]);
-  const safeSoundtracksBySeries = soundtracksBySeries || new Map();
+  const seriesBySlug = useMemo(() => new Map(safeSeries.map((item) => [item.slug, item])), [safeSeries]);
 
-  const seriesItems = useMemo(() => series.map((item) => ({
+  const seriesItems = useMemo(() => safeSeries.map((item) => ({
     id: `series:${item.slug || item.title}`,
     type: 'series',
     title: item.title,
@@ -57,9 +71,9 @@ function SearchModule({ series, releases, extras, soundtracksBySeries }) {
     eyebrow: 'Series',
     context: item.genre || item.tone,
     searchable: createSearchText([item.title, item.logoText, item.tagline, item.shortDescription, item.longDescription, item.genre, item.tone])
-  })), [series]);
+  })), [safeSeries]);
 
-  const visibleReleases = useMemo(() => releases.filter((item) => isVisibleRelease(item)), [releases]);
+  const visibleReleases = useMemo(() => safeReleases.filter((item) => isVisibleRelease(item)), [safeReleases]);
 
   const releaseItems = useMemo(() => visibleReleases.map((item) => ({
     id: `release:${item.id || item.title}`,
@@ -73,7 +87,7 @@ function SearchModule({ series, releases, extras, soundtracksBySeries }) {
     searchable: createSearchText([item.title, String(item.issueNumber ?? ''), item.description, item.seriesSlug, item.releaseDate])
   })), [visibleReleases, seriesBySlug]);
 
-  const extrasItems = useMemo(() => validateExtraList(extras).map((extra, idx) => ({
+  const extrasItems = useMemo(() => validateExtraList(safeExtras).map((extra, idx) => ({
     id: `extra:${extra.seriesSlug || idx}:${extra.title || idx}`,
     type: 'extras',
     title: extra.title,
@@ -83,9 +97,9 @@ function SearchModule({ series, releases, extras, soundtracksBySeries }) {
     eyebrow: extra.type || extra.label || 'Extra',
     seriesTitle: seriesBySlug.get(extra.seriesSlug)?.title || extra.seriesSlug,
     searchable: createSearchText([extra.title, extra.type, extra.label, extra.description, extra.seriesSlug])
-  })), [extras, seriesBySlug]);
+  })), [safeExtras, seriesBySlug]);
 
-  const soundtrackItems = useMemo(() => series.flatMap((item) => (safeSoundtracksBySeries.get(item.slug) || []).map((track, idx) => ({
+  const soundtrackItems = useMemo(() => safeSeries.flatMap((item) => (safeSoundtracksBySeries.get(item.slug) || []).map((track, idx) => ({
     id: `soundtrack:${item.slug || idx}:${track.title || track.trackTitle || idx}`,
     type: 'soundtracks',
     title: track.title || track.trackTitle,
@@ -95,7 +109,7 @@ function SearchModule({ series, releases, extras, soundtracksBySeries }) {
     eyebrow: 'Soundtrack',
     seriesTitle: item.title,
     searchable: createSearchText([track.title, track.trackTitle, track.artist, track.description, track.mood, item.slug])
-  }))), [series, safeSoundtracksBySeries]);
+  }))), [safeSeries, safeSoundtracksBySeries]);
 
   const normalizedQuery = query.trim().toLowerCase();
   const hasQuery = normalizedQuery.length > 0;
@@ -132,14 +146,18 @@ function HomePage({ series, releases, extras, soundtracksBySeries, continueReadi
 }
 
 function SeriesPage({ series, releases, extras, allSeries, soundtracksBySeries }) {
-  const seriesBySlug = useMemo(() => new Map(allSeries.map((item) => [item.slug, item])), [allSeries]);
-  const visibleSeriesReleases = useMemo(() => releases.map((item, index) => ({ item, index })).filter(({ item }) => item.seriesSlug === series.slug && isVisibleRelease(item)).sort((a, b) => sortReleasesByNewest(a.item, b.item, a.index, b.index)).map(({ item }) => item), [releases, series.slug]);
+  const safeAllSeries = Array.isArray(allSeries) ? allSeries : [];
+  const safeReleases = Array.isArray(releases) ? releases : [];
+  const safeExtras = Array.isArray(extras) ? extras : [];
+  const safeSoundtracksBySeries = soundtracksBySeries instanceof Map ? soundtracksBySeries : new Map();
+  const seriesBySlug = useMemo(() => new Map(safeAllSeries.map((item) => [item.slug, item])), [safeAllSeries]);
+  const visibleSeriesReleases = useMemo(() => safeReleases.map((item, index) => ({ item, index })).filter(({ item }) => item.seriesSlug === series.slug && isVisibleRelease(item)).sort((a, b) => sortReleasesByNewest(a.item, b.item, a.index, b.index)).map(({ item }) => item), [safeReleases, series.slug]);
   const latestIssues = visibleSeriesReleases.slice(0, LATEST_ISSUES_LIMIT);
   const archiveIssues = visibleSeriesReleases.slice(LATEST_ISSUES_LIMIT);
   const worldDetails = [series.worldTitle || series.worldName, series.worldPremise, series.longDescription, series.genre, series.tone, series.audiencePromise, series.coreConflict, series.seriesEngine].filter(Boolean);
-  const relatedSeries = allSeries.filter((item) => item.slug !== series.slug && series.worldSlug && item.worldSlug === series.worldSlug);
-  const extraItems = validateExtraList(extras.filter((item) => item.seriesSlug === series.slug));
-  const soundtrackItems = validateSoundtrackList(soundtracksBySeries.get(series.slug) || []);
+  const relatedSeries = safeAllSeries.filter((item) => item.slug !== series.slug && series.worldSlug && item.worldSlug === series.worldSlug);
+  const extraItems = validateExtraList(safeExtras.filter((item) => item.seriesSlug === series.slug));
+  const soundtrackItems = validateSoundtrackList(safeSoundtracksBySeries.get(series.slug) || []);
   const accent = safeColor(series.accentColor, DEFAULT_SERIES_IDENTITY.accent);
   const secondary = safeColor(series.secondaryColor, DEFAULT_SERIES_IDENTITY.secondary);
   const background = safeColor(series.backgroundColor, DEFAULT_SERIES_IDENTITY.background);
@@ -258,10 +276,43 @@ function ReleasePage({ release, series, pages }) { const releasePages = pages.fi
 export default function App() {
   const [data, setData] = useState({ series: [], releases: [], pages: [], extras: [], soundtracks: [] });
   const [continueRecord, setContinueRecord] = useState(null);
-  useEffect(() => { Promise.all([fetch('/content/series.json').then((res) => res.json()), fetch('/content/releases.json').then((res) => res.json()), fetch('/content/pages.json').then((res) => res.json()), fetch('/content/extras.json').then((res) => res.json()).catch(() => ({ extras: [] })), fetch('/content/soundtracks.json').then((res) => res.json()).catch(() => ({ soundtracks: [] }))]).then(([seriesData, releasesData, pagesData, extrasData, soundtracksData]) => setData({ series: validateSeriesList(seriesData?.series), releases: validateReleaseList(releasesData?.releases), pages: validatePageList(pagesData?.pages), extras: validateExtraList(extrasData?.extras), soundtracks: validateReaderSoundtrackList(soundtracksData?.soundtracks) })); }, []);
+  useEffect(() => {
+    let isActive = true;
+    (async () => {
+      const [seriesData, releasesData, pagesData, extrasData, soundtracksData] = await Promise.all([
+        fetchJsonOrFallback('/content/series.json', { series: [] }),
+        fetchJsonOrFallback('/content/releases.json', { releases: [] }),
+        fetchJsonOrFallback('/content/pages.json', { pages: [] }),
+        fetchJsonOrFallback('/content/extras.json', { extras: [] }),
+        fetchJsonOrFallback('/content/soundtracks.json', { soundtracks: [] }),
+      ]);
+
+      if (!isActive) return;
+      setData({
+        series: validateSeriesList(seriesData?.series),
+        releases: validateReleaseList(releasesData?.releases),
+        pages: validatePageList(pagesData?.pages),
+        extras: validateExtraList(extrasData?.extras),
+        soundtracks: validateReaderSoundtrackList(soundtracksData?.soundtracks),
+      });
+    })();
+    return () => {
+      isActive = false;
+    };
+  }, []);
   useEffect(() => { setContinueRecord(getContinueReading()); }, []);
   const path = window.location.pathname;
-  const soundtracksBySeries = useMemo(() => (Array.isArray(data.soundtracks) ? data.soundtracks : []).reduce((map, item) => { const seriesSlug = typeof item?.seriesSlug === 'string' ? item.seriesSlug.trim() : ''; if (!seriesSlug) return map; const current = map.get(seriesSlug) || []; current.push(item); map.set(seriesSlug, current); return map; }, new Map()), [data.soundtracks]);
+  const soundtracksBySeries = useMemo(() => {
+    const safeSoundtracks = Array.isArray(data.soundtracks) ? data.soundtracks : [];
+    return safeSoundtracks.reduce((map, item) => {
+      const seriesSlug = typeof item?.seriesSlug === 'string' ? item.seriesSlug.trim() : '';
+      if (!seriesSlug) return map;
+      const current = map.get(seriesSlug) || [];
+      current.push(item);
+      map.set(seriesSlug, current);
+      return map;
+    }, new Map());
+  }, [data.soundtracks]);
   const releaseId = path.startsWith('/releases/') ? path.replace('/releases/', '') : null;
   const seriesSlug = path.startsWith('/series/') ? path.replace('/series/', '') : null;
   const readReleaseId = path.startsWith('/read/') ? path.replace('/read/', '') : null;

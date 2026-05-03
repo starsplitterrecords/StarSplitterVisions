@@ -117,7 +117,23 @@ export function validateExtraList(value) {
 }
 
 export function validateSoundtrackList(value) {
-  return validateSimpleList('Soundtrack', value, 'title');
+  return asArray(value).flatMap((item) => {
+    if (!item || typeof item !== 'object') {
+      warnOnce('[content] Soundtrack item is not an object:', item);
+      return [];
+    }
+
+    const titleCandidate = isNonEmptyString(item.title)
+      ? item.title.trim()
+      : (isNonEmptyString(item.trackTitle) ? item.trackTitle.trim() : '');
+
+    if (!titleCandidate) {
+      warnField('Soundtrack', 'title/trackTitle', item);
+      return [];
+    }
+
+    return [{ ...item, title: titleCandidate }];
+  });
 }
 
 
