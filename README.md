@@ -28,6 +28,12 @@ Static content is served from `public/content`:
 - `public/content/pages.json`
 - `public/content/extras.json`
 
+## Vercel Preview Deployment Policy
+
+Canonical Vercel project: `star-splitter-visions`.
+
+To avoid duplicate preview deployments, only this canonical project should stay connected to the GitHub repository. Any duplicate project linkage (for example `star-splitter-visions-mnp1`) should remain disconnected.
+
 ## Publishing Workflow
 
 The publishing workflow is intentionally Codex-assisted.
