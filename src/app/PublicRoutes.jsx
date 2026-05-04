@@ -4,6 +4,7 @@ import SeriesPage from '../pages/SeriesPage';
 import ReleasePage from '../pages/ReleasePage';
 import ReaderPage from '../pages/ReaderPage';
 import NotFoundRoute from './NotFoundRoute';
+import { ROUTE_TYPES } from './routes';
 import {
   getContinueReadingViewModel,
   getParentSeriesForRelease,
@@ -13,6 +14,7 @@ import {
   getSoundtracksBySeries,
 } from './selectors';
 
+// Add new public route rendering branches here, keyed by ROUTE_TYPES.
 export default function PublicRoutes({ route, data, continueRecord, onClearContinueReading }) {
   const soundtracksBySeries = useMemo(() => getSoundtracksBySeries(data.soundtracks), [data.soundtracks]);
 
@@ -23,7 +25,7 @@ export default function PublicRoutes({ route, data, continueRecord, onClearConti
     series: data.series,
   }), [continueRecord, data.pages, data.releases, data.series]);
 
-  if (route.type === 'seriesDetail') {
+  if (route.type === ROUTE_TYPES.SERIES_DETAIL) {
     const series = getSeriesBySlug(data.series, route.seriesSlug);
     if (series) {
       return (
@@ -38,7 +40,7 @@ export default function PublicRoutes({ route, data, continueRecord, onClearConti
     }
   }
 
-  if (route.type === 'releaseDetail') {
+  if (route.type === ROUTE_TYPES.RELEASE_DETAIL) {
     const release = getReleaseById(data.releases, route.releaseId);
     if (release) {
       const parentSeries = getParentSeriesForRelease(data.series, release) || { slug: '', title: 'Series' };
@@ -46,7 +48,7 @@ export default function PublicRoutes({ route, data, continueRecord, onClearConti
     }
   }
 
-  if (route.type === 'reader') {
+  if (route.type === ROUTE_TYPES.READER) {
     const release = getReleaseById(data.releases, route.releaseId);
     if (!release) return <NotFoundRoute message="Release not found." />;
 
