@@ -1,4 +1,5 @@
 import { getReleasedPagesForRelease, isVisibleRelease } from '../lib/releaseVisibility';
+import { sortReleasesByNewest } from '../lib/releaseVisibility';
 
 export function getSeriesBySlug(seriesList, slug) {
   return seriesList.find((item) => item.slug === slug);
@@ -50,6 +51,28 @@ export function getContinueReadingViewModel({ continueRecord, releases, pages, s
 
 export function getReaderPagesForRelease(pages, releaseId) {
   return getReleasedPagesForRelease(pages, releaseId);
+}
+
+export function getVisibleReleases(releases) {
+  return (Array.isArray(releases) ? releases : [])
+    .map((item, index) => ({ item, index }))
+    .filter(({ item }) => isVisibleRelease(item))
+    .sort((a, b) => sortReleasesByNewest(a.item, b.item, a.index, b.index))
+    .map(({ item }) => item);
+}
+
+export function getVisibleSeriesReleases(releases, seriesSlug) {
+  return getVisibleReleases(releases).filter((item) => item.seriesSlug === seriesSlug);
+}
+
+export function getLatestSeriesIssues(releases, seriesSlug, limit = 4) {
+  const safeLimit = Math.max(0, Number(limit) || 0);
+  return getVisibleSeriesReleases(releases, seriesSlug).slice(0, safeLimit);
+}
+
+export function getArchiveSeriesIssues(releases, seriesSlug, limit = 4) {
+  const safeLimit = Math.max(0, Number(limit) || 0);
+  return getVisibleSeriesReleases(releases, seriesSlug).slice(safeLimit);
 }
 
 function clampReaderIndex(index, totalPages) {
