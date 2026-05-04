@@ -6,8 +6,16 @@
       "logoText": "VIKINGS 2026!",
       "status": "in development",
       "format": "Workplace comedy series",
-      "genre": ["Comedy", "Workplace", "Culture Clash"],
-      "tone": ["bureaucratic satire", "found-family", "heartfelt absurdity"],
+      "genre": [
+        "Comedy",
+        "Workplace",
+        "Culture Clash"
+      ],
+      "tone": [
+        "bureaucratic satire",
+        "found-family",
+        "heartfelt absurdity"
+      ],
       "tagline": "9th-century Vikings meet New York paperwork.",
       "shortDescription": "A municipal integration department processes displaced Vikings from the 9th century into modern New York life.",
       "longDescription": "When a longship crew from the 9th century is temporally displaced into present-day New York, they are routed into a city integration office that runs on forms, hearings, and impossible waitlists. Every episode turns cultural translation, housing policy, identity paperwork, and lonely reinvention into workplace comedy where small acts of humanity beat rigid systems.",
@@ -18,9 +26,9 @@
       "accentColor": "#f59e0b",
       "secondaryColor": "#64748b",
       "backgroundTone": "bureaucratic",
-      "heroImage": "/images/vikings-2026/hero.jpg",
-      "coverImage": "/images/vikings-2026/cover.jpg",
-      "thumbnailImage": "/images/vikings-2026/thumb.jpg"
+      "heroImage": "/intake/vikings%20assets/ChatGPT%20Image%20May%204,%202026,%2009_03_54%20AM.png",
+      "coverImage": "/intake/vikings%20assets/ChatGPT%20Image%20May%204,%202026,%2009_04_05%20AM.png",
+      "thumbnailImage": "/intake/vikings%20assets/ChatGPT%20Image%20May%204,%202026,%2009_03_18%20AM.png"
     },
     {
       "slug": "stardust-station",
@@ -28,8 +36,16 @@
       "logoText": "STARDUST STATION",
       "status": "ongoing",
       "format": "Sci-fi workplace sitcom",
-      "genre": ["Science Fiction", "Comedy", "Ensemble"],
-      "tone": ["bright", "absurd", "sincere"],
+      "genre": [
+        "Science Fiction",
+        "Comedy",
+        "Ensemble"
+      ],
+      "tone": [
+        "bright",
+        "absurd",
+        "sincere"
+      ],
       "tagline": "Feelings break systems faster than meteor storms.",
       "shortDescription": "A space station crew keeps operations running while ordinary interpersonal friction escalates into cosmic-scale incidents.",
       "longDescription": "Stardust Station is a bustling orbital workplace where every emotional misunderstanding can trigger a literal systems cascade. Docking assignments, life-support routines, and transit schedules are cleanly designed; the humans and aliens running them are not. The result is a bright, weird, sincere ensemble comedy where technical order collides with social chaos.",
@@ -50,8 +66,16 @@
       "logoText": "AZURE REACH",
       "status": "ongoing",
       "format": "Marine park workplace comedy",
-      "genre": ["Comedy", "Workplace", "Contemporary"],
-      "tone": ["operational realism", "heartfelt", "friction-forward"],
+      "genre": [
+        "Comedy",
+        "Workplace",
+        "Contemporary"
+      ],
+      "tone": [
+        "operational realism",
+        "heartfelt",
+        "friction-forward"
+      ],
       "tagline": "Guest-facing wonder, backstage reality.",
       "shortDescription": "A modern marine park team protects animal welfare while juggling branding promises, operations pressure, and daily workplace chaos.",
       "longDescription": "Azure Reach follows caretakers, technicians, guest-services staff, and managers at a premium marine park where the public expects effortless magic. Behind the scenes, life-support systems, maintenance schedules, and staffing gaps create constant friction. Animals are treasured and never put at risk; the comedy comes from humans trying to keep standards high while systems and personalities collide.",
@@ -62,9 +86,9 @@
       "accentColor": "#2dd4bf",
       "secondaryColor": "#fb7185",
       "backgroundTone": "ocean",
-      "heroImage": "/images/azure-reach/hero.jpg",
-      "coverImage": "/images/azure-reach/cover.jpg",
-      "thumbnailImage": "/images/azure-reach/thumb.jpg"
+      "heroImage": "/intake/azure%20reach%20assets/ChatGPT%20Image%20May%204,%202026,%2009_05_20%20AM.png",
+      "coverImage": "/intake/azure%20reach%20assets/ChatGPT%20Image%20May%204,%202026,%2009_05_31%20AM.png",
+      "thumbnailImage": "/intake/azure%20reach%20assets/ChatGPT%20Image%20May%204,%202026,%2009_04_48%20AM.png"
     },
     {
       "slug": "sunforge-outlaw",
@@ -72,8 +96,16 @@
       "logoText": "SUNFORGE OUTLAW",
       "status": "ongoing",
       "format": "Cinematic frontier adventure",
-      "genre": ["Adventure", "Frontier", "Outlaw"],
-      "tone": ["gritty", "mythic", "tense"],
+      "genre": [
+        "Adventure",
+        "Frontier",
+        "Outlaw"
+      ],
+      "tone": [
+        "gritty",
+        "mythic",
+        "tense"
+      ],
       "tagline": "Debt, heat, and pursuit at the edge of civilization.",
       "shortDescription": "An outlaw fights to survive a brutal frontier where debt, heat, and relentless pursuit shape every decision.",
       "longDescription": "Sunforge Outlaw tracks desperate travelers, enforcers, and opportunists across a sun-burned frontier built on scarce water, volatile fuel, and violent leverage. Every route carries a cost, every safe harbor carries a hidden debt, and every choice narrows the path forward. The series pairs cinematic action with character-driven consequences in a world of dust, metal, and heat haze.",

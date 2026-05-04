@@ -62,11 +62,11 @@ function validateImagePaths(value, context) {
       errors.push(`${context}: image path must not start with /public/images/ (found: ${value})`);
     }
     if (value.startsWith('/')) {
-      if (!value.startsWith('/images/')) {
-        errors.push(`${context}: image path must start with /images/ when using root-relative paths (found: ${value})`);
+      if (!value.startsWith('/images/') && !value.startsWith('/intake/')) {
+        errors.push(`${context}: image path must start with /images/ or /intake/ when using root-relative paths (found: ${value})`);
       }
-    } else if (value.includes('/images/')) {
-      errors.push(`${context}: image path should be root-relative and start with /images/ (found: ${value})`);
+    } else if (value.includes('/images/') || value.includes('/intake/')) {
+      errors.push(`${context}: image path should be root-relative and start with /images/ or /intake/ (found: ${value})`);
     }
   } else if (Array.isArray(value)) {
     value.forEach((item, index) => validateImagePaths(item, `${context}[${index}]`));
