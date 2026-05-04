@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { getReleaseAssetPublicPath, getReleaseAssetRepoPath, getSeriesAssetPublicPath, getSeriesAssetRepoPath } from '../../lib/paths';
+import { getReleaseAssetPublicPath, getReleaseAssetRepoPath, getSeriesAssetPublicPath, getSeriesAssetRepoPath } from '../lib/paths';
 
 const ADMIN_SECTIONS = [
   {
