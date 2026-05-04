@@ -1,8 +1,16 @@
 import { parseDate } from '../lib/dateUtils';
-import { isVisibleRelease } from '../lib/releaseVisibility';
 import { sortPagesByPageNumber, sortReleasesByNewest, stripOriginalIndex, withOriginalIndex } from './contentOrdering';
 
 const LATEST_ISSUES_LIMIT = 4;
+
+function isVisibleRelease(release) {
+  if (release.status === 'draft') return false;
+  if (release.status === 'scheduled') {
+    const releaseDate = parseDate(release.releaseDate);
+    if (releaseDate && releaseDate > new Date()) return false;
+  }
+  return true;
+}
 
 export function getVisibleReleases(releases) {
   return stripOriginalIndex(
