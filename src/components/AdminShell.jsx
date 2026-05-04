@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { getReleaseAssetPublicPath, getReleaseAssetRepoPath, getSeriesAssetPublicPath, getSeriesAssetRepoPath } from '../lib/paths';
+import AdminSectionErrorBoundary from './admin/AdminSectionErrorBoundary';
 
 const ADMIN_SECTIONS = [
   {
@@ -316,7 +317,10 @@ function SeriesMetadataEditor() {
 
   useEffect(() => {
     fetch('/content/series.json')
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) throw new Error('Failed to load series.json');
+        return response.json();
+      })
       .then((payload) => {
         const items = Array.isArray(payload?.series) ? payload.series : [];
         setSeriesList(items);
@@ -654,6 +658,12 @@ function ImageFilingHelper() {
 
   const setField = (key, value) => setForm((current) => ({ ...current, [key]: value }));
 
+  useEffect(() => () => {
+    if (previewUrl && typeof URL !== 'undefined' && typeof URL.revokeObjectURL === 'function') {
+      URL.revokeObjectURL(previewUrl);
+    }
+  }, [previewUrl]);
+
   const copyText = async (key, value) => {
     if (!value || !navigator?.clipboard?.writeText) return;
     try {
@@ -687,8 +697,12 @@ function ImageFilingHelper() {
           const file = event.target.files?.[0] ?? null;
           setSelectedFile(file);
           setField('originalFilename', file?.name ?? form.originalFilename);
-          if (previewUrl) URL.revokeObjectURL(previewUrl);
-          setPreviewUrl(file ? URL.createObjectURL(file) : '');
+          if (previewUrl && typeof URL !== 'undefined' && typeof URL.revokeObjectURL === 'function') URL.revokeObjectURL(previewUrl);
+          if (file && typeof URL !== 'undefined' && typeof URL.createObjectURL === 'function') {
+            setPreviewUrl(URL.createObjectURL(file));
+          } else {
+            setPreviewUrl('');
+          }
         }} /></label>
       </div>
 
@@ -1286,15 +1300,37 @@ export default function AdminShell() {
         ))}
       </section>
 
-      <SoundtracksPackageGenerator />
+      <AdminSectionErrorBoundary sectionTitle="Series metadata editor">
+        <SeriesMetadataEditor />
+      </AdminSectionErrorBoundary>
 
-      <XtrasPackageGenerator />
+      <AdminSectionErrorBoundary sectionTitle="Series JSON generator">
+        <SeriesJsonGenerator />
+      </AdminSectionErrorBoundary>
 
-      <SeriesJsonGenerator />
-      <ReleaseJsonGenerator />
-      <PageJsonGenerator />
-      <CodexContentPackageGenerator />
-      <ImageFilingHelper />
+      <AdminSectionErrorBoundary sectionTitle="Release JSON generator">
+        <ReleaseJsonGenerator />
+      </AdminSectionErrorBoundary>
+
+      <AdminSectionErrorBoundary sectionTitle="Page JSON generator">
+        <PageJsonGenerator />
+      </AdminSectionErrorBoundary>
+
+      <AdminSectionErrorBoundary sectionTitle="Image filing helper">
+        <ImageFilingHelper />
+      </AdminSectionErrorBoundary>
+
+      <AdminSectionErrorBoundary sectionTitle="Extras package generator">
+        <XtrasPackageGenerator />
+      </AdminSectionErrorBoundary>
+
+      <AdminSectionErrorBoundary sectionTitle="Soundtracks package generator">
+        <SoundtracksPackageGenerator />
+      </AdminSectionErrorBoundary>
+
+      <AdminSectionErrorBoundary sectionTitle="Publishing package generator">
+        <CodexContentPackageGenerator />
+      </AdminSectionErrorBoundary>
 
       <p>
         <a href="/">Back to site</a>
