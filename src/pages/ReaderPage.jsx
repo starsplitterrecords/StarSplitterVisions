@@ -1,19 +1,22 @@
 import { useEffect, useMemo, useState } from 'react';
 import ReaderShell from '../components/ReaderShell';
 import MiniAudioPlayer from '../components/reader/MiniAudioPlayer';
-import { setContinueReading, getContinueReading } from '../lib/continueReading';
+import { setContinueReading } from '../lib/continueReading';
 import { findSoundtrackForRelease } from '../lib/soundtracks';
 
-export default function ReaderPage({ release, pages, series, soundtracks }) {
+export default function ReaderPage({ release, pages, series, soundtracks, initialPageIndex = 0 }) {
   const [index, setIndex] = useState(0);
   const [imageFailed, setImageFailed] = useState(false);
 
   useEffect(() => {
-    const saved = getContinueReading();
-    if (!saved || saved.releaseSlug !== release.id || pages.length === 0) return setIndex(0);
-    const boundedIndex = Math.max(0, Math.min(saved.pageIndex, pages.length - 1));
+    if (pages.length === 0) {
+      setIndex(0);
+      return;
+    }
+
+    const boundedIndex = Math.max(0, Math.min(Number(initialPageIndex) || 0, pages.length - 1));
     setIndex(pages[boundedIndex] ? boundedIndex : 0);
-  }, [release.id, pages]);
+  }, [initialPageIndex, pages]);
 
   const totalPages = pages.length;
   const page = pages[index];
