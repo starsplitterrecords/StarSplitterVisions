@@ -7,6 +7,7 @@ import NotFoundRoute from './NotFoundRoute';
 import { ROUTE_TYPES } from './routes';
 import {
   getContinueReadingViewModel,
+  getInitialReaderPageIndex,
   getParentSeriesForRelease,
   getReaderPagesForRelease,
   getReleaseById,
@@ -54,7 +55,14 @@ export default function PublicRoutes({ route, data, continueRecord, onClearConti
 
     const releasePages = getReaderPagesForRelease(data.pages, release.id);
     const parentSeries = getParentSeriesForRelease(data.series, release);
-    return <ReaderPage release={release} pages={releasePages} series={parentSeries} soundtracks={data.soundtracks} />;
+    const initialPageIndex = getInitialReaderPageIndex({
+      totalPages: releasePages.length,
+      continueRecord,
+      releaseId: release.id,
+      requestedPageNumber: route.requestedPageNumber,
+    });
+
+    return <ReaderPage release={release} pages={releasePages} series={parentSeries} soundtracks={data.soundtracks} initialPageIndex={initialPageIndex} />;
   }
 
   return (

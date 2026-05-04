@@ -51,3 +51,23 @@ export function getContinueReadingViewModel({ continueRecord, releases, pages, s
 export function getReaderPagesForRelease(pages, releaseId) {
   return getReleasedPagesForRelease(pages, releaseId);
 }
+
+function clampReaderIndex(index, totalPages) {
+  if (totalPages <= 0) return 0;
+  return Math.max(0, Math.min(index, totalPages - 1));
+}
+
+export function getInitialReaderPageIndex({ totalPages, continueRecord, releaseId, requestedPageNumber }) {
+  if (totalPages <= 0) return 0;
+
+  // Explicit URL page hints take precedence over continue-reading local storage.
+  if (Number.isInteger(requestedPageNumber) && requestedPageNumber > 0) {
+    return clampReaderIndex(requestedPageNumber - 1, totalPages);
+  }
+
+  if (continueRecord?.releaseSlug === releaseId && Number.isInteger(continueRecord.pageIndex)) {
+    return clampReaderIndex(continueRecord.pageIndex, totalPages);
+  }
+
+  return 0;
+}
