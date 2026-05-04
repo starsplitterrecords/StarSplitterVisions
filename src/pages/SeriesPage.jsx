@@ -3,8 +3,8 @@ import ContentRail from '../components/ContentRail';
 import MediaCard from '../components/MediaCard';
 import ReleaseCard from '../components/ReleaseCard';
 import SeriesHero from '../components/SeriesHero';
+import { getArchiveSeriesIssues, getLatestSeriesIssues } from '../app/selectors';
 import { validateExtraList, validateSoundtrackList } from '../lib/contentValidation';
-import { isVisibleRelease, sortReleasesByNewest } from '../lib/releaseVisibility';
 
 const LATEST_ISSUES_LIMIT = 4;
 const DEFAULT_SERIES_IDENTITY = { accent: '#7f8cff', secondary: '#3a4d80', background: '#0a0d17' };
@@ -14,9 +14,8 @@ const toneClass = (tone) => ['dark', 'deep', 'ocean', 'cosmic', 'bureaucratic', 
 
 export default function SeriesPage({ series, releases, extras, allSeries, soundtracksBySeries }) {
   const seriesBySlug = useMemo(() => new Map(allSeries.map((item) => [item.slug, item])), [allSeries]);
-  const visibleSeriesReleases = useMemo(() => releases.map((item, index) => ({ item, index })).filter(({ item }) => item.seriesSlug === series.slug && isVisibleRelease(item)).sort((a, b) => sortReleasesByNewest(a.item, b.item, a.index, b.index)).map(({ item }) => item), [releases, series.slug]);
-  const latestIssues = visibleSeriesReleases.slice(0, LATEST_ISSUES_LIMIT);
-  const archiveIssues = visibleSeriesReleases.slice(LATEST_ISSUES_LIMIT);
+  const latestIssues = useMemo(() => getLatestSeriesIssues(releases, series.slug, LATEST_ISSUES_LIMIT), [releases, series.slug]);
+  const archiveIssues = useMemo(() => getArchiveSeriesIssues(releases, series.slug, LATEST_ISSUES_LIMIT), [releases, series.slug]);
   const worldDetails = [series.worldTitle || series.worldName, series.worldPremise, series.longDescription, series.genre, series.tone, series.audiencePromise, series.coreConflict, series.seriesEngine].filter(Boolean);
   const relatedSeries = allSeries.filter((item) => item.slug !== series.slug && series.worldSlug && item.worldSlug === series.worldSlug);
   const extraItems = validateExtraList(extras.filter((item) => item.seriesSlug === series.slug));

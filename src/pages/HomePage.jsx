@@ -2,8 +2,9 @@ import { useMemo, useState } from 'react';
 import ContentRail from '../components/ContentRail';
 import MediaCard from '../components/MediaCard';
 import ReleaseCard from '../components/ReleaseCard';
+import { getVisibleReleases } from '../app/selectors';
 import { validateExtraList } from '../lib/contentValidation';
-import { isVisibleRelease, sortReleasesByNewest } from '../lib/releaseVisibility';
+import { isVisibleRelease } from '../lib/releaseVisibility';
 import { SEARCH_FILTERS, createSearchText } from '../lib/searchUtils';
 
 function ContinueReadingModule({ item, onClear }) {
@@ -38,6 +39,6 @@ function SearchModule({ series, releases, extras, soundtracksBySeries }) {
 
 export default function HomePage({ series, releases, extras, soundtracksBySeries, continueReading, onClearContinueReading }) {
   const seriesBySlug = useMemo(() => new Map(series.map((item) => [item.slug, item])), [series]);
-  const visibleReleases = useMemo(() => releases.map((item, index) => ({ item, index })).filter(({ item }) => isVisibleRelease(item)).sort((a, b) => sortReleasesByNewest(a.item, b.item, a.index, b.index)).map(({ item }) => item), [releases]);
+  const visibleReleases = useMemo(() => getVisibleReleases(releases), [releases]);
   return <main className="page page-home"><header className="home-header"><h1>Star Splitter Visions</h1><p>Browse new releases and cinematic worlds across the Star Splitter slate.</p></header>{continueReading ? <ContinueReadingModule item={continueReading} onClear={onClearContinueReading} /> : null}<SearchModule series={series} releases={releases} extras={extras} soundtracksBySeries={soundtracksBySeries} /><ContentRail title="Latest Releases" emptyMessage="No releases available yet."><ul className="rail-row">{visibleReleases.map((release) => <ReleaseCard key={release.id} release={release} seriesTitle={seriesBySlug.get(release.seriesSlug)?.title || release.seriesSlug} />)}</ul></ContentRail><ContentRail title="Series" emptyMessage="No series available yet."><ul className="rail-row">{series.map((item) => <MediaCard key={item.slug} className="series-card" href={item.slug ? `/series/${item.slug}` : undefined} image={item.thumbnailImage || item.heroImage || item.image} alt={`${item.title} series art`} title={item.title} description={item.tagline || item.shortDescription || item.longDescription} fallbackText={item.logoText || item.title} />)}</ul></ContentRail></main>;
 }
