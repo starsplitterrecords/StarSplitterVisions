@@ -8,6 +8,11 @@ import {
 } from '../lib/contentValidation';
 
 export const EMPTY_CONTENT = { series: [], releases: [], pages: [], extras: [], soundtracks: [] };
+const CONTENT_BASE_PATH = `${import.meta.env.BASE_URL || '/'}content/`;
+
+function toContentUrl(filename) {
+  return new URL(filename, window.location.origin + CONTENT_BASE_PATH).pathname;
+}
 
 async function fetchJson(url, { optional = false, fallback } = {}) {
   try {
@@ -36,11 +41,11 @@ export default function useContentData() {
 
       try {
         const [seriesData, releasesData, pagesData, extrasData, soundtracksData] = await Promise.all([
-          fetchJson('/content/series.json'),
-          fetchJson('/content/releases.json'),
-          fetchJson('/content/pages.json'),
-          fetchJson('/content/extras.json', { optional: true, fallback: { extras: [] } }),
-          fetchJson('/content/soundtracks.json', { optional: true, fallback: { soundtracks: [] } })
+          fetchJson(toContentUrl('series.json')),
+          fetchJson(toContentUrl('releases.json')),
+          fetchJson(toContentUrl('pages.json')),
+          fetchJson(toContentUrl('extras.json'), { optional: true, fallback: { extras: [] } }),
+          fetchJson(toContentUrl('soundtracks.json'), { optional: true, fallback: { soundtracks: [] } })
         ]);
 
         const nextData = {
