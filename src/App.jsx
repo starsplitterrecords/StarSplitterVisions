@@ -7,7 +7,10 @@ function App() {
   return (
     <div className="site-shell">
       <header className="top-nav hud-frame">
-        <div className="brand">STAR SPLITTER VISIONS</div>
+        <div className="brand">
+          <img className="brand-logo" src="/images/brand/logo.png" alt="Star Splitter Visions" />
+          <img className="brand-icon" src="/images/brand/icon.png" alt="" aria-hidden="true" />
+        </div>
         <nav>{navLinks.map((link, i) => <a key={link} className={i === 0 ? 'active' : ''} href="#">{link}</a>)}</nav>
         <div className="icon-row"><button>⌕</button><button>▶</button><button>☰</button></div>
       </header>
@@ -39,7 +42,13 @@ function App() {
           <div className="rail large-rail">
             {featuredSeries.map((series) => (
               <article className="series-card" key={series.title}>
-                <img src={series.cover} alt={series.title} />
+                {series.cover ? (
+                  <img src={series.cover} alt={series.title} />
+                ) : (
+                  <div className="series-cover-placeholder" aria-hidden="true">
+                    <span>ART INBOUND</span>
+                  </div>
+                )}
                 <div className="card-copy">
                   <p>{series.issue}</p>
                   <h3>{series.title}</h3>
@@ -61,7 +70,7 @@ function App() {
           <article className="panel hud-frame">
             <h3>Latest Release</h3>
             <p>Vikings 2026 — Issue 01</p>
-            <img src="/images/vikings-2026/vikings-ep1/cover.jpg" alt="Vikings 2026 issue 1" />
+            <img src="/images/series/vikings-2026/card.png" alt="Vikings 2026 issue 1" />
           </article>
           <article className="panel hud-frame soundtrack">
             <h3>Soundtrack Spotlight</h3>
@@ -72,7 +81,7 @@ function App() {
       </main>
 
       <footer className="footer hud-frame">
-        <strong>STAR SPLITTER VISIONS</strong>
+        <strong><img className="footer-logo" src="/images/brand/logo.png" alt="Star Splitter Visions" /></strong>
         <div><a href="#">Subscribe</a><a href="#">Join Discord</a><a href="#">Follow Signal</a></div>
         <small>Story worlds. Daily pages. Boundless visions.</small>
       </footer>
