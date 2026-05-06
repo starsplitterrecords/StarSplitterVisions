@@ -1,8 +1,44 @@
+import { useMemo, useState } from 'react'
 import { featuredSeries, moreWorlds } from './data/homepageSeries'
 
 const navLinks = ['Home', 'Series', 'Issues', 'Soundtracks', 'Extras', 'About']
 
 function App() {
+  const [isReaderOpen, setIsReaderOpen] = useState(false)
+  const [currentPage, setCurrentPage] = useState(0)
+
+  const vikingsPages = useMemo(
+    () =>
+      Array.from({ length: 15 }, (_, index) =>
+        `/images/pages/vikings-2026/issue-01/page-${String(index + 1).padStart(3, '0')}.jpg`
+      ),
+    []
+  )
+
+  const openReader = () => {
+    setCurrentPage(0)
+    setIsReaderOpen(true)
+  }
+
+  if (isReaderOpen) {
+    return (
+      <div className="site-shell">
+        <main className="reader hud-frame">
+          <header className="reader-header">
+            <h2>Vikings 2026 — Issue 01</h2>
+            <p>Page {currentPage + 1} of {vikingsPages.length}</p>
+          </header>
+          <img src={vikingsPages[currentPage]} alt={`Vikings 2026 issue 1 page ${currentPage + 1}`} />
+          <div className="reader-controls">
+            <button onClick={() => setCurrentPage((page) => Math.max(page - 1, 0))} disabled={currentPage === 0}>Previous</button>
+            <button onClick={() => setCurrentPage((page) => Math.min(page + 1, vikingsPages.length - 1))} disabled={currentPage === vikingsPages.length - 1}>Next</button>
+            <button onClick={() => setIsReaderOpen(false)}>Back to Home</button>
+          </div>
+        </main>
+      </div>
+    )
+  }
+
   return (
     <div className="site-shell">
       <header className="top-nav hud-frame">
@@ -41,18 +77,19 @@ function App() {
           <div className="rail large-rail">
             {featuredSeries.map((series) => (
               <article className="series-card" key={series.title}>
-                {series.cover ? (
-                  <img src={series.cover} alt={series.title} />
-                ) : (
-                  <div className="series-cover-placeholder" aria-hidden="true">
-                    <span>ART INBOUND</span>
-                  </div>
-                )}
+                <img src={series.cover} alt={series.title} />
                 <div className="card-copy">
                   <p>{series.issue}</p>
                   <h3>{series.title}</h3>
                   <span>{series.hook}</span>
-                  <div><a href="#">Read Issue</a><a href="#">Play Soundtrack</a></div>
+                  <div>
+                    {series.title === 'Vikings 2026' ? (
+                      <button className="inline-link" onClick={openReader}>Read Issue</button>
+                    ) : (
+                      <a href="#">Read Issue</a>
+                    )}
+                    <a href="#">Play Soundtrack</a>
+                  </div>
                 </div>
               </article>
             ))}
@@ -60,7 +97,12 @@ function App() {
 
           <h2>More Worlds</h2>
           <div className="rail small-rail">
-            {moreWorlds.map((world) => <article key={world} className="mini-card">{world}</article>)}
+            {moreWorlds.map((world) => (
+              <article key={world.title} className="mini-card">
+                <img src={world.cover} alt={world.title} />
+                <p>{world.title}</p>
+              </article>
+            ))}
             <article className="mini-card view-all">View All Series →</article>
           </div>
         </section>
