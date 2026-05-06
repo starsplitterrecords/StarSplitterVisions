@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { featuredSeries, moreWorlds } from './data/homepageSeries'
+import './styles.css'
 
 const navLinks = ['Home', 'Series', 'Issues', 'Soundtracks', 'Extras', 'About']
 
