@@ -32,10 +32,34 @@ export const featuredSeries = [
 ]
 
 export const moreWorlds = [
-  'The Sequence',
-  'Hollow Creek',
-  'The Choir Array',
-  'Alter Sequence',
-  'Low Tide Signal',
-  'Supersonic Being'
+  {
+    title: 'The Sequence',
+    cover: null
+  },
+  {
+    title: 'Hollow Creek',
+    cover: null
+  },
+  {
+    title: 'The Choir Array',
+    cover: null
+  },
+  {
+    title: 'Alter Sequence',
+    cover: null
+  },
+  {
+    title: 'Low Tide Signal',
+    cover: null
+  },
+  {
+    title: 'Supersonic Being',
+    cover: null
+  }
+]
+
+export const vikingsIssuePages = [
+  '/images/vikings-2026/vikings-ep1/page-001.jpg',
+  '/images/vikings-2026/vikings-ep1/page-002.jpg',
+  '/images/vikings-2026/vikings-ep1/page-003.jpg'
 ]

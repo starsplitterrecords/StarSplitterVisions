@@ -1,8 +1,64 @@
-import { featuredSeries, moreWorlds } from './data/homepageSeries'
+import { useMemo, useState } from 'react'
+import { featuredSeries, moreWorlds, vikingsIssuePages } from './data/homepageSeries'
 
 const navLinks = ['Home', 'Series', 'Issues', 'Soundtracks', 'Extras', 'About']
 
 function App() {
+  const [view, setView] = useState('home')
+  const [pageIndex, setPageIndex] = useState(0)
+
+  const hasPages = vikingsIssuePages.length > 0
+  const activePage = hasPages ? vikingsIssuePages[pageIndex] : null
+
+  const featuredSeriesWithActions = useMemo(
+    () =>
+      featuredSeries.map((series) => ({
+        ...series,
+        onReadIssue: series.title === 'Vikings 2026' ? () => setView('reader') : null
+      })),
+    []
+  )
+
+  if (view === 'reader') {
+    return (
+      <div className="site-shell">
+        <header className="top-nav hud-frame">
+          <div className="brand">
+            <img className="brand-logo" src="/images/brand/logo.png" alt="Star Splitter Visions" />
+            <img className="brand-icon" src="/images/brand/icon.png" alt="" aria-hidden="true" />
+          </div>
+          <button className="reader-back" onClick={() => setView('home')}>Back to Home</button>
+        </header>
+
+        <main className="reader-preview hud-frame">
+          <p className="eyebrow">VIKINGS 2026 // ISSUE 01</p>
+          <h1>Reader Preview</h1>
+          {activePage ? (
+            <img src={activePage} alt={`Vikings 2026 page ${pageIndex + 1}`} className="reader-page" />
+          ) : (
+            <div className="series-cover-placeholder reader-empty" aria-hidden="true">
+              <span>PAGES INBOUND</span>
+            </div>
+          )}
+          <div className="reader-controls">
+            <button onClick={() => setPageIndex((index) => Math.max(index - 1, 0))} disabled={!hasPages || pageIndex === 0}>
+              Previous
+            </button>
+            <p>
+              Page {hasPages ? pageIndex + 1 : 0} / {vikingsIssuePages.length}
+            </p>
+            <button
+              onClick={() => setPageIndex((index) => Math.min(index + 1, vikingsIssuePages.length - 1))}
+              disabled={!hasPages || pageIndex === vikingsIssuePages.length - 1}
+            >
+              Next
+            </button>
+          </div>
+        </main>
+      </div>
+    )
+  }
+
   return (
     <div className="site-shell">
       <header className="top-nav hud-frame">
@@ -39,7 +95,7 @@ function App() {
         <section>
           <h2>Featured Series</h2>
           <div className="rail large-rail">
-            {featuredSeries.map((series) => (
+            {featuredSeriesWithActions.map((series) => (
               <article className="series-card" key={series.title}>
                 {series.cover ? (
                   <img src={series.cover} alt={series.title} />
@@ -52,7 +108,14 @@ function App() {
                   <p>{series.issue}</p>
                   <h3>{series.title}</h3>
                   <span>{series.hook}</span>
-                  <div><a href="#">Read Issue</a><a href="#">Play Soundtrack</a></div>
+                  <div>
+                    {series.onReadIssue ? (
+                      <button className="link-button" onClick={series.onReadIssue}>Read Issue</button>
+                    ) : (
+                      <a href="#">Read Issue</a>
+                    )}
+                    <a href="#">Play Soundtrack</a>
+                  </div>
                 </div>
               </article>
             ))}
@@ -60,7 +123,12 @@ function App() {
 
           <h2>More Worlds</h2>
           <div className="rail small-rail">
-            {moreWorlds.map((world) => <article key={world} className="mini-card">{world}</article>)}
+            {moreWorlds.map((world) => (
+              <article key={world.title} className="mini-card">
+                {world.cover ? <img src={world.cover} alt={world.title} /> : <div className="mini-placeholder" aria-hidden="true" />}
+                <p>{world.title}</p>
+              </article>
+            ))}
             <article className="mini-card view-all">View All Series →</article>
           </div>
         </section>
