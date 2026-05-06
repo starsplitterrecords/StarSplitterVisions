@@ -4,6 +4,20 @@ import './styles.css'
 
 const navLinks = ['Home', 'Series', 'Issues', 'Soundtracks', 'Extras', 'About']
 
+function ImageWithFallback({ src, alt, className = '', fallbackText = 'ART INBOUND' }) {
+  const [failed, setFailed] = useState(false)
+
+  if (!src || failed) {
+    return (
+      <div className={`image-fallback ${className}`.trim()} role="img" aria-label={alt || fallbackText}>
+        <span>{fallbackText}</span>
+      </div>
+    )
+  }
+
+  return <img className={className} src={src} alt={alt} onError={() => setFailed(true)} />
+}
+
 function App() {
   const [isReaderOpen, setIsReaderOpen] = useState(false)
   const [currentPage, setCurrentPage] = useState(0)
@@ -29,7 +43,7 @@ function App() {
             <h2>Vikings 2026 — Issue 01</h2>
             <p>Page {currentPage + 1} of {vikingsPages.length}</p>
           </header>
-          <img src={vikingsPages[currentPage]} alt={`Vikings 2026 issue 1 page ${currentPage + 1}`} />
+          <ImageWithFallback src={vikingsPages[currentPage]} alt={`Vikings 2026 issue 1 page ${currentPage + 1}`} fallbackText={`PAGE ${String(currentPage + 1).padStart(3, '0')} INBOUND`} />
           <div className="reader-controls">
             <button onClick={() => setCurrentPage((page) => Math.max(page - 1, 0))} disabled={currentPage === 0}>Previous</button>
             <button onClick={() => setCurrentPage((page) => Math.min(page + 1, vikingsPages.length - 1))} disabled={currentPage === vikingsPages.length - 1}>Next</button>
@@ -44,8 +58,8 @@ function App() {
     <div className="site-shell">
       <header className="top-nav hud-frame">
         <div className="brand">
-          <img className="brand-logo" src="/images/brand/logo.png" alt="Star Splitter Visions" />
-          <img className="brand-icon" src="/images/brand/icon.png" alt="" aria-hidden="true" />
+          <ImageWithFallback className="brand-logo" src="/images/brand/logo.png" alt="Star Splitter Visions" fallbackText="STAR SPLITTER VISIONS" />
+          <ImageWithFallback className="brand-icon" src="/images/brand/icon.png" alt="Star Splitter Visions mark" fallbackText="✦" />
         </div>
         <nav>{navLinks.map((link, i) => <a key={link} className={i === 0 ? 'active' : ''} href="#">{link}</a>)}</nav>
         <div className="icon-row"><button>⌕</button><button>▶</button><button>☰</button></div>
@@ -78,7 +92,7 @@ function App() {
           <div className="rail large-rail">
             {featuredSeries.map((series) => (
               <article className="series-card" key={series.title}>
-                <img src={series.cover} alt={series.title} />
+                <ImageWithFallback src={series.cover} alt={series.title} fallbackText="ART INBOUND" />
                 <div className="card-copy">
                   <p>{series.issue}</p>
                   <h3>{series.title}</h3>
@@ -100,7 +114,7 @@ function App() {
           <div className="rail small-rail">
             {moreWorlds.map((world) => (
               <article key={world.title} className="mini-card">
-                <img src={world.cover} alt={world.title} />
+                <ImageWithFallback src={world.cover} alt={world.title} fallbackText="ART INBOUND" />
                 <p>{world.title}</p>
               </article>
             ))}
@@ -112,7 +126,7 @@ function App() {
           <article className="panel hud-frame">
             <h3>Latest Release</h3>
             <p>Vikings 2026 — Issue 01</p>
-            <img src="/images/series/vikings-2026/card.png" alt="Vikings 2026 issue 1" />
+            <ImageWithFallback src="/images/series/vikings-2026/card.png" alt="Vikings 2026 issue 1" fallbackText="VIKINGS 2026" />
           </article>
           <article className="panel hud-frame soundtrack">
             <h3>Soundtrack Spotlight</h3>
@@ -123,7 +137,7 @@ function App() {
       </main>
 
       <footer className="footer hud-frame">
-        <strong><img className="footer-logo" src="/images/brand/logo.png" alt="Star Splitter Visions" /></strong>
+        <strong><ImageWithFallback className="footer-logo" src="/images/brand/logo.png" alt="Star Splitter Visions" fallbackText="STAR SPLITTER VISIONS" /></strong>
         <div><a href="#">Subscribe</a><a href="#">Join Discord</a><a href="#">Follow Signal</a></div>
         <small>Story worlds. Daily pages. Boundless visions.</small>
       </footer>
