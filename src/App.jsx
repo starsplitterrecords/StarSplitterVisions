@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import Reader from './components/Reader'
+import SeriesIndex from './components/SeriesIndex'
 import SeriesPage from './components/SeriesPage'
 import ImageWithFallback from './components/shared/ImageWithFallback'
 import { featuredSeries, moreWorlds } from './data/homepageSeries'
@@ -36,6 +37,11 @@ function App() {
     setRoute(`series:${slug}`)
   }
 
+  const openSeriesIndex = () => {
+    setIsReaderOpen(false)
+    setRoute('series-index')
+  }
+
   const goHome = () => {
     setIsReaderOpen(false)
     setRoute('home')
@@ -50,7 +56,7 @@ function App() {
     }
 
     if (link === 'Series') {
-      openSeries(defaultSeriesSlug)
+      openSeriesIndex()
     }
   }
 
@@ -60,6 +66,23 @@ function App() {
       openSeries(slug)
     }
   }
+
+  const renderHeader = (activeNav) => (
+    <header className="top-nav hud-frame">
+      <button className="brand brand-button" onClick={goHome} type="button">
+        <ImageWithFallback className="brand-logo" src="/images/brand/logo.png" alt="Star Splitter Visions" fallbackText="STAR SPLITTER VISIONS" />
+        <ImageWithFallback className="brand-icon" src="/images/brand/icon.png" alt="Star Splitter Visions mark" fallbackText="✦" />
+      </button>
+
+      <nav>
+        {navLinks.map((link) => (
+          <a key={link} className={link === activeNav ? 'active' : ''} href="#" onClick={(event) => handleNavClick(event, link)}>
+            {link}
+          </a>
+        ))}
+      </nav>
+    </header>
+  )
 
   if (isReaderOpen) {
     return (
@@ -75,23 +98,19 @@ function App() {
     )
   }
 
+  if (route === 'series-index') {
+    return (
+      <div className="site-shell">
+        {renderHeader('Series')}
+        <SeriesIndex onOpenSeries={openSeries} />
+      </div>
+    )
+  }
+
   if (route === 'series:vikings-2026') {
     return (
       <div className="site-shell">
-        <header className="top-nav hud-frame">
-          <button className="brand brand-button" onClick={goHome} type="button">
-            <ImageWithFallback className="brand-logo" src="/images/brand/logo.png" alt="Star Splitter Visions" fallbackText="STAR SPLITTER VISIONS" />
-            <ImageWithFallback className="brand-icon" src="/images/brand/icon.png" alt="Star Splitter Visions mark" fallbackText="✦" />
-          </button>
-
-          <nav>
-            {navLinks.map((link) => (
-              <a key={link} className={link === 'Series' ? 'active' : ''} href="#" onClick={(event) => handleNavClick(event, link)}>
-                {link}
-              </a>
-            ))}
-          </nav>
-        </header>
+        {renderHeader('Series')}
 
         <SeriesPage slug="vikings-2026" onReadIssue={(pageNumber) => openReader(pageNumber, 'vikings-2026')} />
       </div>
@@ -100,26 +119,7 @@ function App() {
 
   return (
     <div className="site-shell">
-      <header className="top-nav hud-frame">
-        <button className="brand brand-button" onClick={goHome} type="button">
-          <ImageWithFallback className="brand-logo" src="/images/brand/logo.png" alt="Star Splitter Visions" fallbackText="STAR SPLITTER VISIONS" />
-          <ImageWithFallback className="brand-icon" src="/images/brand/icon.png" alt="Star Splitter Visions mark" fallbackText="✦" />
-        </button>
-
-        <nav>
-          {navLinks.map((link) => (
-            <a key={link} className={link === 'Home' ? 'active' : ''} href="#" onClick={(event) => handleNavClick(event, link)}>
-              {link}
-            </a>
-          ))}
-        </nav>
-
-        <div className="icon-row">
-          <button>⌕</button>
-          <button>▶</button>
-          <button>☰</button>
-        </div>
-      </header>
+      {renderHeader('Home')}
 
       <section className="hero hud-frame">
         <div className="hero-main">
