@@ -348,8 +348,8 @@
 
 @media (max-width: 900px) {
   .small-rail .mini-card {
-    flex-basis: 204px;
-    min-width: 204px;
+    flex-basis: 148px;
+    min-width: 148px;
   }
 
   .series-world-header {
@@ -410,8 +410,8 @@
 
 @media (max-width: 420px) {
   .small-rail .mini-card {
-    flex-basis: 170px;
-    min-width: 170px;
+    flex-basis: 128px;
+    min-width: 128px;
   }
 
   .series-world-header h1 {
