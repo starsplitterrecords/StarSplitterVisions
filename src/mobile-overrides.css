@@ -74,18 +74,14 @@
 
 .series-current-page {
   display: grid;
-  grid-template-columns: minmax(260px, .72fr) minmax(0, 1.28fr);
   gap: 1rem;
   padding: 1rem;
-  align-items: stretch;
 }
 
 .series-current-copy {
   display: flex;
   flex-direction: column;
   gap: .85rem;
-  justify-content: center;
-  padding: .5rem;
 }
 
 .series-current-copy h2,
@@ -99,31 +95,50 @@
   background: #03060c;
   border: 1px solid var(--line-soft);
   display: grid;
-  min-height: 480px;
+  overflow: hidden;
   place-items: center;
 }
 
 .series-reader-preview img {
-  max-height: 72vh;
+  display: block;
   object-fit: contain;
   width: 100%;
 }
 
-.series-page-controls,
-.series-page-actions {
+.series-temporal-nav {
+  display: grid;
+  gap: .85rem;
+}
+
+.series-page-controls {
   display: flex;
   flex-wrap: wrap;
+  gap: .5rem;
+}
+
+.series-page-controls button {
+  background: rgba(5,9,16,.7);
+  border: 1px solid var(--line);
+  color: var(--text);
+  cursor: pointer;
+  flex: 1;
+  min-width: 74px;
+  padding: .6rem .4rem;
+}
+
+.series-page-actions {
+  display: flex;
   gap: .6rem;
 }
 
-.series-page-controls button,
 .series-page-actions button,
 .series-release-actions button {
   background: rgba(5,9,16,.7);
   border: 1px solid var(--line);
   color: var(--text);
   cursor: pointer;
-  padding: .65rem .85rem;
+  flex: 1;
+  padding: .8rem .9rem;
 }
 
 .series-page-actions .primary-action,
@@ -184,17 +199,43 @@
   place-items: center;
 }
 
+.series-release-copy {
+  display: grid;
+  gap: .35rem;
+}
+
 .series-release-copy p {
   color: var(--accent);
   font-size: .72rem;
   letter-spacing: .1em;
-  margin: 0 0 .25rem;
+  margin: 0;
   text-transform: uppercase;
 }
 
 .series-release-copy h3 {
   font-size: 1.25rem;
   margin: 0;
+}
+
+.series-release-copy span {
+  color: #cfdbef;
+  line-height: 1.45;
+}
+
+.series-release-meta {
+  display: grid;
+  gap: .2rem;
+  justify-items: center;
+}
+
+.series-release-meta strong {
+  font-size: 1.8rem;
+}
+
+.series-release-meta small {
+  color: #9eabc0;
+  letter-spacing: .08em;
+  text-transform: uppercase;
 }
 
 .series-release-actions button:disabled {
@@ -231,25 +272,13 @@
     min-width: 204px;
   }
 
-  .series-world-header,
-  .series-current-page {
-    grid-template-columns: 1fr;
-  }
-
   .series-world-header {
+    grid-template-columns: 1fr;
     padding: 1rem;
   }
 
   .series-world-meta {
     min-width: 0;
-  }
-
-  .series-reader-preview {
-    min-height: 0;
-  }
-
-  .series-reader-preview img {
-    max-height: none;
   }
 
   .series-section-header {
@@ -264,6 +293,12 @@
   .series-release-cover img,
   .series-release-placeholder {
     width: 66px;
+  }
+
+  .series-release-meta {
+    grid-column: 1 / -1;
+    grid-template-columns: auto auto;
+    justify-content: start;
   }
 
   .series-release-actions {
@@ -289,7 +324,17 @@
     font-size: 3rem;
   }
 
-  .series-page-controls,
+  .series-page-controls {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .series-page-controls button {
+    font-size: .78rem;
+    min-width: 0;
+    padding: .7rem .15rem;
+  }
+
   .series-page-actions {
     display: grid;
     grid-template-columns: 1fr;
