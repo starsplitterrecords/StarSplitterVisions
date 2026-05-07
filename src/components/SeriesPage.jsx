@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { seriesPages } from '../data/seriesPages'
+import { getLatestReleasedPage, getReleasedPages } from '../utils/dailyPages'
 
 export default function SeriesPage({ slug, onReadIssue }) {
   const series = seriesPages[slug]
@@ -13,10 +14,16 @@ export default function SeriesPage({ slug, onReadIssue }) {
       return []
     }
 
-    return series.dailyPages.filter((page) => page.releaseDate <= todayString)
+    return getReleasedPages(series.dailyPages, todayString)
   }, [series, todayString])
 
-  const latestPage = availablePages[availablePages.length - 1]
+  const latestPage = useMemo(() => {
+    if (!series) {
+      return null
+    }
+
+    return getLatestReleasedPage(series.dailyPages, todayString)
+  }, [series, todayString])
 
   useEffect(() => {
     if (latestPage) {
@@ -46,6 +53,7 @@ export default function SeriesPage({ slug, onReadIssue }) {
   const goPrevious = () => updatePreviewPage(currentPreviewPage <= 1 ? availablePages.length : currentPreviewPage - 1)
   const goNext = () => updatePreviewPage(currentPreviewPage >= availablePages.length ? 1 : currentPreviewPage + 1)
   const goLatest = () => latestPage && updatePreviewPage(latestPage.pageNumber)
+
   const goRandom = () => {
     const randomPage = availablePages[Math.floor(Math.random() * availablePages.length)]
     if (randomPage) updatePreviewPage(randomPage.pageNumber)
@@ -143,6 +151,31 @@ export default function SeriesPage({ slug, onReadIssue }) {
                   {isActiveRelease ? <button onClick={() => onReadIssue?.(1)}>Read Issue</button> : <button disabled>Coming Soon</button>}
                 </div>
               </article>
+            )
+          })}
+        </div>
+      </section>
+
+      <section className="series-release-section hud-frame">
+        <div className="series-section-header">
+          <h2>Daily Archive</h2>
+          <span>Chronological release timeline</span>
+        </div>
+
+        <div className="series-archive-grid">
+          {series.dailyPages.map((page) => {
+            const isReleased = page.releaseDate <= todayString
+
+            return (
+              <button
+                key={page.pageNumber}
+                className={`series-archive-item${isReleased ? ' released' : ' unreleased'}${currentPreviewPage === page.pageNumber ? ' active' : ''}`}
+                disabled={!isReleased}
+                onClick={() => updatePreviewPage(page.pageNumber)}
+              >
+                <strong>{String(page.pageNumber).padStart(3, '0')}</strong>
+                <span>{page.releaseDate}</span>
+              </button>
             )
           })}
         </div>
