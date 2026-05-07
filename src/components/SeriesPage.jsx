@@ -4,6 +4,7 @@ import { seriesPages } from '../data/seriesPages'
 export default function SeriesPage({ slug, onReadIssue }) {
   const series = seriesPages[slug]
   const [currentPreviewPage, setCurrentPreviewPage] = useState(1)
+  const [previewFailed, setPreviewFailed] = useState(false)
 
   const previewPages = useMemo(() => {
     if (!series) {
@@ -26,28 +27,21 @@ export default function SeriesPage({ slug, onReadIssue }) {
     )
   }
 
-  const goPrevious = () => {
-    setCurrentPreviewPage((page) => {
-      if (page <= 1) {
-        return previewPages.length
-      }
+  const updatePreviewPage = (nextPage) => {
+    setPreviewFailed(false)
+    setCurrentPreviewPage(nextPage)
+  }
 
-      return page - 1
-    })
+  const goPrevious = () => {
+    updatePreviewPage(currentPreviewPage <= 1 ? previewPages.length : currentPreviewPage - 1)
   }
 
   const goNext = () => {
-    setCurrentPreviewPage((page) => {
-      if (page >= previewPages.length) {
-        return 1
-      }
-
-      return page + 1
-    })
+    updatePreviewPage(currentPreviewPage >= previewPages.length ? 1 : currentPreviewPage + 1)
   }
 
   const goRandom = () => {
-    setCurrentPreviewPage(Math.floor(Math.random() * previewPages.length) + 1)
+    updatePreviewPage(Math.floor(Math.random() * previewPages.length) + 1)
   }
 
   return (
@@ -78,11 +72,11 @@ export default function SeriesPage({ slug, onReadIssue }) {
           </div>
 
           <div className="series-page-actions">
-            <button className="primary-action" onClick={() => onReadIssue?.()}>
+            <button className="primary-action" onClick={() => onReadIssue?.(1)}>
               Start Reading
             </button>
 
-            <button onClick={() => onReadIssue?.()}>
+            <button onClick={() => onReadIssue?.(currentPreviewPage)}>
               Open Reader
             </button>
           </div>
@@ -93,10 +87,17 @@ export default function SeriesPage({ slug, onReadIssue }) {
         </div>
 
         <div className="series-reader-preview">
-          <img
-            src={previewPages[currentPreviewPage - 1]}
-            alt={`${series.title} preview page ${currentPreviewPage}`}
-          />
+          {previewFailed ? (
+            <div className="image-fallback series-preview-fallback">
+              <span>PREVIEW PAGE UNAVAILABLE</span>
+            </div>
+          ) : (
+            <img
+              src={previewPages[currentPreviewPage - 1]}
+              alt={`${series.title} preview page ${currentPreviewPage}`}
+              onError={() => setPreviewFailed(true)}
+            />
+          )}
         </div>
       </section>
 
@@ -120,7 +121,7 @@ export default function SeriesPage({ slug, onReadIssue }) {
 
               <div className="series-release-actions">
                 {release.cover ? (
-                  <button onClick={() => onReadIssue?.()}>Read Issue</button>
+                  <button onClick={() => onReadIssue?.(1)}>Read Issue</button>
                 ) : (
                   <button disabled>Coming Soon</button>
                 )}
