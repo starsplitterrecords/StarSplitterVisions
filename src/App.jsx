@@ -1,40 +1,32 @@
 import { useMemo, useState } from 'react'
-import { featuredSeries, moreWorlds } from './data/homepageSeries'
+import Reader from './components/Reader'
 import SeriesPage from './components/SeriesPage'
+import ImageWithFallback from './components/shared/ImageWithFallback'
+import { featuredSeries, moreWorlds } from './data/homepageSeries'
+import { seriesPages } from './data/seriesPages'
 import './styles.css'
 import './mobile-overrides.css'
 
 const navLinks = ['Home', 'Series', 'Issues', 'Soundtracks', 'Extras', 'About']
-
-function ImageWithFallback({ src, alt, className = '', fallbackText = 'ART INBOUND' }) {
-  const [failed, setFailed] = useState(false)
-
-  if (!src || failed) {
-    return (
-      <div className={`image-fallback ${className}`.trim()} role="img" aria-label={alt || fallbackText}>
-        <span>{fallbackText}</span>
-      </div>
-    )
-  }
-
-  return <img className={className} src={src} alt={alt} onError={() => setFailed(true)} />
-}
+const defaultSeriesSlug = 'vikings-2026'
 
 function App() {
   const [route, setRoute] = useState('home')
   const [isReaderOpen, setIsReaderOpen] = useState(false)
   const [currentPage, setCurrentPage] = useState(0)
+  const [activeReaderSeriesSlug, setActiveReaderSeriesSlug] = useState(defaultSeriesSlug)
 
-  const vikingsPages = useMemo(
-    () =>
-      Array.from({ length: 15 }, (_, index) =>
-        `/images/pages/vikings-2026/issue-01/page-${String(index + 1).padStart(3, '0')}.jpg`
-      ),
-    []
-  )
+  const activeReaderSeries = seriesPages[activeReaderSeriesSlug] || seriesPages[defaultSeriesSlug]
 
-  const openReader = (pageNumber = 1) => {
-    const safePage = Math.min(Math.max(pageNumber, 1), vikingsPages.length)
+  const readerPages = useMemo(() => {
+    return activeReaderSeries.dailyPages.map((page) => page.image)
+  }, [activeReaderSeries])
+
+  const openReader = (pageNumber = 1, seriesSlug = defaultSeriesSlug) => {
+    const series = seriesPages[seriesSlug] || seriesPages[defaultSeriesSlug]
+    const safePage = Math.min(Math.max(pageNumber, 1), series.dailyPages.length)
+
+    setActiveReaderSeriesSlug(series.slug)
     setCurrentPage(safePage - 1)
     setIsReaderOpen(true)
   }
@@ -49,11 +41,6 @@ function App() {
     setRoute('home')
   }
 
-  const goToReaderPage = (pageNumber) => {
-    const safePage = Math.min(Math.max(pageNumber, 1), vikingsPages.length)
-    setCurrentPage(safePage - 1)
-  }
-
   const handleNavClick = (event, link) => {
     event.preventDefault()
 
@@ -63,7 +50,7 @@ function App() {
     }
 
     if (link === 'Series') {
-      openSeries('vikings-2026')
+      openSeries(defaultSeriesSlug)
     }
   }
 
@@ -77,58 +64,13 @@ function App() {
   if (isReaderOpen) {
     return (
       <div className="site-shell">
-        <main className="reader hud-frame">
-          <header className="reader-header">
-            <div>
-              <p className="eyebrow">READING //</p>
-              <h2>Vikings 2026 — Issue 01</h2>
-              <p>Page {currentPage + 1} of {vikingsPages.length}</p>
-            </div>
-
-            <button onClick={() => setIsReaderOpen(false)}>Back to Series</button>
-          </header>
-
-          <div className="reader-stage">
-            <button
-              className="reader-tap-zone reader-tap-zone-left"
-              aria-label="Previous page"
-              onClick={() => setCurrentPage((page) => Math.max(page - 1, 0))}
-              disabled={currentPage === 0}
-            />
-
-            <ImageWithFallback
-              src={vikingsPages[currentPage]}
-              alt={`Vikings 2026 issue 1 page ${currentPage + 1}`}
-              fallbackText={`PAGE ${String(currentPage + 1).padStart(3, '0')} INBOUND`}
-            />
-
-            <button
-              className="reader-tap-zone reader-tap-zone-right"
-              aria-label="Next page"
-              onClick={() => setCurrentPage((page) => Math.min(page + 1, vikingsPages.length - 1))}
-              disabled={currentPage === vikingsPages.length - 1}
-            />
-          </div>
-
-          <div className="reader-controls">
-            <button onClick={() => goToReaderPage(1)} disabled={currentPage === 0}>First</button>
-            <button onClick={() => setCurrentPage((page) => Math.max(page - 1, 0))} disabled={currentPage === 0}>Prev</button>
-            <button onClick={() => setCurrentPage((page) => Math.min(page + 1, vikingsPages.length - 1))} disabled={currentPage === vikingsPages.length - 1}>Next</button>
-            <button onClick={() => goToReaderPage(vikingsPages.length)} disabled={currentPage === vikingsPages.length - 1}>Latest</button>
-          </div>
-
-          <div className="reader-page-jump" aria-label="Page jump">
-            {vikingsPages.map((_, index) => (
-              <button
-                key={index + 1}
-                className={currentPage === index ? 'active' : ''}
-                onClick={() => goToReaderPage(index + 1)}
-              >
-                {index + 1}
-              </button>
-            ))}
-          </div>
-        </main>
+        <Reader
+          title={`${activeReaderSeries.title} — ${activeReaderSeries.currentRelease}`}
+          pages={readerPages}
+          currentPage={currentPage}
+          onPageChange={setCurrentPage}
+          onClose={() => setIsReaderOpen(false)}
+        />
       </div>
     )
   }
@@ -151,7 +93,7 @@ function App() {
           </nav>
         </header>
 
-        <SeriesPage slug="vikings-2026" onReadIssue={openReader} />
+        <SeriesPage slug="vikings-2026" onReadIssue={(pageNumber) => openReader(pageNumber, 'vikings-2026')} />
       </div>
     )
   }
@@ -190,7 +132,7 @@ function App() {
           <p>Comics and soundtracks from the edges of time, space, and imagination.</p>
 
           <div className="cta-row">
-            <button className="primary" onClick={() => openSeries('vikings-2026')}>Explore Series</button>
+            <button className="primary" onClick={() => openSeries(defaultSeriesSlug)}>Explore Series</button>
             <button disabled>Learn More</button>
           </div>
         </div>
@@ -218,8 +160,8 @@ function App() {
                 <article
                   className={`series-card${isVikings ? ' clickable-card' : ''}`}
                   key={series.title}
-                  onClick={isVikings ? () => openSeries('vikings-2026') : undefined}
-                  onKeyDown={isVikings ? (event) => handleSeriesCardKeyDown(event, 'vikings-2026') : undefined}
+                  onClick={isVikings ? () => openSeries(defaultSeriesSlug) : undefined}
+                  onKeyDown={isVikings ? (event) => handleSeriesCardKeyDown(event, defaultSeriesSlug) : undefined}
                   role={isVikings ? 'button' : undefined}
                   tabIndex={isVikings ? 0 : undefined}
                 >
@@ -236,7 +178,7 @@ function App() {
                           className="inline-link"
                           onClick={(event) => {
                             event.stopPropagation()
-                            openSeries('vikings-2026')
+                            openSeries(defaultSeriesSlug)
                           }}
                         >
                           View Series
