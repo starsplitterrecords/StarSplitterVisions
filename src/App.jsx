@@ -39,12 +39,33 @@ function App() {
   }
 
   const openSeries = (slug) => {
+    setIsReaderOpen(false)
     setRoute(`series:${slug}`)
   }
 
   const goHome = () => {
     setIsReaderOpen(false)
     setRoute('home')
+  }
+
+  const handleNavClick = (event, link) => {
+    event.preventDefault()
+
+    if (link === 'Home') {
+      goHome()
+      return
+    }
+
+    if (link === 'Series') {
+      openSeries('vikings-2026')
+    }
+  }
+
+  const handleSeriesCardKeyDown = (event, slug) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      openSeries(slug)
+    }
   }
 
   if (isReaderOpen) {
@@ -85,14 +106,19 @@ function App() {
     return (
       <div className="site-shell">
         <header className="top-nav hud-frame">
-          <div className="brand" onClick={goHome} style={{ cursor: 'pointer' }}>
+          <button className="brand brand-button" onClick={goHome} type="button">
             <ImageWithFallback className="brand-logo" src="/images/brand/logo.png" alt="Star Splitter Visions" fallbackText="STAR SPLITTER VISIONS" />
             <ImageWithFallback className="brand-icon" src="/images/brand/icon.png" alt="Star Splitter Visions mark" fallbackText="✦" />
-          </div>
+          </button>
 
           <nav>
-            {navLinks.map((link, i) => (
-              <a key={link} className={i === 0 ? 'active' : ''} href="#">
+            {navLinks.map((link) => (
+              <a
+                key={link}
+                className={link === 'Series' ? 'active' : ''}
+                href="#"
+                onClick={(event) => handleNavClick(event, link)}
+              >
                 {link}
               </a>
             ))}
@@ -107,14 +133,19 @@ function App() {
   return (
     <div className="site-shell">
       <header className="top-nav hud-frame">
-        <div className="brand">
+        <button className="brand brand-button" onClick={goHome} type="button">
           <ImageWithFallback className="brand-logo" src="/images/brand/logo.png" alt="Star Splitter Visions" fallbackText="STAR SPLITTER VISIONS" />
           <ImageWithFallback className="brand-icon" src="/images/brand/icon.png" alt="Star Splitter Visions mark" fallbackText="✦" />
-        </div>
+        </button>
 
         <nav>
-          {navLinks.map((link, i) => (
-            <a key={link} className={i === 0 ? 'active' : ''} href="#">
+          {navLinks.map((link) => (
+            <a
+              key={link}
+              className={link === 'Home' ? 'active' : ''}
+              href="#"
+              onClick={(event) => handleNavClick(event, link)}
+            >
               {link}
             </a>
           ))}
@@ -162,29 +193,48 @@ function App() {
           <h2>Featured Series</h2>
 
           <div className="rail large-rail">
-            {featuredSeries.map((series) => (
-              <article className="series-card" key={series.title}>
-                <ImageWithFallback src={series.cover} alt={series.title} fallbackText="ART INBOUND" />
+            {featuredSeries.map((series) => {
+              const isVikings = series.title === 'Vikings 2026'
 
-                <div className="card-copy">
-                  <p>{series.issue}</p>
-                  <h3>{series.title}</h3>
-                  <span>{series.hook}</span>
+              return (
+                <article
+                  className={`series-card${isVikings ? ' clickable-card' : ''}`}
+                  key={series.title}
+                  onClick={isVikings ? () => openSeries('vikings-2026') : undefined}
+                  onKeyDown={isVikings ? (event) => handleSeriesCardKeyDown(event, 'vikings-2026') : undefined}
+                  role={isVikings ? 'button' : undefined}
+                  tabIndex={isVikings ? 0 : undefined}
+                >
+                  <ImageWithFallback src={series.cover} alt={series.title} fallbackText="ART INBOUND" />
 
-                  <div>
-                    {series.title === 'Vikings 2026' ? (
-                      <button className="inline-link" onClick={() => openSeries('vikings-2026')}>
-                        View Series
-                      </button>
-                    ) : (
-                      <a href="#">View Series</a>
-                    )}
+                  <div className="card-copy">
+                    <p>{series.issue}</p>
+                    <h3>{series.title}</h3>
+                    <span>{series.hook}</span>
 
-                    <a href="#">Play Soundtrack</a>
+                    <div>
+                      {isVikings ? (
+                        <button
+                          className="inline-link"
+                          onClick={(event) => {
+                            event.stopPropagation()
+                            openSeries('vikings-2026')
+                          }}
+                        >
+                          View Series
+                        </button>
+                      ) : (
+                        <a href="#">View Series</a>
+                      )}
+
+                      <a href="#" onClick={(event) => event.stopPropagation()}>
+                        Play Soundtrack
+                      </a>
+                    </div>
                   </div>
-                </div>
-              </article>
-            ))}
+                </article>
+              )
+            })}
           </div>
 
           <h2>More Worlds</h2>
