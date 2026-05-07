@@ -1,4 +1,13 @@
-import { buildDailyPages } from '../utils/dailyPages'
+import { buildDailyPagesFromReleaseConfig } from '../utils/dailyPages'
+
+const vikingsIssue01ReleaseConfig = {
+  seriesSlug: 'vikings-2026',
+  releaseSlug: 'issue-01',
+  pageCount: 15,
+  startDate: '2026-05-01',
+  cadence: 'daily',
+  imagePathBase: '/images/pages/vikings-2026/issue-01',
+}
 
 export const seriesPages = {
   'vikings-2026': {
@@ -10,13 +19,8 @@ export const seriesPages = {
       'Ancient rivalries, bureaucratic absurdity, and displaced warriors collide inside the Department of Temporal Integration.',
     hero: '/images/series/vikings-2026/card.png',
     currentRelease: 'Issue 01',
-    currentPageCount: 15,
-    pagePathBase: '/images/pages/vikings-2026/issue-01',
-    dailyPages: buildDailyPages({
-      count: 15,
-      startDate: '2026-05-01',
-      imagePathBase: '/images/pages/vikings-2026/issue-01',
-    }),
+    releaseConfigs: [vikingsIssue01ReleaseConfig],
+    dailyPages: buildDailyPagesFromReleaseConfig(vikingsIssue01ReleaseConfig),
     releases: [
       {
         slug: 'vikings-2026-issue-01',
