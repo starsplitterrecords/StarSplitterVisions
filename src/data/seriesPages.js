@@ -1,4 +1,5 @@
 import { buildDailyPagesFromReleaseConfig } from '../utils/dailyPages'
+import { validateReleaseConfig } from '../utils/releaseValidation'
 
 const vikingsIssue01ReleaseConfig = {
   seriesSlug: 'vikings-2026',
@@ -7,6 +8,15 @@ const vikingsIssue01ReleaseConfig = {
   startDate: '2026-05-01',
   cadence: 'daily',
   imagePathBase: '/images/pages/vikings-2026/issue-01',
+}
+
+const releaseConfigWarnings = validateReleaseConfig(vikingsIssue01ReleaseConfig)
+
+if (releaseConfigWarnings.length > 0) {
+  console.warn(
+    `[Visions Release Config Warning] ${vikingsIssue01ReleaseConfig.releaseSlug}:`,
+    releaseConfigWarnings
+  )
 }
 
 export const seriesPages = {
