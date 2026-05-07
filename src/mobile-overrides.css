@@ -1,3 +1,32 @@
+.brand-button {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+}
+
+.brand-button:hover .brand-logo,
+.brand-button:focus-visible .brand-logo,
+.clickable-card:hover,
+.clickable-card:focus-visible {
+  filter: drop-shadow(0 0 10px rgba(186, 255, 0, .18));
+}
+
+.clickable-card {
+  cursor: pointer;
+}
+
+.card-copy .disabled-link {
+  color: #748196;
+  cursor: default;
+  font-size: .78rem;
+  opacity: .72;
+  text-decoration: none;
+}
+
 @media (max-width: 900px) {
   .small-rail .mini-card {
     flex-basis: 204px;
