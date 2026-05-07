@@ -49,6 +49,11 @@ function App() {
     setRoute('home')
   }
 
+  const goToReaderPage = (pageNumber) => {
+    const safePage = Math.min(Math.max(pageNumber, 1), vikingsPages.length)
+    setCurrentPage(safePage - 1)
+  }
+
   const handleNavClick = (event, link) => {
     event.preventDefault()
 
@@ -74,29 +79,54 @@ function App() {
       <div className="site-shell">
         <main className="reader hud-frame">
           <header className="reader-header">
-            <h2>Vikings 2026 — Issue 01</h2>
-            <p>Page {currentPage + 1} of {vikingsPages.length}</p>
-          </header>
-
-          <ImageWithFallback
-            src={vikingsPages[currentPage]}
-            alt={`Vikings 2026 issue 1 page ${currentPage + 1}`}
-            fallbackText={`PAGE ${String(currentPage + 1).padStart(3, '0')} INBOUND`}
-          />
-
-          <div className="reader-controls">
-            <button onClick={() => setCurrentPage((page) => Math.max(page - 1, 0))} disabled={currentPage === 0}>
-              Previous
-            </button>
-
-            <button
-              onClick={() => setCurrentPage((page) => Math.min(page + 1, vikingsPages.length - 1))}
-              disabled={currentPage === vikingsPages.length - 1}
-            >
-              Next
-            </button>
+            <div>
+              <p className="eyebrow">READING //</p>
+              <h2>Vikings 2026 — Issue 01</h2>
+              <p>Page {currentPage + 1} of {vikingsPages.length}</p>
+            </div>
 
             <button onClick={() => setIsReaderOpen(false)}>Back to Series</button>
+          </header>
+
+          <div className="reader-stage">
+            <button
+              className="reader-tap-zone reader-tap-zone-left"
+              aria-label="Previous page"
+              onClick={() => setCurrentPage((page) => Math.max(page - 1, 0))}
+              disabled={currentPage === 0}
+            />
+
+            <ImageWithFallback
+              src={vikingsPages[currentPage]}
+              alt={`Vikings 2026 issue 1 page ${currentPage + 1}`}
+              fallbackText={`PAGE ${String(currentPage + 1).padStart(3, '0')} INBOUND`}
+            />
+
+            <button
+              className="reader-tap-zone reader-tap-zone-right"
+              aria-label="Next page"
+              onClick={() => setCurrentPage((page) => Math.min(page + 1, vikingsPages.length - 1))}
+              disabled={currentPage === vikingsPages.length - 1}
+            />
+          </div>
+
+          <div className="reader-controls">
+            <button onClick={() => goToReaderPage(1)} disabled={currentPage === 0}>First</button>
+            <button onClick={() => setCurrentPage((page) => Math.max(page - 1, 0))} disabled={currentPage === 0}>Prev</button>
+            <button onClick={() => setCurrentPage((page) => Math.min(page + 1, vikingsPages.length - 1))} disabled={currentPage === vikingsPages.length - 1}>Next</button>
+            <button onClick={() => goToReaderPage(vikingsPages.length)} disabled={currentPage === vikingsPages.length - 1}>Latest</button>
+          </div>
+
+          <div className="reader-page-jump" aria-label="Page jump">
+            {vikingsPages.map((_, index) => (
+              <button
+                key={index + 1}
+                className={currentPage === index ? 'active' : ''}
+                onClick={() => goToReaderPage(index + 1)}
+              >
+                {index + 1}
+              </button>
+            ))}
           </div>
         </main>
       </div>
@@ -114,12 +144,7 @@ function App() {
 
           <nav>
             {navLinks.map((link) => (
-              <a
-                key={link}
-                className={link === 'Series' ? 'active' : ''}
-                href="#"
-                onClick={(event) => handleNavClick(event, link)}
-              >
+              <a key={link} className={link === 'Series' ? 'active' : ''} href="#" onClick={(event) => handleNavClick(event, link)}>
                 {link}
               </a>
             ))}
@@ -141,12 +166,7 @@ function App() {
 
         <nav>
           {navLinks.map((link) => (
-            <a
-              key={link}
-              className={link === 'Home' ? 'active' : ''}
-              href="#"
-              onClick={(event) => handleNavClick(event, link)}
-            >
+            <a key={link} className={link === 'Home' ? 'active' : ''} href="#" onClick={(event) => handleNavClick(event, link)}>
               {link}
             </a>
           ))}
@@ -170,17 +190,13 @@ function App() {
           <p>Comics and soundtracks from the edges of time, space, and imagination.</p>
 
           <div className="cta-row">
-            <button className="primary" onClick={() => openSeries('vikings-2026')}>
-              Explore Series
-            </button>
-
+            <button className="primary" onClick={() => openSeries('vikings-2026')}>Explore Series</button>
             <button disabled>Learn More</button>
           </div>
         </div>
 
         <aside className="status-panel">
           <h3>Signal Status</h3>
-
           <ul>
             <li><span>Online</span><strong>YES</strong></li>
             <li><span>Signal Strength</span><strong>97%</strong></li>
@@ -255,12 +271,7 @@ function App() {
           <article className="panel hud-frame">
             <h3>Latest Release</h3>
             <p>Vikings 2026 — Issue 01</p>
-
-            <ImageWithFallback
-              src="/images/series/vikings-2026/card.png"
-              alt="Vikings 2026 issue 1"
-              fallbackText="VIKINGS 2026"
-            />
+            <ImageWithFallback src="/images/series/vikings-2026/card.png" alt="Vikings 2026 issue 1" fallbackText="VIKINGS 2026" />
           </article>
 
           <article className="panel hud-frame soundtrack">
