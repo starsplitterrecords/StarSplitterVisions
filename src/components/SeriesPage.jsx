@@ -108,26 +108,40 @@ export default function SeriesPage({ slug, onReadIssue }) {
         </div>
 
         <div className="series-release-list">
-          {series.releases.map((release) => (
-            <article className="series-release-row" key={release.slug}>
-              <div className="series-release-cover">
-                {release.cover ? <img src={release.cover} alt={release.title} /> : <div className="series-release-placeholder">SOON</div>}
-              </div>
+          {series.releases.map((release) => {
+            const isActiveRelease = Boolean(release.cover)
 
-              <div className="series-release-copy">
-                <p>{release.status}</p>
-                <h3>{release.title}</h3>
-              </div>
+            return (
+              <article className={`series-release-row${isActiveRelease ? ' active-release' : ''}`} key={release.slug}>
+                <div className="series-release-cover">
+                  {release.cover ? (
+                    <img src={release.cover} alt={release.title} />
+                  ) : (
+                    <div className="series-release-placeholder">SOON</div>
+                  )}
+                </div>
 
-              <div className="series-release-actions">
-                {release.cover ? (
-                  <button onClick={() => onReadIssue?.(1)}>Read Issue</button>
-                ) : (
-                  <button disabled>Coming Soon</button>
-                )}
-              </div>
-            </article>
-          ))}
+                <div className="series-release-copy">
+                  <p>{release.status}</p>
+                  <h3>{release.title}</h3>
+                  <span>{release.description}</span>
+                </div>
+
+                <div className="series-release-meta">
+                  <strong>{release.pageCount || '—'}</strong>
+                  <small>{release.pageCount ? 'Pages' : 'Pending'}</small>
+                </div>
+
+                <div className="series-release-actions">
+                  {isActiveRelease ? (
+                    <button onClick={() => onReadIssue?.(1)}>Read Issue</button>
+                  ) : (
+                    <button disabled>Coming Soon</button>
+                  )}
+                </div>
+              </article>
+            )
+          })}
         </div>
       </section>
 
