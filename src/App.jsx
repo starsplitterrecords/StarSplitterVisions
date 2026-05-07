@@ -172,7 +172,8 @@ function App() {
             <button className="primary" onClick={() => openSeries('vikings-2026')}>
               Explore Series
             </button>
-            <button>Learn More</button>
+
+            <button disabled>Learn More</button>
           </div>
         </div>
 
@@ -224,12 +225,10 @@ function App() {
                           View Series
                         </button>
                       ) : (
-                        <a href="#">View Series</a>
+                        <span className="disabled-link">Series Coming Soon</span>
                       )}
 
-                      <a href="#" onClick={(event) => event.stopPropagation()}>
-                        Play Soundtrack
-                      </a>
+                      <span className="disabled-link">Soundtrack Soon</span>
                     </div>
                   </div>
                 </article>
