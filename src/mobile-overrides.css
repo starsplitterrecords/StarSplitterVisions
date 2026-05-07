@@ -1,0 +1,13 @@
+@media (max-width: 900px) {
+  .small-rail .mini-card {
+    flex-basis: 204px;
+    min-width: 204px;
+  }
+}
+
+@media (max-width: 420px) {
+  .small-rail .mini-card {
+    flex-basis: 170px;
+    min-width: 170px;
+  }
+}
