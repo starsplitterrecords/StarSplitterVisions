@@ -33,8 +33,9 @@ function App() {
     []
   )
 
-  const openReader = () => {
-    setCurrentPage(0)
+  const openReader = (pageNumber = 1) => {
+    const safePage = Math.min(Math.max(pageNumber, 1), vikingsPages.length)
+    setCurrentPage(safePage - 1)
     setIsReaderOpen(true)
   }
 
