@@ -42,30 +42,13 @@ export default function SeriesPage({ slug, onReadIssue }) {
     setCurrentPreviewPage(nextPage)
   }
 
-  const goFirst = () => {
-    updatePreviewPage(1)
-  }
-
-  const goPrevious = () => {
-    updatePreviewPage(currentPreviewPage <= 1 ? availablePages.length : currentPreviewPage - 1)
-  }
-
-  const goNext = () => {
-    updatePreviewPage(currentPreviewPage >= availablePages.length ? 1 : currentPreviewPage + 1)
-  }
-
-  const goLatest = () => {
-    if (latestPage) {
-      updatePreviewPage(latestPage.pageNumber)
-    }
-  }
-
+  const goFirst = () => updatePreviewPage(1)
+  const goPrevious = () => updatePreviewPage(currentPreviewPage <= 1 ? availablePages.length : currentPreviewPage - 1)
+  const goNext = () => updatePreviewPage(currentPreviewPage >= availablePages.length ? 1 : currentPreviewPage + 1)
+  const goLatest = () => latestPage && updatePreviewPage(latestPage.pageNumber)
   const goRandom = () => {
     const randomPage = availablePages[Math.floor(Math.random() * availablePages.length)]
-
-    if (randomPage) {
-      updatePreviewPage(randomPage.pageNumber)
-    }
+    if (randomPage) updatePreviewPage(randomPage.pageNumber)
   }
 
   return (
@@ -88,8 +71,28 @@ export default function SeriesPage({ slug, onReadIssue }) {
           <p className="eyebrow">CURRENT DAILY PAGE //</p>
           <h2>Page {currentPreviewPage}</h2>
           <p className="series-description">{series.description}</p>
+        </div>
 
-          <div className="series-page-controls">
+        <div className="series-reader-preview">
+          {previewFailed || !currentPageData ? (
+            <div className="image-fallback series-preview-fallback">
+              <span>PREVIEW PAGE UNAVAILABLE</span>
+            </div>
+          ) : (
+            <img
+              src={currentPageData.image}
+              alt={`${series.title} preview page ${currentPreviewPage}`}
+              onError={() => setPreviewFailed(true)}
+            />
+          )}
+        </div>
+
+        <div className="series-temporal-nav">
+          <p className="series-page-counter">
+            Page {currentPreviewPage} • Released {currentPageData?.releaseDate || 'Pending'}
+          </p>
+
+          <div className="series-page-controls" aria-label="Daily page navigation">
             <button onClick={goFirst}>First</button>
             <button onClick={goPrevious}>Prev</button>
             <button onClick={goRandom}>Random</button>
@@ -106,24 +109,6 @@ export default function SeriesPage({ slug, onReadIssue }) {
               Open Current Page
             </button>
           </div>
-
-          <p className="series-page-counter">
-            Page {currentPreviewPage} • Released {currentPageData?.releaseDate || 'Pending'}
-          </p>
-        </div>
-
-        <div className="series-reader-preview">
-          {previewFailed || !currentPageData ? (
-            <div className="image-fallback series-preview-fallback">
-              <span>PREVIEW PAGE UNAVAILABLE</span>
-            </div>
-          ) : (
-            <img
-              src={currentPageData.image}
-              alt={`${series.title} preview page ${currentPreviewPage}`}
-              onError={() => setPreviewFailed(true)}
-            />
-          )}
         </div>
       </section>
 
@@ -140,11 +125,7 @@ export default function SeriesPage({ slug, onReadIssue }) {
             return (
               <article className={`series-release-row${isActiveRelease ? ' active-release' : ''}`} key={release.slug}>
                 <div className="series-release-cover">
-                  {release.cover ? (
-                    <img src={release.cover} alt={release.title} />
-                  ) : (
-                    <div className="series-release-placeholder">SOON</div>
-                  )}
+                  {release.cover ? <img src={release.cover} alt={release.title} /> : <div className="series-release-placeholder">SOON</div>}
                 </div>
 
                 <div className="series-release-copy">
@@ -159,11 +140,7 @@ export default function SeriesPage({ slug, onReadIssue }) {
                 </div>
 
                 <div className="series-release-actions">
-                  {isActiveRelease ? (
-                    <button onClick={() => onReadIssue?.(1)}>Read Issue</button>
-                  ) : (
-                    <button disabled>Coming Soon</button>
-                  )}
+                  {isActiveRelease ? <button onClick={() => onReadIssue?.(1)}>Read Issue</button> : <button disabled>Coming Soon</button>}
                 </div>
               </article>
             )
