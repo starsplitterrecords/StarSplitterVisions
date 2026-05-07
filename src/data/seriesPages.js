@@ -1,3 +1,5 @@
+import { buildDailyPages } from '../utils/dailyPages'
+
 export const seriesPages = {
   'vikings-2026': {
     slug: 'vikings-2026',
@@ -10,15 +12,10 @@ export const seriesPages = {
     currentRelease: 'Issue 01',
     currentPageCount: 15,
     pagePathBase: '/images/pages/vikings-2026/issue-01',
-    dailyPages: Array.from({ length: 15 }, (_, index) => {
-      const pageNumber = index + 1
-      const releaseDate = new Date(Date.UTC(2026, 4, pageNumber))
-
-      return {
-        pageNumber,
-        releaseDate: releaseDate.toISOString().slice(0, 10),
-        image: `/images/pages/vikings-2026/issue-01/page-${String(pageNumber).padStart(3, '0')}.jpg`,
-      }
+    dailyPages: buildDailyPages({
+      count: 15,
+      startDate: '2026-05-01',
+      imagePathBase: '/images/pages/vikings-2026/issue-01',
     }),
     releases: [
       {
