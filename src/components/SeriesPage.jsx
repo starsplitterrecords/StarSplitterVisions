@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { seriesPages } from '../data/seriesPages'
 
 export default function SeriesPage({ slug, onReadIssue }) {
@@ -6,15 +6,23 @@ export default function SeriesPage({ slug, onReadIssue }) {
   const [currentPreviewPage, setCurrentPreviewPage] = useState(1)
   const [previewFailed, setPreviewFailed] = useState(false)
 
-  const previewPages = useMemo(() => {
+  const todayString = new Date().toISOString().slice(0, 10)
+
+  const availablePages = useMemo(() => {
     if (!series) {
       return []
     }
 
-    return Array.from({ length: series.currentPageCount }, (_, index) => {
-      return `${series.pagePathBase}/page-${String(index + 1).padStart(3, '0')}.jpg`
-    })
-  }, [series])
+    return series.dailyPages.filter((page) => page.releaseDate <= todayString)
+  }, [series, todayString])
+
+  const latestPage = availablePages[availablePages.length - 1]
+
+  useEffect(() => {
+    if (latestPage) {
+      setCurrentPreviewPage(latestPage.pageNumber)
+    }
+  }, [latestPage])
 
   if (!series) {
     return (
@@ -27,21 +35,37 @@ export default function SeriesPage({ slug, onReadIssue }) {
     )
   }
 
+  const currentPageData = availablePages.find((page) => page.pageNumber === currentPreviewPage)
+
   const updatePreviewPage = (nextPage) => {
     setPreviewFailed(false)
     setCurrentPreviewPage(nextPage)
   }
 
+  const goFirst = () => {
+    updatePreviewPage(1)
+  }
+
   const goPrevious = () => {
-    updatePreviewPage(currentPreviewPage <= 1 ? previewPages.length : currentPreviewPage - 1)
+    updatePreviewPage(currentPreviewPage <= 1 ? availablePages.length : currentPreviewPage - 1)
   }
 
   const goNext = () => {
-    updatePreviewPage(currentPreviewPage >= previewPages.length ? 1 : currentPreviewPage + 1)
+    updatePreviewPage(currentPreviewPage >= availablePages.length ? 1 : currentPreviewPage + 1)
+  }
+
+  const goLatest = () => {
+    if (latestPage) {
+      updatePreviewPage(latestPage.pageNumber)
+    }
   }
 
   const goRandom = () => {
-    updatePreviewPage(Math.floor(Math.random() * previewPages.length) + 1)
+    const randomPage = availablePages[Math.floor(Math.random() * availablePages.length)]
+
+    if (randomPage) {
+      updatePreviewPage(randomPage.pageNumber)
+    }
   }
 
   return (
@@ -62,38 +86,40 @@ export default function SeriesPage({ slug, onReadIssue }) {
       <section className="series-current-page hud-frame">
         <div className="series-current-copy">
           <p className="eyebrow">CURRENT DAILY PAGE //</p>
-          <h2>{series.currentRelease}</h2>
+          <h2>Page {currentPreviewPage}</h2>
           <p className="series-description">{series.description}</p>
 
           <div className="series-page-controls">
+            <button onClick={goFirst}>First</button>
             <button onClick={goPrevious}>Prev</button>
             <button onClick={goRandom}>Random</button>
             <button onClick={goNext}>Next</button>
+            <button onClick={goLatest}>Latest</button>
           </div>
 
           <div className="series-page-actions">
             <button className="primary-action" onClick={() => onReadIssue?.(1)}>
-              Start Reading
+              Start From Beginning
             </button>
 
             <button onClick={() => onReadIssue?.(currentPreviewPage)}>
-              Open Reader
+              Open Current Page
             </button>
           </div>
 
           <p className="series-page-counter">
-            Preview Page {currentPreviewPage} / {previewPages.length}
+            Page {currentPreviewPage} • Released {currentPageData?.releaseDate || 'Pending'}
           </p>
         </div>
 
         <div className="series-reader-preview">
-          {previewFailed ? (
+          {previewFailed || !currentPageData ? (
             <div className="image-fallback series-preview-fallback">
               <span>PREVIEW PAGE UNAVAILABLE</span>
             </div>
           ) : (
             <img
-              src={previewPages[currentPreviewPage - 1]}
+              src={currentPageData.image}
               alt={`${series.title} preview page ${currentPreviewPage}`}
               onError={() => setPreviewFailed(true)}
             />
