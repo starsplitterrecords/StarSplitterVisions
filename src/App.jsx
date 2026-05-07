@@ -205,7 +205,7 @@ function App() {
               </article>
             ))}
 
-            <article className="mini-card view-all">View All Series →</article>
+            <button className="mini-card view-all" onClick={openSeriesIndex}>View All Series →</button>
           </div>
         </section>
 
