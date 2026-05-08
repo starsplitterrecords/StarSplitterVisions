@@ -19,7 +19,16 @@ if (releaseConfigWarnings.length > 0) {
   )
 }
 
-function createComingSoonSeries({ slug, title, worldLabel, tagline, description, hero }) {
+function createComingSoonSeries({
+  slug,
+  title,
+  worldLabel,
+  tagline,
+  description,
+  hero,
+  accent,
+  atmosphere,
+}) {
   return {
     slug,
     title,
@@ -27,6 +36,8 @@ function createComingSoonSeries({ slug, title, worldLabel, tagline, description,
     tagline,
     description,
     hero,
+    accent,
+    atmosphere,
     currentRelease: 'Coming Soon',
     releaseConfigs: [],
     dailyPages: [],
@@ -45,6 +56,8 @@ export const seriesPages = {
     description:
       'Ancient rivalries, bureaucratic absurdity, and displaced warriors collide inside the Department of Temporal Integration.',
     hero: '/images/series/vikings-2026/card.png',
+    accent: '#BAFF00',
+    atmosphere: 'Civic bureaucracy meets temporal-collapse mythology.',
     currentRelease: 'Issue 01',
     releaseConfigs: [vikingsIssue01ReleaseConfig],
     dailyPages: buildDailyPagesFromReleaseConfig(vikingsIssue01ReleaseConfig),
@@ -82,6 +95,8 @@ export const seriesPages = {
     tagline: 'Neon magenta conspiracies unfold through fractured time markets.',
     description: 'A coming Visions world about time, trade, memory, and impossible bargains.',
     hero: '/images/covers/glass-hour-issue-01.png',
+    accent: '#FF4FD8',
+    atmosphere: 'Luxury decay, impossible finance, and fractured chronology.',
   }),
   'rex-of-the-splitters': createComingSoonSeries({
     slug: 'rex-of-the-splitters',
@@ -90,6 +105,8 @@ export const seriesPages = {
     tagline: 'Cyan frontier raids across unstable jump corridors.',
     description: 'A coming Visions world of unstable crossings, outlaw crews, and frontier myth.',
     hero: '/images/covers/rex-of-the-splitters-issue-01.png',
+    accent: '#42D7FF',
+    atmosphere: 'Frontier velocity, signal storms, and jump-gate violence.',
   }),
   'sunforge-outlaw': createComingSoonSeries({
     slug: 'sunforge-outlaw',
@@ -98,6 +115,8 @@ export const seriesPages = {
     tagline: 'Dust-choked worlds, hot steel, and outlaw dynasties.',
     description: 'A coming Visions world forged from heat, exile, inheritance, and rebellion.',
     hero: '/images/covers/sunforge-outlaw-issue-01.png',
+    accent: '#FF8A2B',
+    atmosphere: 'Solar furnaces, ash storms, and outlaw inheritance wars.',
   }),
   'signal-atlas': createComingSoonSeries({
     slug: 'signal-atlas',
@@ -106,6 +125,8 @@ export const seriesPages = {
     tagline: 'Cartographers decode impossible maps hidden in starlight noise.',
     description: 'A coming Visions world about maps that should not exist and the people who follow them anyway.',
     hero: '/images/covers/signal-atlas-issue-01.png',
+    accent: '#76FFE5',
+    atmosphere: 'Astral mapping, impossible coordinates, and navigational obsession.',
   }),
   'stardust-station': createComingSoonSeries({
     slug: 'stardust-station',
@@ -114,6 +135,8 @@ export const seriesPages = {
     tagline: 'A workplace sci-fi comedy from the edges of the Visions signal.',
     description: 'A coming Visions world where corporate optimism, cosmic logistics, and bad signage collide.',
     hero: '/images/covers/stardust-station-issue-01.png',
+    accent: '#FFD54A',
+    atmosphere: 'Corporate hospitality, orbital retail, and existential customer service.',
   }),
   'hollow-creek': createComingSoonSeries({
     slug: 'hollow-creek',
@@ -122,6 +145,8 @@ export const seriesPages = {
     tagline: 'A quiet signal from somewhere darker, stranger, and older.',
     description: 'A coming Visions world of small-town shadows, impossible memory, and local folklore.',
     hero: '/images/covers/hollow-creek-issue-01.png',
+    accent: '#7D8EFF',
+    atmosphere: 'Fog, silence, forgotten roads, and impossible local history.',
   }),
   'the-choir-array': createComingSoonSeries({
     slug: 'the-choir-array',
@@ -130,6 +155,8 @@ export const seriesPages = {
     tagline: 'A cosmic transmission assembled from impossible voices.',
     description: 'A coming Visions world built from resonance, signal, devotion, and scale.',
     hero: '/images/covers/the-choir-array-issue-01.png',
+    accent: '#D8A6FF',
+    atmosphere: 'Celestial resonance, impossible harmonics, and devotional machinery.',
   }),
   'supersonic-being': createComingSoonSeries({
     slug: 'supersonic-being',
@@ -138,5 +165,7 @@ export const seriesPages = {
     tagline: 'Velocity, identity, and myth under pressure.',
     description: 'A coming Visions world about speed, pressure, selfhood, and becoming something else.',
     hero: '/images/covers/supersonic-being-issue-01.png',
+    accent: '#FF5B5B',
+    atmosphere: 'Impact physics, velocity trauma, and mythic acceleration.',
   }),
 }
