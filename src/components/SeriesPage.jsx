@@ -10,6 +10,10 @@ export default function SeriesPage({ slug, onReadIssue }) {
 
   const todayString = new Date().toISOString().slice(0, 10)
 
+  const worldStyle = {
+    '--world-accent': series?.accent || '#BAFF00',
+  }
+
   const availablePages = useMemo(() => {
     if (!series || series.dailyPages.length === 0) {
       return []
@@ -45,12 +49,13 @@ export default function SeriesPage({ slug, onReadIssue }) {
 
   if (series.status === 'coming-soon') {
     return (
-      <main className="series-page">
+      <main className="series-page world-themed" style={worldStyle}>
         <section className="series-world-header hud-frame">
           <div>
             <p className="eyebrow">SIGNAL DETECTED //</p>
             <h1>{series.title}</h1>
             <p className="series-tagline">{series.tagline}</p>
+            <p className="series-atmosphere">{series.atmosphere}</p>
           </div>
 
           <div className="series-world-meta">
@@ -119,12 +124,13 @@ export default function SeriesPage({ slug, onReadIssue }) {
   }
 
   return (
-    <main className="series-page">
+    <main className="series-page world-themed" style={worldStyle}>
       <section className="series-world-header hud-frame">
         <div>
           <p className="eyebrow">NOW ENTERING //</p>
           <h1>{series.title}</h1>
           <p className="series-tagline">{series.tagline}</p>
+          <p className="series-atmosphere">{series.atmosphere}</p>
         </div>
 
         <div className="series-world-meta">
