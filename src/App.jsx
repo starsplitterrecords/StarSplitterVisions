@@ -10,6 +10,7 @@ import './mobile-overrides.css'
 
 const navLinks = ['Home', 'Series', 'Issues', 'Soundtracks', 'Extras', 'About']
 const defaultSeriesSlug = 'vikings-2026'
+const vikingsIssue01Cover = '/images/covers/vikings-2026-issue-01.jpg'
 
 function parseReaderPath(pathname) {
   const match = pathname.match(/^\/read\/([^/]+)\/page\/(\d+)$/)
@@ -272,7 +273,7 @@ function App() {
           <article className="panel hud-frame">
             <h3>Latest Release</h3>
             <p>Vikings 2026 — Issue 01</p>
-            <ImageWithFallback src="/images/series/vikings-2026/card.png" alt="Vikings 2026 issue 1" fallbackText="VIKINGS 2026" />
+            <ImageWithFallback src={vikingsIssue01Cover} alt="Vikings 2026 issue 1" fallbackText="VIKINGS 2026" />
           </article>
 
           <article className="panel hud-frame soundtrack">
