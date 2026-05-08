@@ -68,6 +68,13 @@ const seriesIndexItems = [
 ]
 
 export default function SeriesIndex({ onOpenSeries }) {
+  const handleKeyDown = (event, slug) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      onOpenSeries(slug)
+    }
+  }
+
   return (
     <main className="series-index">
       <section className="series-index-hero hud-frame">
@@ -78,7 +85,14 @@ export default function SeriesIndex({ onOpenSeries }) {
 
       <section className="series-index-grid">
         {seriesIndexItems.map((series) => (
-          <article className={`series-index-card hud-frame${series.isActive ? ' active' : ''}`} key={series.slug}>
+          <article
+            className={`series-index-card hud-frame clickable-card${series.isActive ? ' active' : ''}`}
+            key={series.slug}
+            onClick={() => onOpenSeries(series.slug)}
+            onKeyDown={(event) => handleKeyDown(event, series.slug)}
+            role="button"
+            tabIndex={0}
+          >
             <ImageWithFallback src={series.cover} alt={series.title} fallbackText="ART INBOUND" />
 
             <div>
@@ -89,7 +103,7 @@ export default function SeriesIndex({ onOpenSeries }) {
               {series.isActive ? (
                 <button onClick={() => onOpenSeries(series.slug)}>Enter Series</button>
               ) : (
-                <button disabled>Coming Soon</button>
+                <button>View World</button>
               )}
             </div>
           </article>
