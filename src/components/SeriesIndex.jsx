@@ -1,6 +1,5 @@
 import ImageWithFallback from './shared/ImageWithFallback'
-
-const vikingsIssue01Cover = '/images/covers/vikings-2026-issue-01.jpg'
+import { coverAssets } from '../data/assets'
 
 const seriesIndexItems = [
   {
@@ -8,7 +7,7 @@ const seriesIndexItems = [
     title: 'Vikings 2026',
     status: 'Active',
     hook: 'Municipal satire where Viking logistics meets city hall absurdity.',
-    cover: vikingsIssue01Cover,
+    cover: coverAssets.vikingsIssue01,
     isActive: true,
   },
   {
@@ -16,56 +15,56 @@ const seriesIndexItems = [
     title: 'Glass Hour',
     status: 'Coming Soon',
     hook: 'Neon magenta conspiracies unfold through fractured time markets.',
-    cover: '/images/covers/glass-hour-issue-01.png',
+    cover: coverAssets.glassHourIssue01,
   },
   {
     slug: 'rex-of-the-splitters',
     title: 'Rex of the Splitters',
     status: 'Coming Soon',
     hook: 'Cyan frontier raids across unstable jump corridors.',
-    cover: '/images/covers/rex-of-the-splitters-issue-01.png',
+    cover: coverAssets.rexOfTheSplittersIssue01,
   },
   {
     slug: 'sunforge-outlaw',
     title: 'Sunforge Outlaw',
     status: 'Coming Soon',
     hook: 'Dust-choked worlds, hot steel, and outlaw dynasties.',
-    cover: '/images/covers/sunforge-outlaw-issue-01.png',
+    cover: coverAssets.sunforgeOutlawIssue01,
   },
   {
     slug: 'signal-atlas',
     title: 'Signal Atlas',
     status: 'Coming Soon',
     hook: 'Cartographers decode impossible maps hidden in starlight noise.',
-    cover: '/images/covers/signal-atlas-issue-01.png',
+    cover: coverAssets.signalAtlasIssue01,
   },
   {
     slug: 'stardust-station',
     title: 'Stardust Station',
     status: 'Coming Soon',
     hook: 'A workplace sci-fi comedy from the edges of the Visions signal.',
-    cover: '/images/covers/stardust-station-issue-01.png',
+    cover: coverAssets.stardustStationIssue01,
   },
   {
     slug: 'hollow-creek',
     title: 'Hollow Creek',
     status: 'Coming Soon',
     hook: 'A quiet signal from somewhere darker, stranger, and older.',
-    cover: '/images/covers/hollow-creek-issue-01.png',
+    cover: coverAssets.hollowCreekIssue01,
   },
   {
     slug: 'the-choir-array',
     title: 'The Choir Array',
     status: 'Coming Soon',
     hook: 'A cosmic transmission assembled from impossible voices.',
-    cover: '/images/covers/the-choir-array-issue-01.png',
+    cover: coverAssets.theChoirArrayIssue01,
   },
   {
     slug: 'supersonic-being',
     title: 'Supersonic Being',
     status: 'Coming Soon',
     hook: 'Velocity, identity, and myth under pressure.',
-    cover: '/images/covers/supersonic-being-issue-01.png',
+    cover: coverAssets.supersonicBeingIssue01,
   },
 ]
 
