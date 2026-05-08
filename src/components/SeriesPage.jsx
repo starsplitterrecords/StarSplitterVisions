@@ -10,7 +10,7 @@ export default function SeriesPage({ slug, onReadIssue }) {
   const todayString = new Date().toISOString().slice(0, 10)
 
   const availablePages = useMemo(() => {
-    if (!series) {
+    if (!series || series.dailyPages.length === 0) {
       return []
     }
 
@@ -18,7 +18,7 @@ export default function SeriesPage({ slug, onReadIssue }) {
   }, [series, todayString])
 
   const latestPage = useMemo(() => {
-    if (!series) {
+    if (!series || series.dailyPages.length === 0) {
       return null
     }
 
@@ -38,6 +38,52 @@ export default function SeriesPage({ slug, onReadIssue }) {
           <p className="eyebrow">SERIES NOT FOUND</p>
           <h1>Unknown Signal</h1>
         </div>
+      </main>
+    )
+  }
+
+  if (series.status === 'coming-soon') {
+    return (
+      <main className="series-page">
+        <section className="series-world-header hud-frame">
+          <div>
+            <p className="eyebrow">SIGNAL DETECTED //</p>
+            <h1>{series.title}</h1>
+            <p className="series-tagline">{series.tagline}</p>
+          </div>
+
+          <div className="series-world-meta">
+            <span>{series.worldLabel}</span>
+            <span>Coming Soon</span>
+          </div>
+        </section>
+
+        <section className="series-current-page hud-frame">
+          <div className="series-current-copy">
+            <p className="eyebrow">WORLD PREVIEW //</p>
+            <h2>Transmission Inbound</h2>
+            <p className="series-description">{series.description}</p>
+          </div>
+
+          <div className="series-reader-preview">
+            <img
+              src={series.hero}
+              alt={series.title}
+              onError={() => setPreviewFailed(true)}
+            />
+          </div>
+
+          <div className="series-temporal-nav">
+            <p className="series-page-counter">
+              Publishing pipeline active • No released pages yet
+            </p>
+
+            <div className="series-page-actions">
+              <button disabled>Issue 01 Coming Soon</button>
+              <button disabled>Daily Pages Pending</button>
+            </div>
+          </div>
+        </section>
       </main>
     )
   }
@@ -153,47 +199,6 @@ export default function SeriesPage({ slug, onReadIssue }) {
               </article>
             )
           })}
-        </div>
-      </section>
-
-      <section className="series-release-section hud-frame">
-        <div className="series-section-header">
-          <h2>Daily Archive</h2>
-          <span>Chronological release timeline</span>
-        </div>
-
-        <div className="series-archive-grid">
-          {series.dailyPages.map((page) => {
-            const isReleased = page.releaseDate <= todayString
-
-            return (
-              <button
-                key={page.pageNumber}
-                className={`series-archive-item${isReleased ? ' released' : ' unreleased'}${currentPreviewPage === page.pageNumber ? ' active' : ''}`}
-                disabled={!isReleased}
-                onClick={() => updatePreviewPage(page.pageNumber)}
-              >
-                <strong>{String(page.pageNumber).padStart(3, '0')}</strong>
-                <span>{page.releaseDate}</span>
-              </button>
-            )
-          })}
-        </div>
-      </section>
-
-      <section className="purchase-links hud-frame">
-        <div className="series-section-header">
-          <h2>Purchase & Platforms</h2>
-          <span>Additional storefront integrations coming later</span>
-        </div>
-
-        <div className="purchase-link-grid">
-          {series.purchaseLinks.map((platform) => (
-            <article className="purchase-link-card" key={platform}>
-              <span>{platform}</span>
-              <small>Coming Soon</small>
-            </article>
-          ))}
         </div>
       </section>
     </main>
