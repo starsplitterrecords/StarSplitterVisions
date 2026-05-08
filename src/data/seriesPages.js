@@ -19,7 +19,7 @@ if (releaseConfigWarnings.length > 0) {
   )
 }
 
-const vikingsIssue01Cover = '/images/pages/vikings-2026/issue-01/page-001.jpg'
+const vikingsIssue01Cover = '/images/covers/vikings-2026-issue-01.jpg'
 
 function createComingSoonSeries({
   slug,
