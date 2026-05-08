@@ -1,12 +1,14 @@
 import ImageWithFallback from './shared/ImageWithFallback'
 
+const vikingsIssue01Cover = '/images/covers/vikings-2026-issue-01.jpg'
+
 const seriesIndexItems = [
   {
     slug: 'vikings-2026',
     title: 'Vikings 2026',
     status: 'Active',
     hook: 'Municipal satire where Viking logistics meets city hall absurdity.',
-    cover: '/images/series/vikings-2026/card.png',
+    cover: vikingsIssue01Cover,
     isActive: true,
   },
   {
