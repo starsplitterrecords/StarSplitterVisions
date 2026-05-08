@@ -11,16 +11,41 @@ import './mobile-overrides.css'
 const navLinks = ['Home', 'Series', 'Issues', 'Soundtracks', 'Extras', 'About']
 const defaultSeriesSlug = 'vikings-2026'
 
+function parseReaderPath(pathname) {
+  const match = pathname.match(/^\/read\/([^/]+)\/page\/(\d+)$/)
+
+  if (!match) {
+    return null
+  }
+
+  return {
+    seriesSlug: match[1],
+    pageNumber: Number(match[2]),
+  }
+}
+
 function App() {
+  const initialReaderPath = parseReaderPath(window.location.pathname || '/')
+  const initialReaderSeries = initialReaderPath?.seriesSlug || defaultSeriesSlug
+  const initialReaderPage = initialReaderPath?.pageNumber || 1
+
   const [route, setRoute] = useState(window.location.pathname || '/')
-  const [isReaderOpen, setIsReaderOpen] = useState(false)
-  const [currentPage, setCurrentPage] = useState(0)
-  const [activeReaderSeriesSlug, setActiveReaderSeriesSlug] = useState(defaultSeriesSlug)
+  const [isReaderOpen, setIsReaderOpen] = useState(Boolean(initialReaderPath))
+  const [currentPage, setCurrentPage] = useState(Math.max(initialReaderPage - 1, 0))
+  const [activeReaderSeriesSlug, setActiveReaderSeriesSlug] = useState(initialReaderSeries)
 
   useEffect(() => {
     const handlePopState = () => {
-      setRoute(window.location.pathname || '/')
-      setIsReaderOpen(window.location.pathname.includes('/read/'))
+      const pathname = window.location.pathname || '/'
+      const readerPath = parseReaderPath(pathname)
+
+      setRoute(pathname)
+      setIsReaderOpen(Boolean(readerPath))
+
+      if (readerPath) {
+        setActiveReaderSeriesSlug(readerPath.seriesSlug)
+        setCurrentPage(Math.max(readerPath.pageNumber - 1, 0))
+      }
     }
 
     window.addEventListener('popstate', handlePopState)
@@ -40,6 +65,11 @@ function App() {
 
   const navigate = (path) => {
     window.history.pushState({}, '', path)
+    setRoute(path)
+  }
+
+  const replaceRoute = (path) => {
+    window.history.replaceState({}, '', path)
     setRoute(path)
   }
 
@@ -67,6 +97,14 @@ function App() {
   const goHome = () => {
     setIsReaderOpen(false)
     navigate('/')
+  }
+
+  const updateReaderPage = (nextPageIndex) => {
+    const safePageIndex = Math.min(Math.max(nextPageIndex, 0), Math.max(readerPages.length - 1, 0))
+    const pageNumber = safePageIndex + 1
+
+    setCurrentPage(safePageIndex)
+    replaceRoute(`/read/${activeReaderSeries.slug}/page/${String(pageNumber).padStart(3, '0')}`)
   }
 
   const handleNavClick = (event, link) => {
@@ -113,7 +151,7 @@ function App() {
           title={`${activeReaderSeries.title} — ${activeReaderSeries.currentRelease}`}
           pages={readerPages}
           currentPage={currentPage}
-          onPageChange={setCurrentPage}
+          onPageChange={updateReaderPage}
           onClose={() => openSeries(activeReaderSeries.slug)}
         />
       </div>
