@@ -4,7 +4,7 @@ export const featuredSeries = [
     title: 'Vikings 2026',
     issue: 'Issue 01',
     hook: 'Municipal satire where Viking logistics meets city hall absurdity.',
-    cover: '/images/covers/vikings-2026-issue-01".png'
+    cover: '/images/covers/vikings-2026-issue-01.png'
   },
   {
     slug: 'glass-hour',
