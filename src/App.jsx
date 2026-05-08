@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Reader from './components/Reader'
 import SeriesIndex from './components/SeriesIndex'
 import SeriesPage from './components/SeriesPage'
@@ -12,16 +12,36 @@ const navLinks = ['Home', 'Series', 'Issues', 'Soundtracks', 'Extras', 'About']
 const defaultSeriesSlug = 'vikings-2026'
 
 function App() {
-  const [route, setRoute] = useState('home')
+  const [route, setRoute] = useState(window.location.pathname || '/')
   const [isReaderOpen, setIsReaderOpen] = useState(false)
   const [currentPage, setCurrentPage] = useState(0)
   const [activeReaderSeriesSlug, setActiveReaderSeriesSlug] = useState(defaultSeriesSlug)
+
+  useEffect(() => {
+    const handlePopState = () => {
+      setRoute(window.location.pathname || '/')
+      setIsReaderOpen(window.location.pathname.includes('/read/'))
+    }
+
+    window.addEventListener('popstate', handlePopState)
+
+    return () => window.removeEventListener('popstate', handlePopState)
+  }, [])
+
+  const activeSeriesSlug = route.startsWith('/series/')
+    ? route.replace('/series/', '')
+    : defaultSeriesSlug
 
   const activeReaderSeries = seriesPages[activeReaderSeriesSlug] || seriesPages[defaultSeriesSlug]
 
   const readerPages = useMemo(() => {
     return activeReaderSeries.dailyPages.map((page) => page.image)
   }, [activeReaderSeries])
+
+  const navigate = (path) => {
+    window.history.pushState({}, '', path)
+    setRoute(path)
+  }
 
   const openReader = (pageNumber = 1, seriesSlug = defaultSeriesSlug) => {
     const series = seriesPages[seriesSlug] || seriesPages[defaultSeriesSlug]
@@ -30,21 +50,23 @@ function App() {
     setActiveReaderSeriesSlug(series.slug)
     setCurrentPage(safePage - 1)
     setIsReaderOpen(true)
+
+    navigate(`/read/${series.slug}/page/${String(safePage).padStart(3, '0')}`)
   }
 
   const openSeries = (slug) => {
     setIsReaderOpen(false)
-    setRoute(`series:${slug}`)
+    navigate(`/series/${slug}`)
   }
 
   const openSeriesIndex = () => {
     setIsReaderOpen(false)
-    setRoute('series-index')
+    navigate('/series')
   }
 
   const goHome = () => {
     setIsReaderOpen(false)
-    setRoute('home')
+    navigate('/')
   }
 
   const handleNavClick = (event, link) => {
@@ -92,13 +114,13 @@ function App() {
           pages={readerPages}
           currentPage={currentPage}
           onPageChange={setCurrentPage}
-          onClose={() => setIsReaderOpen(false)}
+          onClose={() => openSeries(activeReaderSeries.slug)}
         />
       </div>
     )
   }
 
-  if (route === 'series-index') {
+  if (route === '/series') {
     return (
       <div className="site-shell">
         {renderHeader('Series')}
@@ -107,12 +129,12 @@ function App() {
     )
   }
 
-  if (route === 'series:vikings-2026') {
+  if (route.startsWith('/series/')) {
     return (
       <div className="site-shell">
         {renderHeader('Series')}
 
-        <SeriesPage slug="vikings-2026" onReadIssue={(pageNumber) => openReader(pageNumber, 'vikings-2026')} />
+        <SeriesPage slug={activeSeriesSlug} onReadIssue={(pageNumber) => openReader(pageNumber, activeSeriesSlug)} />
       </div>
     )
   }
@@ -153,53 +175,52 @@ function App() {
           <h2>Featured Series</h2>
 
           <div className="rail large-rail">
-            {featuredSeries.map((series) => {
-              const isVikings = series.title === 'Vikings 2026'
+            {featuredSeries.map((series) => (
+              <article
+                className="series-card clickable-card"
+                key={series.title}
+                onClick={() => openSeries(series.slug)}
+                onKeyDown={(event) => handleSeriesCardKeyDown(event, series.slug)}
+                role="button"
+                tabIndex={0}
+              >
+                <ImageWithFallback src={series.cover} alt={series.title} fallbackText="ART INBOUND" />
 
-              return (
-                <article
-                  className={`series-card${isVikings ? ' clickable-card' : ''}`}
-                  key={series.title}
-                  onClick={isVikings ? () => openSeries(defaultSeriesSlug) : undefined}
-                  onKeyDown={isVikings ? (event) => handleSeriesCardKeyDown(event, defaultSeriesSlug) : undefined}
-                  role={isVikings ? 'button' : undefined}
-                  tabIndex={isVikings ? 0 : undefined}
-                >
-                  <ImageWithFallback src={series.cover} alt={series.title} fallbackText="ART INBOUND" />
+                <div className="card-copy">
+                  <p>{series.issue}</p>
+                  <h3>{series.title}</h3>
+                  <span>{series.hook}</span>
 
-                  <div className="card-copy">
-                    <p>{series.issue}</p>
-                    <h3>{series.title}</h3>
-                    <span>{series.hook}</span>
+                  <div>
+                    <button
+                      className="inline-link"
+                      onClick={(event) => {
+                        event.stopPropagation()
+                        openSeries(series.slug)
+                      }}
+                    >
+                      View Series
+                    </button>
 
-                    <div>
-                      {isVikings ? (
-                        <button
-                          className="inline-link"
-                          onClick={(event) => {
-                            event.stopPropagation()
-                            openSeries(defaultSeriesSlug)
-                          }}
-                        >
-                          View Series
-                        </button>
-                      ) : (
-                        <span className="disabled-link">Series Coming Soon</span>
-                      )}
-
-                      <span className="disabled-link">Soundtrack Soon</span>
-                    </div>
+                    <span className="disabled-link">Soundtrack Soon</span>
                   </div>
-                </article>
-              )
-            })}
+                </div>
+              </article>
+            ))}
           </div>
 
           <h2>More Worlds</h2>
 
           <div className="rail small-rail">
             {moreWorlds.map((world) => (
-              <article key={world.title} className="mini-card">
+              <article
+                key={world.title}
+                className="mini-card clickable-card"
+                onClick={() => openSeries(world.slug)}
+                onKeyDown={(event) => handleSeriesCardKeyDown(event, world.slug)}
+                role="button"
+                tabIndex={0}
+              >
                 <ImageWithFallback src={world.cover} alt={world.title} fallbackText="ART INBOUND" />
                 <p>{world.title}</p>
               </article>
