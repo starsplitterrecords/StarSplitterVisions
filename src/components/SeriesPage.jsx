@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import ImageWithFallback from './shared/ImageWithFallback'
 import { seriesPages } from '../data/seriesPages'
 import { getLatestReleasedPage, getReleasedPages } from '../utils/dailyPages'
 
@@ -66,11 +67,7 @@ export default function SeriesPage({ slug, onReadIssue }) {
           </div>
 
           <div className="series-reader-preview">
-            <img
-              src={series.hero}
-              alt={series.title}
-              onError={() => setPreviewFailed(true)}
-            />
+            <ImageWithFallback src={series.hero} alt={series.title} fallbackText="WORLD ART INBOUND" />
           </div>
 
           <div className="series-temporal-nav">
@@ -82,6 +79,22 @@ export default function SeriesPage({ slug, onReadIssue }) {
               <button disabled>Issue 01 Coming Soon</button>
               <button disabled>Daily Pages Pending</button>
             </div>
+          </div>
+        </section>
+
+        <section className="purchase-links hud-frame">
+          <div className="series-section-header">
+            <h2>Platforms</h2>
+            <span>Storefronts and reader links will appear here</span>
+          </div>
+
+          <div className="purchase-link-grid">
+            {series.purchaseLinks.map((platform) => (
+              <article className="purchase-link-card" key={platform}>
+                <span>{platform}</span>
+                <small>Coming Soon</small>
+              </article>
+            ))}
           </div>
         </section>
       </main>
@@ -199,6 +212,47 @@ export default function SeriesPage({ slug, onReadIssue }) {
               </article>
             )
           })}
+        </div>
+      </section>
+
+      <section className="series-release-section hud-frame">
+        <div className="series-section-header">
+          <h2>Daily Archive</h2>
+          <span>Chronological release timeline</span>
+        </div>
+
+        <div className="series-archive-grid">
+          {series.dailyPages.map((page) => {
+            const isReleased = page.releaseDate <= todayString
+
+            return (
+              <button
+                key={page.pageNumber}
+                className={`series-archive-item${isReleased ? ' released' : ' unreleased'}${currentPreviewPage === page.pageNumber ? ' active' : ''}`}
+                disabled={!isReleased}
+                onClick={() => updatePreviewPage(page.pageNumber)}
+              >
+                <strong>{String(page.pageNumber).padStart(3, '0')}</strong>
+                <span>{page.releaseDate}</span>
+              </button>
+            )
+          })}
+        </div>
+      </section>
+
+      <section className="purchase-links hud-frame">
+        <div className="series-section-header">
+          <h2>Purchase & Platforms</h2>
+          <span>Additional storefront integrations coming later</span>
+        </div>
+
+        <div className="purchase-link-grid">
+          {series.purchaseLinks.map((platform) => (
+            <article className="purchase-link-card" key={platform}>
+              <span>{platform}</span>
+              <small>Coming Soon</small>
+            </article>
+          ))}
         </div>
       </section>
     </main>
