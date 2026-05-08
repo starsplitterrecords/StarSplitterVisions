@@ -19,6 +19,23 @@ if (releaseConfigWarnings.length > 0) {
   )
 }
 
+function createComingSoonSeries({ slug, title, worldLabel, tagline, description, hero }) {
+  return {
+    slug,
+    title,
+    worldLabel,
+    tagline,
+    description,
+    hero,
+    currentRelease: 'Coming Soon',
+    releaseConfigs: [],
+    dailyPages: [],
+    releases: [],
+    purchaseLinks: ['Comixology', 'Kindle', 'Apple Books', 'Google Play Books'],
+    status: 'coming-soon',
+  }
+}
+
 export const seriesPages = {
   'vikings-2026': {
     slug: 'vikings-2026',
@@ -56,5 +73,70 @@ export const seriesPages = {
       },
     ],
     purchaseLinks: ['Comixology', 'Kindle', 'Apple Books', 'Google Play Books'],
+    status: 'active',
   },
+  'glass-hour': createComingSoonSeries({
+    slug: 'glass-hour',
+    title: 'Glass Hour',
+    worldLabel: 'Temporal Market // Restricted Signal',
+    tagline: 'Neon magenta conspiracies unfold through fractured time markets.',
+    description: 'A coming Visions world about time, trade, memory, and impossible bargains.',
+    hero: '/images/covers/glass-hour-issue-01.png',
+  }),
+  'rex-of-the-splitters': createComingSoonSeries({
+    slug: 'rex-of-the-splitters',
+    title: 'Rex of the Splitters',
+    worldLabel: 'Frontier Jump Corridor // Outer Signal',
+    tagline: 'Cyan frontier raids across unstable jump corridors.',
+    description: 'A coming Visions world of unstable crossings, outlaw crews, and frontier myth.',
+    hero: '/images/covers/rex-of-the-splitters-issue-01.png',
+  }),
+  'sunforge-outlaw': createComingSoonSeries({
+    slug: 'sunforge-outlaw',
+    title: 'Sunforge Outlaw',
+    worldLabel: 'Ash Circuit // Solar Borderlands',
+    tagline: 'Dust-choked worlds, hot steel, and outlaw dynasties.',
+    description: 'A coming Visions world forged from heat, exile, inheritance, and rebellion.',
+    hero: '/images/covers/sunforge-outlaw-issue-01.png',
+  }),
+  'signal-atlas': createComingSoonSeries({
+    slug: 'signal-atlas',
+    title: 'Signal Atlas',
+    worldLabel: 'Cartographer Node // Deep Signal',
+    tagline: 'Cartographers decode impossible maps hidden in starlight noise.',
+    description: 'A coming Visions world about maps that should not exist and the people who follow them anyway.',
+    hero: '/images/covers/signal-atlas-issue-01.png',
+  }),
+  'stardust-station': createComingSoonSeries({
+    slug: 'stardust-station',
+    title: 'Stardust Station',
+    worldLabel: 'Orbital Workplace // Public-Facing Signal',
+    tagline: 'A workplace sci-fi comedy from the edges of the Visions signal.',
+    description: 'A coming Visions world where corporate optimism, cosmic logistics, and bad signage collide.',
+    hero: '/images/covers/stardust-station-issue-01.png',
+  }),
+  'hollow-creek': createComingSoonSeries({
+    slug: 'hollow-creek',
+    title: 'Hollow Creek',
+    worldLabel: 'Local Archive // Dark Signal',
+    tagline: 'A quiet signal from somewhere darker, stranger, and older.',
+    description: 'A coming Visions world of small-town shadows, impossible memory, and local folklore.',
+    hero: '/images/covers/hollow-creek-issue-01.png',
+  }),
+  'the-choir-array': createComingSoonSeries({
+    slug: 'the-choir-array',
+    title: 'The Choir Array',
+    worldLabel: 'Vocal Relay // Cosmic Signal',
+    tagline: 'A cosmic transmission assembled from impossible voices.',
+    description: 'A coming Visions world built from resonance, signal, devotion, and scale.',
+    hero: '/images/covers/the-choir-array-issue-01.png',
+  }),
+  'supersonic-being': createComingSoonSeries({
+    slug: 'supersonic-being',
+    title: 'Supersonic Being',
+    worldLabel: 'Velocity Event // Human Signal',
+    tagline: 'Velocity, identity, and myth under pressure.',
+    description: 'A coming Visions world about speed, pressure, selfhood, and becoming something else.',
+    hero: '/images/covers/supersonic-being-issue-01.png',
+  }),
 }
