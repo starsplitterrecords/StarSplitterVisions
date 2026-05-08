@@ -19,6 +19,8 @@ if (releaseConfigWarnings.length > 0) {
   )
 }
 
+const vikingsIssue01Cover = '/images/pages/vikings-2026/issue-01/page-001.jpg'
+
 function createComingSoonSeries({
   slug,
   title,
@@ -55,7 +57,7 @@ export const seriesPages = {
     tagline: 'Norse legends displaced into modern New York.',
     description:
       'Ancient rivalries, bureaucratic absurdity, and displaced warriors collide inside the Department of Temporal Integration.',
-    hero: '/images/covers/vikings-2026-issue-01.svg',
+    hero: vikingsIssue01Cover,
     accent: '#BAFF00',
     atmosphere: 'Civic bureaucracy meets temporal-collapse mythology.',
     currentRelease: 'Issue 01',
@@ -68,7 +70,7 @@ export const seriesPages = {
         status: 'Now Reading',
         description: 'The first documented displacement event in the Vikings 2026 archive.',
         pageCount: 15,
-        cover: '/images/covers/vikings-2026-issue-01.svg',
+        cover: vikingsIssue01Cover,
       },
       {
         slug: 'vikings-2026-issue-02',
