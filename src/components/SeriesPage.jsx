@@ -107,6 +107,10 @@ export default function SeriesPage({ slug, onReadIssue }) {
   }
 
   const currentPageData = availablePages.find((page) => page.pageNumber === currentPreviewPage)
+  const firstRelease = series.releases.find((release) => release.cover)
+  const totalPages = series.dailyPages.length
+  const releasedPageCount = availablePages.length
+  const nextUnreleasedPage = series.dailyPages.find((page) => page.releaseDate > todayString)
 
   const updatePreviewPage = (nextPage) => {
     setPreviewFailed(false)
@@ -125,24 +129,43 @@ export default function SeriesPage({ slug, onReadIssue }) {
 
   return (
     <main className="series-page world-themed" style={worldStyle}>
-      <section className="series-world-header hud-frame">
+      <section className="series-world-header series-world-header-featured hud-frame">
         <div>
-          <p className="eyebrow">NOW ENTERING //</p>
+          <p className="eyebrow">FLAGSHIP SERIES //</p>
           <h1>{series.title}</h1>
           <p className="series-tagline">{series.tagline}</p>
           <p className="series-atmosphere">{series.atmosphere}</p>
         </div>
 
-        <div className="series-world-meta">
+        <div className="series-world-meta series-world-stats">
           <span>{series.worldLabel}</span>
           <span>{series.currentRelease}</span>
+          <span>{releasedPageCount} of {totalPages} daily pages released</span>
+          {nextUnreleasedPage ? <span>Next page: {nextUnreleasedPage.releaseDate}</span> : <span>Issue fully released</span>}
+        </div>
+      </section>
+
+      <section className="series-launch-strip hud-frame">
+        <div className="series-cover-lockup">
+          <ImageWithFallback src={firstRelease?.cover || series.hero} alt={`${series.title} ${series.currentRelease} cover`} fallbackText="ISSUE COVER" />
+        </div>
+
+        <div className="series-launch-copy">
+          <p className="eyebrow">CURRENT ISSUE //</p>
+          <h2>{series.currentRelease}</h2>
+          <p>{firstRelease?.description || series.description}</p>
+        </div>
+
+        <div className="series-launch-actions">
+          <button className="primary-action" onClick={() => onReadIssue?.(1)}>Read From Page 001</button>
+          <button onClick={() => latestPage && onReadIssue?.(latestPage.pageNumber)}>Open Latest Daily</button>
         </div>
       </section>
 
       <section className="series-current-page hud-frame">
         <div className="series-current-copy">
-          <p className="eyebrow">CURRENT DAILY PAGE //</p>
-          <h2>Page {currentPreviewPage}</h2>
+          <p className="eyebrow">LATEST DAILY PAGE //</p>
+          <h2>Page {String(currentPreviewPage).padStart(3, '0')}</h2>
           <p className="series-description">{series.description}</p>
         </div>
 
@@ -162,7 +185,7 @@ export default function SeriesPage({ slug, onReadIssue }) {
 
         <div className="series-temporal-nav">
           <p className="series-page-counter">
-            Page {currentPreviewPage} • Released {currentPageData?.releaseDate || 'Pending'}
+            Page {String(currentPreviewPage).padStart(3, '0')} • Released {currentPageData?.releaseDate || 'Pending'} • {releasedPageCount} available
           </p>
 
           <div className="series-page-controls" aria-label="Daily page navigation">
@@ -179,7 +202,7 @@ export default function SeriesPage({ slug, onReadIssue }) {
             </button>
 
             <button onClick={() => onReadIssue?.(currentPreviewPage)}>
-              Open Current Page
+              Open This Page
             </button>
           </div>
         </div>
@@ -224,7 +247,7 @@ export default function SeriesPage({ slug, onReadIssue }) {
       <section className="series-release-section hud-frame">
         <div className="series-section-header">
           <h2>Daily Archive</h2>
-          <span>Chronological release timeline</span>
+          <span>{releasedPageCount} released • {Math.max(totalPages - releasedPageCount, 0)} scheduled</span>
         </div>
 
         <div className="series-archive-grid">
@@ -239,7 +262,7 @@ export default function SeriesPage({ slug, onReadIssue }) {
                 onClick={() => updatePreviewPage(page.pageNumber)}
               >
                 <strong>{String(page.pageNumber).padStart(3, '0')}</strong>
-                <span>{page.releaseDate}</span>
+                <span>{isReleased ? page.releaseDate : `Scheduled ${page.releaseDate}`}</span>
               </button>
             )
           })}
