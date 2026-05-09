@@ -154,7 +154,8 @@
 
 .world-themed .series-archive-item.active,
 .world-themed .active-release,
-.world-themed .purchase-link-card:hover {
+.world-themed .purchase-link-card:hover,
+.series-launch-strip {
   border-color: color-mix(in srgb, var(--world-accent) 45%, var(--line));
   background: color-mix(in srgb, var(--world-accent) 8%, rgba(5, 9, 16, .72));
 }
@@ -167,6 +168,10 @@
   overflow: hidden;
 }
 
+.series-world-header-featured {
+  padding: 1.8rem;
+}
+
 .series-world-header h1 {
   font-size: clamp(2.4rem, 7vw, 5.2rem);
   line-height: .9;
@@ -175,7 +180,8 @@
 }
 
 .series-tagline,
-.series-description {
+.series-description,
+.series-launch-copy p {
   color: #cfdbef;
   line-height: 1.5;
   margin: 0;
@@ -189,6 +195,10 @@
   min-width: 220px;
 }
 
+.series-world-stats {
+  align-content: end;
+}
+
 .series-world-meta span,
 .series-page-counter,
 .series-section-header span {
@@ -196,6 +206,40 @@
   font-size: .78rem;
   letter-spacing: .08em;
   text-transform: uppercase;
+}
+
+.series-launch-strip {
+  align-items: center;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 180px minmax(0, 1fr) auto;
+  padding: 1rem;
+}
+
+.series-cover-lockup img {
+  aspect-ratio: 2 / 3;
+  display: block;
+  object-fit: contain;
+  width: 180px;
+}
+
+.series-launch-copy {
+  display: grid;
+  gap: .7rem;
+}
+
+.series-launch-copy h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin: 0;
+}
+
+.series-launch-actions {
+  display: grid;
+  gap: .6rem;
+}
+
+.series-launch-actions button {
+  min-width: 220px;
 }
 
 .series-current-page {
@@ -230,14 +274,14 @@
 .reader-stage img {
   display: block;
   height: auto;
-  max-height: min(72vh, 820px);
+  max-height: min(68vh, 780px);
   object-fit: contain;
   width: auto;
   max-width: 100%;
 }
 
 .series-preview-fallback {
-  min-height: min(72vh, 820px);
+  min-height: min(68vh, 780px);
   width: 100%;
 }
 
@@ -259,6 +303,7 @@
 .series-page-controls button,
 .series-page-actions button,
 .series-release-actions button,
+.series-launch-actions button,
 .reader-controls button,
 .reader-page-jump button,
 .reader-header button,
@@ -423,11 +468,14 @@
 
 @media (max-width: 900px) {
   .small-rail .mini-card { flex-basis: 148px; min-width: 148px; }
-  .series-world-header { grid-template-columns: 1fr; padding: 1rem; }
+  .series-world-header,
+  .series-launch-strip { grid-template-columns: 1fr; padding: 1rem; }
   .series-world-meta { min-width: 0; }
+  .series-cover-lockup img { margin: 0 auto; width: min(240px, 100%); }
+  .series-launch-actions button { min-width: 0; width: 100%; }
   .series-reader-preview img,
-  .reader-stage img { max-height: 64vh; }
-  .series-preview-fallback { min-height: 64vh; }
+  .reader-stage img { max-height: 60vh; }
+  .series-preview-fallback { min-height: 60vh; }
   .series-section-header { align-items: start; display: grid; }
   .series-release-row { grid-template-columns: 66px minmax(0, 1fr); }
   .series-release-cover img,
@@ -444,12 +492,13 @@
   .small-rail .mini-card { flex-basis: 128px; min-width: 128px; }
   .series-world-header h1 { font-size: 3rem; }
   .series-reader-preview img,
-  .reader-stage img { max-height: 56vh; }
-  .series-preview-fallback { min-height: 56vh; }
+  .reader-stage img { max-height: 52vh; }
+  .series-preview-fallback { min-height: 52vh; }
   .series-page-controls { display: grid; grid-template-columns: repeat(5, 1fr); }
   .series-page-controls button { font-size: .78rem; min-width: 0; padding: .7rem .15rem; }
   .series-page-actions,
-  .reader-controls { display: grid; grid-template-columns: 1fr; }
+  .reader-controls,
+  .series-launch-actions { display: grid; grid-template-columns: 1fr; }
   .reader-page-jump { display: grid; grid-template-columns: repeat(5, 1fr); }
   .reader-page-jump button { min-width: 0; }
   .purchase-link-grid { grid-template-columns: 1fr; }
