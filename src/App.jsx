@@ -3,27 +3,20 @@ import Reader from './components/Reader'
 import SeriesIndex from './components/SeriesIndex'
 import SeriesPage from './components/SeriesPage'
 import ImageWithFallback from './components/shared/ImageWithFallback'
+import { brandAssets, coverAssets } from './data/assets'
 import { featuredSeries, moreWorlds } from './data/homepageSeries'
 import { seriesPages } from './data/seriesPages'
+import {
+  buildReaderPath,
+  buildSeriesPath,
+  clampPageNumber,
+  parseReaderPath,
+} from './utils/routes'
 import './styles.css'
 import './mobile-overrides.css'
 
 const navLinks = ['Home', 'Series', 'Issues', 'Soundtracks', 'Extras', 'About']
 const defaultSeriesSlug = 'vikings-2026'
-const vikingsIssue01Cover = '/images/covers/vikings-2026-issue-01.jpg'
-
-function parseReaderPath(pathname) {
-  const match = pathname.match(/^\/read\/([^/]+)\/page\/(\d+)$/)
-
-  if (!match) {
-    return null
-  }
-
-  return {
-    seriesSlug: match[1],
-    pageNumber: Number(match[2]),
-  }
-}
 
 function App() {
   const initialReaderPath = parseReaderPath(window.location.pathname || '/')
@@ -76,18 +69,18 @@ function App() {
 
   const openReader = (pageNumber = 1, seriesSlug = defaultSeriesSlug) => {
     const series = seriesPages[seriesSlug] || seriesPages[defaultSeriesSlug]
-    const safePage = Math.min(Math.max(pageNumber, 1), series.dailyPages.length)
+    const safePage = clampPageNumber(pageNumber, series.dailyPages.length)
 
     setActiveReaderSeriesSlug(series.slug)
     setCurrentPage(safePage - 1)
     setIsReaderOpen(true)
 
-    navigate(`/read/${series.slug}/page/${String(safePage).padStart(3, '0')}`)
+    navigate(buildReaderPath(series.slug, safePage))
   }
 
   const openSeries = (slug) => {
     setIsReaderOpen(false)
-    navigate(`/series/${slug}`)
+    navigate(buildSeriesPath(slug))
   }
 
   const openSeriesIndex = () => {
@@ -105,7 +98,7 @@ function App() {
     const pageNumber = safePageIndex + 1
 
     setCurrentPage(safePageIndex)
-    replaceRoute(`/read/${activeReaderSeries.slug}/page/${String(pageNumber).padStart(3, '0')}`)
+    replaceRoute(buildReaderPath(activeReaderSeries.slug, pageNumber))
   }
 
   const handleNavClick = (event, link) => {
@@ -131,8 +124,8 @@ function App() {
   const renderHeader = (activeNav) => (
     <header className="top-nav hud-frame">
       <button className="brand brand-button" onClick={goHome} type="button">
-        <ImageWithFallback className="brand-logo" src="/images/brand/logo.png" alt="Star Splitter Visions" fallbackText="STAR SPLITTER VISIONS" />
-        <ImageWithFallback className="brand-icon" src="/images/brand/icon.png" alt="Star Splitter Visions mark" fallbackText="✦" />
+        <ImageWithFallback className="brand-logo" src={brandAssets.logo} alt="Star Splitter Visions" fallbackText="STAR SPLITTER VISIONS" />
+        <ImageWithFallback className="brand-icon" src={brandAssets.icon} alt="Star Splitter Visions mark" fallbackText="✦" />
       </button>
 
       <nav>
@@ -273,7 +266,7 @@ function App() {
           <article className="panel hud-frame">
             <h3>Latest Release</h3>
             <p>Vikings 2026 — Issue 01</p>
-            <ImageWithFallback src={vikingsIssue01Cover} alt="Vikings 2026 issue 1" fallbackText="VIKINGS 2026" />
+            <ImageWithFallback src={coverAssets.vikingsIssue01} alt="Vikings 2026 issue 1" fallbackText="VIKINGS 2026" />
           </article>
 
           <article className="panel hud-frame soundtrack">
@@ -286,7 +279,7 @@ function App() {
 
       <footer className="footer hud-frame">
         <strong>
-          <ImageWithFallback className="footer-logo" src="/images/brand/logo.png" alt="Star Splitter Visions" fallbackText="STAR SPLITTER VISIONS" />
+          <ImageWithFallback className="footer-logo" src={brandAssets.logo} alt="Star Splitter Visions" fallbackText="STAR SPLITTER VISIONS" />
         </strong>
 
         <div>
