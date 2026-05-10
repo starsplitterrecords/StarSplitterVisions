@@ -1,6 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
 import ImageWithFallback from './shared/ImageWithFallback'
+import ExtrasRail from './media/ExtrasRail'
+import AudioRail from './media/AudioRail'
 import { seriesPages } from '../data/seriesPages'
+import { vikingsExtras } from '../data/vikingsExtras'
+import { vikingsAudio } from '../data/vikingsAudio'
 import { getLatestReleasedPage, getReleasedPages } from '../utils/dailyPages'
 
 export default function SeriesPage({ slug, onReadIssue }) {
@@ -13,6 +17,9 @@ export default function SeriesPage({ slug, onReadIssue }) {
   const worldStyle = {
     '--world-accent': series?.accent || '#BAFF00',
   }
+
+  const seriesExtras = slug === 'vikings-2026' ? vikingsExtras : []
+  const seriesAudio = slug === 'vikings-2026' ? vikingsAudio : []
 
   const availablePages = useMemo(() => {
     if (!series || series.dailyPages.length === 0) {
@@ -84,22 +91,6 @@ export default function SeriesPage({ slug, onReadIssue }) {
               <button disabled>Issue 01 Coming Soon</button>
               <button disabled>Daily Pages Pending</button>
             </div>
-          </div>
-        </section>
-
-        <section className="purchase-links hud-frame">
-          <div className="series-section-header">
-            <h2>Platforms</h2>
-            <span>Storefronts and reader links will appear here</span>
-          </div>
-
-          <div className="purchase-link-grid">
-            {series.purchaseLinks.map((platform) => (
-              <article className="purchase-link-card" key={platform}>
-                <span>{platform}</span>
-                <small>Coming Soon</small>
-              </article>
-            ))}
           </div>
         </section>
       </main>
@@ -207,6 +198,10 @@ export default function SeriesPage({ slug, onReadIssue }) {
           </div>
         </div>
       </section>
+
+      <ExtrasRail title="Recovered Artifacts" artifacts={seriesExtras} />
+
+      <AudioRail title="Signal Audio" tracks={seriesAudio} />
 
       <section className="series-release-section hud-frame">
         <div className="series-section-header">
