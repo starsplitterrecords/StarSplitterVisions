@@ -13,7 +13,7 @@ export const featuredSeries = [
     title: 'Azure Reach',
     issue: 'In Development',
     hook: 'A workplace comedy inside the invisible systems that keep wonder alive.',
-    cover: null,
+    cover: coverAssets.azureReachIssue01,
   },
   {
     slug: 'stardust-station',
