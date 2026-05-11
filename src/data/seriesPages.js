@@ -72,7 +72,7 @@ export const seriesPages = {
     developmentStatus: 'In development',
     worldLabel: 'Orbital Workplace Sitcom',
     currentRelease: 'Preview',
-    hero: '/images/series/stardust-station/hero.jpg',
+    hero: null,
     accent: '#FFCE5C',
     format: 'Workplace sitcom / comic development',
     worldPremise: 'People trapped together in a space workplace discover the real emergency is each other.',
