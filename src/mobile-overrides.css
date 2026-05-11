@@ -97,7 +97,7 @@
 
 .series-page {
   display: grid;
-  gap: 1rem;
+  gap: 1.15rem;
   margin-top: 1rem;
 }
 
@@ -133,9 +133,10 @@
 .series-atmosphere {
   border-left: 2px solid var(--world-accent);
   color: color-mix(in srgb, var(--world-accent) 42%, #cfdbef);
-  line-height: 1.45;
+  font-size: 1rem;
+  line-height: 1.55;
   margin: 1rem 0 0;
-  max-width: 38rem;
+  max-width: 42rem;
   padding-left: .85rem;
 }
 
@@ -162,37 +163,58 @@
 
 .series-world-header {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 1rem;
-  padding: 1.4rem;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 320px);
+  gap: 1.25rem;
+  padding: clamp(1.35rem, 3vw, 2.25rem);
   overflow: hidden;
 }
 
 .series-world-header-featured {
-  padding: 1.8rem;
+  padding: clamp(1.6rem, 4vw, 2.8rem);
 }
 
 .series-world-header h1 {
-  font-size: clamp(2.4rem, 7vw, 5.2rem);
-  line-height: .9;
-  margin: .35rem 0 .65rem;
-  letter-spacing: -.05em;
+  font-size: clamp(3rem, 8vw, 6.4rem);
+  line-height: .86;
+  margin: .35rem 0 .75rem;
+  letter-spacing: -.065em;
+  max-width: 11ch;
 }
 
 .series-tagline,
 .series-description,
 .series-launch-copy p {
-  color: #cfdbef;
-  line-height: 1.5;
+  color: #d5e0f0;
+  line-height: 1.58;
   margin: 0;
-  max-width: 42rem;
+  max-width: 46rem;
+}
+
+.series-tagline {
+  font-size: clamp(1.04rem, 2vw, 1.28rem);
+}
+
+.series-tag-rail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-top: 1rem;
+}
+
+.series-tag-rail span {
+  border: 1px solid color-mix(in srgb, var(--world-accent) 36%, var(--line));
+  color: color-mix(in srgb, var(--world-accent) 54%, #eff6ff);
+  font-size: .72rem;
+  letter-spacing: .08em;
+  padding: .4rem .55rem;
+  text-transform: uppercase;
 }
 
 .series-world-meta {
   align-self: end;
   display: grid;
-  gap: .45rem;
-  min-width: 220px;
+  gap: .5rem;
+  min-width: 0;
 }
 
 .series-world-stats {
@@ -205,22 +227,30 @@
   color: #9eabc0;
   font-size: .78rem;
   letter-spacing: .08em;
+  line-height: 1.35;
   text-transform: uppercase;
+}
+
+.series-world-meta span {
+  background: rgba(5, 9, 16, .42);
+  border: 1px solid rgba(255, 255, 255, .045);
+  padding: .55rem .65rem;
 }
 
 .series-launch-strip {
   align-items: center;
   display: grid;
-  gap: 1rem;
-  grid-template-columns: 180px minmax(0, 1fr) auto;
+  gap: 1.1rem;
+  grid-template-columns: 150px minmax(0, 1fr) minmax(190px, auto);
   padding: 1rem;
 }
 
-.series-cover-lockup img {
+.series-cover-lockup img,
+.series-cover-lockup .image-fallback {
   aspect-ratio: 2 / 3;
   display: block;
   object-fit: contain;
-  width: 180px;
+  width: 150px;
 }
 
 .series-launch-copy {
@@ -229,7 +259,7 @@
 }
 
 .series-launch-copy h2 {
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(1.8rem, 4vw, 3rem);
   margin: 0;
 }
 
@@ -239,13 +269,74 @@
 }
 
 .series-launch-actions button {
-  min-width: 220px;
+  min-width: 190px;
+}
+
+.series-editorial-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, .85fr);
+}
+
+.series-editorial-section,
+.series-dna-panel,
+.series-theme-section,
+.series-release-section,
+.purchase-links {
+  padding: clamp(1rem, 2vw, 1.35rem);
+}
+
+.series-editorial-copy p {
+  color: #d6e2f2;
+  font-size: 1.02rem;
+  line-height: 1.75;
+  margin: 0;
+  max-width: 68rem;
+}
+
+.series-dna-grid {
+  display: grid;
+  gap: .75rem;
+}
+
+.series-dna-grid div,
+.series-theme-grid article {
+  background: rgba(5, 9, 16, .5);
+  border: 1px solid rgba(255,255,255,.055);
+  display: grid;
+  gap: .35rem;
+  padding: .85rem;
+}
+
+.series-dna-grid span {
+  color: color-mix(in srgb, var(--world-accent) 44%, #9eabc0);
+  font-size: .72rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.series-dna-grid strong {
+  color: #eff6ff;
+  font-size: .95rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.series-theme-grid {
+  display: grid;
+  gap: .65rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.series-theme-grid article span {
+  color: #d6e2f2;
+  line-height: 1.45;
 }
 
 .series-current-page {
   display: grid;
   gap: 1rem;
-  padding: 1rem;
+  padding: clamp(1rem, 2vw, 1.4rem);
 }
 
 .series-current-copy {
@@ -257,7 +348,7 @@
 .series-current-copy h2,
 .series-section-header h2 {
   margin: 0;
-  font-size: clamp(1.6rem, 3vw, 2.6rem);
+  font-size: clamp(1.55rem, 3vw, 2.45rem);
   letter-spacing: -.03em;
 }
 
@@ -274,7 +365,7 @@
 .reader-stage img {
   display: block;
   height: auto;
-  max-height: min(68vh, 780px);
+  max-height: min(70vh, 820px);
   object-fit: contain;
   width: auto;
   max-width: 100%;
@@ -319,12 +410,7 @@
 .reader-controls button {
   flex: 1;
   min-width: 74px;
-  padding: .7rem .5rem;
-}
-
-.series-release-section,
-.purchase-links {
-  padding: 1rem;
+  padding: .75rem .55rem;
 }
 
 .series-section-header {
@@ -466,17 +552,42 @@
 .reader-tap-zone-left { left: 0; }
 .reader-tap-zone-right { right: 0; }
 
+@media (max-width: 980px) {
+  .series-world-header,
+  .series-editorial-grid,
+  .series-launch-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .series-launch-actions {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .series-launch-actions button {
+    min-width: 0;
+  }
+}
+
 @media (max-width: 900px) {
   .small-rail .mini-card { flex-basis: 148px; min-width: 148px; }
+  .series-page { gap: .8rem; margin-top: .7rem; }
   .series-world-header,
-  .series-launch-strip { grid-template-columns: 1fr; padding: 1rem; }
+  .series-launch-strip { padding: 1rem; }
+  .series-world-header h1 { font-size: clamp(2.75rem, 14vw, 4.6rem); max-width: 9ch; }
   .series-world-meta { min-width: 0; }
-  .series-cover-lockup img { margin: 0 auto; width: min(240px, 100%); }
-  .series-launch-actions button { min-width: 0; width: 100%; }
+  .series-world-meta span { padding: .5rem .55rem; }
+  .series-atmosphere { font-size: .95rem; line-height: 1.5; }
+  .series-tag-rail { gap: .4rem; }
+  .series-tag-rail span { font-size: .66rem; padding: .35rem .45rem; }
+  .series-cover-lockup img,
+  .series-cover-lockup .image-fallback { margin: 0 auto; width: min(220px, 100%); }
   .series-reader-preview img,
   .reader-stage img { max-height: 60vh; }
   .series-preview-fallback { min-height: 60vh; }
   .series-section-header { align-items: start; display: grid; }
+  .series-editorial-copy p { font-size: .98rem; line-height: 1.65; }
+  .series-dna-grid { gap: .55rem; }
+  .series-theme-grid { grid-template-columns: 1fr 1fr; }
   .series-release-row { grid-template-columns: 66px minmax(0, 1fr); }
   .series-release-cover img,
   .series-release-placeholder { width: 66px; }
@@ -488,18 +599,27 @@
   .reader-header { align-items: start; flex-direction: column; }
 }
 
-@media (max-width: 420px) {
-  .small-rail .mini-card { flex-basis: 128px; min-width: 128px; }
-  .series-world-header h1 { font-size: 3rem; }
-  .series-reader-preview img,
-  .reader-stage img { max-height: 52vh; }
-  .series-preview-fallback { min-height: 52vh; }
-  .series-page-controls { display: grid; grid-template-columns: repeat(5, 1fr); }
-  .series-page-controls button { font-size: .78rem; min-width: 0; padding: .7rem .15rem; }
+@media (max-width: 520px) {
+  .series-world-header h1 { font-size: clamp(2.55rem, 18vw, 3.75rem); max-width: 8ch; }
+  .series-launch-actions,
   .series-page-actions,
   .reader-controls,
   .series-launch-actions { display: grid; grid-template-columns: 1fr; }
+  .series-page-controls { display: grid; grid-template-columns: repeat(5, 1fr); }
+  .series-page-controls button { font-size: .76rem; min-width: 0; padding: .7rem .12rem; }
+  .series-theme-grid,
+  .purchase-link-grid { grid-template-columns: 1fr; }
+  .series-archive-grid { grid-template-columns: repeat(3, 1fr); }
+  .series-archive-item { padding: .68rem .5rem; }
+  .series-archive-item strong { font-size: .9rem; }
+  .series-archive-item span { font-size: .7rem; line-height: 1.25; }
+}
+
+@media (max-width: 420px) {
+  .small-rail .mini-card { flex-basis: 128px; min-width: 128px; }
+  .series-reader-preview img,
+  .reader-stage img { max-height: 52vh; }
+  .series-preview-fallback { min-height: 52vh; }
   .reader-page-jump { display: grid; grid-template-columns: repeat(5, 1fr); }
   .reader-page-jump button { min-width: 0; }
-  .purchase-link-grid { grid-template-columns: 1fr; }
 }
