@@ -1,0 +1,22 @@
+{
+  "seriesSlug": "azure-reach",
+  "releaseSlug": "azure-reach-issue-01",
+  "issueNumber": 1,
+  "assets": {
+    "cover": {
+      "repoPath": "public/images/azure-reach/azure-reach-issue-01/cover.jpg",
+      "runtimePath": "/images/azure-reach/azure-reach-issue-01/cover.jpg",
+      "dimensions": "1800x2700"
+    },
+    "hero": {
+      "repoPath": "public/images/azure-reach/azure-reach-issue-01/hero.jpg",
+      "runtimePath": "/images/azure-reach/azure-reach-issue-01/hero.jpg",
+      "dimensions": "2400x1350"
+    },
+    "social": {
+      "repoPath": "public/images/azure-reach/azure-reach-issue-01/social.jpg",
+      "runtimePath": "/images/azure-reach/azure-reach-issue-01/social.jpg",
+      "dimensions": "1200x630"
+    }
+  }
+}
