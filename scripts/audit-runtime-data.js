@@ -7,6 +7,10 @@ const repoRoot = path.resolve(path.dirname(__filename), '..')
 
 const errors = []
 const warnings = []
+const referencedRuntimeImages = new Set()
+const referencedAssetKeys = new Set()
+
+const imageExtensions = new Set(['.jpg', '.jpeg', '.png', '.webp', '.gif', '.svg'])
 
 function repoPath(...segments) {
   return path.join(repoRoot, ...segments)
@@ -22,6 +26,25 @@ function assertFileMissing(relativePath, message = `${relativePath} should not e
   if (fs.existsSync(repoPath(relativePath))) {
     errors.push(message)
   }
+}
+
+function walkFiles(directory) {
+  if (!fs.existsSync(directory)) return []
+
+  return fs.readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const fullPath = path.join(directory, entry.name)
+
+    if (entry.isDirectory()) {
+      return walkFiles(fullPath)
+    }
+
+    return [fullPath]
+  })
+}
+
+function toRuntimePath(publicFilePath) {
+  const relativePublicPath = path.relative(repoPath('public'), publicFilePath).replaceAll(path.sep, '/')
+  return `/${relativePublicPath}`
 }
 
 function assertNoPublicPrefix(value, context) {
@@ -45,11 +68,17 @@ function assertRuntimeImagePath(value, context) {
     return
   }
 
+  referencedRuntimeImages.add(value)
+
   const publicPath = repoPath('public', value.replace(/^\//, ''))
 
   if (!fs.existsSync(publicPath)) {
     warnings.push(`${context} references missing image asset: ${value}`)
   }
+}
+
+function markAssetKey(key) {
+  if (key) referencedAssetKeys.add(key)
 }
 
 async function loadModule(relativePath) {
@@ -97,14 +126,20 @@ function assertKnownSeriesLink(slug, context) {
   }
 }
 
+function findAssetKeyByPath(registry, runtimePath) {
+  return Object.entries(registry || {}).find(([, value]) => value === runtimePath)?.[0]
+}
+
 ;(featuredSeries || []).forEach((series, index) => {
   assertKnownSeriesLink(series.slug, `featuredSeries[${index}]`)
   assertRuntimeImagePath(series.cover, `featuredSeries[${index}].cover`)
+  markAssetKey(findAssetKeyByPath(coverAssets, series.cover))
 })
 
 ;(moreWorlds || []).forEach((series, index) => {
   assertKnownSeriesLink(series.slug, `moreWorlds[${index}]`)
   assertRuntimeImagePath(series.cover, `moreWorlds[${index}].cover`)
+  markAssetKey(findAssetKeyByPath(coverAssets, series.cover))
 })
 
 Object.entries(seriesPages || {}).forEach(([slug, series]) => {
@@ -117,14 +152,34 @@ Object.entries(seriesPages || {}).forEach(([slug, series]) => {
   }
 
   assertRuntimeImagePath(series.hero, `seriesPages.${slug}.hero`)
+  markAssetKey(findAssetKeyByPath(coverAssets, series.hero))
 
   ;(series.releases || []).forEach((release, index) => {
     assertRuntimeImagePath(release.cover, `seriesPages.${slug}.releases[${index}].cover`)
+    markAssetKey(findAssetKeyByPath(coverAssets, release.cover))
   })
 
   ;(series.dailyPages || []).forEach((page, index) => {
     assertRuntimeImagePath(page.image, `seriesPages.${slug}.dailyPages[${index}].image`)
   })
+})
+
+Object.keys(brandAssets || {}).forEach(markAssetKey)
+
+Object.keys(coverAssets || {}).forEach((key) => {
+  if (!referencedAssetKeys.has(key)) {
+    warnings.push(`coverAssets.${key} is registered but not used by current homepage/series runtime data`)
+  }
+})
+
+const publicImageFiles = walkFiles(repoPath('public', 'images'))
+  .filter((filePath) => imageExtensions.has(path.extname(filePath).toLowerCase()))
+  .map(toRuntimePath)
+
+publicImageFiles.forEach((runtimePath) => {
+  if (!referencedRuntimeImages.has(runtimePath)) {
+    warnings.push(`public image appears orphaned by current runtime data: ${runtimePath}`)
+  }
 })
 
 warnings.forEach((warning) => console.warn(`Runtime data warning: ${warning}`))
