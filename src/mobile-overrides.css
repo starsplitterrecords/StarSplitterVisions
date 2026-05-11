@@ -16,7 +16,7 @@
 .series-page-vikings .series-cover-lockup .image-fallback{
   width:min(100%,240px);
   justify-self:center;
-  object-fit:cover;
+  object-fit:contain;
   border:1px solid rgba(255,255,255,.09);
 }
 .series-page-vikings .series-launch-copy{
