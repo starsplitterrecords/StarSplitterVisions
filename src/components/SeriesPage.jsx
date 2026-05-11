@@ -7,6 +7,22 @@ import { vikingsExtras } from '../data/vikingsExtras'
 import { vikingsAudio } from '../data/vikingsAudio'
 import { getLatestReleasedPage, getReleasedPages } from '../utils/dailyPages'
 
+function EditorialSection({ title, children }) {
+  if (!children) return null
+
+  return (
+    <section className="series-editorial-section hud-frame">
+      <div className="series-section-header">
+        <h2>{title}</h2>
+      </div>
+
+      <div className="series-editorial-copy">
+        <p>{children}</p>
+      </div>
+    </section>
+  )
+}
+
 export default function SeriesPage({ slug, onReadIssue }) {
   const series = seriesPages[slug]
   const [currentPreviewPage, setCurrentPreviewPage] = useState(1)
@@ -54,6 +70,9 @@ export default function SeriesPage({ slug, onReadIssue }) {
     )
   }
 
+  const narrativeForms = series.narrativeForms || []
+  const themes = series.themes || []
+
   if (series.status === 'coming-soon') {
     return (
       <main className="series-page world-themed" style={worldStyle}>
@@ -81,18 +100,11 @@ export default function SeriesPage({ slug, onReadIssue }) {
           <div className="series-reader-preview">
             <ImageWithFallback src={series.hero} alt={series.title} fallbackText="WORLD ART INBOUND" />
           </div>
-
-          <div className="series-temporal-nav">
-            <p className="series-page-counter">
-              Publishing pipeline active • No released pages yet
-            </p>
-
-            <div className="series-page-actions">
-              <button disabled>Issue 01 Coming Soon</button>
-              <button disabled>Daily Pages Pending</button>
-            </div>
-          </div>
         </section>
+
+        <EditorialSection title="About This World">
+          {series.worldPremise || series.description}
+        </EditorialSection>
       </main>
     )
   }
@@ -126,6 +138,14 @@ export default function SeriesPage({ slug, onReadIssue }) {
           <h1>{series.title}</h1>
           <p className="series-tagline">{series.tagline}</p>
           <p className="series-atmosphere">{series.atmosphere}</p>
+
+          {narrativeForms.length > 0 && (
+            <div className="series-tag-rail">
+              {narrativeForms.map((item) => (
+                <span key={item}>{item}</span>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="series-world-meta series-world-stats">
@@ -152,6 +172,68 @@ export default function SeriesPage({ slug, onReadIssue }) {
           <button onClick={() => latestPage && onReadIssue?.(latestPage.pageNumber)}>Open Latest Daily</button>
         </div>
       </section>
+
+      <section className="series-editorial-grid">
+        <EditorialSection title="About This World">
+          {series.worldPremise || series.description}
+        </EditorialSection>
+
+        <section className="series-dna-panel hud-frame">
+          <div className="series-section-header">
+            <h2>Narrative DNA</h2>
+          </div>
+
+          <div className="series-dna-grid">
+            {series.format && (
+              <div>
+                <span>Format</span>
+                <strong>{series.format}</strong>
+              </div>
+            )}
+
+            {series.seriesEngine && (
+              <div>
+                <span>Series Engine</span>
+                <strong>{series.seriesEngine}</strong>
+              </div>
+            )}
+
+            {series.coreConflict && (
+              <div>
+                <span>Core Conflict</span>
+                <strong>{series.coreConflict}</strong>
+              </div>
+            )}
+
+            {series.developmentStatus && (
+              <div>
+                <span>Status</span>
+                <strong>{series.developmentStatus}</strong>
+              </div>
+            )}
+          </div>
+        </section>
+      </section>
+
+      {themes.length > 0 && (
+        <section className="series-theme-section hud-frame">
+          <div className="series-section-header">
+            <h2>Themes & Concerns</h2>
+          </div>
+
+          <div className="series-theme-grid">
+            {themes.map((theme) => (
+              <article key={theme}>
+                <span>{theme}</span>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <EditorialSection title="Reader Orientation">
+        {series.readerEntry || series.audiencePromise}
+      </EditorialSection>
 
       <section className="series-current-page hud-frame">
         <div className="series-current-copy">
@@ -202,83 +284,6 @@ export default function SeriesPage({ slug, onReadIssue }) {
       <ExtrasRail title="Recovered Artifacts" artifacts={seriesExtras} />
 
       <AudioRail title="Signal Audio" tracks={seriesAudio} />
-
-      <section className="series-release-section hud-frame">
-        <div className="series-section-header">
-          <h2>Issues</h2>
-          <span>Current and archived releases</span>
-        </div>
-
-        <div className="series-release-list">
-          {series.releases.map((release) => {
-            const isActiveRelease = Boolean(release.cover)
-
-            return (
-              <article className={`series-release-row${isActiveRelease ? ' active-release' : ''}`} key={release.slug}>
-                <div className="series-release-cover">
-                  {release.cover ? <img src={release.cover} alt={release.title} /> : <div className="series-release-placeholder">SOON</div>}
-                </div>
-
-                <div className="series-release-copy">
-                  <p>{release.status}</p>
-                  <h3>{release.title}</h3>
-                  <span>{release.description}</span>
-                </div>
-
-                <div className="series-release-meta">
-                  <strong>{release.pageCount || '—'}</strong>
-                  <small>{release.pageCount ? 'Pages' : 'Pending'}</small>
-                </div>
-
-                <div className="series-release-actions">
-                  {isActiveRelease ? <button onClick={() => onReadIssue?.(1)}>Read Issue</button> : <button disabled>Coming Soon</button>}
-                </div>
-              </article>
-            )
-          })}
-        </div>
-      </section>
-
-      <section className="series-release-section hud-frame">
-        <div className="series-section-header">
-          <h2>Daily Archive</h2>
-          <span>{releasedPageCount} released • {Math.max(totalPages - releasedPageCount, 0)} scheduled</span>
-        </div>
-
-        <div className="series-archive-grid">
-          {series.dailyPages.map((page) => {
-            const isReleased = page.releaseDate <= todayString
-
-            return (
-              <button
-                key={page.pageNumber}
-                className={`series-archive-item${isReleased ? ' released' : ' unreleased'}${currentPreviewPage === page.pageNumber ? ' active' : ''}`}
-                disabled={!isReleased}
-                onClick={() => updatePreviewPage(page.pageNumber)}
-              >
-                <strong>{String(page.pageNumber).padStart(3, '0')}</strong>
-                <span>{isReleased ? page.releaseDate : `Scheduled ${page.releaseDate}`}</span>
-              </button>
-            )
-          })}
-        </div>
-      </section>
-
-      <section className="purchase-links hud-frame">
-        <div className="series-section-header">
-          <h2>Purchase & Platforms</h2>
-          <span>Additional storefront integrations coming later</span>
-        </div>
-
-        <div className="purchase-link-grid">
-          {series.purchaseLinks.map((platform) => (
-            <article className="purchase-link-card" key={platform}>
-              <span>{platform}</span>
-              <small>Coming Soon</small>
-            </article>
-          ))}
-        </div>
-      </section>
     </main>
   )
 }
