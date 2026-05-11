@@ -5,7 +5,7 @@ export const brandAssets = {
 
 export const coverAssets = {
   vikingsIssue01: '/images/covers/vikings-2026-issue-01.jpg',
-  azureReachIssue01: '/images/covers/azure-reach-issue-01.png',
+  azureReachIssue01: '/images/covers/azure-reach-issue-01-cover.jpg',
   glassHourIssue01: '/images/covers/glass-hour-issue-01.png',
   rexOfTheSplittersIssue01: '/images/covers/rex-of-the-splitters-issue-01.png',
   sunforgeOutlawIssue01: '/images/covers/sunforge-outlaw-issue-01.png',
