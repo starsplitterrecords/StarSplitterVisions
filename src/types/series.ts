@@ -55,6 +55,15 @@ export interface SeriesPageData {
   releases: SeriesRelease[]
   purchaseLinks: string[]
   status: SeriesStatus
+  format?: string
+  audiencePromise?: string
+  worldPremise?: string
+  coreConflict?: string
+  seriesEngine?: string
+  narrativeForms?: string[]
+  themes?: string[]
+  readerEntry?: string
+  developmentStatus?: string
 }
 
 export type SeriesPagesBySlug = Record<string, SeriesPageData>
