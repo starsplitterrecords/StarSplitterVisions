@@ -49,11 +49,17 @@ export const seriesPages = {
     developmentStatus: 'In development',
     worldLabel: 'Workplace Comedy',
     currentRelease: 'Preview',
-    hero: '/images/series/azure-reach/hero.jpg',
+    hero: '/images/covers/azure-reach-issue-01-cover.jpg',
     accent: '#3BE7FF',
     format: 'Series bible / comic development',
     worldPremise: 'Behind every effortless moment of public wonder is an invisible system of people solving problems before anyone notices.',
-    releases: [],
+    releases: [
+      {
+        title: 'Issue 01 Preview',
+        cover: '/images/covers/azure-reach-issue-01-cover.jpg',
+        description: 'The first public visual signal for Azure Reach.',
+      },
+    ],
     dailyPages: [],
   },
   'stardust-station': {
