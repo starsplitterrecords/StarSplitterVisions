@@ -1,4 +1,4 @@
-import { coverAssets } from './assets'
+import { coverAssets } from './assets.js'
 
 export const featuredSeries = [
   {
@@ -19,7 +19,7 @@ export const featuredSeries = [
     slug: 'stardust-station',
     title: 'Stardust Station',
     issue: 'In Development',
-    hook: 'A character-first workplace sitcom on a space station under constant social pressure.',
+    hook: 'A character-first workplace sitcom about forced proximity in orbit.',
     cover: null,
   },
 ]
