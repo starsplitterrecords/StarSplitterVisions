@@ -75,7 +75,7 @@ export default function SeriesPage({ slug, onReadIssue }) {
 
   if (series.status === 'coming-soon') {
     return (
-      <main className="series-page world-themed" style={worldStyle}>
+      <main className={`series-page world-themed ${slug === 'vikings-2026' ? 'series-page-vikings' : ''}`.trim()} style={worldStyle}>
         <section className="series-world-header hud-frame">
           <div>
             <p className="eyebrow">SIGNAL DETECTED //</p>
@@ -131,7 +131,7 @@ export default function SeriesPage({ slug, onReadIssue }) {
   }
 
   return (
-    <main className="series-page world-themed" style={worldStyle}>
+    <main className={`series-page world-themed ${slug === 'vikings-2026' ? 'series-page-vikings' : ''}`.trim()} style={worldStyle}>
       <section className="series-world-header series-world-header-featured hud-frame">
         <div>
           <p className="eyebrow">FLAGSHIP SERIES //</p>
