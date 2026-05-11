@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import AboutPage from './components/AboutPage'
 import Reader from './components/Reader'
 import SeriesIndex from './components/SeriesIndex'
 import SeriesPage from './components/SeriesPage'
@@ -111,6 +112,12 @@ function App() {
 
     if (link === 'Series') {
       openSeriesIndex()
+      return
+    }
+
+    if (link === 'About') {
+      setIsReaderOpen(false)
+      navigate('/about')
     }
   }
 
@@ -152,6 +159,15 @@ function App() {
     )
   }
 
+  if (route === '/about') {
+    return (
+      <div className="site-shell">
+        {renderHeader('About')}
+        <AboutPage />
+      </div>
+    )
+  }
+
   if (route === '/series') {
     return (
       <div className="site-shell">
@@ -187,7 +203,7 @@ function App() {
 
           <div className="cta-row">
             <button className="primary" onClick={() => openSeries(defaultSeriesSlug)}>Explore Series</button>
-            <button disabled>Learn More</button>
+            <button onClick={() => navigate('/about')}>About</button>
           </div>
         </div>
 
