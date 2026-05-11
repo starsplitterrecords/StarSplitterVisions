@@ -10,11 +10,18 @@ export const featuredSeries: FeaturedSeriesItem[] = [
     cover: coverAssets.vikingsIssue01,
   },
   {
-    slug: 'glass-hour',
-    title: 'Glass Hour',
-    issue: 'Pilot Drop',
-    hook: 'Neon magenta conspiracies unfold through fractured time markets.',
-    cover: coverAssets.glassHourIssue01,
+    slug: 'azure-reach',
+    title: 'Azure Reach',
+    issue: 'Series Preview',
+    hook: 'A workplace comedy-drama inside a luxury marine park built on spectacle, labor, and invisible care.',
+    cover: coverAssets.azureReachIssue01,
+  },
+  {
+    slug: 'stardust-station',
+    title: 'Stardust Station',
+    issue: 'Station Preview',
+    hook: 'Corporate hospitality, cosmic logistics, and existential customer service collide in orbit.',
+    cover: coverAssets.stardustStationIssue01,
   },
   {
     slug: 'rex-of-the-splitters',
@@ -30,20 +37,18 @@ export const featuredSeries: FeaturedSeriesItem[] = [
     hook: 'Dust-choked worlds, hot steel, and outlaw dynasties.',
     cover: coverAssets.sunforgeOutlawIssue01,
   },
-  {
-    slug: 'signal-atlas',
-    title: 'Signal Atlas',
-    issue: 'Nodebook 07',
-    hook: 'Cartographers decode impossible maps hidden in starlight noise.',
-    cover: coverAssets.signalAtlasIssue01,
-  },
 ]
 
 export const moreWorlds: MoreWorldItem[] = [
   {
-    slug: 'stardust-station',
-    title: 'Stardust Station',
-    cover: coverAssets.stardustStationIssue01,
+    slug: 'glass-hour',
+    title: 'Glass Hour',
+    cover: coverAssets.glassHourIssue01,
+  },
+  {
+    slug: 'signal-atlas',
+    title: 'Signal Atlas',
+    cover: coverAssets.signalAtlasIssue01,
   },
   {
     slug: 'hollow-creek',
