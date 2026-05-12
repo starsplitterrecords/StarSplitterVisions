@@ -1,10 +1,13 @@
+import ImageWithFallback from '../shared/ImageWithFallback'
+
 export default function ArtifactCard({ artifact }) {
   return (
     <article className="artifact-card hud-frame">
-      <img
+      <ImageWithFallback
         className="artifact-card-image"
         src={artifact.image}
         alt={artifact.title}
+        fallbackText="ARTIFACT IMAGE INBOUND"
       />
 
       <div className="artifact-card-content">
