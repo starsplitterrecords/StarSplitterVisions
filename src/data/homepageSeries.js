@@ -20,7 +20,7 @@ export const featuredSeries = [
     title: 'Stardust Station',
     issue: 'In Development',
     hook: 'A character-first workplace sitcom about forced proximity in orbit.',
-    cover: null,
+    cover: coverAssets.stardustStationIssue01,
   },
 ]
 
@@ -33,7 +33,7 @@ export const moreWorlds = [
   {
     slug: 'sunforge-outlaw',
     title: 'Sunforge Outlaw',
-    cover: null,
+    cover: coverAssets.sunforgeOutlawIssue01,
   },
   {
     slug: 'low-tide-signal',
