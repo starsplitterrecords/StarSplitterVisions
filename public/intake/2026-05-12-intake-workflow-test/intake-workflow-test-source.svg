@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360" role="img" aria-labelledby="title desc">
+  <title id="title">Asset intake workflow test</title>
+  <desc id="desc">A simple test image for the Star Splitter Visions intake workflow.</desc>
+  <rect width="640" height="360" fill="#08111f" />
+  <rect x="24" y="24" width="592" height="312" fill="none" stroke="#baff00" stroke-width="8" />
+  <text x="320" y="174" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="34" font-weight="700">INTAKE TEST</text>
+  <text x="320" y="218" text-anchor="middle" fill="#baff00" font-family="Arial, sans-serif" font-size="20">canonical asset workflow</text>
+</svg>
