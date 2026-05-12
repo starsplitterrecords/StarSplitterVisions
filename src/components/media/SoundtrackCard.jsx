@@ -1,10 +1,13 @@
+import ImageWithFallback from '../shared/ImageWithFallback'
+
 export default function SoundtrackCard({ track }) {
   return (
     <article className="soundtrack-card hud-frame">
-      <img
+      <ImageWithFallback
         className="soundtrack-card-image"
         src={track.coverImage}
         alt={track.title}
+        fallbackText="AUDIO ART INBOUND"
       />
 
       <div className="soundtrack-card-content">
@@ -16,18 +19,20 @@ export default function SoundtrackCard({ track }) {
 
         <p>{track.description}</p>
 
-        <div className="soundtrack-card-links">
-          {track.platformLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.url}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {link.label}
-            </a>
-          ))}
-        </div>
+        {track.platformLinks?.length > 0 && (
+          <div className="soundtrack-card-links">
+            {track.platformLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.url}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+        )}
       </div>
     </article>
   )
