@@ -1,6 +1,0 @@
-SERIES: platform
-ASSET TYPE: misc-reference
-TARGET USE: intake workflow proof
-SOURCE FILE: intake-workflow-test-source.svg
-FINAL PATH: /images/brand/intake-workflow-test.svg
-NOTES: Lightweight STA-186 end-to-end test asset. Not referenced by runtime data.
