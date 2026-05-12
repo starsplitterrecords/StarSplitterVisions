@@ -1,0 +1,6 @@
+SERIES: platform
+ASSET TYPE: misc-reference
+TARGET USE: intake workflow proof
+SOURCE FILE: public/intake/2026-05-12-intake-workflow-test/intake-workflow-test-source.svg
+FINAL PATH: /images/brand/intake-workflow-test.svg
+NOTES: STA-186 end-to-end test. Source was staged in intake, published to canonical brand path, and this manifest was preserved as provenance. Runtime data does not reference this test asset.
