@@ -1,3 +1,5 @@
+import { coverAssets } from './assets.js'
+
 const makeVikingsPages = () => Array.from({ length: 15 }, (_, index) => {
   const pageNumber = index + 1
   const padded = String(pageNumber).padStart(3, '0')
@@ -33,7 +35,7 @@ export const seriesPages = {
     releases: [
       {
         title: 'Issue 01',
-        cover: '/images/covers/vikings-2026-issue-01.jpg',
+        cover: coverAssets.vikingsIssue01,
         description: 'The first public signal from Vikings 2026!',
       },
     ],
@@ -49,14 +51,14 @@ export const seriesPages = {
     developmentStatus: 'In development',
     worldLabel: 'Workplace Comedy',
     currentRelease: 'Preview',
-    hero: '/images/covers/azure-reach-issue-01-cover.jpg',
+    hero: coverAssets.azureReachIssue01,
     accent: '#3BE7FF',
     format: 'Series bible / comic development',
     worldPremise: 'Behind every effortless moment of public wonder is an invisible system of people solving problems before anyone notices.',
     releases: [
       {
         title: 'Issue 01 Preview',
-        cover: '/images/covers/azure-reach-issue-01-cover.jpg',
+        cover: coverAssets.azureReachIssue01,
         description: 'The first public visual signal for Azure Reach.',
       },
     ],
@@ -72,11 +74,17 @@ export const seriesPages = {
     developmentStatus: 'In development',
     worldLabel: 'Orbital Workplace Sitcom',
     currentRelease: 'Preview',
-    hero: null,
+    hero: coverAssets.stardustStationIssue01,
     accent: '#FFCE5C',
     format: 'Workplace sitcom / comic development',
     worldPremise: 'People trapped together in a space workplace discover the real emergency is each other.',
-    releases: [],
+    releases: [
+      {
+        title: 'Issue 01 Preview',
+        cover: coverAssets.stardustStationIssue01,
+        description: 'The first public visual signal for Stardust Station.',
+      },
+    ],
     dailyPages: [],
   },
   'rex-fleet': {
@@ -89,11 +97,17 @@ export const seriesPages = {
     developmentStatus: 'In development',
     worldLabel: 'Speculative Adventure',
     currentRelease: 'Preview',
-    hero: null,
+    hero: coverAssets.rexOfTheSplittersIssue01,
     accent: '#BAFF00',
     format: 'Comic development',
     worldPremise: 'Public-facing details are still being locked.',
-    releases: [],
+    releases: [
+      {
+        title: 'Issue 01 Preview',
+        cover: coverAssets.rexOfTheSplittersIssue01,
+        description: 'The first public visual signal for Rex Fleet.',
+      },
+    ],
     dailyPages: [],
   },
   'sunforge-outlaw': {
@@ -106,11 +120,17 @@ export const seriesPages = {
     developmentStatus: 'In development',
     worldLabel: 'Speculative Frontier',
     currentRelease: 'Preview',
-    hero: null,
+    hero: coverAssets.sunforgeOutlawIssue01,
     accent: '#FF9B3D',
     format: 'Comic development',
     worldPremise: 'Public-facing details are still being locked.',
-    releases: [],
+    releases: [
+      {
+        title: 'Issue 01 Preview',
+        cover: coverAssets.sunforgeOutlawIssue01,
+        description: 'The first public visual signal for Sunforge Outlaw.',
+      },
+    ],
     dailyPages: [],
   },
   'low-tide-signal': {
