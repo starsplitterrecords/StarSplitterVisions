@@ -5,22 +5,25 @@ function ContactPage() {
         <p className="eyebrow">CONTACT // STAR SPLITTER VISIONS</p>
         <h1>Contact</h1>
         <p>
-          For publishing, press, collaboration, or rights inquiries, use the current official contact channel for Star Splitter Visions.
+          For publishing, press, collaboration, rights, or platform inquiries, use this page as the public routing point
+          for Star Splitter Visions. A permanent contact address will be published when the approved public channel is ready.
         </p>
       </section>
 
       <section className="info-grid">
         <article className="info-card hud-frame">
-          <h2>General inquiries</h2>
+          <h2>Publishing and collaboration</h2>
           <p>
-            Send series, publishing, or platform inquiries through the established Star Splitter Records / Star Splitter Visions contact channel.
+            Include the series, release, or workstream you are asking about, along with the purpose of the inquiry and any
+            relevant timing.
           </p>
         </article>
 
         <article className="info-card hud-frame">
-          <h2>Asset and website updates</h2>
+          <h2>Press and coverage</h2>
           <p>
-            Website changes should include the target page, canonical asset path, and any approved public copy needed for implementation.
+            For reviews, interviews, coverage, or media requests, include the outlet, intended use, requested materials,
+            and deadline.
           </p>
         </article>
       </section>
