@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import AboutPage from './components/AboutPage'
+import ContactPage from './components/ContactPage'
+import PressPage from './components/PressPage'
 import Reader from './components/Reader'
 import SeriesIndex from './components/SeriesIndex'
 import SeriesPage from './components/SeriesPage'
@@ -15,8 +17,9 @@ import {
 } from './utils/routes'
 import './styles.css'
 import './mobile-overrides.css'
+import './public-shell.css'
 
-const navLinks = ['Home', 'Series', 'Issues', 'Soundtracks', 'Extras', 'About']
+const navLinks = ['Home', 'Series', 'About', 'Contact', 'Press']
 const defaultSeriesSlug = 'vikings-2026'
 
 function App() {
@@ -102,6 +105,11 @@ function App() {
     replaceRoute(buildReaderPath(activeReaderSeries.slug, pageNumber))
   }
 
+  const navigateToPage = (path) => {
+    setIsReaderOpen(false)
+    navigate(path)
+  }
+
   const handleNavClick = (event, link) => {
     event.preventDefault()
 
@@ -115,10 +123,7 @@ function App() {
       return
     }
 
-    if (link === 'About') {
-      setIsReaderOpen(false)
-      navigate('/about')
-    }
+    navigateToPage(`/${link.toLowerCase()}`)
   }
 
   const handleSeriesCardKeyDown = (event, slug) => {
@@ -137,12 +142,37 @@ function App() {
 
       <nav>
         {navLinks.map((link) => (
-          <a key={link} className={link === activeNav ? 'active' : ''} href="#" onClick={(event) => handleNavClick(event, link)}>
+          <a key={link} className={link === activeNav ? 'active' : ''} href={`/${link === 'Home' ? '' : link.toLowerCase()}`} onClick={(event) => handleNavClick(event, link)}>
             {link}
           </a>
         ))}
       </nav>
     </header>
+  )
+
+  const renderFooter = () => (
+    <footer className="footer hud-frame">
+      <strong>
+        <ImageWithFallback className="footer-logo" src={brandAssets.logo} alt="Star Splitter Visions" fallbackText="STAR SPLITTER VISIONS" />
+      </strong>
+
+      <div>
+        <button className="footer-link-button" onClick={openSeriesIndex} type="button">Series</button>
+        <button className="footer-link-button" onClick={() => navigateToPage('/about')} type="button">About</button>
+        <button className="footer-link-button" onClick={() => navigateToPage('/contact')} type="button">Contact</button>
+        <button className="footer-link-button" onClick={() => navigateToPage('/press')} type="button">Press</button>
+      </div>
+
+      <small>Story worlds. Daily pages. Boundless visions.</small>
+    </footer>
+  )
+
+  const renderShellPage = (activeNav, page) => (
+    <div className="site-shell">
+      {renderHeader(activeNav)}
+      {page}
+      {renderFooter()}
+    </div>
   )
 
   if (isReaderOpen) {
@@ -160,31 +190,23 @@ function App() {
   }
 
   if (route === '/about') {
-    return (
-      <div className="site-shell">
-        {renderHeader('About')}
-        <AboutPage />
-      </div>
-    )
+    return renderShellPage('About', <AboutPage />)
+  }
+
+  if (route === '/contact') {
+    return renderShellPage('Contact', <ContactPage />)
+  }
+
+  if (route === '/press') {
+    return renderShellPage('Press', <PressPage />)
   }
 
   if (route === '/series') {
-    return (
-      <div className="site-shell">
-        {renderHeader('Series')}
-        <SeriesIndex onOpenSeries={openSeries} />
-      </div>
-    )
+    return renderShellPage('Series', <SeriesIndex onOpenSeries={openSeries} />)
   }
 
   if (route.startsWith('/series/')) {
-    return (
-      <div className="site-shell">
-        {renderHeader('Series')}
-
-        <SeriesPage slug={activeSeriesSlug} onReadIssue={(pageNumber) => openReader(pageNumber, activeSeriesSlug)} />
-      </div>
-    )
+    return renderShellPage('Series', <SeriesPage slug={activeSeriesSlug} onReadIssue={(pageNumber) => openReader(pageNumber, activeSeriesSlug)} />)
   }
 
   return (
@@ -203,7 +225,7 @@ function App() {
 
           <div className="cta-row">
             <button className="primary" onClick={() => openSeries(defaultSeriesSlug)}>Explore Series</button>
-            <button onClick={() => navigate('/about')}>About</button>
+            <button onClick={() => navigateToPage('/about')}>About</button>
           </div>
         </div>
 
@@ -293,19 +315,7 @@ function App() {
         </aside>
       </main>
 
-      <footer className="footer hud-frame">
-        <strong>
-          <ImageWithFallback className="footer-logo" src={brandAssets.logo} alt="Star Splitter Visions" fallbackText="STAR SPLITTER VISIONS" />
-        </strong>
-
-        <div>
-          <a href="#">Subscribe</a>
-          <a href="#">Join Discord</a>
-          <a href="#">Follow Signal</a>
-        </div>
-
-        <small>Story worlds. Daily pages. Boundless visions.</small>
-      </footer>
+      {renderFooter()}
     </div>
   )
 }
