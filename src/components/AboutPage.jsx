@@ -5,13 +5,19 @@ function AboutPage() {
         <p className="eyebrow">ABOUT // STAR SPLITTER VISIONS</p>
         <h1>Stories about people living inside strange systems.</h1>
         <p className="about-hero-copy">
-          Star Splitter Visions is an independent home for speculative comics, graphic novels, and illustrated fiction
-          about social pressure, institutional life, and the private moral worlds people build inside extraordinary circumstances.
+          Star Splitter Visions is an independent publisher of speculative comics, graphic stories, and companion music
+          about social pressure, institutional life, and the private worlds people build under extraordinary conditions.
         </p>
       </section>
 
       <section className="about-grid">
         <article className="about-foreword hud-frame">
+          <p>
+            The work begins with strange premises, but it is rarely about strangeness alone. These stories are interested
+            in what happens after the impossible becomes normal: how people work, adapt, joke, care, fail, and keep going
+            inside systems they did not design.
+          </p>
+
           <p>
             There is a tendency in speculative fiction to imagine the future as a problem of technology. Bigger weapons.
             Faster travel. Smarter machines. Stranger worlds.
@@ -21,12 +27,6 @@ function AboutPage() {
             But most people do not experience history through inventions. They experience it through institutions:
             workplaces, cities, families, bureaucracies, social expectations, economic pressure, friendships, hierarchies,
             and the quiet negotiations required to remain human inside systems too large to fully see.
-          </p>
-
-          <p>
-            That is the territory Star Splitter Visions explores. These stories are interested in what happens when the
-            impossible becomes normal, when extraordinary circumstances are absorbed into ordinary life, and when people
-            keep working, caring, adapting, joking, failing, and searching for meaning inside structures they did not design.
           </p>
 
           <blockquote>
