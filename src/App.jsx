@@ -215,27 +215,27 @@ function App() {
 
       <section className="hero hud-frame">
         <div className="hero-main">
-          <p className="eyebrow">PUBLISHER SHELL // ONLINE</p>
+          <p className="eyebrow">STAR SPLITTER VISIONS</p>
           <h1>
-            DAILY PAGES.
+            COMICS AND MUSIC.
             <br />
-            BOUNDLESS VISIONS.
+            STRANGE WORLDS.
           </h1>
-          <p>Comics and soundtracks from the edges of time, space, and imagination.</p>
+          <p>Independent speculative comics, graphic stories, and companion music from strange worlds with human stakes.</p>
 
           <div className="cta-row">
-            <button className="primary" onClick={() => openSeries(defaultSeriesSlug)}>Explore Series</button>
-            <button onClick={() => navigateToPage('/about')}>About</button>
+            <button className="primary" onClick={() => openReader(1, defaultSeriesSlug)}>Start Reading</button>
+            <button onClick={openSeriesIndex}>Explore Series</button>
           </div>
         </div>
 
         <aside className="status-panel">
-          <h3>Signal Status</h3>
+          <h3>Current Shelf</h3>
           <ul>
-            <li><span>Online</span><strong>YES</strong></li>
-            <li><span>Signal Strength</span><strong>97%</strong></li>
-            <li><span>Orbital Node</span><strong>N-06</strong></li>
-            <li><span>Tune In</span><strong>ACTIVE</strong></li>
+            <li><span>Flagship Release</span><strong>VIKINGS 2026</strong></li>
+            <li><span>Active Catalog</span><strong>3 SERIES</strong></li>
+            <li><span>Developing Worlds</span><strong>AZURE / STARDUST</strong></li>
+            <li><span>Companion Music</span><strong>IN PROGRESS</strong></li>
           </ul>
         </aside>
       </section>
