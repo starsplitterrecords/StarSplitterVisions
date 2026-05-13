@@ -163,7 +163,7 @@ function App() {
         <button className="footer-link-button" onClick={() => navigateToPage('/press')} type="button">Press</button>
       </div>
 
-      <small>Story worlds. Daily pages. Boundless visions.</small>
+      <small>Independent comics, graphic stories, and companion music from strange worlds with human stakes.</small>
     </footer>
   )
 
