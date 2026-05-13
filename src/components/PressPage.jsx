@@ -5,7 +5,8 @@ function PressPage() {
         <p className="eyebrow">PRESS // STAR SPLITTER VISIONS</p>
         <h1>Press</h1>
         <p>
-          Star Splitter Visions is an independent publishing shell for speculative comics, graphic novels, and connected music releases.
+          Star Splitter Visions is an independent publishing imprint for speculative comics, graphic stories, and
+          companion music. The platform presents a growing catalog of strange worlds with human stakes.
         </p>
       </section>
 
@@ -13,14 +14,16 @@ function PressPage() {
         <article className="info-card hud-frame">
           <h2>Publisher overview</h2>
           <p>
-            The platform presents active and developing story worlds, including daily comic pages, series previews, and soundtrack-adjacent releases.
+            The current shelf includes Vikings 2026!, Azure Reach, and Stardust Station, with additional story worlds in
+            development across comics, illustrated fiction, and soundtrack-aware releases.
           </p>
         </article>
 
         <article className="info-card hud-frame">
           <h2>Press materials</h2>
           <p>
-            Use canonical public images from the site when available. Full press-kit expansion should be handled as a separate scoped issue.
+            Use public series names, descriptions, and artwork as presented on the site. A downloadable press kit should
+            remain a separate scoped release when final approved assets are ready.
           </p>
         </article>
       </section>
