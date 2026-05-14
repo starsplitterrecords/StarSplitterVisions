@@ -38,6 +38,6 @@ export const moreWorlds = [
   {
     slug: 'low-tide-signal',
     title: 'Low Tide Signal',
-    cover: null,
+    cover: coverAssets.lowTideSignalIssue01,
   },
 ]
