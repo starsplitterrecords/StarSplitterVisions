@@ -28,7 +28,7 @@ export const moreWorlds = [
   {
     slug: 'rex-fleet',
     title: 'Rex Fleet',
-    cover: null,
+    cover: coverAssets.rexFleetIssue01,
   },
   {
     slug: 'sunforge-outlaw',
