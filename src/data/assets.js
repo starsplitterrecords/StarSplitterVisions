@@ -10,6 +10,7 @@ export const coverAssets = {
   glassHourIssue01: '/images/covers/glass-hour-issue-01.png',
   rexOfTheSplittersIssue01: '/images/covers/rex-of-the-splitters-issue-01.png',
   sunforgeOutlawIssue01: '/images/covers/sunforge-outlaw-issue-01.png',
+  lowTideSignalIssue01: '/images/covers/low-tide-signal-issue-01-cover.png',
   signalAtlasIssue01: '/images/covers/signal-atlas-issue-01.png',
   stardustStationIssue01: '/images/covers/stardust-station-issue-01.png',
   hollowCreekIssue01: '/images/covers/hollow-creek-issue-01.png',
