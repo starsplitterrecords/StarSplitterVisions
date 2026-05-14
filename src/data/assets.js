@@ -8,6 +8,7 @@ export const coverAssets = {
   vikingsIssue01: '/images/covers/vikings-2026-issue-01.jpg',
   azureReachIssue01: '/images/covers/azure-reach-issue-01-cover.jpg',
   glassHourIssue01: '/images/covers/glass-hour-issue-01.png',
+  rexFleetIssue01: '/images/covers/rex-fleet-issue-01-cover.png',
   rexOfTheSplittersIssue01: '/images/covers/rex-of-the-splitters-issue-01.png',
   sunforgeOutlawIssue01: '/images/covers/sunforge-outlaw-issue-01.png',
   lowTideSignalIssue01: '/images/covers/low-tide-signal-issue-01-cover.png',
