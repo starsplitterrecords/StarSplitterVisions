@@ -143,11 +143,17 @@ export const seriesPages = {
     developmentStatus: 'In development',
     worldLabel: 'Coastal Sci-Fi Mystery',
     currentRelease: 'Preview',
-    hero: null,
+    hero: coverAssets.lowTideSignalIssue01,
     accent: '#78D7FF',
     format: 'Limited series development',
     worldPremise: 'Public-facing details are still being locked.',
-    releases: [],
+    releases: [
+      {
+        title: 'Issue 01 Preview',
+        cover: coverAssets.lowTideSignalIssue01,
+        description: 'The first public visual signal for Low Tide Signal.',
+      },
+    ],
     dailyPages: [],
   },
 }
