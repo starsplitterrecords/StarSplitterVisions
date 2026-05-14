@@ -97,14 +97,14 @@ export const seriesPages = {
     developmentStatus: 'In development',
     worldLabel: 'Speculative Adventure',
     currentRelease: 'Preview',
-    hero: coverAssets.rexOfTheSplittersIssue01,
+    hero: coverAssets.rexFleetIssue01,
     accent: '#BAFF00',
     format: 'Comic development',
     worldPremise: 'Public-facing details are still being locked.',
     releases: [
       {
         title: 'Issue 01 Preview',
-        cover: coverAssets.rexOfTheSplittersIssue01,
+        cover: coverAssets.rexFleetIssue01,
         description: 'The first public visual signal for Rex Fleet.',
       },
     ],
