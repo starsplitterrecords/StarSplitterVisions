@@ -1,0 +1,108 @@
+name: Clean Records branch once
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/clean-records-branch-once.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/clean-records-branch-once.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: clean-records-branch-once
+  cancel-in-progress: false
+
+jobs:
+  clean-records:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out Records branch
+        uses: actions/checkout@v4
+        with:
+          ref: records-site-cms
+          fetch-depth: 0
+
+      - name: Reconstruct validated source and checked-in assets
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          test -f .records-clean/source/part-0000
+          test -d .records-bootstrap/source
+
+          mkdir -p /tmp/records-clean/source /tmp/records-clean/assets
+          cat .records-clean/source/part-* | base64 -d > /tmp/records-clean/source.tar.gz
+          tar -xzf /tmp/records-clean/source.tar.gz -C /tmp/records-clean/source
+
+          cat .records-bootstrap/source/part-* | base64 -d > /tmp/records-clean/assets.tar.gz
+          tar -xzf /tmp/records-clean/assets.tar.gz -C /tmp/records-clean/assets
+
+          test -f /tmp/records-clean/source/package.json
+          test -f /tmp/records-clean/source/package-lock.json
+          test -f /tmp/records-clean/source/.pages.yml
+          test -f /tmp/records-clean/source/records/scripts/build.mjs
+          test -d /tmp/records-clean/assets/public/images/records
+
+      - name: Replace fragmented branch with normal source files
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git rm -r --ignore-unmatch .
+          git clean -fdx
+
+          cp -a /tmp/records-clean/source/. .
+          mkdir -p public/images public/media
+          cp -a /tmp/records-clean/assets/public/images/records public/images/
+          if [ -d /tmp/records-clean/assets/public/media/records ]; then
+            cp -a /tmp/records-clean/assets/public/media/records public/media/
+          fi
+
+          test "$(find records/content/artists -type f -name '*.json' | wc -l)" -eq 23
+          test "$(find public/images/records -type f | wc -l)" -eq 72
+          test "$(find public/media/records -type f | wc -l)" -eq 1
+          test ! -d .records-bootstrap
+          test ! -d .records-clean
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Validate and build complete Records website
+        run: npm run check
+
+      - name: Verify generated website
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f records/dist/index.html
+          test "$(find records/dist/artists -type f -name '*.html' | wc -l)" -eq 23
+          test "$(find records/dist/releases -type f -name '*.html' | wc -l)" -eq 40
+          grep -q 'Star Splitter Records' records/dist/index.html
+          grep -q 'Authorship and process' records/dist/index.html
+
+      - name: Commit clean Records branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf node_modules records/dist records/.asset-baseline
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Clean and finalize Star Splitter Records website"
+          git push origin HEAD:records-site-cms
