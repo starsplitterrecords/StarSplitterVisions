@@ -4,12 +4,12 @@ import { fileURLToPath } from 'node:url'
 
 const __filename = fileURLToPath(import.meta.url)
 const repoRoot = path.resolve(path.dirname(__filename), '..')
+const contentRoot = path.join(repoRoot, 'src', 'content')
+const seriesRoot = path.join(contentRoot, 'series')
 
 const errors = []
 const warnings = []
 const referencedRuntimeImages = new Set()
-const referencedAssetKeys = new Set()
-
 const imageExtensions = new Set(['.jpg', '.jpeg', '.png', '.webp', '.gif', '.svg'])
 
 function repoPath(...segments) {
@@ -22,34 +22,23 @@ function assertFileExists(relativePath, message = `${relativePath} is missing`) 
   }
 }
 
-function assertFileMissing(relativePath, message = `${relativePath} should not exist`) {
-  if (fs.existsSync(repoPath(relativePath))) {
-    errors.push(message)
-  }
-}
-
 function walkFiles(directory) {
   if (!fs.existsSync(directory)) return []
 
   return fs.readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
     const fullPath = path.join(directory, entry.name)
-
-    if (entry.isDirectory()) {
-      return walkFiles(fullPath)
-    }
-
-    return [fullPath]
+    return entry.isDirectory() ? walkFiles(fullPath) : [fullPath]
   })
 }
 
-function toRuntimePath(publicFilePath) {
-  const relativePublicPath = path.relative(repoPath('public'), publicFilePath).replaceAll(path.sep, '/')
-  return `/${relativePublicPath}`
-}
+function readJson(relativePath) {
+  const absolutePath = repoPath(relativePath)
 
-function assertNoPublicPrefix(value, context) {
-  if (typeof value === 'string' && value.startsWith('/public/')) {
-    errors.push(`${context} uses invalid public runtime prefix: ${value}`)
+  try {
+    return JSON.parse(fs.readFileSync(absolutePath, 'utf8'))
+  } catch (error) {
+    errors.push(`${relativePath} is not valid JSON: ${error.message}`)
+    return null
   }
 }
 
@@ -61,7 +50,10 @@ function assertRuntimeImagePath(value, context) {
     return
   }
 
-  assertNoPublicPrefix(value, context)
+  if (value.startsWith('/public/')) {
+    errors.push(`${context} uses invalid public runtime prefix: ${value}`)
+    return
+  }
 
   if (!value.startsWith('/images/')) {
     errors.push(`${context} must use /images/... runtime path: ${value}`)
@@ -71,25 +63,34 @@ function assertRuntimeImagePath(value, context) {
   referencedRuntimeImages.add(value)
 
   const publicPath = repoPath('public', value.replace(/^\//, ''))
-
   if (!fs.existsSync(publicPath)) {
     warnings.push(`${context} references missing image asset: ${value}`)
   }
 }
 
-function markAssetKey(key) {
-  if (key) referencedAssetKeys.add(key)
+function assertDate(value, context, { optional = false } = {}) {
+  if (!value && optional) return
+
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    errors.push(`${context} must use YYYY-MM-DD format`)
+  }
 }
 
-async function loadModule(relativePath) {
-  const moduleUrl = new URL(`../${relativePath}`, import.meta.url)
-  return import(moduleUrl.href)
+function assertKnownSeries(slug, knownSeries, context) {
+  if (!knownSeries.has(slug)) {
+    errors.push(`${context} references unknown series slug: ${slug}`)
+  }
 }
 
+assertFileExists('.pages.yml')
 assertFileExists('src/App.jsx')
-assertFileExists('src/data/assets.js')
 assertFileExists('src/data/homepageSeries.js')
 assertFileExists('src/data/seriesPages.js')
+assertFileExists('src/content/site.json')
+assertFileExists('src/content/homepage.json')
+assertFileExists('src/content/pages/about.json')
+assertFileExists('src/content/pages/contact.json')
+assertFileExists('src/content/pages/press.json')
 assertFileExists('src/components/SeriesIndex.jsx')
 assertFileExists('src/components/SeriesPage.jsx')
 assertFileExists('src/components/Reader.jsx')
@@ -97,88 +98,134 @@ assertFileExists('src/components/shared/ImageWithFallback.jsx')
 assertFileExists('src/utils/routes.js')
 assertFileExists('src/utils/dailyPages.js')
 
-assertFileMissing('src/data/assets.ts', 'Remove stale parallel src/data/assets.ts; runtime asset registry is src/data/assets.js')
-assertFileMissing('tsconfig.json', 'Remove stale tsconfig.json unless TypeScript migration is active')
+const pagesConfig = fs.existsSync(repoPath('.pages.yml'))
+  ? fs.readFileSync(repoPath('.pages.yml'), 'utf8')
+  : ''
 
-const { brandAssets, coverAssets, pageImageBases } = await loadModule('src/data/assets.js')
-const { featuredSeries, moreWorlds } = await loadModule('src/data/homepageSeries.js')
-const { seriesPages } = await loadModule('src/data/seriesPages.js')
-
-Object.entries(brandAssets || {}).forEach(([key, value]) => {
-  assertRuntimeImagePath(value, `brandAssets.${key}`)
-})
-
-Object.entries(coverAssets || {}).forEach(([key, value]) => {
-  assertRuntimeImagePath(value, `coverAssets.${key}`)
-})
-
-Object.entries(pageImageBases || {}).forEach(([key, value]) => {
-  if (typeof value !== 'string' || !value.startsWith('/images/')) {
-    errors.push(`pageImageBases.${key} must use /images/... runtime path`)
-  }
-})
-
-const knownSeries = new Set(Object.keys(seriesPages || {}))
-
-function assertKnownSeriesLink(slug, context) {
-  if (!knownSeries.has(slug)) {
-    errors.push(`${context} references unknown series slug: ${slug}`)
-  }
+if (pagesConfig && !pagesConfig.includes('path: src/content/series')) {
+  errors.push('.pages.yml must expose src/content/series as an editable collection')
 }
 
-function findAssetKeyByPath(registry, runtimePath) {
-  return Object.entries(registry || {}).find(([, value]) => value === runtimePath)?.[0]
+if (pagesConfig && !pagesConfig.includes('input: public/images')) {
+  errors.push('.pages.yml must store uploaded media in public/images')
 }
 
-;(featuredSeries || []).forEach((series, index) => {
-  assertKnownSeriesLink(series.slug, `featuredSeries[${index}]`)
-  assertRuntimeImagePath(series.cover, `featuredSeries[${index}].cover`)
-  markAssetKey(findAssetKeyByPath(coverAssets, series.cover))
-})
+const site = readJson('src/content/site.json') || {}
+const homepage = readJson('src/content/homepage.json') || {}
+readJson('src/content/pages/about.json')
+readJson('src/content/pages/contact.json')
+readJson('src/content/pages/press.json')
 
-;(moreWorlds || []).forEach((series, index) => {
-  assertKnownSeriesLink(series.slug, `moreWorlds[${index}]`)
-  assertRuntimeImagePath(series.cover, `moreWorlds[${index}].cover`)
-  markAssetKey(findAssetKeyByPath(coverAssets, series.cover))
-})
+assertRuntimeImagePath(site.brand?.logo, 'site.brand.logo')
+assertRuntimeImagePath(site.brand?.icon, 'site.brand.icon')
+assertRuntimeImagePath(homepage.latestRelease?.image, 'homepage.latestRelease.image')
 
-Object.entries(seriesPages || {}).forEach(([slug, series]) => {
-  if (series.slug !== slug) {
-    errors.push(`seriesPages.${slug}.slug must match object key`)
+const seriesFiles = walkFiles(seriesRoot)
+  .filter((filePath) => path.extname(filePath).toLowerCase() === '.json')
+  .sort()
+
+if (seriesFiles.length === 0) {
+  errors.push('src/content/series must contain at least one JSON file')
+}
+
+const seriesCatalog = {}
+const slugSources = new Map()
+
+seriesFiles.forEach((filePath) => {
+  const relativePath = path.relative(repoRoot, filePath).replaceAll(path.sep, '/')
+  const series = readJson(relativePath)
+
+  if (!series) return
+
+  if (!series.slug || typeof series.slug !== 'string') {
+    errors.push(`${relativePath}.slug is required`)
+    return
   }
+
+  if (!/^[a-z0-9-]+$/.test(series.slug)) {
+    errors.push(`${relativePath}.slug must contain lowercase letters, numbers, and hyphens only`)
+  }
+
+  if (slugSources.has(series.slug)) {
+    errors.push(`${relativePath}.slug duplicates ${slugSources.get(series.slug)}`)
+  }
+
+  slugSources.set(series.slug, relativePath)
+  seriesCatalog[series.slug] = series
 
   if (!series.title) {
-    errors.push(`seriesPages.${slug}.title is required`)
+    errors.push(`${relativePath}.title is required`)
   }
 
-  assertRuntimeImagePath(series.hero, `seriesPages.${slug}.hero`)
-  markAssetKey(findAssetKeyByPath(coverAssets, series.hero))
+  if (!['active', 'coming-soon', 'archived'].includes(series.status)) {
+    errors.push(`${relativePath}.status must be active, coming-soon, or archived`)
+  }
+
+  assertRuntimeImagePath(series.hero, `${relativePath}.hero`)
+  assertRuntimeImagePath(series.homepage?.cover, `${relativePath}.homepage.cover`)
 
   ;(series.releases || []).forEach((release, index) => {
-    assertRuntimeImagePath(release.cover, `seriesPages.${slug}.releases[${index}].cover`)
-    markAssetKey(findAssetKeyByPath(coverAssets, release.cover))
+    if (!release.title) {
+      errors.push(`${relativePath}.releases[${index}].title is required`)
+    }
+    assertRuntimeImagePath(release.cover, `${relativePath}.releases[${index}].cover`)
+    assertDate(release.releaseDate, `${relativePath}.releases[${index}].releaseDate`, { optional: true })
   })
 
+  const pageNumbers = new Set()
   ;(series.dailyPages || []).forEach((page, index) => {
-    assertRuntimeImagePath(page.image, `seriesPages.${slug}.dailyPages[${index}].image`)
+    if (!Number.isInteger(page.pageNumber) || page.pageNumber < 1) {
+      errors.push(`${relativePath}.dailyPages[${index}].pageNumber must be a positive integer`)
+    }
+
+    if (pageNumbers.has(page.pageNumber)) {
+      errors.push(`${relativePath}.dailyPages contains duplicate page number ${page.pageNumber}`)
+    }
+
+    pageNumbers.add(page.pageNumber)
+    assertDate(page.releaseDate, `${relativePath}.dailyPages[${index}].releaseDate`)
+    assertRuntimeImagePath(page.image, `${relativePath}.dailyPages[${index}].image`)
+  })
+
+  ;(series.extras || []).forEach((artifact, index) => {
+    assertRuntimeImagePath(artifact.image, `${relativePath}.extras[${index}].image`)
+  })
+
+  ;(series.audio || []).forEach((track, index) => {
+    assertRuntimeImagePath(track.coverImage, `${relativePath}.audio[${index}].coverImage`)
   })
 })
 
-Object.keys(brandAssets || {}).forEach(markAssetKey)
+const knownSeries = new Set(Object.keys(seriesCatalog))
 
-Object.keys(coverAssets || {}).forEach((key) => {
-  if (!referencedAssetKeys.has(key)) {
-    warnings.push(`coverAssets.${key} is registered but not used by current homepage/series runtime data`)
-  }
+assertKnownSeries(site.defaultSeriesSlug, knownSeries, 'site.defaultSeriesSlug')
+
+;(homepage.featuredSeries || []).forEach((slug, index) => {
+  assertKnownSeries(slug, knownSeries, `homepage.featuredSeries[${index}]`)
+})
+
+;(homepage.moreWorlds || []).forEach((slug, index) => {
+  assertKnownSeries(slug, knownSeries, `homepage.moreWorlds[${index}]`)
+})
+
+if (homepage.latestRelease?.series) {
+  assertKnownSeries(homepage.latestRelease.series, knownSeries, 'homepage.latestRelease.series')
+}
+
+const duplicateHomepageSlugs = (homepage.featuredSeries || [])
+  .filter((slug) => (homepage.moreWorlds || []).includes(slug))
+
+duplicateHomepageSlugs.forEach((slug) => {
+  warnings.push(`homepage repeats ${slug} in Featured Series and More Worlds`)
 })
 
 const publicImageFiles = walkFiles(repoPath('public', 'images'))
   .filter((filePath) => imageExtensions.has(path.extname(filePath).toLowerCase()))
-  .map(toRuntimePath)
+  .map((filePath) => `/${path.relative(repoPath('public'), filePath).replaceAll(path.sep, '/')}`)
 
 publicImageFiles.forEach((runtimePath) => {
   if (!referencedRuntimeImages.has(runtimePath)) {
-    warnings.push(`public image appears orphaned by current runtime data: ${runtimePath}`)
+    warnings.push(`public image is not referenced by managed content: ${runtimePath}`)
   }
 })
 
@@ -189,4 +236,4 @@ if (errors.length > 0) {
   process.exit(1)
 }
 
-console.log('Runtime data audit passed.')
+console.log(`Runtime data audit passed for ${seriesFiles.length} managed series.`)
