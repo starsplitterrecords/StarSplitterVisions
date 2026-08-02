@@ -46,10 +46,12 @@ jobs:
           test -f /tmp/records-complete/records/scripts/build.mjs
           test -f /tmp/records-complete/records/source/site.css
           test -f /tmp/records-complete/records/source/site.js
-          test -d /tmp/records-complete/public/images/records
-          test "$(find /tmp/records-complete/records/content/artists -type f -name '*.json' | wc -l)" -eq 23
-          test "$(find /tmp/records-complete/public/images/records -type f | wc -l)" -eq 72
-          test "$(find /tmp/records-complete/public/media/records -type f | wc -l)" -eq 1
+          test -d /tmp/records-complete/records/content/artists
+          printf 'Archive artists: %s\n' "$(find /tmp/records-complete/records/content/artists -type f -name '*.json' | wc -l)"
+          printf 'Archive public images: %s\n' "$(find /tmp/records-complete/public/images/records -type f 2>/dev/null | wc -l)"
+          printf 'Archive built images: %s\n' "$(find /tmp/records-complete/records/dist/images/records -type f 2>/dev/null | wc -l)"
+          printf 'Archive public media: %s\n' "$(find /tmp/records-complete/public/media/records -type f 2>/dev/null | wc -l)"
+          printf 'Archive built media: %s\n' "$(find /tmp/records-complete/records/dist/media/records -type f 2>/dev/null | wc -l)"
 
       - name: Replace fragmented branch with normal source files
         shell: bash
@@ -59,6 +61,16 @@ jobs:
           git rm -r --ignore-unmatch .
           git clean -fdx
           cp -a /tmp/records-complete/. .
+
+          if [ ! -d public/images/records ] && [ -d records/dist/images/records ]; then
+            mkdir -p public/images
+            cp -a records/dist/images/records public/images/
+          fi
+          if [ ! -d public/media/records ] && [ -d records/dist/media/records ]; then
+            mkdir -p public/media
+            cp -a records/dist/media/records public/media/
+          fi
+
           rm -rf records/dist records/.asset-baseline
 
           cat > package.json <<'JSON'
@@ -97,6 +109,7 @@ jobs:
           content:
           YAML
           awk '/^  - name: records-artists$/{copy=1} copy{print}' .pages.yml > /tmp/pages-records.yml
+          test -s /tmp/pages-records.yml
           cat /tmp/pages-header.yml /tmp/pages-records.yml > .pages.yml
 
           mkdir -p .github/workflows
@@ -132,9 +145,15 @@ jobs:
 
           npm install --package-lock-only --ignore-scripts
 
-          test "$(find records/content/artists -type f -name '*.json' | wc -l)" -eq 23
-          test "$(find public/images/records -type f | wc -l)" -eq 72
-          test "$(find public/media/records -type f | wc -l)" -eq 1
+          artists=$(find records/content/artists -type f -name '*.json' | wc -l)
+          images=$(find public/images/records -type f | wc -l)
+          media=$(find public/media/records -type f | wc -l)
+          printf 'Clean branch artists: %s\n' "$artists"
+          printf 'Clean branch images: %s\n' "$images"
+          printf 'Clean branch media: %s\n' "$media"
+          test "$artists" -eq 23
+          test "$images" -eq 72
+          test "$media" -eq 1
           test ! -d .records-bootstrap
           test ! -d .records-clean
           test ! -d .records-clean-v2
