@@ -17,25 +17,15 @@
     "hook": "A workplace comedy inside the invisible systems that keep wonder alive.",
     "cover": "/images/covers/azure-reach-issue-01-cover.jpg"
   },
-  "narrativeForms": [],
-  "themes": [],
-  "seriesEngine": "",
-  "coreConflict": "",
-  "readerEntry": "",
-  "audiencePromise": "",
   "releases": [
     {
       "title": "Issue 01 Preview",
-      "cover": "/images/covers/azure-reach-issue-01-cover.jpg",
-      "description": "The first public visual signal for Azure Reach.",
       "releaseType": "Preview",
-      "releaseDate": "",
-      "externalLink": ""
+      "releaseDate": "2026-08-02",
+      "cover": "/images/covers/azure-reach-issue-01-cover.jpg",
+      "description": "The first public visual for Azure Reach."
     }
   ],
-  "dailyPages": [],
   "extrasTitle": "Recovered Artifacts",
-  "extras": [],
-  "audioTitle": "Signal Audio",
-  "audio": []
+  "audioTitle": "Signal Audio"
 }
