@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
 import AboutPage from './components/AboutPage'
 import ContactPage from './components/ContactPage'
 import PressPage from './components/PressPage'
@@ -6,7 +6,8 @@ import Reader from './components/Reader'
 import SeriesIndex from './components/SeriesIndex'
 import SeriesPage from './components/SeriesPage'
 import ImageWithFallback from './components/shared/ImageWithFallback'
-import { brandAssets, coverAssets } from './data/assets'
+import homepageContent from './content/homepage.json'
+import siteContent from './content/site.json'
 import { featuredSeries, moreWorlds } from './data/homepageSeries'
 import { seriesPages } from './data/seriesPages'
 import {
@@ -19,8 +20,15 @@ import './styles.css'
 import './mobile-overrides.css'
 import './public-shell.css'
 
-const navLinks = ['Home', 'Series', 'About', 'Contact', 'Press']
-const defaultSeriesSlug = 'vikings-2026'
+const navigationItems = siteContent.navigation || [
+  { label: 'Home', path: '/' },
+  { label: 'Series', path: '/series' },
+  { label: 'About', path: '/about' },
+  { label: 'Contact', path: '/contact' },
+  { label: 'Press', path: '/press' },
+]
+const defaultSeriesSlug = siteContent.defaultSeriesSlug || Object.keys(seriesPages)[0]
+const footerLinks = siteContent.footer?.links || navigationItems.filter((item) => item.path !== '/')
 
 function App() {
   const initialReaderPath = parseReaderPath(window.location.pathname || '/')
@@ -58,7 +66,7 @@ function App() {
   const activeReaderSeries = seriesPages[activeReaderSeriesSlug] || seriesPages[defaultSeriesSlug]
 
   const readerPages = useMemo(() => {
-    return activeReaderSeries.dailyPages.map((page) => page.image)
+    return activeReaderSeries?.dailyPages?.map((page) => page.image) || []
   }, [activeReaderSeries])
 
   const navigate = (path) => {
@@ -73,6 +81,11 @@ function App() {
 
   const openReader = (pageNumber = 1, seriesSlug = defaultSeriesSlug) => {
     const series = seriesPages[seriesSlug] || seriesPages[defaultSeriesSlug]
+
+    if (!series || series.dailyPages.length === 0) {
+      return
+    }
+
     const safePage = clampPageNumber(pageNumber, series.dailyPages.length)
 
     setActiveReaderSeriesSlug(series.slug)
@@ -110,20 +123,23 @@ function App() {
     navigate(path)
   }
 
-  const handleNavClick = (event, link) => {
-    event.preventDefault()
-
-    if (link === 'Home') {
+  const navigateToConfiguredPath = (path) => {
+    if (path === '/') {
       goHome()
       return
     }
 
-    if (link === 'Series') {
+    if (path === '/series') {
       openSeriesIndex()
       return
     }
 
-    navigateToPage(`/${link.toLowerCase()}`)
+    navigateToPage(path)
+  }
+
+  const handleNavClick = (event, item) => {
+    event.preventDefault()
+    navigateToConfiguredPath(item.path)
   }
 
   const handleSeriesCardKeyDown = (event, slug) => {
@@ -136,14 +152,29 @@ function App() {
   const renderHeader = (activeNav) => (
     <header className="top-nav hud-frame">
       <button className="brand brand-button" onClick={goHome} type="button">
-        <ImageWithFallback className="brand-logo" src={brandAssets.logo} alt="Star Splitter Visions" fallbackText="STAR SPLITTER VISIONS" />
-        <ImageWithFallback className="brand-icon" src={brandAssets.icon} alt="Star Splitter Visions mark" fallbackText="✦" />
+        <ImageWithFallback
+          className="brand-logo"
+          src={siteContent.brand?.logo}
+          alt={siteContent.brand?.name || 'Star Splitter Visions'}
+          fallbackText="STAR SPLITTER VISIONS"
+        />
+        <ImageWithFallback
+          className="brand-icon"
+          src={siteContent.brand?.icon}
+          alt={`${siteContent.brand?.name || 'Star Splitter Visions'} mark`}
+          fallbackText="✦"
+        />
       </button>
 
       <nav>
-        {navLinks.map((link) => (
-          <a key={link} className={link === activeNav ? 'active' : ''} href={`/${link === 'Home' ? '' : link.toLowerCase()}`} onClick={(event) => handleNavClick(event, link)}>
-            {link}
+        {navigationItems.map((item) => (
+          <a
+            key={item.path}
+            className={item.label === activeNav ? 'active' : ''}
+            href={item.path}
+            onClick={(event) => handleNavClick(event, item)}
+          >
+            {item.label}
           </a>
         ))}
       </nav>
@@ -153,17 +184,28 @@ function App() {
   const renderFooter = () => (
     <footer className="footer hud-frame">
       <strong>
-        <ImageWithFallback className="footer-logo" src={brandAssets.logo} alt="Star Splitter Visions" fallbackText="STAR SPLITTER VISIONS" />
+        <ImageWithFallback
+          className="footer-logo"
+          src={siteContent.brand?.logo}
+          alt={siteContent.brand?.name || 'Star Splitter Visions'}
+          fallbackText="STAR SPLITTER VISIONS"
+        />
       </strong>
 
       <div>
-        <button className="footer-link-button" onClick={openSeriesIndex} type="button">Series</button>
-        <button className="footer-link-button" onClick={() => navigateToPage('/about')} type="button">About</button>
-        <button className="footer-link-button" onClick={() => navigateToPage('/contact')} type="button">Contact</button>
-        <button className="footer-link-button" onClick={() => navigateToPage('/press')} type="button">Press</button>
+        {footerLinks.map((item) => (
+          <button
+            className="footer-link-button"
+            key={item.path}
+            onClick={() => navigateToConfiguredPath(item.path)}
+            type="button"
+          >
+            {item.label}
+          </button>
+        ))}
       </div>
 
-      <small>Independent comics, graphic stories, and companion music from strange worlds with human stakes.</small>
+      <small>{siteContent.footer?.description}</small>
     </footer>
   )
 
@@ -175,7 +217,7 @@ function App() {
     </div>
   )
 
-  if (isReaderOpen) {
+  if (isReaderOpen && activeReaderSeries) {
     return (
       <div className="site-shell">
         <Reader
@@ -215,40 +257,47 @@ function App() {
 
       <section className="hero hud-frame">
         <div className="hero-main">
-          <p className="eyebrow">STAR SPLITTER VISIONS</p>
+          <p className="eyebrow">{siteContent.hero?.eyebrow}</p>
           <h1>
-            COMICS AND MUSIC.
-            <br />
-            STRANGE WORLDS.
+            {(siteContent.hero?.headingLines || []).map((line, index, lines) => (
+              <Fragment key={line}>
+                {line}
+                {index < lines.length - 1 && <br />}
+              </Fragment>
+            ))}
           </h1>
-          <p>Independent speculative comics, graphic stories, and companion music from strange worlds with human stakes.</p>
+          <p>{siteContent.hero?.description}</p>
 
           <div className="cta-row">
-            <button className="primary" onClick={() => openReader(1, defaultSeriesSlug)}>Start Reading</button>
-            <button onClick={openSeriesIndex}>Explore Series</button>
+            <button className="primary" onClick={() => openReader(1, defaultSeriesSlug)}>
+              {siteContent.hero?.primaryAction}
+            </button>
+            <button onClick={openSeriesIndex}>{siteContent.hero?.secondaryAction}</button>
           </div>
         </div>
 
         <aside className="status-panel">
-          <h3>Current Shelf</h3>
+          <h3>{siteContent.statusPanel?.title}</h3>
           <ul>
-            <li><span>Flagship Release</span><strong>VIKINGS 2026</strong></li>
-            <li><span>Active Catalog</span><strong>3 SERIES</strong></li>
-            <li><span>Developing Worlds</span><strong>AZURE / STARDUST</strong></li>
-            <li><span>Companion Music</span><strong>IN PROGRESS</strong></li>
+            {(siteContent.statusPanel?.items || []).map((item) => (
+              <li key={`${item.label}-${item.value}`}>
+                <span>{item.label}</span>
+                <strong>{item.value}</strong>
+              </li>
+            ))}
           </ul>
         </aside>
       </section>
 
       <main className="content-grid">
         <section>
-          <h2>Featured Series</h2>
+          <h2>{homepageContent.featuredHeading}</h2>
 
           <div className="rail large-rail">
             {featuredSeries.map((series) => (
               <article
                 className="series-card clickable-card"
-                key={series.title}
+                key={series.slug}
                 onClick={() => openSeries(series.slug)}
                 onKeyDown={(event) => handleSeriesCardKeyDown(event, series.slug)}
                 role="button"
@@ -279,12 +328,12 @@ function App() {
             ))}
           </div>
 
-          <h2>More Worlds</h2>
+          <h2>{homepageContent.moreWorldsHeading}</h2>
 
           <div className="rail small-rail">
             {moreWorlds.map((world) => (
               <article
-                key={world.title}
+                key={world.slug}
                 className="mini-card clickable-card"
                 onClick={() => openSeries(world.slug)}
                 onKeyDown={(event) => handleSeriesCardKeyDown(event, world.slug)}
@@ -296,22 +345,32 @@ function App() {
               </article>
             ))}
 
-            <button className="mini-card view-all" onClick={openSeriesIndex}>View All Series →</button>
+            <button className="mini-card view-all" onClick={openSeriesIndex}>
+              {homepageContent.viewAllLabel}
+            </button>
           </div>
         </section>
 
         <aside className="sidebar">
-          <article className="panel hud-frame">
-            <h3>Latest Release</h3>
-            <p>Vikings 2026 — Issue 01</p>
-            <ImageWithFallback src={coverAssets.vikingsIssue01} alt="Vikings 2026 issue 1" fallbackText="VIKINGS 2026" />
-          </article>
+          {homepageContent.latestRelease && (
+            <article className="panel hud-frame">
+              <h3>{homepageContent.latestRelease.heading}</h3>
+              <p>{homepageContent.latestRelease.title}</p>
+              <ImageWithFallback
+                src={homepageContent.latestRelease.image}
+                alt={homepageContent.latestRelease.title}
+                fallbackText="LATEST RELEASE"
+              />
+            </article>
+          )}
 
-          <article className="panel hud-frame soundtrack">
-            <h3>Soundtrack Spotlight</h3>
-            <p>Sequence Drive // Vol. 01</p>
-            <div className="wave" />
-          </article>
+          {homepageContent.soundtrackSpotlight?.enabled && (
+            <article className="panel hud-frame soundtrack">
+              <h3>{homepageContent.soundtrackSpotlight.heading}</h3>
+              <p>{homepageContent.soundtrackSpotlight.title}</p>
+              <div className="wave" />
+            </article>
+          )}
         </aside>
       </main>
 

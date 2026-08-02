@@ -1,159 +1,28 @@
-import { coverAssets } from './assets.js'
-
-const makeVikingsPages = () => Array.from({ length: 15 }, (_, index) => {
-  const pageNumber = index + 1
-  const padded = String(pageNumber).padStart(3, '0')
-
-  return {
-    pageNumber,
-    releaseDate: `2026-05-${String(Math.min(pageNumber, 28)).padStart(2, '0')}`,
-    image: `/images/pages/vikings-2026/issue-01/page-${padded}.jpg`,
-  }
+const seriesModules = import.meta.glob('../content/series/*.json', {
+  eager: true,
+  import: 'default',
 })
 
-export const seriesPages = {
-  'vikings-2026': {
-    slug: 'vikings-2026',
-    title: 'Vikings 2026!',
-    tagline: 'Ancient warriors. Modern bureaucracy. One very confused apartment building.',
-    atmosphere: 'Temporal displacement comedy with paperwork, roommates, and bad assumptions.',
-    description: 'A time-displaced Viking crew collides with present-day systems, apartments, transit, and paperwork.',
-    status: 'active',
-    developmentStatus: 'Publishing / active polish',
-    worldLabel: 'Temporal Comedy',
-    currentRelease: 'Issue 01',
-    hero: '/images/series/vikings-2026/card.png',
-    accent: '#BAFF00',
-    format: 'Daily comic / issue release',
-    narrativeForms: ['daily comic', 'workplace-adjacent comedy', 'temporal fish-out-of-water'],
-    themes: ['Bureaucracy', 'Misread systems', 'Found family under pressure'],
-    worldPremise: 'People from another age survive less by conquering the present than by misunderstanding it with total confidence.',
-    seriesEngine: 'Ancient worldview versus modern systems.',
-    coreConflict: 'Survival depends on learning systems nobody explains clearly.',
-    readerEntry: 'Start with page one and let the procedural confusion build panel by panel.',
-    audiencePromise: 'A sharp, character-led comedy about people trying to make sense of systems built for someone else.',
-    releases: [
-      {
-        title: 'Issue 01',
-        cover: coverAssets.vikingsIssue01,
-        description: 'The first public signal from Vikings 2026!',
-      },
-    ],
-    dailyPages: makeVikingsPages(),
-  },
-  'azure-reach': {
-    slug: 'azure-reach',
-    title: 'Azure Reach',
-    tagline: 'The wonder is public. The work is invisible.',
-    atmosphere: 'Bright marine-park spectacle seen through the exhausted precision of the staff who keep it possible.',
-    description: 'A workplace comedy about competent people holding together a social-media-famous marine park without ever putting animals at risk.',
-    status: 'coming-soon',
-    developmentStatus: 'In development',
-    worldLabel: 'Workplace Comedy',
-    currentRelease: 'Preview',
-    hero: coverAssets.azureReachIssue01,
-    accent: '#3BE7FF',
-    format: 'Series bible / comic development',
-    worldPremise: 'Behind every effortless moment of public wonder is an invisible system of people solving problems before anyone notices.',
-    releases: [
-      {
-        title: 'Issue 01 Preview',
-        cover: coverAssets.azureReachIssue01,
-        description: 'The first public visual signal for Azure Reach.',
-      },
-    ],
+function normalizeSeries(series) {
+  return {
+    narrativeForms: [],
+    themes: [],
+    releases: [],
     dailyPages: [],
-  },
-  'stardust-station': {
-    slug: 'stardust-station',
-    title: 'Stardust Station',
-    tagline: 'The coworkers are the reactor.',
-    atmosphere: 'A warm, absurd workplace sitcom about forced proximity in orbit.',
-    description: 'A character-driven station comedy where social pressure, proximity, and petty workplace rituals matter more than cosmic mystery.',
-    status: 'coming-soon',
-    developmentStatus: 'In development',
-    worldLabel: 'Orbital Workplace Sitcom',
-    currentRelease: 'Preview',
-    hero: coverAssets.stardustStationIssue01,
-    accent: '#FFCE5C',
-    format: 'Workplace sitcom / comic development',
-    worldPremise: 'People trapped together in a space workplace discover the real emergency is each other.',
-    releases: [
-      {
-        title: 'Issue 01 Preview',
-        cover: coverAssets.stardustStationIssue01,
-        description: 'The first public visual signal for Stardust Station.',
-      },
-    ],
-    dailyPages: [],
-  },
-  'rex-fleet': {
-    slug: 'rex-fleet',
-    title: 'Rex Fleet',
-    tagline: 'A deeper signal from the Star Splitter shelf.',
-    atmosphere: 'Adventure-facing speculative comics development.',
-    description: 'A developing Star Splitter Visions world awaiting public expansion.',
-    status: 'coming-soon',
-    developmentStatus: 'In development',
-    worldLabel: 'Speculative Adventure',
-    currentRelease: 'Preview',
-    hero: coverAssets.rexFleetIssue01,
-    accent: '#BAFF00',
-    format: 'Comic development',
-    worldPremise: 'Public-facing details are still being locked.',
-    releases: [
-      {
-        title: 'Issue 01 Preview',
-        cover: coverAssets.rexFleetIssue01,
-        description: 'The first public visual signal for Rex Fleet.',
-      },
-    ],
-    dailyPages: [],
-  },
-  'sunforge-outlaw': {
-    slug: 'sunforge-outlaw',
-    title: 'Sunforge Outlaw',
-    tagline: 'A developing frontier signal.',
-    atmosphere: 'Heat, pursuit, and outlaw energy inside the Visions portfolio.',
-    description: 'A developing Star Splitter Visions world awaiting public expansion.',
-    status: 'coming-soon',
-    developmentStatus: 'In development',
-    worldLabel: 'Speculative Frontier',
-    currentRelease: 'Preview',
-    hero: coverAssets.sunforgeOutlawIssue01,
-    accent: '#FF9B3D',
-    format: 'Comic development',
-    worldPremise: 'Public-facing details are still being locked.',
-    releases: [
-      {
-        title: 'Issue 01 Preview',
-        cover: coverAssets.sunforgeOutlawIssue01,
-        description: 'The first public visual signal for Sunforge Outlaw.',
-      },
-    ],
-    dailyPages: [],
-  },
-  'low-tide-signal': {
-    slug: 'low-tide-signal',
-    title: 'Low Tide Signal',
-    tagline: 'A quiet coastal signal from a flooded edge of the future.',
-    atmosphere: 'Quiet mystery, abandoned infrastructure, and social unease.',
-    description: 'A developing coastal sci-fi mystery in the Star Splitter Visions portfolio.',
-    status: 'coming-soon',
-    developmentStatus: 'In development',
-    worldLabel: 'Coastal Sci-Fi Mystery',
-    currentRelease: 'Preview',
-    hero: coverAssets.lowTideSignalIssue01,
-    accent: '#78D7FF',
-    format: 'Limited series development',
-    worldPremise: 'Public-facing details are still being locked.',
-    releases: [
-      {
-        title: 'Issue 01 Preview',
-        cover: coverAssets.lowTideSignalIssue01,
-        description: 'The first public visual signal for Low Tide Signal.',
-      },
-    ],
-    dailyPages: [],
-  },
+    extras: [],
+    audio: [],
+    homepage: {},
+    ...series,
+  }
 }
+
+export const seriesPages = Object.values(seriesModules).reduce((catalog, source) => {
+  const series = normalizeSeries(source)
+
+  if (!series.slug) {
+    return catalog
+  }
+
+  catalog[series.slug] = series
+  return catalog
+}, {})
