@@ -1,0 +1,65 @@
+{
+  "slug": "vikings-2026",
+  "title": "Vikings 2026!",
+  "tagline": "Ancient warriors. Modern bureaucracy. One very confused apartment building.",
+  "atmosphere": "Temporal displacement comedy with paperwork, roommates, and bad assumptions.",
+  "description": "A time-displaced Viking crew collides with present-day systems, apartments, transit, and paperwork.",
+  "status": "active",
+  "developmentStatus": "Publishing / active polish",
+  "worldLabel": "Temporal Comedy",
+  "currentRelease": "Issue 01",
+  "hero": "/images/series/vikings-2026/card.png",
+  "accent": "#BAFF00",
+  "format": "Daily comic / issue release",
+  "worldPremise": "People from another age survive less by conquering the present than by misunderstanding it with total confidence.",
+  "homepage": {
+    "issue": "Issue 01",
+    "hook": "Temporal bureaucracy, apartment life, and ancient warriors processing modern systems.",
+    "cover": "/images/covers/vikings-2026-issue-01.jpg"
+  },
+  "narrativeForms": [
+    "daily comic",
+    "workplace-adjacent comedy",
+    "temporal fish-out-of-water"
+  ],
+  "themes": [
+    "Bureaucracy",
+    "Misread systems",
+    "Found family under pressure"
+  ],
+  "seriesEngine": "Ancient worldview versus modern systems.",
+  "coreConflict": "Survival depends on learning systems nobody explains clearly.",
+  "readerEntry": "Start with page one and let the procedural confusion build panel by panel.",
+  "audiencePromise": "A sharp, character-led comedy about people trying to make sense of systems built for someone else.",
+  "releases": [
+    {
+      "title": "Issue 01",
+      "cover": "/images/covers/vikings-2026-issue-01.jpg",
+      "description": "The first public signal from Vikings 2026!",
+      "releaseType": "Comic issue",
+      "releaseDate": "2026-05-01",
+      "externalLink": ""
+    }
+  ],
+  "dailyPages": [
+    {"pageNumber": 1, "releaseDate": "2026-05-01", "image": "/images/pages/vikings-2026/issue-01/page-001.jpg"},
+    {"pageNumber": 2, "releaseDate": "2026-05-02", "image": "/images/pages/vikings-2026/issue-01/page-002.jpg"},
+    {"pageNumber": 3, "releaseDate": "2026-05-03", "image": "/images/pages/vikings-2026/issue-01/page-003.jpg"},
+    {"pageNumber": 4, "releaseDate": "2026-05-04", "image": "/images/pages/vikings-2026/issue-01/page-004.jpg"},
+    {"pageNumber": 5, "releaseDate": "2026-05-05", "image": "/images/pages/vikings-2026/issue-01/page-005.jpg"},
+    {"pageNumber": 6, "releaseDate": "2026-05-06", "image": "/images/pages/vikings-2026/issue-01/page-006.jpg"},
+    {"pageNumber": 7, "releaseDate": "2026-05-07", "image": "/images/pages/vikings-2026/issue-01/page-007.jpg"},
+    {"pageNumber": 8, "releaseDate": "2026-05-08", "image": "/images/pages/vikings-2026/issue-01/page-008.jpg"},
+    {"pageNumber": 9, "releaseDate": "2026-05-09", "image": "/images/pages/vikings-2026/issue-01/page-009.jpg"},
+    {"pageNumber": 10, "releaseDate": "2026-05-10", "image": "/images/pages/vikings-2026/issue-01/page-010.jpg"},
+    {"pageNumber": 11, "releaseDate": "2026-05-11", "image": "/images/pages/vikings-2026/issue-01/page-011.jpg"},
+    {"pageNumber": 12, "releaseDate": "2026-05-12", "image": "/images/pages/vikings-2026/issue-01/page-012.jpg"},
+    {"pageNumber": 13, "releaseDate": "2026-05-13", "image": "/images/pages/vikings-2026/issue-01/page-013.jpg"},
+    {"pageNumber": 14, "releaseDate": "2026-05-14", "image": "/images/pages/vikings-2026/issue-01/page-014.jpg"},
+    {"pageNumber": 15, "releaseDate": "2026-05-15", "image": "/images/pages/vikings-2026/issue-01/page-015.jpg"}
+  ],
+  "extrasTitle": "Recovered Artifacts",
+  "extras": [],
+  "audioTitle": "Signal Audio",
+  "audio": []
+}

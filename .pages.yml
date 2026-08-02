@@ -1,0 +1,534 @@
+media:
+  input: public/images
+  output: /images
+  rename: safe
+  categories: [image]
+
+settings:
+  content:
+    merge: true
+  commit:
+    identity: user
+    templates:
+      create: "content: create {path}"
+      update: "content: update {path}"
+      delete: "content: delete {path}"
+      rename: "content: rename {oldPath} to {newPath}"
+
+content:
+  - name: series
+    label: Series
+    type: collection
+    path: src/content/series
+    format: json
+    filename: "{fields.slug}.json"
+    view:
+      primary: title
+      fields: [title, status, currentRelease, worldLabel]
+      sort: [title, status, currentRelease]
+      search: [title, slug, tagline, description, worldLabel]
+      default:
+        sort: title
+        order: asc
+    fields:
+      - name: slug
+        label: URL Slug
+        type: string
+        required: true
+        pattern:
+          regex: "^[a-z0-9-]+$"
+          message: "Use lowercase letters, numbers, and hyphens only."
+        description: Used in the public URL, for example /series/rex-fleet.
+
+      - name: title
+        type: string
+        required: true
+
+      - name: tagline
+        type: string
+
+      - name: atmosphere
+        type: text
+
+      - name: description
+        type: text
+        required: true
+
+      - name: status
+        type: select
+        required: true
+        options:
+          values:
+            - name: active
+              label: Active
+            - name: coming-soon
+              label: In Development
+            - name: archived
+              label: Archived
+
+      - name: developmentStatus
+        label: Development Status
+        type: string
+
+      - name: worldLabel
+        label: World / Genre Label
+        type: string
+
+      - name: currentRelease
+        label: Current Release
+        type: string
+
+      - name: hero
+        label: Primary Artwork
+        type: image
+        required: true
+
+      - name: accent
+        label: Accent Color
+        type: string
+        description: Hex color used by the series page, for example #BAFF00.
+
+      - name: format
+        type: string
+
+      - name: worldPremise
+        label: About This World
+        type: text
+
+      - name: seriesEngine
+        label: Series Engine
+        type: text
+
+      - name: coreConflict
+        label: Core Conflict
+        type: text
+
+      - name: readerEntry
+        label: Reader Orientation
+        type: text
+
+      - name: audiencePromise
+        label: Audience Promise
+        type: text
+
+      - name: homepage
+        label: Homepage Card
+        type: object
+        fields:
+          - name: issue
+            label: Issue / Status Line
+            type: string
+          - name: hook
+            type: text
+          - name: cover
+            type: image
+
+      - name: narrativeForms
+        label: Narrative Forms
+        type: string
+        list: true
+
+      - name: themes
+        label: Themes and Concerns
+        type: string
+        list: true
+
+      - name: releases
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{title}"
+        fields:
+          - name: title
+            type: string
+            required: true
+          - name: releaseType
+            label: Release Type
+            type: string
+          - name: releaseDate
+            label: Release Date
+            type: date
+          - name: cover
+            type: image
+          - name: description
+            type: text
+          - name: externalLink
+            label: External Link
+            type: string
+
+      - name: dailyPages
+        label: Daily Comic Pages
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "Page {pageNumber} — {releaseDate}"
+        fields:
+          - name: pageNumber
+            label: Page Number
+            type: number
+            required: true
+          - name: releaseDate
+            label: Release Date
+            type: date
+            required: true
+          - name: image
+            type: image
+            required: true
+
+      - name: extrasTitle
+        label: Extras Section Title
+        type: string
+
+      - name: extras
+        label: Artifacts / Extras
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{title}"
+        fields:
+          - name: id
+            type: string
+          - name: title
+            type: string
+            required: true
+          - name: category
+            type: string
+          - name: image
+            type: image
+          - name: description
+            type: text
+          - name: releaseDate
+            label: Release Date
+            type: date
+          - name: externalLink
+            label: External Link
+            type: string
+
+      - name: audioTitle
+        label: Audio Section Title
+        type: string
+
+      - name: audio
+        label: Soundtrack / Audio
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{title}"
+        fields:
+          - name: id
+            type: string
+          - name: title
+            type: string
+            required: true
+          - name: artist
+            type: string
+          - name: runtime
+            type: string
+          - name: coverImage
+            label: Cover Image
+            type: image
+          - name: description
+            type: text
+          - name: platformLinks
+            label: Platform Links
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{label}"
+            fields:
+              - name: label
+                type: string
+                required: true
+              - name: url
+                type: string
+                required: true
+
+  - name: site-management
+    label: Site Management
+    type: group
+    items:
+      - name: site
+        label: Site Settings
+        type: file
+        path: src/content/site.json
+        format: json
+        operations:
+          delete: false
+        fields:
+          - name: brand
+            type: object
+            fields:
+              - name: name
+                type: string
+                required: true
+              - name: logo
+                type: image
+                required: true
+              - name: icon
+                type: image
+                required: true
+
+          - name: navigation
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{label}"
+            fields:
+              - name: label
+                type: string
+                required: true
+              - name: path
+                type: string
+                required: true
+                pattern: "^/"
+
+          - name: defaultSeriesSlug
+            label: Default / Flagship Series
+            type: reference
+            required: true
+            options:
+              collection: series
+              search: "title,slug"
+              value: "{fields.slug}"
+              label: "{fields.title}"
+
+          - name: hero
+            type: object
+            fields:
+              - name: eyebrow
+                type: string
+              - name: headingLines
+                label: Heading Lines
+                type: string
+                list: true
+              - name: description
+                type: text
+              - name: primaryAction
+                label: Primary Button
+                type: string
+              - name: secondaryAction
+                label: Secondary Button
+                type: string
+
+          - name: statusPanel
+            label: Current Shelf Panel
+            type: object
+            fields:
+              - name: title
+                type: string
+              - name: items
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: "{label}: {value}"
+                fields:
+                  - name: label
+                    type: string
+                  - name: value
+                    type: string
+
+          - name: footer
+            type: object
+            fields:
+              - name: links
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: "{label}"
+                fields:
+                  - name: label
+                    type: string
+                    required: true
+                  - name: path
+                    type: string
+                    required: true
+                    pattern: "^/"
+              - name: description
+                type: text
+
+          - name: seriesCatalog
+            label: Series Catalog Page
+            type: object
+            fields:
+              - name: eyebrow
+                type: string
+              - name: title
+                type: string
+              - name: description
+                type: text
+              - name: emptyMessage
+                label: Empty Results Message
+                type: string
+              - name: viewLabel
+                label: View Button Label
+                type: string
+
+      - name: homepage
+        label: Homepage
+        type: file
+        path: src/content/homepage.json
+        format: json
+        operations:
+          delete: false
+        fields:
+          - name: featuredHeading
+            label: Featured Section Heading
+            type: string
+
+          - name: featuredSeries
+            label: Featured Series
+            type: reference
+            required: true
+            options:
+              collection: series
+              multiple: true
+              search: "title,slug"
+              value: "{fields.slug}"
+              label: "{fields.title}"
+
+          - name: moreWorldsHeading
+            label: More Worlds Heading
+            type: string
+
+          - name: moreWorlds
+            label: More Worlds
+            type: reference
+            options:
+              collection: series
+              multiple: true
+              search: "title,slug"
+              value: "{fields.slug}"
+              label: "{fields.title}"
+
+          - name: viewAllLabel
+            label: View All Button
+            type: string
+
+          - name: latestRelease
+            label: Latest Release Panel
+            type: object
+            fields:
+              - name: heading
+                type: string
+              - name: series
+                type: reference
+                options:
+                  collection: series
+                  search: "title,slug"
+                  value: "{fields.slug}"
+                  label: "{fields.title}"
+              - name: title
+                type: string
+              - name: image
+                type: image
+
+          - name: soundtrackSpotlight
+            label: Soundtrack Spotlight
+            type: object
+            fields:
+              - name: enabled
+                type: boolean
+              - name: heading
+                type: string
+              - name: title
+                type: string
+
+  - name: information-pages
+    label: Information Pages
+    type: group
+    items:
+      - name: about
+        label: About
+        type: file
+        path: src/content/pages/about.json
+        format: json
+        operations:
+          delete: false
+        fields:
+          - name: eyebrow
+            type: string
+          - name: title
+            type: string
+          - name: intro
+            type: text
+          - name: paragraphs
+            type: text
+            list: true
+          - name: quoteAfterParagraph
+            label: Insert Center Quote After Paragraph
+            type: number
+          - name: centerQuote
+            label: Center Quote
+            type: text
+          - name: topPullquote
+            label: Top Pullquote
+            type: text
+          - name: principlesTitle
+            label: Principles Heading
+            type: string
+          - name: principles
+            type: string
+            list: true
+          - name: bottomPullquote
+            label: Bottom Pullquote
+            type: text
+
+      - name: contact
+        label: Contact
+        type: file
+        path: src/content/pages/contact.json
+        format: json
+        operations:
+          delete: false
+        fields:
+          - name: eyebrow
+            type: string
+          - name: title
+            type: string
+          - name: intro
+            type: text
+          - name: cards
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{title}"
+            fields:
+              - name: title
+                type: string
+              - name: body
+                type: text
+
+      - name: press
+        label: Press
+        type: file
+        path: src/content/pages/press.json
+        format: json
+        operations:
+          delete: false
+        fields:
+          - name: eyebrow
+            type: string
+          - name: title
+            type: string
+          - name: intro
+            type: text
+          - name: cards
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{title}"
+            fields:
+              - name: title
+                type: string
+              - name: body
+                type: text

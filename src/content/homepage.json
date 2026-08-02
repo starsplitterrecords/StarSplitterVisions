@@ -1,0 +1,26 @@
+{
+  "featuredHeading": "Featured Series",
+  "featuredSeries": [
+    "vikings-2026",
+    "azure-reach",
+    "stardust-station"
+  ],
+  "moreWorldsHeading": "More Worlds",
+  "moreWorlds": [
+    "rex-fleet",
+    "sunforge-outlaw",
+    "low-tide-signal"
+  ],
+  "viewAllLabel": "View All Series →",
+  "latestRelease": {
+    "heading": "Latest Release",
+    "series": "vikings-2026",
+    "title": "Vikings 2026 — Issue 01",
+    "image": "/images/covers/vikings-2026-issue-01.jpg"
+  },
+  "soundtrackSpotlight": {
+    "enabled": true,
+    "heading": "Soundtrack Spotlight",
+    "title": "Sequence Drive // Vol. 01"
+  }
+}

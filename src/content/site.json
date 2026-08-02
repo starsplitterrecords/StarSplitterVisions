@@ -1,0 +1,89 @@
+{
+  "brand": {
+    "name": "Star Splitter Visions",
+    "logo": "/images/brand/logo.png",
+    "icon": "/images/brand/icon.png"
+  },
+  "navigation": [
+    {
+      "label": "Home",
+      "path": "/"
+    },
+    {
+      "label": "Series",
+      "path": "/series"
+    },
+    {
+      "label": "About",
+      "path": "/about"
+    },
+    {
+      "label": "Contact",
+      "path": "/contact"
+    },
+    {
+      "label": "Press",
+      "path": "/press"
+    }
+  ],
+  "defaultSeriesSlug": "vikings-2026",
+  "hero": {
+    "eyebrow": "STAR SPLITTER VISIONS",
+    "headingLines": [
+      "COMICS AND MUSIC.",
+      "STRANGE WORLDS."
+    ],
+    "description": "Independent speculative comics, graphic stories, and companion music from strange worlds with human stakes.",
+    "primaryAction": "Start Reading",
+    "secondaryAction": "Explore Series"
+  },
+  "statusPanel": {
+    "title": "Current Shelf",
+    "items": [
+      {
+        "label": "Flagship Release",
+        "value": "VIKINGS 2026"
+      },
+      {
+        "label": "Active Catalog",
+        "value": "3 SERIES"
+      },
+      {
+        "label": "Developing Worlds",
+        "value": "AZURE / STARDUST"
+      },
+      {
+        "label": "Companion Music",
+        "value": "IN PROGRESS"
+      }
+    ]
+  },
+  "footer": {
+    "links": [
+      {
+        "label": "Series",
+        "path": "/series"
+      },
+      {
+        "label": "About",
+        "path": "/about"
+      },
+      {
+        "label": "Contact",
+        "path": "/contact"
+      },
+      {
+        "label": "Press",
+        "path": "/press"
+      }
+    ],
+    "description": "Independent comics, graphic stories, and companion music from strange worlds with human stakes."
+  },
+  "seriesCatalog": {
+    "eyebrow": "SERIES CATALOG //",
+    "title": "Series",
+    "description": "Explore the current Star Splitter Visions shelf: active releases, developing worlds, and signals queued for expansion.",
+    "emptyMessage": "No series match this filter.",
+    "viewLabel": "View Series →"
+  }
+}

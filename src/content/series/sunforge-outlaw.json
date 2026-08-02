@@ -1,0 +1,41 @@
+{
+  "slug": "sunforge-outlaw",
+  "title": "Sunforge Outlaw",
+  "tagline": "A developing frontier signal.",
+  "atmosphere": "Heat, pursuit, and outlaw energy inside the Visions portfolio.",
+  "description": "A developing Star Splitter Visions world awaiting public expansion.",
+  "status": "coming-soon",
+  "developmentStatus": "In development",
+  "worldLabel": "Speculative Frontier",
+  "currentRelease": "Preview",
+  "hero": "/images/covers/sunforge-outlaw-issue-01.png",
+  "accent": "#FF9B3D",
+  "format": "Comic development",
+  "worldPremise": "Public-facing details are still being locked.",
+  "homepage": {
+    "issue": "In Development",
+    "hook": "A developing frontier signal shaped by heat, pursuit, and outlaw energy.",
+    "cover": "/images/covers/sunforge-outlaw-issue-01.png"
+  },
+  "narrativeForms": [],
+  "themes": [],
+  "seriesEngine": "",
+  "coreConflict": "",
+  "readerEntry": "",
+  "audiencePromise": "",
+  "releases": [
+    {
+      "title": "Issue 01 Preview",
+      "cover": "/images/covers/sunforge-outlaw-issue-01.png",
+      "description": "The first public visual signal for Sunforge Outlaw.",
+      "releaseType": "Preview",
+      "releaseDate": "",
+      "externalLink": ""
+    }
+  ],
+  "dailyPages": [],
+  "extrasTitle": "Recovered Artifacts",
+  "extras": [],
+  "audioTitle": "Signal Audio",
+  "audio": []
+}
