@@ -32,26 +32,24 @@ jobs:
           ref: records-site-cms
           fetch-depth: 0
 
-      - name: Reconstruct validated source and checked-in assets
+      - name: Reconstruct verified complete website
         shell: bash
         run: |
           set -euo pipefail
+          count=$(find .records-bootstrap/source -maxdepth 1 -name 'part-*' | wc -l)
+          test "$count" -eq 16
+          mkdir -p /tmp/records-complete
+          cat .records-bootstrap/source/part-* | base64 -d > /tmp/records-complete.tar.gz
+          tar -tzf /tmp/records-complete.tar.gz >/tmp/records-complete-files.txt
+          tar -xzf /tmp/records-complete.tar.gz -C /tmp/records-complete
 
-          test -f .records-clean/source/part-0000
-          test -d .records-bootstrap/source
-
-          mkdir -p /tmp/records-clean/source /tmp/records-clean/assets
-          cat .records-clean/source/part-* | base64 -d > /tmp/records-clean/source.tar.gz
-          tar -xzf /tmp/records-clean/source.tar.gz -C /tmp/records-clean/source
-
-          cat .records-bootstrap/source/part-* | base64 -d > /tmp/records-clean/assets.tar.gz
-          tar -xzf /tmp/records-clean/assets.tar.gz -C /tmp/records-clean/assets
-
-          test -f /tmp/records-clean/source/package.json
-          test -f /tmp/records-clean/source/package-lock.json
-          test -f /tmp/records-clean/source/.pages.yml
-          test -f /tmp/records-clean/source/records/scripts/build.mjs
-          test -d /tmp/records-clean/assets/public/images/records
+          test -f /tmp/records-complete/records/scripts/build.mjs
+          test -f /tmp/records-complete/records/source/site.css
+          test -f /tmp/records-complete/records/source/site.js
+          test -d /tmp/records-complete/public/images/records
+          test "$(find /tmp/records-complete/records/content/artists -type f -name '*.json' | wc -l)" -eq 23
+          test "$(find /tmp/records-complete/public/images/records -type f | wc -l)" -eq 72
+          test "$(find /tmp/records-complete/public/media/records -type f | wc -l)" -eq 1
 
       - name: Replace fragmented branch with normal source files
         shell: bash
@@ -60,19 +58,92 @@ jobs:
 
           git rm -r --ignore-unmatch .
           git clean -fdx
+          cp -a /tmp/records-complete/. .
+          rm -rf records/dist records/.asset-baseline
 
-          cp -a /tmp/records-clean/source/. .
-          mkdir -p public/images public/media
-          cp -a /tmp/records-clean/assets/public/images/records public/images/
-          if [ -d /tmp/records-clean/assets/public/media/records ]; then
-            cp -a /tmp/records-clean/assets/public/media/records public/media/
-          fi
+          cat > package.json <<'JSON'
+          {
+            "name": "star-splitter-records",
+            "private": true,
+            "version": "1.0.0",
+            "type": "module",
+            "scripts": {
+              "build": "node records/scripts/build.mjs",
+              "build:records": "node records/scripts/build.mjs",
+              "check": "node records/scripts/build.mjs",
+              "check:records": "node records/scripts/build.mjs"
+            }
+          }
+          JSON
+
+          cat > /tmp/pages-header.yml <<'YAML'
+          media:
+            input: public/images/records
+            output: /images/records
+            rename: safe
+            categories: [image]
+
+          settings:
+            content:
+              merge: true
+            commit:
+              identity: user
+              templates:
+                create: "content: create {path}"
+                update: "content: update {path}"
+                delete: "content: delete {path}"
+                rename: "content: rename {oldPath} to {newPath}"
+
+          content:
+          YAML
+          awk '/^  - name: records-artists$/{copy=1} copy{print}' .pages.yml > /tmp/pages-records.yml
+          cat /tmp/pages-header.yml /tmp/pages-records.yml > .pages.yml
+
+          mkdir -p .github/workflows
+          cat > .github/workflows/validate.yml <<'YAML'
+          name: Validate Star Splitter Records
+
+          on:
+            pull_request:
+            push:
+              branches:
+                - records-site-cms
+
+          permissions:
+            contents: read
+
+          jobs:
+            validate:
+              runs-on: ubuntu-latest
+              timeout-minutes: 10
+              steps:
+                - name: Check out repository
+                  uses: actions/checkout@v4
+                - name: Set up Node.js
+                  uses: actions/setup-node@v4
+                  with:
+                    node-version: 24
+                    cache: npm
+                - name: Install
+                  run: npm ci
+                - name: Validate and build
+                  run: npm run check
+          YAML
+
+          npm install --package-lock-only --ignore-scripts
 
           test "$(find records/content/artists -type f -name '*.json' | wc -l)" -eq 23
           test "$(find public/images/records -type f | wc -l)" -eq 72
           test "$(find public/media/records -type f | wc -l)" -eq 1
           test ! -d .records-bootstrap
           test ! -d .records-clean
+          test ! -d .records-clean-v2
+          grep -q '^  - name: records-artists$' .pages.yml
+          grep -q '^  - name: records-management$' .pages.yml
+          if grep -q '^  - name: series$' .pages.yml; then
+            echo 'Visions CMS collection remained in Records configuration'
+            exit 1
+          fi
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
