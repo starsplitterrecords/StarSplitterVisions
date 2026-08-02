@@ -1,0 +1,87 @@
+{
+  "name": "Minor Collapse",
+  "slug": "minor-collapse",
+  "field": "Immersive rock",
+  "category": "Immersive rock",
+  "categories": [
+    "rock",
+    "songs"
+  ],
+  "tagline": "The quietest emotions often feel the biggest.",
+  "accent": "#7E86A8",
+  "identityImage": "/images/records/artists/minor-collapse.webp",
+  "worldImage": "/images/records/worlds/minor-collapse.webp",
+  "oneSentenceBio": "Minor Collapse gives quiet vulnerability immense physical scale, surrounding intimate vocals and unresolved longing with fuzz-soaked guitars, celestial haze, and slow-burning walls of sound.",
+  "threeSentenceBio": "Minor Collapse lives where emotional fragility meets overwhelming sound. Soft, restrained vocals remain deeply human inside dense guitars, expansive reverb, and dreamlike textures, turning distortion into an amplifier for longing rather than aggression. The songs linger in distance, uncertainty, memory, and quiet hope, allowing listeners to inhabit feelings that resist simple explanation. Melodies provide small points of light within the weight, making the experience powerful, intimate, and quietly beautiful rather than merely heavy.",
+  "paragraphBio": "Minor Collapse gives the quietest emotions the largest possible horizon. Dense, fuzz-soaked guitars, expansive reverbs, celestial textures, and slow-burning dynamics create immense environments, while soft, almost resigned vocals remain intimate at the center. The contrast is essential: vulnerability does not compete with the sound around it but becomes more affecting because it seems suspended inside something vast. Distortion is never used simply as aggression. It carries longing, emotional distance, uncertainty, and the pressure of thoughts that cannot be spoken clearly. Melodies offer small points of light inside the weight, and lyrics suggest private histories without explaining them into submission. Songs may circle unanswered questions, fleeting memories, misaligned relationships, isolation, or the quiet acceptance that clarity may never arrive. Even the largest moments remain personal rather than theatrical. Minor Collapse is heavy and delicate at once, drawing from shoegaze, post-hardcore, and space-rock atmosphere to create music that listeners experience physically as well as emotionally. It is for anyone who has felt small beneath something infinitely beautiful - and discovered that the feeling itself was enormous.",
+  "riyl": "Deftones • Hum • Nothing • Slowdive • Holy Fawn • Cloakroom",
+  "listenUrl": "",
+  "releases": [
+    {
+      "title": "Hexagonis",
+      "meta": "Selected catalog",
+      "image": "/images/records/releases/minor-collapse-hexagonis.webp",
+      "links": [],
+      "slug": "hexagonis",
+      "description": "",
+      "lineage": {
+        "display": "hidden",
+        "publicLabel": "",
+        "compositionOrigin": "undocumented",
+        "realizationMethod": "undocumented",
+        "versionRelationship": "undocumented",
+        "sourceTitle": "",
+        "sourceArtist": "",
+        "sourceUrl": "",
+        "publicSummary": "",
+        "methodNote": "",
+        "credits": {
+          "composition": "",
+          "lyrics": "",
+          "arrangement": "",
+          "performance": "",
+          "production": "",
+          "finalEditingAndCuration": ""
+        },
+        "relatedReleases": []
+      }
+    },
+    {
+      "title": "Mach Point Five",
+      "meta": "Upcoming · December 13, 2026",
+      "image": "/images/records/releases/minor-collapse-mach-point-five.webp",
+      "links": [],
+      "slug": "mach-point-five",
+      "description": "",
+      "lineage": {
+        "display": "hidden",
+        "publicLabel": "",
+        "compositionOrigin": "undocumented",
+        "realizationMethod": "undocumented",
+        "versionRelationship": "undocumented",
+        "sourceTitle": "",
+        "sourceArtist": "",
+        "sourceUrl": "",
+        "publicSummary": "",
+        "methodNote": "",
+        "credits": {
+          "composition": "",
+          "lyrics": "",
+          "arrangement": "",
+          "performance": "",
+          "production": "",
+          "finalEditingAndCuration": ""
+        },
+        "relatedReleases": []
+      }
+    }
+  ],
+  "status": "active",
+  "featured": false,
+  "seoTitle": "Minor Collapse — Star Splitter Records",
+  "seoDescription": "Minor Collapse gives quiet vulnerability immense physical scale, surrounding intimate vocals and unresolved longing with fuzz-soaked guitars, celestial haze, and slow-burning walls of sound.",
+  "platformLinks": [],
+  "motion": {},
+  "catalogRole": "Immersive rock language",
+  "roleStatement": "The catalog’s immersive rock language, giving private vulnerability the scale and force of a physical environment."
+}

@@ -1,8 +1,22 @@
 media:
-  input: public/images
-  output: /images
-  rename: safe
-  categories: [image]
+  - name: visions-images
+    label: Star Splitter Visions images
+    input: sites/visions/public/images
+    output: /images
+    rename: safe
+    categories: [image]
+  - name: records-images
+    label: Star Splitter Records images
+    input: sites/records/public/images/records
+    output: /images/records
+    rename: safe
+    categories: [image]
+  - name: records-media
+    label: Star Splitter Records media
+    input: sites/records/public/media/records
+    output: /media/records
+    rename: safe
+    categories: [video, audio]
 
 settings:
   content:
@@ -17,9 +31,9 @@ settings:
 
 content:
   - name: series
-    label: Series
+    label: Visions — Series
     type: collection
-    path: src/content/series
+    path: sites/visions/src/content/series
     format: json
     filename: "{fields.slug}.json"
     view:
@@ -39,21 +53,16 @@ content:
           regex: "^[a-z0-9-]+$"
           message: "Use lowercase letters, numbers, and hyphens only."
         description: Used in the public URL, for example /series/rex-fleet.
-
       - name: title
         type: string
         required: true
-
       - name: tagline
         type: string
-
       - name: atmosphere
         type: text
-
       - name: description
         type: text
         required: true
-
       - name: status
         type: select
         required: true
@@ -65,52 +74,42 @@ content:
               label: In Development
             - name: archived
               label: Archived
-
       - name: developmentStatus
         label: Development Status
         type: string
-
       - name: worldLabel
         label: World / Genre Label
         type: string
-
       - name: currentRelease
         label: Current Release
         type: string
-
       - name: hero
         label: Primary Artwork
         type: image
+        options:
+          media: visions-images
         required: true
-
       - name: accent
         label: Accent Color
         type: string
         description: Hex color used by the series page, for example #BAFF00.
-
       - name: format
         type: string
-
       - name: worldPremise
         label: About This World
         type: text
-
       - name: seriesEngine
         label: Series Engine
         type: text
-
       - name: coreConflict
         label: Core Conflict
         type: text
-
       - name: readerEntry
         label: Reader Orientation
         type: text
-
       - name: audiencePromise
         label: Audience Promise
         type: text
-
       - name: homepage
         label: Homepage Card
         type: object
@@ -122,17 +121,16 @@ content:
             type: text
           - name: cover
             type: image
-
+            options:
+              media: visions-images
       - name: narrativeForms
         label: Narrative Forms
         type: string
         list: true
-
       - name: themes
         label: Themes and Concerns
         type: string
         list: true
-
       - name: releases
         type: object
         list:
@@ -151,12 +149,13 @@ content:
             type: date
           - name: cover
             type: image
+            options:
+              media: visions-images
           - name: description
             type: text
           - name: externalLink
             label: External Link
             type: string
-
       - name: dailyPages
         label: Daily Comic Pages
         type: object
@@ -175,12 +174,12 @@ content:
             required: true
           - name: image
             type: image
+            options:
+              media: visions-images
             required: true
-
       - name: extrasTitle
         label: Extras Section Title
         type: string
-
       - name: extras
         label: Artifacts / Extras
         type: object
@@ -198,6 +197,8 @@ content:
             type: string
           - name: image
             type: image
+            options:
+              media: visions-images
           - name: description
             type: text
           - name: releaseDate
@@ -206,11 +207,9 @@ content:
           - name: externalLink
             label: External Link
             type: string
-
       - name: audioTitle
         label: Audio Section Title
         type: string
-
       - name: audio
         label: Soundtrack / Audio
         type: object
@@ -231,6 +230,8 @@ content:
           - name: coverImage
             label: Cover Image
             type: image
+            options:
+              media: visions-images
           - name: description
             type: text
           - name: platformLinks
@@ -249,13 +250,13 @@ content:
                 required: true
 
   - name: site-management
-    label: Site Management
+    label: Visions — Site Management
     type: group
     items:
       - name: site
         label: Site Settings
         type: file
-        path: src/content/site.json
+        path: sites/visions/src/content/site.json
         format: json
         operations:
           delete: false
@@ -268,11 +269,14 @@ content:
                 required: true
               - name: logo
                 type: image
+                options:
+                  media: visions-images
                 required: true
               - name: icon
                 type: image
+                options:
+                  media: visions-images
                 required: true
-
           - name: navigation
             type: object
             list:
@@ -287,7 +291,6 @@ content:
                 type: string
                 required: true
                 pattern: "^/"
-
           - name: defaultSeriesSlug
             label: Default / Flagship Series
             type: reference
@@ -297,7 +300,6 @@ content:
               search: "title,slug"
               value: "{fields.slug}"
               label: "{fields.title}"
-
           - name: hero
             type: object
             fields:
@@ -315,7 +317,6 @@ content:
               - name: secondaryAction
                 label: Secondary Button
                 type: string
-
           - name: statusPanel
             label: Current Shelf Panel
             type: object
@@ -333,7 +334,6 @@ content:
                     type: string
                   - name: value
                     type: string
-
           - name: footer
             type: object
             fields:
@@ -353,7 +353,6 @@ content:
                     pattern: "^/"
               - name: description
                 type: text
-
           - name: seriesCatalog
             label: Series Catalog Page
             type: object
@@ -370,11 +369,10 @@ content:
               - name: viewLabel
                 label: View Button Label
                 type: string
-
       - name: homepage
         label: Homepage
         type: file
-        path: src/content/homepage.json
+        path: sites/visions/src/content/homepage.json
         format: json
         operations:
           delete: false
@@ -382,7 +380,6 @@ content:
           - name: featuredHeading
             label: Featured Section Heading
             type: string
-
           - name: featuredSeries
             label: Featured Series
             type: reference
@@ -393,11 +390,9 @@ content:
               search: "title,slug"
               value: "{fields.slug}"
               label: "{fields.title}"
-
           - name: moreWorldsHeading
             label: More Worlds Heading
             type: string
-
           - name: moreWorlds
             label: More Worlds
             type: reference
@@ -407,11 +402,9 @@ content:
               search: "title,slug"
               value: "{fields.slug}"
               label: "{fields.title}"
-
           - name: viewAllLabel
             label: View All Button
             type: string
-
           - name: latestRelease
             label: Latest Release Panel
             type: object
@@ -429,7 +422,8 @@ content:
                 type: string
               - name: image
                 type: image
-
+                options:
+                  media: visions-images
           - name: soundtrackSpotlight
             label: Soundtrack Spotlight
             type: object
@@ -442,13 +436,13 @@ content:
                 type: string
 
   - name: information-pages
-    label: Information Pages
+    label: Visions — Information Pages
     type: group
     items:
       - name: about
         label: About
         type: file
-        path: src/content/pages/about.json
+        path: sites/visions/src/content/pages/about.json
         format: json
         operations:
           delete: false
@@ -480,11 +474,35 @@ content:
           - name: bottomPullquote
             label: Bottom Pullquote
             type: text
-
       - name: contact
         label: Contact
         type: file
-        path: src/content/pages/contact.json
+        path: sites/visions/src/content/pages/contact.json
+        format: json
+        operations:
+          delete: false
+        fields:
+          - name: eyebrow
+            type: string
+          - name: title
+            type: string
+          - name: intro
+            type: text
+          - name: cards
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{title}"
+            fields:
+              - name: title
+                type: string
+              - name: body
+                type: text
+      - name: press
+        label: Press
+        type: file
+        path: sites/visions/src/content/pages/press.json
         format: json
         operations:
           delete: false
@@ -507,28 +525,617 @@ content:
               - name: body
                 type: text
 
-      - name: press
-        label: Press
-        type: file
-        path: src/content/pages/press.json
-        format: json
-        operations:
-          delete: false
+  - name: records-artists
+    label: Records — Artists
+    type: collection
+    path: sites/records/content/artists
+    format: json
+    filename: "{fields.slug}.json"
+    view:
+      primary: name
+      fields: [name, status, field, catalogRole, featured]
+      sort: [name, status]
+      search: [name, slug, field, tagline, catalogRole, roleStatement, oneSentenceBio]
+      default:
+        sort: name
+        order: asc
+    fields:
+      - name: name
+        label: Artist / Project Name
+        type: string
+        required: true
+      - name: slug
+        label: URL Slug
+        type: string
+        required: true
+        pattern:
+          regex: "^[a-z0-9-]+$"
+          message: "Use lowercase letters, numbers, and hyphens only."
+      - name: status
+        type: select
+        required: true
+        options:
+          values:
+            - name: active
+              label: Active
+            - name: archived
+              label: Archived
+      - name: featured
+        type: boolean
+      - name: field
+        label: Public Musical Orientation
+        type: string
+        required: true
+      - name: category
+        label: Internal Category
+        type: string
+      - name: categories
+        label: Homepage Filters
+        type: select
+        list: true
+        options:
+          values:
+            - rock
+            - electronic
+            - songs
+            - cinematic
+            - roots
+            - experimental
+      - name: tagline
+        type: text
+        required: true
+      - name: catalogRole
+        label: Role in the Catalog — Heading
+        type: string
+        required: true
+        description: Short listener-facing role label, such as Direct artist identity or Reconstruction project.
+      - name: roleStatement
+        label: Role in the Catalog — Statement
+        type: text
+        required: true
+        description: Explains what this project contributes to the larger catalog without describing fictional biography.
+      - name: accent
+        label: Accent Color
+        type: string
+        required: true
+      - name: identityImage
+        label: Identity Artwork
+        type: image
+        options:
+          media: records-images
+        required: true
+      - name: worldImage
+        label: Secondary / World Artwork
+        type: image
+        options:
+          media: records-images
+      - name: oneSentenceBio
+        label: One-Sentence Bio
+        type: text
+        required: true
+      - name: threeSentenceBio
+        label: Short Bio
+        type: text
+        required: true
+      - name: paragraphBio
+        label: Full Bio
+        type: text
+        required: true
+      - name: riyl
+        label: Recommended If You Like
+        type: text
+      - name: listenUrl
+        label: Primary Listening URL
+        type: string
+      - name: platformLinks
+        label: Artist Listening Links
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{label}"
         fields:
-          - name: eyebrow
+          - name: label
             type: string
+            required: true
+          - name: url
+            type: string
+            required: true
+      - name: motion
+        label: Motion Identity
+        type: object
+        fields:
+          - name: video
+            label: Video URL
+            type: string
+          - name: poster
+            type: image
+            options:
+              media: records-images
           - name: title
             type: string
-          - name: intro
+      - name: releases
+        label: Releases
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{title} — {meta}"
+        fields:
+          - name: title
+            type: string
+            required: true
+          - name: slug
+            label: Release URL Slug
+            type: string
+            required: true
+            pattern:
+              regex: "^[a-z0-9-]+$"
+              message: "Use lowercase letters, numbers, and hyphens only."
+          - name: meta
+            label: Public Status / Date Line
+            type: string
+            required: true
+          - name: description
+            label: Release Description
             type: text
-          - name: cards
+            description: Listener-facing overview of this recording. Leave blank until confirmed.
+          - name: image
+            type: image
+            options:
+              media: records-images
+          - name: links
+            label: Listening and External Links
             type: object
             list:
               collapsible:
                 collapsed: true
-                summary: "{title}"
+                summary: "{label}"
             fields:
+              - name: label
+                type: string
+                required: true
+              - name: url
+                type: string
+                required: true
+          - name: lineage
+            label: Credits and Lineage
+            type: object
+            description: Keep Display hidden until the public summary and any shown fields are accurate.
+            fields:
+              - name: display
+                label: Public Display
+                type: select
+                required: true
+                options:
+                  values:
+                    - name: hidden
+                      label: Hidden — structure only
+                    - name: summary
+                      label: Summary — public note and high-level relationship
+                    - name: full
+                      label: Full — note, credits, process, source, and related releases
+              - name: publicLabel
+                label: Release Card Relationship Label
+                type: string
+                description: Optional public label such as Original, New interpretation, Legacy recording, Remix, or Alternate version.
+              - name: compositionOrigin
+                label: Composition Origin
+                type: select
+                required: true
+                options:
+                  values:
+                    - name: undocumented
+                      label: Not documented yet
+                    - name: human-composed
+                      label: Human-composed
+                    - name: co-written
+                      label: Co-written
+                    - name: generative-starting-point
+                      label: Generative starting point
+                    - name: adapted-from-existing-work
+                      label: Adapted from an existing work
+                    - name: public-domain-or-traditional
+                      label: Public-domain or traditional source
+                    - name: other
+                      label: Other
+              - name: realizationMethod
+                label: Realization Method
+                type: select
+                required: true
+                options:
+                  values:
+                    - name: undocumented
+                      label: Not documented yet
+                    - name: performed-and-produced
+                      label: Performed and produced
+                    - name: ai-assisted-realization
+                      label: AI-assisted realization
+                    - name: hybrid-realization
+                      label: Hybrid realization
+                    - name: restored-source-recording
+                      label: Restored source recording
+                    - name: generative-production
+                      label: Generative production
+                    - name: other
+                      label: Other
+              - name: versionRelationship
+                label: Version Relationship
+                type: select
+                required: true
+                options:
+                  values:
+                    - name: undocumented
+                      label: Not documented yet
+                    - name: original-release
+                      label: Original release
+                    - name: new-interpretation
+                      label: New interpretation
+                    - name: legacy-recording
+                      label: Legacy recording
+                    - name: remix
+                      label: Remix
+                    - name: remaster-or-restoration
+                      label: Remaster or restoration
+                    - name: alternate-version
+                      label: Alternate version
+                    - name: adaptation
+                      label: Adaptation
+                    - name: other
+                      label: Other
+              - name: sourceTitle
+                label: Source Composition / Recording Title
+                type: string
+              - name: sourceArtist
+                label: Source Artist / Project
+                type: string
+              - name: sourceUrl
+                label: Source Work URL
+                type: string
+              - name: publicSummary
+                label: Public Credits and Lineage Summary
+                type: text
+                description: Required before public display. State what actually happened without defending or reducing the release to a tool label.
+              - name: methodNote
+                label: Public Process Note
+                type: text
+                description: Optional detail about arrangement, performance, generation, recording, production, editing, or selection.
+              - name: credits
+                label: Credits
+                type: object
+                fields:
+                  - name: composition
+                    type: string
+                  - name: lyrics
+                    type: string
+                  - name: arrangement
+                    type: string
+                  - name: performance
+                    type: string
+                  - name: production
+                    type: string
+                  - name: finalEditingAndCuration
+                    label: Final Editing and Curation
+                    type: string
+              - name: relatedReleases
+                label: Related Releases
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: "{label}"
+                fields:
+                  - name: label
+                    label: Public Link Label
+                    type: string
+                    required: true
+                  - name: artist
+                    type: string
+                  - name: title
+                    type: string
+                  - name: url
+                    type: string
+                    required: true
+      - name: seoTitle
+        label: SEO Title
+        type: string
+      - name: seoDescription
+        label: SEO Description
+        type: text
+
+  - name: records-management
+    label: Records — Site Management
+    type: group
+    items:
+      - name: records-site
+        label: Homepage and Site Copy
+        type: file
+        path: sites/records/content/site.json
+        format: json
+        operations:
+          delete: false
+        fields:
+          - name: brand
+            type: object
+            fields:
+              - name: name
+                type: string
+                required: true
+              - name: wordmark
+                type: string
+                required: true
+              - name: submark
+                type: string
+                required: true
+          - name: seo
+            type: object
+            fields:
+              - name: title
+                type: string
+                required: true
+              - name: description
+                type: text
+                required: true
+          - name: navigation
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{label}"
+            fields:
+              - name: label
+                type: string
+                required: true
+              - name: path
+                type: string
+                required: true
+          - name: hero
+            type: object
+            fields:
+              - name: eyebrow
+                type: string
+              - name: headingLines
+                type: string
+                list: true
+              - name: italicLine
+                label: Italic Heading Line Index
+                type: number
+              - name: description
+                type: text
+              - name: image
+                type: image
+                options:
+                  media: records-images
+              - name: primaryAction
+                type: object
+                fields:
+                  - name: label
+                    type: string
+                  - name: path
+                    type: string
+              - name: secondaryAction
+                type: object
+                fields:
+                  - name: label
+                    type: string
+                  - name: path
+                    type: string
+          - name: releaseSection
+            label: Featured Releases
+            type: object
+            fields:
+              - name: eyebrow
+                type: string
+              - name: title
+                type: string
+              - name: intro
+                type: text
+              - name: featured
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: "{meta}"
+                fields:
+                  - name: titleLines
+                    label: Artist and Release Title Lines
+                    type: string
+                    list: true
+                  - name: meta
+                    type: string
+                  - name: artistSlug
+                    label: Artist Slug
+                    type: reference
+                    required: true
+                    options:
+                      collection: records-artists
+                      search: "name,slug"
+                      value: "{fields.slug}"
+                      label: "{fields.name}"
+                  - name: releaseSlug
+                    label: Release Slug
+                    type: string
+                    required: true
+                  - name: image
+                    type: image
+                    options:
+                      media: records-images
+                  - name: accent
+                    type: string
+                  - name: links
+                    type: object
+                    list:
+                      collapsible:
+                        collapsed: true
+                        summary: "{label}"
+                    fields:
+                      - name: label
+                        type: string
+                      - name: url
+                        type: string
+          - name: creditNote
+            label: Homepage Credits Note
+            type: object
+            fields:
+              - name: eyebrow
+                type: string
               - name: title
                 type: string
               - name: body
                 type: text
+              - name: linkLabel
+                type: string
+              - name: path
+                type: string
+          - name: artistSection
+            label: Artist Roster Introduction
+            type: object
+            fields:
+              - name: eyebrow
+                type: string
+              - name: title
+                type: string
+              - name: intro
+                type: text
+              - name: filters
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: "{label}"
+                fields:
+                  - name: label
+                    type: string
+                  - name: value
+                    type: string
+          - name: worlds
+            label: Featured Artist Worlds
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{artist}"
+            fields:
+              - name: artist
+                type: string
+              - name: title
+                type: text
+              - name: linkLabel
+                type: string
+              - name: slug
+                type: reference
+                options:
+                  collection: records-artists
+                  search: "name,slug"
+                  value: "{fields.slug}"
+                  label: "{fields.name}"
+              - name: image
+                type: image
+                options:
+                  media: records-images
+          - name: labelSlate
+            label: Label Statement
+            type: object
+            fields:
+              - name: eyebrow
+                type: string
+              - name: titleLines
+                type: string
+                list: true
+              - name: body
+                type: text
+          - name: story
+            type: object
+            fields:
+              - name: eyebrow
+                type: string
+              - name: title
+                type: string
+              - name: paragraphs
+                type: text
+                list: true
+          - name: authorship
+            label: Authorship and Process Section
+            type: object
+            fields:
+              - name: eyebrow
+                type: string
+              - name: title
+                type: string
+              - name: intro
+                type: text
+              - name: principles
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: "{title}"
+                fields:
+                  - name: title
+                    type: string
+                  - name: body
+                    type: text
+              - name: closing
+                type: text
+          - name: releasePage
+            label: Release Page Labels
+            type: object
+            fields:
+              - name: detailsEyebrow
+                type: string
+              - name: backLabel
+                type: string
+              - name: aboutEyebrow
+                type: string
+              - name: lineageEyebrow
+                type: string
+              - name: lineageTitle
+                type: string
+              - name: lineageIntro
+                type: text
+              - name: sourceTitle
+                type: string
+              - name: creditsTitle
+                type: string
+              - name: processTitle
+                type: string
+              - name: relatedTitle
+                type: string
+          - name: journal
+            type: object
+            fields:
+              - name: eyebrow
+                type: string
+              - name: title
+                type: string
+              - name: intro
+                type: text
+              - name: cards
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: "{title}"
+                fields:
+                  - name: eyebrow
+                    type: string
+                  - name: title
+                    type: string
+                  - name: body
+                    type: text
+          - name: licensing
+            type: object
+            fields:
+              - name: eyebrow
+                type: string
+              - name: title
+                type: string
+              - name: intro
+                type: text
+          - name: footer
+            type: object
+            fields:
+              - name: copyright
+                type: string
+              - name: tagline
+                type: string

@@ -37,8 +37,9 @@ Do not treat plausible explanations as verified facts.
 - Runtime paths must use `/images/...`.
 - Do not use `/public/images/...` in app/runtime code.
 - Do not use `/intake/...` in app/runtime code.
-- `public/intake/` is source-only.
-- Curated assets belong under `public/images/...`.
+- `sites/visions/public/intake/` is source-only.
+- Visions assets belong under `sites/visions/public/images/...`.
+- Records assets belong under `sites/records/public/images/records/...`.
 - Before wiring an asset path, verify the file exists on the target branch.
 
 ## Verification Rules

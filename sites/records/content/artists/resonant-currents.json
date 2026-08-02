@@ -1,0 +1,87 @@
+{
+  "name": "Resonant Currents",
+  "slug": "resonant-currents",
+  "field": "Dub",
+  "category": "Dub",
+  "categories": [
+    "electronic",
+    "roots"
+  ],
+  "tagline": "Space is an instrument.",
+  "accent": "#DA3929",
+  "identityImage": "/images/records/artists/resonant-currents.webp",
+  "worldImage": "",
+  "oneSentenceBio": "Resonant Currents composes with bass, drums, echo, and empty space, creating modern dub that feels deep, suspended, physical, and alive.",
+  "threeSentenceBio": "Resonant Currents treats space as an instrument. Bass and drums provide the foundation while delay, reverb, subtraction, and versioning continually reshape the arrangement in motion. The result is hypnotic modern dub with heat, depth, and rhythmic resistance - rooted in tradition without flattening it into generic island atmosphere. Each track feels actively transformed as it plays, with silence and decay carrying as much meaning as the sounds that remain.",
+  "paragraphBio": "Resonant Currents begins with the relationship between bass and drums, then uses space to transform everything around them. Echo trails become countermelodies, reverb creates temporary rooms inside the mix, and entire layers disappear so that a single remaining sound can suddenly carry the weight of the track. The project draws from dub's tradition of live arrangement, versioning, and radical subtraction, treating the studio not as a place to preserve a fixed performance but as an instrument that can continuously reinterpret it. Low end is physical, rhythm is patient, and silence is never empty. The music can feel warm, suspended, resistant, or dreamlike, but it avoids generic tropical shorthand in favor of the deeper compositional principles that make dub enduring. Resonant Currents is for listeners who understand that density is not the only path to intensity. It creates a world where one bass note, one snare, and one decaying echo can suggest an entire landscape.",
+  "riyl": "Lee \"Scratch\" Perry • King Tubby • Mad Professor • Dub Syndicate • Thievery Corporation • Fat Freddy's Drop",
+  "listenUrl": "",
+  "releases": [
+    {
+      "title": "Meaningless Dub",
+      "meta": "Upcoming · September 18, 2026",
+      "image": "",
+      "links": [],
+      "slug": "meaningless-dub",
+      "description": "",
+      "lineage": {
+        "display": "hidden",
+        "publicLabel": "",
+        "compositionOrigin": "undocumented",
+        "realizationMethod": "undocumented",
+        "versionRelationship": "undocumented",
+        "sourceTitle": "",
+        "sourceArtist": "",
+        "sourceUrl": "",
+        "publicSummary": "",
+        "methodNote": "",
+        "credits": {
+          "composition": "",
+          "lyrics": "",
+          "arrangement": "",
+          "performance": "",
+          "production": "",
+          "finalEditingAndCuration": ""
+        },
+        "relatedReleases": []
+      }
+    },
+    {
+      "title": "Away Away",
+      "meta": "Upcoming · October 31, 2026",
+      "image": "",
+      "links": [],
+      "slug": "away-away",
+      "description": "",
+      "lineage": {
+        "display": "hidden",
+        "publicLabel": "",
+        "compositionOrigin": "undocumented",
+        "realizationMethod": "undocumented",
+        "versionRelationship": "undocumented",
+        "sourceTitle": "",
+        "sourceArtist": "",
+        "sourceUrl": "",
+        "publicSummary": "",
+        "methodNote": "",
+        "credits": {
+          "composition": "",
+          "lyrics": "",
+          "arrangement": "",
+          "performance": "",
+          "production": "",
+          "finalEditingAndCuration": ""
+        },
+        "relatedReleases": []
+      }
+    }
+  ],
+  "status": "active",
+  "featured": false,
+  "seoTitle": "Resonant Currents — Star Splitter Records",
+  "seoDescription": "Resonant Currents composes with bass, drums, echo, and empty space, creating modern dub that feels deep, suspended, physical, and alive.",
+  "platformLinks": [],
+  "motion": {},
+  "catalogRole": "Modern dub language",
+  "roleStatement": "The catalog’s dub language, where bass, drums, echo, and silence carry equal compositional weight."
+}

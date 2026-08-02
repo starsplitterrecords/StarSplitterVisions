@@ -1,42 +1,35 @@
-# Star Splitter Visions
+# Star Splitter sites
 
-Star Splitter Visions is a Vite/React site deployed from this GitHub repository.
+This repository contains both public Star Splitter websites. `main` is the only permanent branch and the source of truth for both deployments.
+
+| Website | Source folder | Vercel root directory |
+| --- | --- | --- |
+| Star Splitter Visions | `sites/visions` | `sites/visions` |
+| Star Splitter Records | `sites/records` | `sites/records` |
 
 ## Content management
 
-Public content is stored as JSON under `src/content` and edited through Pages CMS.
+The root `.pages.yml` presents separate **Star Splitter Visions** and **Star Splitter Records** sections in Pages CMS. Saved content and media changes are committed to `main`; Vercel rebuilds the affected project from its site folder.
 
-- `src/content/site.json` — brand, navigation, hero, footer, and catalog copy
-- `src/content/homepage.json` — homepage placement and feature panels
-- `src/content/pages` — About, Contact, and Press
-- `src/content/series` — one file per series, including releases, daily pages, artifacts, and audio links
-- `public/images` — public artwork and page images
-
-### Open the editor
-
-1. Go to `https://app.pagescms.org`.
-2. Sign in with the GitHub account that owns `starsplitterrecords/StarSplitterVisions`.
-3. Install or authorize the Pages CMS GitHub App for this repository.
-4. Open `StarSplitterVisions`.
-5. Edit content or upload artwork and save.
-
-Pages CMS commits the saved files to GitHub. Vercel then rebuilds and deploys the site from the repository automatically.
-
-## Development
+## Local validation
 
 ```bash
+cd sites/visions
 npm ci
 npm run check
 npm run build
-npm run dev
+
+cd ../records
+npm ci
+npm run check
+npm run build
 ```
 
-`npm run check` validates the React source and audits the managed content, references, dates, and image paths.
+The Records production build intentionally requires its complete artwork library under `sites/records/public/images/records`. `npm run check` validates the Records content model before those binary files are present.
 
 ## Publishing rules
 
-- Store public images under `public/images`.
-- Use runtime image paths beginning with `/images/`; never include `/public/`.
-- Add new series through the Series collection. The Vite data loader discovers new JSON files automatically.
-- Use the Homepage editor to choose which series appear in Featured Series and More Worlds.
-- Keep URL slugs lowercase with hyphens.
+- Keep Visions content and assets inside `sites/visions`.
+- Keep Records content and assets inside `sites/records`.
+- Use public runtime paths beginning with `/images/` or `/media/`; never include `/public/`.
+- Use short-lived feature branches only. Merge approved work into `main`, then delete the feature branch.

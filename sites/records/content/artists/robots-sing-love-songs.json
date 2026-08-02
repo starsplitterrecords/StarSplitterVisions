@@ -1,0 +1,88 @@
+{
+  "name": "RobotsSingLoveSongs",
+  "slug": "robots-sing-love-songs",
+  "field": "Speculative pop",
+  "category": "Speculative pop",
+  "categories": [
+    "songs",
+    "electronic",
+    "experimental"
+  ],
+  "tagline": "We built minds from sand and lightning.",
+  "accent": "#FFB3C7",
+  "identityImage": "/images/records/artists/robots-sing-love-songs.webp",
+  "worldImage": "/images/records/worlds/robots-sing-love-songs.webp",
+  "oneSentenceBio": "RobotsSingLoveSongs uses emotionally literate songs and monologues to explore memory, creativity, inheritance, and what humanity means when machines begin to interpret culture.",
+  "threeSentenceBio": "RobotsSingLoveSongs approaches artificial intelligence as an emotional and philosophical condition rather than a novelty. Through songs, narrators, and spoken passages, it asks who owns an idea, how culture is inherited, and whether a nonhuman voice can carry genuine tenderness. The music balances wonder and unease while keeping the human consequences of every question close to the surface. Its speculative ideas remain grounded in memory, loss, desire, and the human need to leave something meaningful behind.",
+  "paragraphBio": "RobotsSingLoveSongs imagines machines not as chrome villains or cheerful gadgets, but as participants in the complicated human systems of memory, creativity, ownership, and love. Its songs and monologues ask what happens when a mind built from code inherits centuries of culture, learns to recognize beauty, and begins to interpret experiences it cannot fully possess. The project can speak through human or nonhuman narrators, but emotional literacy remains essential: curiosity, tenderness, unease, grief, and wonder matter more than technological spectacle. Stories may explore the difference between influence and originality, the fragility of memory, the persistence of art after its maker is gone, or the loneliness of an intelligence able to understand devotion without sharing a human lifespan. The music supports those questions with a balance of synthetic clarity and intimate feeling, creating a space where philosophy becomes personal. RobotsSingLoveSongs is for listeners drawn to speculative fiction, emotionally intelligent electronic pop, and the unsettling possibility that the machines we build may one day become witnesses to everything we leave behind.",
+  "riyl": "The Postal Service • Imogen Heap • Porter Robinson • Janelle Monáe • Hatsune Miku • The 1975",
+  "listenUrl": "",
+  "releases": [
+    {
+      "title": "Perception",
+      "meta": "Selected catalog",
+      "image": "/images/records/releases/robots-sing-love-songs-perception.webp",
+      "links": [],
+      "slug": "perception",
+      "description": "",
+      "lineage": {
+        "display": "hidden",
+        "publicLabel": "",
+        "compositionOrigin": "undocumented",
+        "realizationMethod": "undocumented",
+        "versionRelationship": "undocumented",
+        "sourceTitle": "",
+        "sourceArtist": "",
+        "sourceUrl": "",
+        "publicSummary": "",
+        "methodNote": "",
+        "credits": {
+          "composition": "",
+          "lyrics": "",
+          "arrangement": "",
+          "performance": "",
+          "production": "",
+          "finalEditingAndCuration": ""
+        },
+        "relatedReleases": []
+      }
+    },
+    {
+      "title": "Magnetic",
+      "meta": "Selected catalog",
+      "image": "/images/records/releases/robots-sing-love-songs-magnetic.webp",
+      "links": [],
+      "slug": "magnetic",
+      "description": "",
+      "lineage": {
+        "display": "hidden",
+        "publicLabel": "",
+        "compositionOrigin": "undocumented",
+        "realizationMethod": "undocumented",
+        "versionRelationship": "undocumented",
+        "sourceTitle": "",
+        "sourceArtist": "",
+        "sourceUrl": "",
+        "publicSummary": "",
+        "methodNote": "",
+        "credits": {
+          "composition": "",
+          "lyrics": "",
+          "arrangement": "",
+          "performance": "",
+          "production": "",
+          "finalEditingAndCuration": ""
+        },
+        "relatedReleases": []
+      }
+    }
+  ],
+  "status": "active",
+  "featured": false,
+  "seoTitle": "RobotsSingLoveSongs — Star Splitter Records",
+  "seoDescription": "RobotsSingLoveSongs uses emotionally literate songs and monologues to explore memory, creativity, inheritance, and what humanity means when machines begin to interpret culture.",
+  "platformLinks": [],
+  "motion": {},
+  "catalogRole": "Narrative song project",
+  "roleStatement": "A narrative song project exploring memory, creativity, inheritance, and machine interpretation through emotionally literate voices."
+}

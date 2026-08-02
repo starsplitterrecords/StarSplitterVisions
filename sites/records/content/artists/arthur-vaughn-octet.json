@@ -1,0 +1,87 @@
+{
+  "name": "The Arthur Vaughn Octet",
+  "slug": "arthur-vaughn-octet",
+  "field": "Americana / bluegrass",
+  "category": "Americana / bluegrass",
+  "categories": [
+    "roots",
+    "songs"
+  ],
+  "tagline": "Fiddle runs, blood harmonies, and country grooves built for big stages and back porches.",
+  "accent": "#C85B28",
+  "identityImage": "/images/records/artists/arthur-vaughn-octet.webp",
+  "worldImage": "/images/records/worlds/arthur-vaughn-octet.webp",
+  "oneSentenceBio": "The Arthur Vaughn Octet brings fiddle runs, close harmonies, country storytelling, and modern rhythmic drive together for back porches, festival stages, and open roads.",
+  "threeSentenceBio": "The Arthur Vaughn Octet carries roots music forward with organic instrumentation, tight arrangements, and an ear for contemporary momentum. Fiddle, upright bass, acoustic strings, and close harmonies meet country-pop directness and rhythms built for large crowds as naturally as back porches. The result is warm, spirited music filled with roadside revelations, communal choruses, and the feeling of arms around shoulders.",
+  "paragraphBio": "The Arthur Vaughn Octet brings Appalachian string-band energy into the present without sanding away its human grain. Fiddle runs, acoustic strings, upright bass, close harmonies, and country storytelling form the foundation, while tight arrangements and modern rhythmic instincts give the music enough lift for festival stages as well as back porches. The songs live in roadside revelations, bonfire choruses, hard-earned optimism, family voices, and the emotional directness of people singing together because the moment requires it. Organic instrumentation does not mean loose purpose: every entrance, harmony, and rhythmic push is shaped to make the song connect immediately. The project can honor bluegrass and Americana traditions while remaining open to country-pop scale, crossover energy, and unexpected reinterpretation. What matters is that the music feels handcrafted, communal, and alive rather than preserved behind glass. The Arthur Vaughn Octet is for listeners who grew up with both roots records and modern radio, and who want music that can carry memory, motion, and a full crowd in the same chorus.",
+  "riyl": "The Avett Brothers • Old Crow Medicine Show • Mumford & Sons • Billy Strings • Shaboozey • The Chicks",
+  "listenUrl": "",
+  "releases": [
+    {
+      "title": "All I Am",
+      "meta": "Selected catalog",
+      "image": "/images/records/releases/arthur-vaughn-octet-all-i-am.webp",
+      "links": [],
+      "slug": "all-i-am",
+      "description": "",
+      "lineage": {
+        "display": "hidden",
+        "publicLabel": "",
+        "compositionOrigin": "undocumented",
+        "realizationMethod": "undocumented",
+        "versionRelationship": "undocumented",
+        "sourceTitle": "",
+        "sourceArtist": "",
+        "sourceUrl": "",
+        "publicSummary": "",
+        "methodNote": "",
+        "credits": {
+          "composition": "",
+          "lyrics": "",
+          "arrangement": "",
+          "performance": "",
+          "production": "",
+          "finalEditingAndCuration": ""
+        },
+        "relatedReleases": []
+      }
+    },
+    {
+      "title": "Enduring the Endearing",
+      "meta": "Selected catalog",
+      "image": "/images/records/releases/arthur-vaughn-octet-enduring-the-endearing.webp",
+      "links": [],
+      "slug": "enduring-the-endearing",
+      "description": "",
+      "lineage": {
+        "display": "hidden",
+        "publicLabel": "",
+        "compositionOrigin": "undocumented",
+        "realizationMethod": "undocumented",
+        "versionRelationship": "undocumented",
+        "sourceTitle": "",
+        "sourceArtist": "",
+        "sourceUrl": "",
+        "publicSummary": "",
+        "methodNote": "",
+        "credits": {
+          "composition": "",
+          "lyrics": "",
+          "arrangement": "",
+          "performance": "",
+          "production": "",
+          "finalEditingAndCuration": ""
+        },
+        "relatedReleases": []
+      }
+    }
+  ],
+  "status": "active",
+  "featured": false,
+  "seoTitle": "The Arthur Vaughn Octet — Star Splitter Records",
+  "seoDescription": "The Arthur Vaughn Octet brings fiddle runs, close harmonies, country storytelling, and modern rhythmic drive together for back porches, festival stages, and open roads.",
+  "platformLinks": [],
+  "motion": {},
+  "catalogRole": "Country ensemble",
+  "roleStatement": "The catalog’s country ensemble: fiddle, close harmony, story, and rhythmic drive shaped for back porches, open roads, and large stages."
+}

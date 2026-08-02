@@ -1,0 +1,86 @@
+{
+  "name": "Daisy Grohs",
+  "slug": "daisy-grohs",
+  "field": "Contemporary pop",
+  "category": "Contemporary pop",
+  "categories": [
+    "songs"
+  ],
+  "tagline": "A voice earns its identity through specificity.",
+  "accent": "#C9C6C0",
+  "identityImage": "/images/records/artists/daisy-grohs.webp",
+  "worldImage": "/images/records/worlds/daisy-grohs.webp",
+  "oneSentenceBio": "Daisy Grohs is a female-led contemporary project centered on distinctive character, emotional presence, and songs shaped around the voice they genuinely require.",
+  "threeSentenceBio": "Daisy Grohs is an evolving female-led artist project defined by specificity rather than a fixed pop template. The songs prioritize emotional presence, agency, and an unmistakable sense of character, allowing each release to develop around the strongest version of the voice at its center. The result is contemporary, intimate, and self-possessed music that feels discovered rather than manufactured. Its identity is meant to sharpen through completed songs rather than arrive as a prefabricated persona, giving the music room to become increasingly recognizable on its own terms.",
+  "paragraphBio": "Daisy Grohs is built around the belief that a compelling artist identity cannot be assembled from demographic expectations or a predetermined role. The project develops from the strongest completed songs outward, allowing voice, character, and emotional point of view to determine the sound rather than forcing the material into a fixed category. What remains constant is presence: the sense of a person occupying the song fully, with intimacy, agency, and a recognizable perspective. Daisy Grohs can be polished without feeling anonymous, vulnerable without becoming passive, and accessible without sanding away the details that make the performance specific. Each release is expected to deepen the identity rather than merely repeat a formula, making the catalog an evolving portrait of a female artistic voice finding its clearest form. Because that voice is still being defined through finished work, the project favors authenticity over premature branding. It is music for listeners who respond to contemporary songwriting with personality, emotional intelligence, and the confidence to let character lead style.",
+  "riyl": "Maggie Rogers • HAIM • MUNA • Clairo • Caroline Polachek • Kacey Musgraves",
+  "listenUrl": "",
+  "releases": [
+    {
+      "title": "For All Creative Habits",
+      "meta": "Upcoming · September 9, 2026",
+      "image": "/images/records/releases/daisy-grohs-for-all-creative-habits.webp",
+      "links": [],
+      "slug": "for-all-creative-habits",
+      "description": "",
+      "lineage": {
+        "display": "hidden",
+        "publicLabel": "",
+        "compositionOrigin": "undocumented",
+        "realizationMethod": "undocumented",
+        "versionRelationship": "undocumented",
+        "sourceTitle": "",
+        "sourceArtist": "",
+        "sourceUrl": "",
+        "publicSummary": "",
+        "methodNote": "",
+        "credits": {
+          "composition": "",
+          "lyrics": "",
+          "arrangement": "",
+          "performance": "",
+          "production": "",
+          "finalEditingAndCuration": ""
+        },
+        "relatedReleases": []
+      }
+    },
+    {
+      "title": "Ten to Pretend",
+      "meta": "Upcoming · October 25, 2026",
+      "image": "/images/records/releases/daisy-grohs-ten-to-pretend.webp",
+      "links": [],
+      "slug": "ten-to-pretend",
+      "description": "",
+      "lineage": {
+        "display": "hidden",
+        "publicLabel": "",
+        "compositionOrigin": "undocumented",
+        "realizationMethod": "undocumented",
+        "versionRelationship": "undocumented",
+        "sourceTitle": "",
+        "sourceArtist": "",
+        "sourceUrl": "",
+        "publicSummary": "",
+        "methodNote": "",
+        "credits": {
+          "composition": "",
+          "lyrics": "",
+          "arrangement": "",
+          "performance": "",
+          "production": "",
+          "finalEditingAndCuration": ""
+        },
+        "relatedReleases": []
+      }
+    }
+  ],
+  "status": "active",
+  "featured": false,
+  "seoTitle": "Daisy Grohs — Star Splitter Records",
+  "seoDescription": "Daisy Grohs is a female-led contemporary project centered on distinctive character, emotional presence, and songs shaped around the voice they genuinely require.",
+  "platformLinks": [],
+  "motion": {},
+  "catalogRole": "Voice-led contemporary project",
+  "roleStatement": "A voice-led project for songs whose character, perspective, and emotional specificity require a distinct female presence."
+}

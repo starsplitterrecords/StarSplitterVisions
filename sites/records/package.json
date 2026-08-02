@@ -1,0 +1,10 @@
+{
+  "name": "star-splitter-records",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "check": "node scripts/build.mjs --content-only",
+    "build": "node scripts/build.mjs"
+  }
+}
