@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url'
 
 const __filename = fileURLToPath(import.meta.url)
 const repoRoot = path.resolve(path.dirname(__filename), '..')
+const monorepoRoot = path.resolve(repoRoot, '..', '..')
 const contentRoot = path.join(repoRoot, 'src', 'content')
 const seriesRoot = path.join(contentRoot, 'series')
 
@@ -83,7 +84,6 @@ function assertKnownSeries(slug, knownSeries, context) {
   }
 }
 
-assertFileExists('.pages.yml')
 assertFileExists('src/App.jsx')
 assertFileExists('src/data/homepageSeries.js')
 assertFileExists('src/data/seriesPages.js')
@@ -99,16 +99,19 @@ assertFileExists('src/components/shared/ImageWithFallback.jsx')
 assertFileExists('src/utils/routes.js')
 assertFileExists('src/utils/dailyPages.js')
 
-const pagesConfig = fs.existsSync(repoPath('.pages.yml'))
-  ? fs.readFileSync(repoPath('.pages.yml'), 'utf8')
+const pagesConfigPath = path.join(monorepoRoot, '.pages.yml')
+if (!fs.existsSync(pagesConfigPath)) errors.push('Root .pages.yml is missing')
+
+const pagesConfig = fs.existsSync(pagesConfigPath)
+  ? fs.readFileSync(pagesConfigPath, 'utf8')
   : ''
 
-if (pagesConfig && !pagesConfig.includes('path: src/content/series')) {
-  errors.push('.pages.yml must expose src/content/series as an editable collection')
+if (pagesConfig && !pagesConfig.includes('path: sites/visions/src/content/series')) {
+  errors.push('.pages.yml must expose the Visions series as an editable collection')
 }
 
-if (pagesConfig && !pagesConfig.includes('input: public/images')) {
-  errors.push('.pages.yml must store uploaded media in public/images')
+if (pagesConfig && !pagesConfig.includes('input: sites/visions/public/images')) {
+  errors.push('.pages.yml must store Visions uploads in sites/visions/public/images')
 }
 
 const site = readJson('src/content/site.json') || {}

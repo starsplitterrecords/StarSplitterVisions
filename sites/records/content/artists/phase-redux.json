@@ -1,0 +1,115 @@
+{
+  "name": "Phase Redux",
+  "slug": "phase-redux",
+  "field": "Electronic",
+  "category": "Electronic",
+  "categories": [
+    "electronic"
+  ],
+  "tagline": "Every sound must earn its place.",
+  "accent": "#F4A628",
+  "identityImage": "/images/records/artists/phase-redux.webp",
+  "worldImage": "/images/records/worlds/phase-redux.webp",
+  "oneSentenceBio": "Phase Redux creates restrained electronic music where effortless groove, elegant detail, and sunset melancholy replace excess with impeccable selection and proportion.",
+  "threeSentenceBio": "Phase Redux makes electronic music that trusts restraint. Balearic atmosphere, refined club rhythm, downtempo warmth, and polished disco influence are shaped into tracks where every sound earns its place. The result is poised, sensual, and quietly emotional music for late afternoons, long evenings, and rooms where sophistication never needs to announce itself. Small details reveal themselves over time, giving the music an understated depth that works equally well for attentive listening and effortless movement.",
+  "paragraphBio": "Phase Redux is electronic music shaped by selection, proportion, and the discipline to stop before elegance becomes excess. Warm bass movement, polished rhythm, soft-focus synthesis, and subtle melodic detail create an atmosphere that can move from a sunlit terrace to a late-night room without changing its fundamental character. The grooves feel effortless, but the ease is carefully constructed: unnecessary layers are removed, transitions are allowed to breathe, and small sonic details become rewards for attentive listening. The emotional world is one of desire, poise, and sunset melancholy rather than maximal celebration. Even at its most danceable, Phase Redux retains a sense of composure, as though the track knows exactly how much energy the moment requires. The project draws on refined club culture, downtempo, nu-disco, and Balearic ease without becoming a period exercise. It is music for listeners who value taste as an audible quality - the confidence of a track that does not need to shout because every choice has already been made with care.",
+  "riyl": "Röyksopp • Air • Poolside • Jessie Ware • Parcels • Bonobo",
+  "listenUrl": "",
+  "releases": [
+    {
+      "title": "If We Remember It Fondly",
+      "meta": "Upcoming · September 6, 2026",
+      "image": "/images/records/releases/phase-redux-if-we-remember-it-fondly.webp",
+      "links": [],
+      "slug": "if-we-remember-it-fondly",
+      "description": "",
+      "lineage": {
+        "display": "hidden",
+        "publicLabel": "",
+        "compositionOrigin": "undocumented",
+        "realizationMethod": "undocumented",
+        "versionRelationship": "undocumented",
+        "sourceTitle": "",
+        "sourceArtist": "",
+        "sourceUrl": "",
+        "publicSummary": "",
+        "methodNote": "",
+        "credits": {
+          "composition": "",
+          "lyrics": "",
+          "arrangement": "",
+          "performance": "",
+          "production": "",
+          "finalEditingAndCuration": ""
+        },
+        "relatedReleases": []
+      }
+    },
+    {
+      "title": "Sail West",
+      "meta": "Selected catalog",
+      "image": "/images/records/releases/phase-redux-sail-west.webp",
+      "links": [],
+      "slug": "sail-west",
+      "description": "",
+      "lineage": {
+        "display": "hidden",
+        "publicLabel": "",
+        "compositionOrigin": "undocumented",
+        "realizationMethod": "undocumented",
+        "versionRelationship": "undocumented",
+        "sourceTitle": "",
+        "sourceArtist": "",
+        "sourceUrl": "",
+        "publicSummary": "",
+        "methodNote": "",
+        "credits": {
+          "composition": "",
+          "lyrics": "",
+          "arrangement": "",
+          "performance": "",
+          "production": "",
+          "finalEditingAndCuration": ""
+        },
+        "relatedReleases": []
+      }
+    },
+    {
+      "title": "Forward Now (feat. Cheddr)",
+      "meta": "Selected catalog",
+      "image": "/images/records/releases/phase-redux-forward-now-feat-cheddr.webp",
+      "links": [],
+      "slug": "forward-now-feat-cheddr",
+      "description": "",
+      "lineage": {
+        "display": "hidden",
+        "publicLabel": "",
+        "compositionOrigin": "undocumented",
+        "realizationMethod": "undocumented",
+        "versionRelationship": "undocumented",
+        "sourceTitle": "",
+        "sourceArtist": "",
+        "sourceUrl": "",
+        "publicSummary": "",
+        "methodNote": "",
+        "credits": {
+          "composition": "",
+          "lyrics": "",
+          "arrangement": "",
+          "performance": "",
+          "production": "",
+          "finalEditingAndCuration": ""
+        },
+        "relatedReleases": []
+      }
+    }
+  ],
+  "status": "active",
+  "featured": false,
+  "seoTitle": "Phase Redux — Star Splitter Records",
+  "seoDescription": "Phase Redux creates restrained electronic music where effortless groove, elegant detail, and sunset melancholy replace excess with impeccable selection and proportion.",
+  "platformLinks": [],
+  "motion": {},
+  "catalogRole": "Restrained electronic language",
+  "roleStatement": "The catalog’s restrained electronic language, where groove, proportion, and selection matter more than density."
+}

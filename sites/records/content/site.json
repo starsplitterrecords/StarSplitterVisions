@@ -1,0 +1,317 @@
+{
+  "brand": {
+    "name": "Star Splitter Records",
+    "wordmark": "STAR SPLITTER",
+    "submark": "RECORDS"
+  },
+  "seo": {
+    "title": "Star Splitter Records",
+    "description": "One evolving catalog expressed through distinct artist projects, with credits designed to preserve process, authorship, and musical lineage."
+  },
+  "navigation": [
+    {
+      "label": "Artists",
+      "path": "/#artists"
+    },
+    {
+      "label": "Releases",
+      "path": "/#releases"
+    },
+    {
+      "label": "Story",
+      "path": "/#story"
+    },
+    {
+      "label": "Licensing",
+      "path": "/#licensing"
+    },
+    {
+      "label": "Journal",
+      "path": "/#journal"
+    }
+  ],
+  "hero": {
+    "eyebrow": "Star Splitter Records",
+    "headingLines": [
+      "Every composition begins as an idea.",
+      "Everything else is interpretation."
+    ],
+    "italicLine": 1,
+    "description": "One evolving catalog, expressed through distinct artist projects. The credits are designed to preserve where the music began, what changed, and who shaped its final form.",
+    "image": "/images/records/worlds/label-hero.webp",
+    "primaryAction": {
+      "label": "Start with the music",
+      "path": "/#releases"
+    },
+    "secondaryAction": {
+      "label": "Explore artists",
+      "path": "/#artists"
+    }
+  },
+  "releaseSection": {
+    "eyebrow": "Selected releases",
+    "title": "Start with the music.",
+    "intro": "Begin anywhere. The catalog treats every release as both music and history: a finished work with an origin, a method, and a place among related versions.",
+    "featured": [
+      {
+        "titleLines": [
+          "Jeff Hines & Ion Drive Orchestra",
+          "Unification Theory"
+        ],
+        "meta": "Latest release · January 16, 2026",
+        "image": "",
+        "links": [
+          {
+            "label": "Listen",
+            "url": "https://music.amazon.com/tracks/B0GH1YKSHS"
+          },
+          {
+            "label": "View artist",
+            "url": "/artists/ion-drive-orchestra.html"
+          }
+        ],
+        "accent": "#F1B826",
+        "artistSlug": "ion-drive-orchestra",
+        "releaseSlug": "unification-theory"
+      },
+      {
+        "titleLines": [
+          "Pulse Width Codex",
+          "I Never Want to Not Do This"
+        ],
+        "meta": "Catalog release · July 14, 2026",
+        "image": "/images/records/releases/pulse-width-codex-i-never-want-to-not-do-this.webp",
+        "links": [
+          {
+            "label": "View artist",
+            "url": "/artists/pulse-width-codex.html"
+          }
+        ],
+        "accent": "#F0327F",
+        "artistSlug": "pulse-width-codex",
+        "releaseSlug": "i-never-want-to-not-do-this"
+      },
+      {
+        "titleLines": [
+          "Jeff Hines & Ion Drive Orchestra",
+          "Freeze Frame"
+        ],
+        "meta": "Released · January 8, 2026",
+        "image": "/images/records/releases/ion-drive-orchestra-freeze-frame.webp",
+        "links": [
+          {
+            "label": "Listen",
+            "url": "https://music.amazon.com/tracks/B0GH1QC7TF"
+          },
+          {
+            "label": "View artist",
+            "url": "/artists/ion-drive-orchestra.html"
+          }
+        ],
+        "accent": "#F1B826",
+        "artistSlug": "ion-drive-orchestra",
+        "releaseSlug": "freeze-frame"
+      },
+      {
+        "titleLines": [
+          "Ghost Driver Unit",
+          "It’s a Grind (Ghost Mode Remix)"
+        ],
+        "meta": "Upcoming · August 17, 2026",
+        "image": "/images/records/releases/ghost-driver-unit-it-s-a-grind-ghost-mode-remix.webp",
+        "links": [
+          {
+            "label": "View artist",
+            "url": "/artists/ghost-driver-unit.html"
+          }
+        ],
+        "accent": "#E8E3D8",
+        "artistSlug": "ghost-driver-unit",
+        "releaseSlug": "its-a-grind-ghost-mode-remix"
+      },
+      {
+        "titleLines": [
+          "Phase Redux",
+          "If We Remember It Fondly"
+        ],
+        "meta": "Upcoming · September 6, 2026",
+        "image": "/images/records/releases/phase-redux-if-we-remember-it-fondly.webp",
+        "links": [
+          {
+            "label": "View artist",
+            "url": "/artists/phase-redux.html"
+          }
+        ],
+        "accent": "#F4A628",
+        "artistSlug": "phase-redux",
+        "releaseSlug": "if-we-remember-it-fondly"
+      },
+      {
+        "titleLines": [
+          "Daisy Grohs",
+          "For All Creative Habits"
+        ],
+        "meta": "Upcoming · September 9, 2026",
+        "image": "/images/records/releases/daisy-grohs-for-all-creative-habits.webp",
+        "links": [
+          {
+            "label": "View artist",
+            "url": "/artists/daisy-grohs.html"
+          }
+        ],
+        "accent": "#C9C6C0",
+        "artistSlug": "daisy-grohs",
+        "releaseSlug": "for-all-creative-habits"
+      }
+    ]
+  },
+  "artistSection": {
+    "eyebrow": "The roster",
+    "title": "Explore the artists.",
+    "intro": "Each project gives the music a distinct voice, emotional perspective, and visual world—and a clear role within the larger catalog.",
+    "filters": [
+      {
+        "label": "All",
+        "value": "all"
+      },
+      {
+        "label": "Rock",
+        "value": "rock"
+      },
+      {
+        "label": "Electronic",
+        "value": "electronic"
+      },
+      {
+        "label": "Songs & Pop",
+        "value": "songs"
+      },
+      {
+        "label": "Cinematic",
+        "value": "cinematic"
+      },
+      {
+        "label": "Roots & Groove",
+        "value": "roots"
+      },
+      {
+        "label": "Experimental",
+        "value": "experimental"
+      }
+    ]
+  },
+  "worlds": [
+    {
+      "artist": "Minor Collapse",
+      "title": "The quietest emotions often feel the biggest.",
+      "linkLabel": "Explore Minor Collapse",
+      "slug": "minor-collapse",
+      "image": "/images/records/artists/minor-collapse.webp"
+    },
+    {
+      "artist": "Ion Drive Orchestra",
+      "title": "The orchestra never stopped evolving.",
+      "linkLabel": "Explore Ion Drive Orchestra",
+      "slug": "ion-drive-orchestra",
+      "image": "/images/records/worlds/ion-drive-orchestra.webp"
+    },
+    {
+      "artist": "Ghost Driver Unit",
+      "title": "Rock survives when the song is stronger than the costume.",
+      "linkLabel": "Explore Ghost Driver Unit",
+      "slug": "ghost-driver-unit",
+      "image": "/images/records/artists/ghost-driver-unit.webp"
+    }
+  ],
+  "labelSlate": {
+    "eyebrow": "The label",
+    "titleLines": [
+      "Many artists.",
+      "One evolving catalog."
+    ],
+    "body": "The projects give the catalog distinct voices. The credits preserve what came first, what changed, and who made the final decisions."
+  },
+  "story": {
+    "eyebrow": "The story",
+    "title": "The work changes. Its lineage remains.",
+    "paragraphs": [
+      "Star Splitter Records is one evolving catalog directed by Jeff Hines and expressed through distinct artist projects. The projects are creative languages—not fictional biographies and not simply genre folders. Each gives the music a different voice, emotional perspective, and visual world.",
+      "A release may begin as a complete composition, an earlier recording, a new interpretation, a reconstruction, a remix, or a more generative starting point. Those beginnings are not interchangeable, and the credits do not treat them as though they are.",
+      "Release credits separate composition, lyrics, arrangement, performance, production, editing, curation, source material, and related versions whenever those distinctions matter. The purpose is neither to conceal the tools nor to make them the subject. It is to show what actually happened and preserve the lineage of the work."
+    ]
+  },
+  "journal": {
+    "eyebrow": "Journal",
+    "title": "Notes from the catalog.",
+    "intro": "Release notes, composition histories, version relationships, project studies, and the decisions that shaped the finished work.",
+    "cards": [
+      {
+        "eyebrow": "Origins",
+        "title": "Where the music began.",
+        "body": "Source compositions, first recordings, inherited ideas, and the musical material that survives each transformation."
+      },
+      {
+        "eyebrow": "Interpretations",
+        "title": "Why this version exists.",
+        "body": "The project language, arrangement choices, performances, production methods, and edits that gave a release its final identity."
+      },
+      {
+        "eyebrow": "Lineage",
+        "title": "How the catalog connects.",
+        "body": "Remixes, reconstructions, restorations, alternate versions, and recurring compositions traced across the catalog."
+      }
+    ]
+  },
+  "licensing": {
+    "eyebrow": "Licensing",
+    "title": "A catalog built for many kinds of scenes.",
+    "intro": "Instrumentals, alternate versions, stems, clean versions, and project-specific music support film, television, games, advertising, and other visual work. The catalog is organized around source relationships, version history, and production credits—useful context for licensing conversations."
+  },
+  "footer": {
+    "copyright": "© 2026 Star Splitter Records",
+    "tagline": "Distinct musical worlds. Clearly preserved lineage."
+  },
+  "creditNote": {
+    "eyebrow": "Credits that follow the work",
+    "title": "Origin and transformation are both part of the story.",
+    "body": "Star Splitter separates composition, interpretation, performance, and production so a release can be credited for what it actually is—not reduced to a single tool, process, or category.",
+    "linkLabel": "How authorship is documented",
+    "path": "/#authorship"
+  },
+  "authorship": {
+    "eyebrow": "Authorship and process",
+    "title": "Credit the origin. Credit the transformation.",
+    "intro": "Composition, interpretation, performance, and production are different forms of creative contribution. Star Splitter names them separately so listeners can understand where a work began, what changed, and who shaped the final release.",
+    "principles": [
+      {
+        "title": "The composition",
+        "body": "Who originated the melody, harmony, rhythm, lyrics, and underlying structure."
+      },
+      {
+        "title": "The realization",
+        "body": "How the work was arranged, performed, generated, recorded, produced, edited, and selected."
+      },
+      {
+        "title": "The lineage",
+        "body": "Which source composition, earlier recording, remix, restoration, or alternate version this release belongs to."
+      },
+      {
+        "title": "The final decisions",
+        "body": "Who chose what remained, what changed, and when the work was finished."
+      }
+    ],
+    "closing": "The result is specific rather than categorical: not a blanket label, but a record of the work itself."
+  },
+  "releasePage": {
+    "detailsEyebrow": "Release",
+    "backLabel": "Back to artist",
+    "aboutEyebrow": "About this release",
+    "lineageEyebrow": "Credits and lineage",
+    "lineageTitle": "How this release came to exist.",
+    "lineageIntro": "The details below separate the origin of the work from the way this version was arranged, performed, produced, edited, and completed.",
+    "sourceTitle": "Source work",
+    "creditsTitle": "Credits",
+    "processTitle": "Process note",
+    "relatedTitle": "Related releases"
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "name": "Milo Bright",
+  "slug": "milo-bright",
+  "field": "Contemporary pop",
+  "category": "Contemporary pop",
+  "categories": [
+    "songs"
+  ],
+  "tagline": "Pop craft and musical craft are the same craft when done honestly.",
+  "accent": "#2850FF",
+  "identityImage": "/images/records/artists/milo-bright.webp",
+  "worldImage": "/images/records/worlds/milo-bright.webp",
+  "oneSentenceBio": "Milo Bright brings visible musicianship, melodic precision, confident performance, and emotional warmth into contemporary male pop without sacrificing immediacy, accessibility, or polish.",
+  "threeSentenceBio": "Milo Bright makes contemporary pop for listeners who want strong hooks and genuine musical substance in the same song. Melodic precision, thoughtful harmony, and confident performance support direct themes of romance, warmth, and self-belief without turning musicianship into a display case. The result is polished, accessible pop that rewards both immediate listening and closer attention. Every musical detail is there to strengthen the song, making the catalog equally suited to immediate pop listening and repeated attention.",
+  "paragraphBio": "Milo Bright approaches contemporary pop as a place where musicianship and accessibility can strengthen one another. The songs lead with melody, emotional clarity, and memorable hooks, but careful harmonic choices, instrumental detail, and precise arrangement give them depth beyond the first impression. Nothing is included merely to prove technical ability; every flourish must make the chorus land harder, the lyric feel warmer, or the emotional arc read more clearly. The vocal presence is modern and direct, able to carry romance, confidence, uncertainty, and optimism without retreating into irony. Production is polished, but the polish serves the song rather than replacing it. Milo Bright is designed for the space where an immediate pop record can still reveal craft over repeated listens - where a bright surface contains thoughtful changes, purposeful performance, and a strong melodic point of view. It is contemporary male pop for audiences who appreciate charisma without emptiness and sophistication without distance.",
+  "riyl": "Harry Styles • Charlie Puth • John Mayer • Lauv • Niall Horan • Benson Boone",
+  "listenUrl": "",
+  "releases": [
+    {
+      "title": "Figure It Out",
+      "meta": "Upcoming · August 23, 2026",
+      "image": "/images/records/releases/milo-bright-figure-it-out.webp",
+      "links": [],
+      "slug": "figure-it-out",
+      "description": "",
+      "lineage": {
+        "display": "hidden",
+        "publicLabel": "",
+        "compositionOrigin": "undocumented",
+        "realizationMethod": "undocumented",
+        "versionRelationship": "undocumented",
+        "sourceTitle": "",
+        "sourceArtist": "",
+        "sourceUrl": "",
+        "publicSummary": "",
+        "methodNote": "",
+        "credits": {
+          "composition": "",
+          "lyrics": "",
+          "arrangement": "",
+          "performance": "",
+          "production": "",
+          "finalEditingAndCuration": ""
+        },
+        "relatedReleases": []
+      }
+    },
+    {
+      "title": "Say Something",
+      "meta": "Upcoming · October 16, 2026",
+      "image": "/images/records/releases/milo-bright-say-something.webp",
+      "links": [],
+      "slug": "say-something",
+      "description": "",
+      "lineage": {
+        "display": "hidden",
+        "publicLabel": "",
+        "compositionOrigin": "undocumented",
+        "realizationMethod": "undocumented",
+        "versionRelationship": "undocumented",
+        "sourceTitle": "",
+        "sourceArtist": "",
+        "sourceUrl": "",
+        "publicSummary": "",
+        "methodNote": "",
+        "credits": {
+          "composition": "",
+          "lyrics": "",
+          "arrangement": "",
+          "performance": "",
+          "production": "",
+          "finalEditingAndCuration": ""
+        },
+        "relatedReleases": []
+      }
+    }
+  ],
+  "status": "active",
+  "featured": false,
+  "seoTitle": "Milo Bright — Star Splitter Records",
+  "seoDescription": "Milo Bright brings visible musicianship, melodic precision, confident performance, and emotional warmth into contemporary male pop without sacrificing immediacy, accessibility, or polish.",
+  "platformLinks": [],
+  "motion": {},
+  "catalogRole": "Musician-led contemporary pop",
+  "roleStatement": "A male pop project where visible musicianship, melodic precision, warmth, and contemporary polish belong to the same performance."
+}

@@ -59,10 +59,10 @@ NOTES:
 ## Canonical published repo paths
 
 ```text
-public/images/brand/
-public/images/covers/
-public/images/pages/{series}/{release}/
-public/images/series/{series}/
+sites/visions/public/images/brand/
+sites/visions/public/images/covers/
+sites/visions/public/images/pages/{series}/{release}/
+sites/visions/public/images/series/{series}/
 ```
 
 ## Runtime path rule
@@ -87,7 +87,7 @@ Incorrect:
 After publishing, preserve the completed manifest in:
 
 ```text
-public/images/_manifests/
+sites/visions/public/images/_manifests/
 ```
 
 The temporary intake batch can then be cleared.
@@ -97,12 +97,11 @@ The temporary intake batch can then be cleared.
 Current runtime mapping lives in JavaScript data files:
 
 ```text
-src/data/assets.js
-src/data/homepageSeries.js
-src/data/seriesPages.js
+sites/visions/src/content/homepage.json
+sites/visions/src/content/series/*.json
 ```
 
-Do not create parallel TypeScript or JSON asset models unless a migration is explicitly scoped.
+Do not create parallel content registries outside the managed JSON model.
 
 ## No admin surface
 

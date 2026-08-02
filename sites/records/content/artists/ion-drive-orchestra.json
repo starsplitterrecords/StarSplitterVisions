@@ -1,0 +1,139 @@
+{
+  "name": "Ion Drive Orchestra",
+  "slug": "ion-drive-orchestra",
+  "field": "Symphonic electronic",
+  "category": "Symphonic electronic",
+  "categories": [
+    "cinematic",
+    "electronic"
+  ],
+  "tagline": "The orchestra never stopped evolving.",
+  "accent": "#F1B826",
+  "identityImage": "/images/records/artists/ion-drive-orchestra.webp",
+  "worldImage": "/images/records/worlds/ion-drive-orchestra.webp",
+  "oneSentenceBio": "Ion Drive Orchestra fuses orchestral scale with electronic motion, creating cinematic instrumental music where strings, brass, synthesis, beats, and sound design evolve together.",
+  "threeSentenceBio": "Ion Drive Orchestra imagines what symphonic music becomes when electronic instruments are treated as native members of the ensemble. Strings, brass, synthesis, programmed rhythm, sampling, and turntablism share the same dramatic arc rather than occupying separate layers. The result is expansive, propulsive music shaped by wonder, precision, and the feeling of looking outward into impossible scale. Themes develop across large dramatic spaces, giving the spectacle a melodic center and allowing reflection, danger, triumph, and awe to exist within the same journey.",
+  "paragraphBio": "Ion Drive Orchestra treats the orchestra not as a historical artifact but as an evolving technology. Strings and brass meet synthesizers, programmed rhythm, sampling, turntablism, and cinematic sound design as equal compositional forces, each capable of changing the direction of a piece. Rather than placing orchestral color over an electronic foundation, the project allows acoustic and synthetic elements to build themes, exchange momentum, and reshape the form together. The music often carries the scale of science fiction: launch sequences, distant worlds, immense machinery, and the sensation of motion through spaces larger than the listener can fully comprehend. Yet spectacle is never the sole objective. Recurring themes, melodic development, and carefully controlled dynamics give the work an emotional center, allowing awe, danger, triumph, and reflection to coexist. Ion Drive Orchestra is cinematic without requiring a film, symphonic without rejecting rhythm technology, and futuristic without abandoning melody. It offers listeners a place where the concert hall, the studio, and the starship bridge feel like parts of the same instrument.",
+  "riyl": "Vangelis • Hans Zimmer • Ludwig Göransson • Hybrid • Ólafur Arnalds • The Glitch Mob",
+  "listenUrl": "https://music.amazon.in/artists/B0GCT7W8V2/ion-drive-orchestra",
+  "releases": [
+    {
+      "title": "Unification Theory",
+      "meta": "Released · January 16, 2026",
+      "image": "",
+      "links": [
+        {
+          "label": "Listen",
+          "url": "https://music.amazon.com/tracks/B0GH1YKSHS"
+        }
+      ],
+      "slug": "unification-theory",
+      "description": "",
+      "lineage": {
+        "display": "hidden",
+        "publicLabel": "",
+        "compositionOrigin": "undocumented",
+        "realizationMethod": "undocumented",
+        "versionRelationship": "undocumented",
+        "sourceTitle": "",
+        "sourceArtist": "",
+        "sourceUrl": "",
+        "publicSummary": "",
+        "methodNote": "",
+        "credits": {
+          "composition": "",
+          "lyrics": "",
+          "arrangement": "",
+          "performance": "",
+          "production": "",
+          "finalEditingAndCuration": ""
+        },
+        "relatedReleases": []
+      }
+    },
+    {
+      "title": "Freeze Frame",
+      "meta": "Released · January 8, 2026",
+      "image": "/images/records/releases/ion-drive-orchestra-freeze-frame.webp",
+      "links": [
+        {
+          "label": "Listen",
+          "url": "https://music.amazon.com/tracks/B0GH1QC7TF"
+        }
+      ],
+      "slug": "freeze-frame",
+      "description": "",
+      "lineage": {
+        "display": "hidden",
+        "publicLabel": "",
+        "compositionOrigin": "undocumented",
+        "realizationMethod": "undocumented",
+        "versionRelationship": "undocumented",
+        "sourceTitle": "",
+        "sourceArtist": "",
+        "sourceUrl": "",
+        "publicSummary": "",
+        "methodNote": "",
+        "credits": {
+          "composition": "",
+          "lyrics": "",
+          "arrangement": "",
+          "performance": "",
+          "production": "",
+          "finalEditingAndCuration": ""
+        },
+        "relatedReleases": []
+      }
+    },
+    {
+      "title": "Ignition Sequence (feat. Cheddr)",
+      "meta": "Selected catalog",
+      "image": "/images/records/releases/ion-drive-orchestra-ignition-sequence-feat-cheddr.webp",
+      "links": [],
+      "slug": "ignition-sequence-feat-cheddr",
+      "description": "",
+      "lineage": {
+        "display": "hidden",
+        "publicLabel": "",
+        "compositionOrigin": "undocumented",
+        "realizationMethod": "undocumented",
+        "versionRelationship": "undocumented",
+        "sourceTitle": "",
+        "sourceArtist": "",
+        "sourceUrl": "",
+        "publicSummary": "",
+        "methodNote": "",
+        "credits": {
+          "composition": "",
+          "lyrics": "",
+          "arrangement": "",
+          "performance": "",
+          "production": "",
+          "finalEditingAndCuration": ""
+        },
+        "relatedReleases": []
+      }
+    }
+  ],
+  "status": "active",
+  "featured": false,
+  "seoTitle": "Ion Drive Orchestra — Star Splitter Records",
+  "seoDescription": "Ion Drive Orchestra fuses orchestral scale with electronic motion, creating cinematic instrumental music where strings, brass, synthesis, beats, and sound design evolve together.",
+  "platformLinks": [
+    {
+      "label": "Unification Theory",
+      "url": "https://music.amazon.com/tracks/B0GH1YKSHS"
+    },
+    {
+      "label": "Freeze Frame",
+      "url": "https://music.amazon.com/tracks/B0GH1QC7TF"
+    },
+    {
+      "label": "Amazon Music",
+      "url": "https://music.amazon.in/artists/B0GCT7W8V2/ion-drive-orchestra"
+    }
+  ],
+  "motion": {},
+  "catalogRole": "Orchestral electronic language",
+  "roleStatement": "The orchestral language of the catalog, where acoustic instruments, synthesis, rhythm, and sound design develop as one ensemble."
+}

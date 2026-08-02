@@ -1,0 +1,144 @@
+{
+  "name": "Jeff Hines",
+  "slug": "jeff-hines",
+  "field": "Authorial electronic",
+  "category": "Authorial electronic",
+  "categories": [
+    "electronic",
+    "experimental"
+  ],
+  "tagline": "The author’s name belongs on the work when the work is fundamentally his voice.",
+  "accent": "#39FF14",
+  "identityImage": "/images/records/artists/jeff-hines.webp",
+  "worldImage": "/images/records/worlds/jeff-hines.webp",
+  "oneSentenceBio": "Jeff Hines creates melodic, exploratory electronic music shaped by direct composition, detailed arrangement, and a personal vision that moves freely across mood and form.",
+  "threeSentenceBio": "Jeff Hines is the direct artist identity behind music that does not need a fictional frame or fixed genre boundary. The work moves through electronic rock, ambient detail, cinematic motion, and melodic experimentation while retaining a strong compositional center. Each release reflects a personal balance of craft, curiosity, atmosphere, and the belief that a memorable idea should remain recognizable through every transformation.",
+  "paragraphBio": "Jeff Hines is the most direct expression of a compositional voice developed across decades of programmed music, electronic production, and melodic experimentation. The project is not confined to one narrow sound; it can move from intricate electronica and cinematic atmosphere to electronic rock, ambient reflection, or bright synthetic momentum whenever the composition calls for it. What connects the work is authorship: deliberate melody, carefully shaped rhythm, structural curiosity, and an interest in how an idea can survive changes in instrumentation and production. Technology is present, sometimes visibly, but it is never the subject by default. The focus remains on the decisions that give a piece identity - a countermelody that changes the emotional meaning of a section, a rhythm that opens a new path through the song, or a texture that clarifies rather than obscures the underlying form. Jeff Hines is for listeners who value electronic music with a strong compositional spine and who enjoy hearing one artistic perspective move freely among intimacy, propulsion, abstraction, and scale.",
+  "riyl": "Tycho • Boards of Canada • Jon Hopkins • BT • Alan Parsons Project • Bonobo",
+  "listenUrl": "https://starsplitterrecords.bandcamp.com/",
+  "releases": [
+    {
+      "title": "Cheddr",
+      "meta": "Historical catalog · 2020",
+      "image": "/images/records/releases/jeff-hines-cheddr.webp",
+      "links": [
+        {
+          "label": "Explore the archive",
+          "url": "https://distrokid.com/hyperfollow/cheddr/cheddr"
+        }
+      ],
+      "slug": "cheddr",
+      "description": "",
+      "lineage": {
+        "display": "hidden",
+        "publicLabel": "",
+        "compositionOrigin": "undocumented",
+        "realizationMethod": "undocumented",
+        "versionRelationship": "undocumented",
+        "sourceTitle": "",
+        "sourceArtist": "",
+        "sourceUrl": "",
+        "publicSummary": "",
+        "methodNote": "",
+        "credits": {
+          "composition": "",
+          "lyrics": "",
+          "arrangement": "",
+          "performance": "",
+          "production": "",
+          "finalEditingAndCuration": ""
+        },
+        "relatedReleases": []
+      }
+    },
+    {
+      "title": "Cheddr-era electronic archive",
+      "meta": "Historical catalog",
+      "image": "/images/records/releases/jeff-hines-electronic-music-2125.webp",
+      "links": [
+        {
+          "label": "Listen on Bandcamp",
+          "url": "https://starsplitterrecords.bandcamp.com/"
+        }
+      ],
+      "slug": "cheddr-era-electronic-archive",
+      "description": "",
+      "lineage": {
+        "display": "hidden",
+        "publicLabel": "",
+        "compositionOrigin": "undocumented",
+        "realizationMethod": "undocumented",
+        "versionRelationship": "undocumented",
+        "sourceTitle": "",
+        "sourceArtist": "",
+        "sourceUrl": "",
+        "publicSummary": "",
+        "methodNote": "",
+        "credits": {
+          "composition": "",
+          "lyrics": "",
+          "arrangement": "",
+          "performance": "",
+          "production": "",
+          "finalEditingAndCuration": ""
+        },
+        "relatedReleases": []
+      }
+    },
+    {
+      "title": "I’m on My Way (feat. Eric C. Powell & Andrea Powell)",
+      "meta": "Released · 2020",
+      "image": "",
+      "links": [
+        {
+          "label": "Listen",
+          "url": "https://distrokid.com/hyperfollow/cheddr/im-on-my-way-feat-eric-c-powell--andrea-powell"
+        }
+      ],
+      "slug": "im-on-my-way-feat-eric-c-powell-andrea-powell",
+      "description": "",
+      "lineage": {
+        "display": "hidden",
+        "publicLabel": "",
+        "compositionOrigin": "undocumented",
+        "realizationMethod": "undocumented",
+        "versionRelationship": "undocumented",
+        "sourceTitle": "",
+        "sourceArtist": "",
+        "sourceUrl": "",
+        "publicSummary": "",
+        "methodNote": "",
+        "credits": {
+          "composition": "",
+          "lyrics": "",
+          "arrangement": "",
+          "performance": "",
+          "production": "",
+          "finalEditingAndCuration": ""
+        },
+        "relatedReleases": []
+      }
+    }
+  ],
+  "status": "active",
+  "featured": false,
+  "seoTitle": "Jeff Hines — Star Splitter Records",
+  "seoDescription": "Jeff Hines creates melodic, exploratory electronic music shaped by direct composition, detailed arrangement, and a personal vision that moves freely across mood and form.",
+  "platformLinks": [
+    {
+      "label": "Listen on Bandcamp",
+      "url": "https://starsplitterrecords.bandcamp.com/"
+    },
+    {
+      "label": "Cheddr archive",
+      "url": "https://distrokid.com/hyperfollow/cheddr/cheddr"
+    },
+    {
+      "label": "I’m on My Way",
+      "url": "https://distrokid.com/hyperfollow/cheddr/im-on-my-way-feat-eric-c-powell--andrea-powell"
+    }
+  ],
+  "motion": {},
+  "catalogRole": "Direct artist identity",
+  "roleStatement": "The direct artist identity and authorial center of the catalog, including finished electronic work preserved from the Cheddr era."
+}

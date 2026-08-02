@@ -48,7 +48,7 @@ Runtime image paths must use:
 Repository files live under:
 
 ```text
-public/images/...
+sites/visions/public/images/...
 ```
 
 Do not use runtime paths beginning with:

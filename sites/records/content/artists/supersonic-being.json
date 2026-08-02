@@ -1,0 +1,68 @@
+{
+  "name": "Supersonic Being",
+  "slug": "supersonic-being",
+  "field": "Hip-hop / pop spectacle",
+  "category": "Hip-hop / pop spectacle",
+  "categories": [
+    "songs",
+    "electronic"
+  ],
+  "tagline": "Life is too short to be boring.",
+  "accent": "#F9268D",
+  "identityImage": "/images/records/artists/supersonic-being.webp",
+  "worldImage": "/images/records/worlds/supersonic-being.webp",
+  "oneSentenceBio": "Supersonic Being makes fearless, funny, personality-driven music where hip-hop, pop spectacle, dance-rock, electronic energy, and left-field storytelling collide without asking permission.",
+  "threeSentenceBio": "Supersonic Being is built for entertainment without apology. Hip-hop provides the center of gravity, while comedy, dance-rock, electronic pop, swagger, and strange narrative detours keep the music unpredictable. The project values personality over genre purity, delivering high-energy songs that are funny because they are sharp and memorable because the musical quality never becomes part of the joke. Every detour is held together by a vivid voice and a commitment to making the song work as hard as the premise.",
+  "paragraphBio": "Supersonic Being treats personality, humor, and sheer entertainment value as serious artistic tools. Hip-hop sits at the center, but the project is free to pull in dance-rock, electronic pop, absurd storytelling, theatrical hooks, and any other element that makes the song more alive. The governing rule is not genre consistency but character: the voice must remain confident, quick, surprising, and unmistakably itself even as the music changes shape around it. Comedy is never an excuse for weak writing or disposable production. The best tracks work because the joke lands, the beat moves, the hook stays, and the arrangement commits completely to the premise. Supersonic Being can swagger, narrate, exaggerate, celebrate, or derail itself on purpose, but it should never feel cautious or sanded down. It is music for parties, headphones, internet rabbit holes, and listeners who believe cleverness and fun do not have to be separated from craft. Life is too short for a predictable second verse.",
+  "riyl": "Beastie Boys • Gorillaz • The Prodigy • Childish Gambino • Oliver Tree • LMFAO",
+  "listenUrl": "https://distrokid.com/hyperfollow/supersonicbeing/give-it-up-let-go-feat-cheddr",
+  "releases": [
+    {
+      "title": "Give It Up, Let’s Go",
+      "meta": "Released · 2025",
+      "image": "/images/records/releases/supersonic-being-give-it-up-let-s-go.webp",
+      "links": [
+        {
+          "label": "Listen",
+          "url": "https://distrokid.com/hyperfollow/supersonicbeing/give-it-up-let-go-feat-cheddr"
+        }
+      ],
+      "slug": "give-it-up-lets-go",
+      "description": "",
+      "lineage": {
+        "display": "hidden",
+        "publicLabel": "",
+        "compositionOrigin": "undocumented",
+        "realizationMethod": "undocumented",
+        "versionRelationship": "undocumented",
+        "sourceTitle": "",
+        "sourceArtist": "",
+        "sourceUrl": "",
+        "publicSummary": "",
+        "methodNote": "",
+        "credits": {
+          "composition": "",
+          "lyrics": "",
+          "arrangement": "",
+          "performance": "",
+          "production": "",
+          "finalEditingAndCuration": ""
+        },
+        "relatedReleases": []
+      }
+    }
+  ],
+  "status": "active",
+  "featured": false,
+  "seoTitle": "Supersonic Being — Star Splitter Records",
+  "seoDescription": "Supersonic Being makes fearless, funny, personality-driven music where hip-hop, pop spectacle, dance-rock, electronic energy, and left-field storytelling collide without asking permission.",
+  "platformLinks": [
+    {
+      "label": "Give it up, Let Go",
+      "url": "https://distrokid.com/hyperfollow/supersonicbeing/give-it-up-let-go-feat-cheddr"
+    }
+  ],
+  "motion": {},
+  "catalogRole": "Personality-driven hybrid",
+  "roleStatement": "The catalog’s most unruly personality-driven project, free to combine hip-hop, pop, dance-rock, comedy, and spectacle."
+}
