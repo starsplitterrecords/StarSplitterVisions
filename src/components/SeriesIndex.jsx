@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import ImageWithFallback from './shared/ImageWithFallback'
+import siteContent from '../content/site.json'
 import { seriesPages } from '../data/seriesPages'
 
 const statusFilters = [
@@ -11,18 +12,20 @@ const statusFilters = [
 const statusLabels = {
   active: 'Active',
   'coming-soon': 'In Development',
+  archived: 'Archived',
 }
 
 export default function SeriesIndex({ onOpenSeries }) {
   const [activeFilter, setActiveFilter] = useState('all')
+  const catalogContent = siteContent.seriesCatalog || {}
 
   const seriesList = useMemo(() => {
     return Object.values(seriesPages)
       .filter((series) => activeFilter === 'all' || series.status === activeFilter)
       .sort((a, b) => {
-        const statusRank = { active: 0, 'coming-soon': 1 }
-        const rankA = statusRank[a.status] ?? 2
-        const rankB = statusRank[b.status] ?? 2
+        const statusRank = { active: 0, 'coming-soon': 1, archived: 2 }
+        const rankA = statusRank[a.status] ?? 3
+        const rankB = statusRank[b.status] ?? 3
 
         if (rankA !== rankB) return rankA - rankB
 
@@ -33,9 +36,9 @@ export default function SeriesIndex({ onOpenSeries }) {
   return (
     <main className="series-index">
       <section className="series-index-hero hud-frame">
-        <p className="eyebrow">SERIES CATALOG //</p>
-        <h1>Series</h1>
-        <p>Explore the current Star Splitter Visions shelf: active releases, developing worlds, and signals queued for expansion.</p>
+        <p className="eyebrow">{catalogContent.eyebrow}</p>
+        <h1>{catalogContent.title}</h1>
+        <p>{catalogContent.description}</p>
       </section>
 
       <section className="series-index-controls hud-frame" aria-label="Series filters">
@@ -53,7 +56,7 @@ export default function SeriesIndex({ onOpenSeries }) {
 
       {seriesList.length === 0 ? (
         <section className="series-index-empty hud-frame">
-          <p>No series match this filter.</p>
+          <p>{catalogContent.emptyMessage || 'No series match this filter.'}</p>
         </section>
       ) : (
         <section className="series-index-grid">
@@ -90,7 +93,7 @@ export default function SeriesIndex({ onOpenSeries }) {
                     onOpenSeries?.(series.slug)
                   }}
                 >
-                  View Series →
+                  {catalogContent.viewLabel || 'View Series →'}
                 </button>
               </div>
             </article>

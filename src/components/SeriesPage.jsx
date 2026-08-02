@@ -3,8 +3,6 @@ import ImageWithFallback from './shared/ImageWithFallback'
 import ExtrasRail from './media/ExtrasRail'
 import AudioRail from './media/AudioRail'
 import { seriesPages } from '../data/seriesPages'
-import { vikingsExtras } from '../data/vikingsExtras'
-import { vikingsAudio } from '../data/vikingsAudio'
 import { getLatestReleasedPage, getReleasedPages } from '../utils/dailyPages'
 
 function EditorialSection({ title, children }) {
@@ -27,18 +25,10 @@ export default function SeriesPage({ slug, onReadIssue }) {
   const series = seriesPages[slug]
   const [currentPreviewPage, setCurrentPreviewPage] = useState(1)
   const [previewFailed, setPreviewFailed] = useState(false)
-
   const todayString = new Date().toISOString().slice(0, 10)
 
-  const worldStyle = {
-    '--world-accent': series?.accent || '#BAFF00',
-  }
-
-  const seriesExtras = slug === 'vikings-2026' ? vikingsExtras : []
-  const seriesAudio = slug === 'vikings-2026' ? vikingsAudio : []
-
   const availablePages = useMemo(() => {
-    if (!series || series.dailyPages.length === 0) {
+    if (!series?.dailyPages?.length) {
       return []
     }
 
@@ -46,7 +36,7 @@ export default function SeriesPage({ slug, onReadIssue }) {
   }, [series, todayString])
 
   const latestPage = useMemo(() => {
-    if (!series || series.dailyPages.length === 0) {
+    if (!series?.dailyPages?.length) {
       return null
     }
 
@@ -70,10 +60,17 @@ export default function SeriesPage({ slug, onReadIssue }) {
     )
   }
 
+  const worldStyle = {
+    '--world-accent': series.accent || '#BAFF00',
+  }
   const narrativeForms = series.narrativeForms || []
   const themes = series.themes || []
+  const seriesExtras = series.extras || []
+  const seriesAudio = series.audio || []
 
-  if (series.status === 'coming-soon') {
+  if (series.status !== 'active') {
+    const statusLabel = series.status === 'archived' ? 'Archived' : 'Coming Soon'
+
     return (
       <main className={`series-page world-themed ${slug === 'vikings-2026' ? 'series-page-vikings' : ''}`.trim()} style={worldStyle}>
         <section className="series-world-header hud-frame">
@@ -86,14 +83,14 @@ export default function SeriesPage({ slug, onReadIssue }) {
 
           <div className="series-world-meta">
             <span>{series.worldLabel}</span>
-            <span>Coming Soon</span>
+            <span>{statusLabel}</span>
           </div>
         </section>
 
         <section className="series-current-page hud-frame">
           <div className="series-current-copy">
             <p className="eyebrow">WORLD PREVIEW //</p>
-            <h2>Transmission Inbound</h2>
+            <h2>{series.currentRelease || 'Transmission Inbound'}</h2>
             <p className="series-description">{series.description}</p>
           </div>
 
@@ -105,6 +102,9 @@ export default function SeriesPage({ slug, onReadIssue }) {
         <EditorialSection title="About This World">
           {series.worldPremise || series.description}
         </EditorialSection>
+
+        <ExtrasRail title={series.extrasTitle || 'Recovered Artifacts'} artifacts={seriesExtras} />
+        <AudioRail title={series.audioTitle || 'Signal Audio'} tracks={seriesAudio} />
       </main>
     )
   }
@@ -114,15 +114,26 @@ export default function SeriesPage({ slug, onReadIssue }) {
   const totalPages = series.dailyPages.length
   const releasedPageCount = availablePages.length
   const nextUnreleasedPage = series.dailyPages.find((page) => page.releaseDate > todayString)
+  const hasAvailablePages = availablePages.length > 0
 
   const updatePreviewPage = (nextPage) => {
+    if (!hasAvailablePages) return
+
     setPreviewFailed(false)
     setCurrentPreviewPage(nextPage)
   }
 
-  const goFirst = () => updatePreviewPage(1)
-  const goPrevious = () => updatePreviewPage(currentPreviewPage <= 1 ? availablePages.length : currentPreviewPage - 1)
-  const goNext = () => updatePreviewPage(currentPreviewPage >= availablePages.length ? 1 : currentPreviewPage + 1)
+  const goFirst = () => updatePreviewPage(availablePages[0]?.pageNumber || 1)
+  const goPrevious = () => {
+    const currentIndex = availablePages.findIndex((page) => page.pageNumber === currentPreviewPage)
+    const previousIndex = currentIndex <= 0 ? availablePages.length - 1 : currentIndex - 1
+    updatePreviewPage(availablePages[previousIndex]?.pageNumber || 1)
+  }
+  const goNext = () => {
+    const currentIndex = availablePages.findIndex((page) => page.pageNumber === currentPreviewPage)
+    const nextIndex = currentIndex >= availablePages.length - 1 ? 0 : currentIndex + 1
+    updatePreviewPage(availablePages[nextIndex]?.pageNumber || 1)
+  }
   const goLatest = () => latestPage && updatePreviewPage(latestPage.pageNumber)
 
   const goRandom = () => {
@@ -168,8 +179,12 @@ export default function SeriesPage({ slug, onReadIssue }) {
         </div>
 
         <div className="series-launch-actions">
-          <button className="primary-action" onClick={() => onReadIssue?.(1)}>Read From Page 001</button>
-          <button onClick={() => latestPage && onReadIssue?.(latestPage.pageNumber)}>Open Latest Daily</button>
+          <button className="primary-action" disabled={!hasAvailablePages} onClick={() => onReadIssue?.(availablePages[0]?.pageNumber || 1)}>
+            Read From Page 001
+          </button>
+          <button disabled={!latestPage} onClick={() => latestPage && onReadIssue?.(latestPage.pageNumber)}>
+            Open Latest Daily
+          </button>
         </div>
       </section>
 
@@ -262,28 +277,31 @@ export default function SeriesPage({ slug, onReadIssue }) {
           </p>
 
           <div className="series-page-controls" aria-label="Daily page navigation">
-            <button onClick={goFirst}>First</button>
-            <button onClick={goPrevious}>Prev</button>
-            <button onClick={goRandom}>Random</button>
-            <button onClick={goNext}>Next</button>
-            <button onClick={goLatest}>Latest</button>
+            <button disabled={!hasAvailablePages} onClick={goFirst}>First</button>
+            <button disabled={!hasAvailablePages} onClick={goPrevious}>Prev</button>
+            <button disabled={!hasAvailablePages} onClick={goRandom}>Random</button>
+            <button disabled={!hasAvailablePages} onClick={goNext}>Next</button>
+            <button disabled={!latestPage} onClick={goLatest}>Latest</button>
           </div>
 
           <div className="series-page-actions">
-            <button className="primary-action" onClick={() => onReadIssue?.(1)}>
+            <button
+              className="primary-action"
+              disabled={!hasAvailablePages}
+              onClick={() => onReadIssue?.(availablePages[0]?.pageNumber || 1)}
+            >
               Start From Beginning
             </button>
 
-            <button onClick={() => onReadIssue?.(currentPreviewPage)}>
+            <button disabled={!currentPageData} onClick={() => onReadIssue?.(currentPreviewPage)}>
               Open This Page
             </button>
           </div>
         </div>
       </section>
 
-      <ExtrasRail title="Recovered Artifacts" artifacts={seriesExtras} />
-
-      <AudioRail title="Signal Audio" tracks={seriesAudio} />
+      <ExtrasRail title={series.extrasTitle || 'Recovered Artifacts'} artifacts={seriesExtras} />
+      <AudioRail title={series.audioTitle || 'Signal Audio'} tracks={seriesAudio} />
     </main>
   )
 }

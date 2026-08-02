@@ -1,0 +1,41 @@
+{
+  "slug": "rex-fleet",
+  "title": "Rex Fleet",
+  "tagline": "A deeper signal from the Star Splitter shelf.",
+  "atmosphere": "Adventure-facing speculative comics development.",
+  "description": "A developing Star Splitter Visions world awaiting public expansion.",
+  "status": "coming-soon",
+  "developmentStatus": "In development",
+  "worldLabel": "Speculative Adventure",
+  "currentRelease": "Preview",
+  "hero": "/images/covers/rex-fleet-issue-01-cover.png",
+  "accent": "#BAFF00",
+  "format": "Comic development",
+  "worldPremise": "Public-facing details are still being locked.",
+  "homepage": {
+    "issue": "In Development",
+    "hook": "A deeper speculative-adventure signal from the Star Splitter shelf.",
+    "cover": "/images/covers/rex-fleet-issue-01-cover.png"
+  },
+  "narrativeForms": [],
+  "themes": [],
+  "seriesEngine": "",
+  "coreConflict": "",
+  "readerEntry": "",
+  "audiencePromise": "",
+  "releases": [
+    {
+      "title": "Issue 01 Preview",
+      "cover": "/images/covers/rex-fleet-issue-01-cover.png",
+      "description": "The first public visual signal for Rex Fleet.",
+      "releaseType": "Preview",
+      "releaseDate": "",
+      "externalLink": ""
+    }
+  ],
+  "dailyPages": [],
+  "extrasTitle": "Recovered Artifacts",
+  "extras": [],
+  "audioTitle": "Signal Audio",
+  "audio": []
+}

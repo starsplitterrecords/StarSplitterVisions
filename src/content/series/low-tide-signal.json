@@ -1,0 +1,41 @@
+{
+  "slug": "low-tide-signal",
+  "title": "Low Tide Signal",
+  "tagline": "A quiet coastal signal from a flooded edge of the future.",
+  "atmosphere": "Quiet mystery, abandoned infrastructure, and social unease.",
+  "description": "A developing coastal sci-fi mystery in the Star Splitter Visions portfolio.",
+  "status": "coming-soon",
+  "developmentStatus": "In development",
+  "worldLabel": "Coastal Sci-Fi Mystery",
+  "currentRelease": "Preview",
+  "hero": "/images/covers/low-tide-signal-issue-01-cover.png",
+  "accent": "#78D7FF",
+  "format": "Limited series development",
+  "worldPremise": "Public-facing details are still being locked.",
+  "homepage": {
+    "issue": "In Development",
+    "hook": "A quiet coastal mystery from a flooded edge of the future.",
+    "cover": "/images/covers/low-tide-signal-issue-01-cover.png"
+  },
+  "narrativeForms": [],
+  "themes": [],
+  "seriesEngine": "",
+  "coreConflict": "",
+  "readerEntry": "",
+  "audiencePromise": "",
+  "releases": [
+    {
+      "title": "Issue 01 Preview",
+      "cover": "/images/covers/low-tide-signal-issue-01-cover.png",
+      "description": "The first public visual signal for Low Tide Signal.",
+      "releaseType": "Preview",
+      "releaseDate": "",
+      "externalLink": ""
+    }
+  ],
+  "dailyPages": [],
+  "extrasTitle": "Recovered Artifacts",
+  "extras": [],
+  "audioTitle": "Signal Audio",
+  "audio": []
+}
