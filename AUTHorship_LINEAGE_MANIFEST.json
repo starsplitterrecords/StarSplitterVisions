@@ -1,0 +1,26 @@
+{
+  "name": "star-splitter-records-authorship-lineage",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CMS-backed authorship, provenance, and release-lineage framework for Star Splitter Records.",
+  "source_branch": "records-site-cms",
+  "implementation": {
+    "project_level": [
+      "role_in_catalog",
+      "authorship_process"
+    ],
+    "release_level": [
+      "composition_origin",
+      "lyrics",
+      "arrangement",
+      "instrumentation",
+      "vocals",
+      "ai_role",
+      "source_work",
+      "version_of",
+      "related_releases",
+      "notes"
+    ],
+    "publication_rule": "Release-level provenance remains hidden from listeners until completed and approved in the CMS."
+  }
+}

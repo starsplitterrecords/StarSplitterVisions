@@ -1,0 +1,40 @@
+{
+  "releaseSchema": {
+    "title": "",
+    "artist": "",
+    "release_date": "",
+    "release_type": "",
+    "cover": "",
+    "latest": false,
+    "listen_links": [],
+    "provenance": {
+      "publish": false,
+      "composition_origin": "",
+      "lyrics": "",
+      "arrangement": "",
+      "instrumentation": "",
+      "vocals": "",
+      "ai_role": "",
+      "source_work": "",
+      "version_of": "",
+      "related_releases": [],
+      "notes": ""
+    }
+  },
+  "artistSchema": {
+    "name": "",
+    "tagline": "",
+    "description": "",
+    "role_in_catalog": "",
+    "authorship_process": "",
+    "identity_asset": "",
+    "gallery": [],
+    "listen_links": []
+  },
+  "publicationRules": [
+    "Project-level authorship and process copy is public on artist pages and associated release pages.",
+    "Release-level provenance is hidden unless provenance.publish is true.",
+    "Empty or unresolved provenance fields must not render placeholder or process copy to listeners.",
+    "No release-specific source work, credits, or relationships may be inferred from project-level provenance."
+  ]
+}
