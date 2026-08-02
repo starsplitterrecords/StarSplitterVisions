@@ -1,0 +1,34 @@
+{
+  "label": {
+    "name": "Star Splitter Records",
+    "provenance": "Curatorial framework. Human creative direction and release strategy. AI may assist with public-facing communications, administration, artwork, and production workflows, but not authorship."
+  },
+  "projects": {
+    "jeff-hines": "Original human compositions. Human-authored lyrics. Human arrangement and production. No AI used in the original works. Electronic production techniques used throughout. Root lineage of the Star Splitter ecosystem.",
+    "star-splitter-rex": "Largely faithful reinterpretations of Jeff Hines compositions in the Rex creative language. AI instrumentation. Instrumental.",
+    "star-splitter-visions": "Original Jeff Hines compositions reimagined through a distinct narrative language. Significant AI creative collaboration. AI vocals permitted.",
+    "ghost-driver-unit": "Highly stylized reinterpretations of Jeff Hines compositions. AI instrumentation. AI vocals. Collaborative human/AI lyrics. Live-band aesthetic.",
+    "minor-collapse": "Highly stylized reinterpretations of Jeff Hines compositions. AI instrumentation. AI vocals. Collaborative lyrics.",
+    "night-motion-archives": "Highly stylized reinterpretations of Jeff Hines compositions. AI instrumentation. AI vocals. Human-authored lyrics.",
+    "pulse-width-codex": "Highly stylized reinterpretations of Jeff Hines compositions. AI instrumentation. AI vocals. Lyrics primarily human with collaborative AI refinement.",
+    "phase-redux": "Lightly stylized reinterpretations of Jeff Hines compositions. AI instrumentation. Instrumental.",
+    "resonant-currents": "Highly stylized reinterpretations and remixes of Jeff Hines compositions. AI instrumentation. AI vocal elements. Human-authored lyrics where applicable.",
+    "ion-drive-orchestra": "Largely faithful reinterpretations of Jeff Hines compositions. AI orchestration and instrumentation. Instrumental.",
+    "before-the-reboot": "Legacy Jeff Hines compositions, primarily originating during the Cheddr era, reinterpreted through tracker-inspired production. AI-assisted instrumentation. Instrumental. Faithful to the original compositions rather than the finished productions.",
+    "robots-sing-love-songs": "Human-authored lyrics. AI-assisted production. Original works influenced by Jeff Hines’ compositional voice. AI vocals.",
+    "supersonic-being": "Highly stylized reinterpretations and remixes of Jeff Hines compositions. AI instrumentation. AI vocals. Frequently collaborative human/AI lyrics.",
+    "milo-bright": "Highly stylized reinterpretations of Jeff Hines compositions. AI instrumentation. AI vocals. Includes an invented performer identity as part of the artistic language.",
+    "daisy-grohs": "Highly stylized reinterpretations of Jeff Hines compositions. AI instrumentation. AI vocals. Includes an invented performer identity as part of the artistic language.",
+    "current-intents": "Original Jeff Hines songwriting. Human lyrics, composition, and original production. AI used to upscale instrumentation and vocal realization while preserving the original artistic perspective.",
+    "verse-assembly": "Highly stylized reinterpretations and remixes of Jeff Hines compositions. AI instrumentation. AI vocals. Presented with a live ensemble aesthetic.",
+    "altered-velvet-band": "Highly stylized reinterpretations and remixes of Jeff Hines compositions. Instrumental. AI instrumentation.",
+    "arthur-vaughn-octet": "Highly stylized reinterpretations and remixes of Jeff Hines compositions. AI instrumentation. AI vocals.",
+    "sterling-drake": "Highly stylized reinterpretations and remixes of Jeff Hines compositions. AI instrumentation. AI vocals. Includes an invented performer identity appropriate to the project.",
+    "ascent-code": "Lightly stylized reinterpretations of Jeff Hines compositions. AI instrumentation. Instrumental.",
+    "warmcircuitsrise": "Highly stylized reinterpretations and remixes of Jeff Hines compositions. AI instrumentation. AI vocals."
+  },
+  "unresolved": {
+    "sun-comes-through": "No provenance statement supplied yet.",
+    "warmcircuitsrise_presentation": "The supplied phrase ended at ‘Presented with a live-band’; no completion was invented."
+  }
+}
