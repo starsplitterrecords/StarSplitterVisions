@@ -3,7 +3,7 @@ import ImageWithFallback from './shared/ImageWithFallback'
 import ExtrasRail from './media/ExtrasRail'
 import AudioRail from './media/AudioRail'
 import { seriesPages } from '../data/seriesPages'
-import { getLatestReleasedPage, getReleasedPages } from '../utils/dailyPages'
+import { getEasternDateString, getLatestReleasedPage, getReleasedItems, getReleasedPages } from '../utils/dailyPages'
 
 function EditorialSection({ title, children }) {
   if (!children) return null
@@ -21,11 +21,44 @@ function EditorialSection({ title, children }) {
   )
 }
 
+function ReleaseRail({ releases = [] }) {
+  if (!releases.length) return null
+
+  return (
+    <section className="series-release-section hud-frame">
+      <div className="series-section-header">
+        <h2>Releases</h2>
+        <span>{releases.length} available</span>
+      </div>
+      <div className="series-release-list">
+        {releases.map((release) => (
+          <article className="series-release-row" key={`${release.title}-${release.releaseDate || 'undated'}`}>
+            <div className="series-release-cover">
+              {release.cover ? <ImageWithFallback src={release.cover} alt={`${release.title} cover`} fallbackText="COVER" /> : <div className="series-release-placeholder">RELEASE</div>}
+            </div>
+            <div className="series-release-copy">
+              <p>{release.releaseType || 'Release'}</p>
+              <h3>{release.title}</h3>
+              {release.description && <span>{release.description}</span>}
+            </div>
+            <div className="series-release-meta">
+              <span>{release.releaseDate || 'Available now'}</span>
+            </div>
+            <div className="series-release-actions">
+              {release.externalLink && <a className="text-link" href={release.externalLink} target="_blank" rel="noreferrer">Open release</a>}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  )
+}
+
 export default function SeriesPage({ slug, onReadIssue }) {
   const series = seriesPages[slug]
   const [currentPreviewPage, setCurrentPreviewPage] = useState(1)
   const [previewFailed, setPreviewFailed] = useState(false)
-  const todayString = new Date().toISOString().slice(0, 10)
+  const todayString = getEasternDateString()
 
   const availablePages = useMemo(() => {
     if (!series?.dailyPages?.length) {
@@ -65,8 +98,9 @@ export default function SeriesPage({ slug, onReadIssue }) {
   }
   const narrativeForms = series.narrativeForms || []
   const themes = series.themes || []
-  const seriesExtras = series.extras || []
-  const seriesAudio = series.audio || []
+  const seriesReleases = getReleasedItems(series.releases || [], todayString)
+  const seriesExtras = getReleasedItems(series.extras || [], todayString)
+  const seriesAudio = getReleasedItems(series.audio || [], todayString)
 
   if (series.status !== 'active') {
     const statusLabel = series.status === 'archived' ? 'Archived' : 'Coming Soon'
@@ -103,6 +137,7 @@ export default function SeriesPage({ slug, onReadIssue }) {
           {series.worldPremise || series.description}
         </EditorialSection>
 
+        <ReleaseRail releases={seriesReleases} />
         <ExtrasRail title={series.extrasTitle || 'Recovered Artifacts'} artifacts={seriesExtras} />
         <AudioRail title={series.audioTitle || 'Signal Audio'} tracks={seriesAudio} />
       </main>
@@ -110,7 +145,7 @@ export default function SeriesPage({ slug, onReadIssue }) {
   }
 
   const currentPageData = availablePages.find((page) => page.pageNumber === currentPreviewPage)
-  const firstRelease = series.releases.find((release) => release.cover)
+  const firstRelease = seriesReleases.find((release) => release.cover)
   const totalPages = series.dailyPages.length
   const releasedPageCount = availablePages.length
   const nextUnreleasedPage = series.dailyPages.find((page) => page.releaseDate > todayString)
@@ -249,6 +284,8 @@ export default function SeriesPage({ slug, onReadIssue }) {
       <EditorialSection title="Reader Orientation">
         {series.readerEntry || series.audiencePromise}
       </EditorialSection>
+
+      <ReleaseRail releases={seriesReleases} />
 
       <section className="series-current-page hud-frame">
         <div className="series-current-copy">

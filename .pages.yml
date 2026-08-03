@@ -234,6 +234,9 @@ content:
               media: visions-images
           - name: description
             type: text
+          - name: releaseDate
+            label: Release Date
+            type: date
           - name: platformLinks
             label: Platform Links
             type: object
@@ -676,6 +679,22 @@ content:
             label: Public Status / Date Line
             type: string
             required: true
+          - name: visibility
+            label: Publication Status
+            type: select
+            description: Published is live immediately. Scheduled stays private until Publish At. Hidden is never built or linked.
+            options:
+              values:
+                - name: published
+                  label: Published
+                - name: scheduled
+                  label: Scheduled
+                - name: hidden
+                  label: Hidden
+          - name: publishAt
+            label: Publish At
+            type: string
+            description: Required for Scheduled. Use ISO 8601 with an Eastern offset, for example 2026-08-15T09:00:00-04:00.
           - name: description
             label: Release Description
             type: text
