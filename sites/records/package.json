@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "check": "node scripts/build.mjs --content-only",
+    "check": "node scripts/build.mjs --content-only && node --test scripts/publishing.test.mjs",
     "build": "node scripts/build.mjs"
   }
 }

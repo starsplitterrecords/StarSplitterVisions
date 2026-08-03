@@ -45,12 +45,4 @@ jobs:
           cache-dependency-path: sites/records/package-lock.json
       - run: npm ci
       - run: npm run check
-      - name: Build when the artwork library is complete
-        shell: bash
-        run: |
-          count=$(find public/images/records -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.webp' -o -iname '*.gif' -o -iname '*.svg' \) 2>/dev/null | wc -l)
-          if [ "$count" -eq 72 ]; then
-            npm run build
-          else
-            echo "Records content is valid; production build awaits 72 artwork files (currently $count)."
-          fi
+      - run: npm run build

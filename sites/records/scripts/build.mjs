@@ -1,6 +1,7 @@
 import { cp, mkdir, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { orderArtists, publicArtistsAt, publicReleaseKeys, releaseVisibility, rosterArtists } from './publishing.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const recordsRoot = path.resolve(__dirname, '..')
@@ -10,6 +11,9 @@ const distRoot = path.join(recordsRoot, 'dist')
 const recordsImages = path.join(recordsRoot, 'public', 'images', 'records')
 const recordsMedia = path.join(recordsRoot, 'public', 'media', 'records')
 const contentOnly = process.argv.includes('--content-only')
+const buildNow = new Date(process.env.RECORDS_BUILD_NOW || Date.now())
+
+if (Number.isNaN(buildNow.getTime())) throw new Error('RECORDS_BUILD_NOW must be a valid ISO 8601 timestamp')
 
 const readJson = async (file) => JSON.parse(await readFile(file, 'utf8'))
 const escapeHtml = (value = '') => String(value)
@@ -68,12 +72,7 @@ const loadArtists = async () => {
   const dir = path.join(contentRoot, 'artists')
   const files = (await readdir(dir)).filter((file) => file.endsWith('.json')).sort()
   const artists = await Promise.all(files.map((file) => readJson(path.join(dir, file))))
-  return artists.sort((left, right) => {
-    if (left.slug === 'jeff-hines') return -1
-    if (right.slug === 'jeff-hines') return 1
-    if (left.featured !== right.featured) return left.featured ? -1 : 1
-    return left.name.localeCompare(right.name, 'en', { sensitivity: 'base' })
-  })
+  return orderArtists(artists)
 }
 
 const header = (site) => `
@@ -202,12 +201,13 @@ const artistCard = (artist) => `
   </div>
 </article>`
 
-const renderHomepage = (site, artists) => {
+const renderHomepage = (site, artists, publicReleaseKeys) => {
   const heroHeading = site.hero.headingLines.map((line, index) =>
     index === site.hero.italicLine ? `<em>${escapeHtml(line)}</em>` : escapeHtml(line)
   ).join('<br />')
 
-  const worlds = site.worlds.map((world) => `
+  const activeArtistSlugs = new Set(artists.map((artist) => artist.slug))
+  const worlds = site.worlds.filter((world) => activeArtistSlugs.has(world.slug)).map((world) => `
     <a class="world" href="/artists/${escapeHtml(world.slug)}.html" style="background-image:url('${escapeHtml(world.image)}')">
       <div>
         <p class="eyebrow">${escapeHtml(world.artist)}</p>
@@ -249,7 +249,7 @@ const renderHomepage = (site, artists) => {
         <p class="eyebrow">${escapeHtml(site.releaseSection.eyebrow)}</p>
         <div><h2 class="section-title">${escapeHtml(site.releaseSection.title)}</h2><p class="section-intro">${escapeHtml(site.releaseSection.intro)}</p></div>
       </div>
-      <div class="release-grid">${site.releaseSection.featured.map(homepageReleaseCard).join('')}</div>
+      <div class="release-grid">${site.releaseSection.featured.filter((release) => publicReleaseKeys.has(`${release.artistSlug}/${release.releaseSlug}`)).map(homepageReleaseCard).join('')}</div>
     </section>
 
     <section class="credit-note">
@@ -427,6 +427,7 @@ const validate = async (site, artists) => {
   }
 
   for (const artist of artists) {
+    if (!['active', 'archived'].includes(artist.status)) throw new Error(`${artist.name} has invalid status: ${artist.status}`)
     for (const field of ['name', 'slug', 'field', 'tagline', 'catalogRole', 'roleStatement', 'oneSentenceBio', 'threeSentenceBio', 'paragraphBio', 'identityImage']) {
       if (!artist[field]) throw new Error(`${artist.slug || artist.name || 'Artist'} is missing ${field}`)
     }
@@ -446,6 +447,12 @@ const validate = async (site, artists) => {
       if (releasePaths.has(pathKey)) throw new Error(`Duplicate release path: ${pathKey}`)
       releasePaths.add(pathKey)
       releaseIndex.set(`${artist.slug}/${release.slug}`, release)
+      const visibility = releaseVisibility(release)
+      if (!['published', 'scheduled', 'hidden'].includes(visibility)) throw new Error(`${artist.name} / ${release.title} has invalid visibility: ${visibility}`)
+      if (visibility === 'scheduled') {
+        if (!release.publishAt || Number.isNaN(Date.parse(release.publishAt))) throw new Error(`${artist.name} / ${release.title} needs a valid publishAt timestamp`)
+        if (!/(?:Z|[+-]\d{2}:\d{2})$/.test(release.publishAt)) throw new Error(`${artist.name} / ${release.title} publishAt must include a timezone offset`)
+      }
       if (release.image) await assertFile(release.image, `${artist.name} / ${release.title}`)
       if (!release.lineage) throw new Error(`${artist.name} / ${release.title} is missing the lineage structure`)
       for (const key of Object.keys(allowed)) {
@@ -491,13 +498,16 @@ const main = async () => {
   const site = await readJson(path.join(contentRoot, 'site.json'))
   const artists = await loadArtists()
   await validate(site, artists)
+  const publicArtists = publicArtistsAt(artists, buildNow)
+  const homepageArtists = rosterArtists(publicArtists)
+  const releaseKeys = publicReleaseKeys(publicArtists)
   await rm(distRoot, { recursive: true, force: true })
   await mkdir(path.join(distRoot, 'artists'), { recursive: true })
   await mkdir(path.join(distRoot, 'releases'), { recursive: true })
   await copyAssetTree()
 
-  await writeFile(path.join(distRoot, 'index.html'), renderHomepage(site, artists))
-  for (const artist of artists) {
+  await writeFile(path.join(distRoot, 'index.html'), renderHomepage(site, homepageArtists, releaseKeys))
+  for (const artist of publicArtists) {
     await writeFile(path.join(distRoot, 'artists', `${artist.slug}.html`), renderArtistPage(site, artist))
     const artistReleaseDir = path.join(distRoot, 'releases', artist.slug)
     await mkdir(artistReleaseDir, { recursive: true })
@@ -507,11 +517,11 @@ const main = async () => {
   }
 
   await mkdir(path.join(distRoot, 'assets', 'data'), { recursive: true })
-  await writeFile(path.join(distRoot, 'assets', 'data', 'catalog.json'), `${JSON.stringify(artists, null, 2)}\n`)
+  await writeFile(path.join(distRoot, 'assets', 'data', 'catalog.json'), `${JSON.stringify(publicArtists, null, 2)}\n`)
   const sitemap = [
     '/',
-    ...artists.map((artist) => `/artists/${artist.slug}.html`),
-    ...artists.flatMap((artist) => (artist.releases || []).map((release) => releaseUrl(artist.slug, release.slug))),
+    ...publicArtists.map((artist) => `/artists/${artist.slug}.html`),
+    ...publicArtists.flatMap((artist) => artist.releases.map((release) => releaseUrl(artist.slug, release.slug))),
   ]
   await writeFile(path.join(distRoot, 'sitemap.txt'), sitemap.join('\n') + '\n')
   await writeFile(path.join(distRoot, '404.html'), documentShell({
@@ -521,8 +531,8 @@ const main = async () => {
     content: '<main id="main"><section class="section"><p class="eyebrow">404</p><h1 class="section-title">That page is not in the catalog.</h1><p><a class="text-link" href="/">Return to Star Splitter Records</a></p></section></main>',
   }))
 
-  const releaseCount = artists.reduce((count, artist) => count + (artist.releases || []).length, 0)
-  console.log(`${contentOnly ? 'Validated' : 'Built'} Star Splitter Records: homepage + ${artists.length} artist pages + ${releaseCount} release pages`)
+  const releaseCount = publicArtists.reduce((count, artist) => count + artist.releases.length, 0)
+  console.log(`${contentOnly ? 'Validated' : 'Built'} Star Splitter Records: homepage + ${publicArtists.length} artist pages + ${releaseCount} public release pages`)
 }
 
 main().catch((error) => {
