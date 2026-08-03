@@ -67,7 +67,13 @@ const ensureAssetTree = async () => {
 const loadArtists = async () => {
   const dir = path.join(contentRoot, 'artists')
   const files = (await readdir(dir)).filter((file) => file.endsWith('.json')).sort()
-  return Promise.all(files.map((file) => readJson(path.join(dir, file))))
+  const artists = await Promise.all(files.map((file) => readJson(path.join(dir, file))))
+  return artists.sort((left, right) => {
+    if (left.slug === 'jeff-hines') return -1
+    if (right.slug === 'jeff-hines') return 1
+    if (left.featured !== right.featured) return left.featured ? -1 : 1
+    return left.name.localeCompare(right.name, 'en', { sensitivity: 'base' })
+  })
 }
 
 const header = (site) => `
