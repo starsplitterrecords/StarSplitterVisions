@@ -6,7 +6,7 @@
   },
   "seo": {
     "title": "Star Splitter Records",
-    "description": "One evolving catalog expressed through distinct artist projects, with credits designed to preserve process, authorship, and musical lineage."
+    "description": "Original music by Jeff Hines, released through distinct artist projects spanning electronic, rock, ambient, cinematic, and experimental styles."
   },
   "navigation": [
     {
@@ -37,7 +37,7 @@
       "In its original form, and also reimagined through a different voice, sound, or point of view."
     ],
     "italicLine": 1,
-    "description": "Music by Jeff Hines, released through a range of distinct projects. Each with its own sound, identity, and point of view.",
+    "description": "Original music by Jeff Hines, released through a collection of distinct creative projects. Explore whichever one catches your ear.",
     "image": "/images/records/worlds/label-hero.webp",
     "primaryAction": {
       "label": "Start with the music",
@@ -51,7 +51,7 @@
   "releaseSection": {
     "eyebrow": "Selected releases",
     "title": "Start with the music.",
-    "intro": "Begin anywhere. The catalog treats every release as both music and history: a finished work with an origin, a method, and a place among related versions.",
+    "intro": "Every release opens a different door into the same body of work.",
     "featured": [
       {
         "titleLines": [
@@ -166,8 +166,8 @@
   },
   "artistSection": {
     "eyebrow": "The roster",
-    "title": "Explore the artists.",
-    "intro": "Each project gives the music a distinct voice, emotional perspective, and visual world—and a clear role within the larger catalog.",
+    "title": "Explore the projects.",
+    "intro": "Each project has its own musical identity, visual language, and personality. Together they form a single body of work.",
     "filters": [
       {
         "label": "All",
@@ -225,16 +225,16 @@
   "labelSlate": {
     "eyebrow": "The label",
     "titleLines": [
-      "Many artists.",
-      "One evolving catalog."
+      "Many projects.",
+      "One Composer/Producer."
     ],
-    "body": "The projects give the catalog distinct voices. The credits preserve what came first, what changed, and who made the final decisions."
+    "body": "Every project exists because some musical expressions simply belong in different musical lanes."
   },
   "story": {
     "eyebrow": "The story",
-    "title": "The work changes. Its lineage remains.",
+    "title": "One body of work. Many ways to hear it.",
     "paragraphs": [
-      "Star Splitter Records is one evolving catalog directed by Jeff Hines and expressed through distinct artist projects. The projects are creative languages—not fictional biographies and not simply genre folders. Each gives the music a different voice, emotional perspective, and visual world.",
+      "Star Splitter Records is the home of music written and directed by Jeff Hines. Rather than separating ideas by genre alone, each project explores a distinct musical identity with its own sound, visual language, and creative focus.",
       "A release may begin as a complete composition, an earlier recording, a new interpretation, a reconstruction, a remix, or a more generative starting point. Those beginnings are not interchangeable, and the credits do not treat them as though they are.",
       "Release credits separate composition, lyrics, arrangement, performance, production, editing, curation, source material, and related versions whenever those distinctions matter. The purpose is neither to conceal the tools nor to make them the subject. It is to show what actually happened and preserve the lineage of the work."
     ]
@@ -271,9 +271,9 @@
     "tagline": "Distinct musical worlds. Clearly preserved lineage."
   },
   "creditNote": {
-    "eyebrow": "Credits that follow the work",
-    "title": "Origin and transformation are both part of the story.",
-    "body": "Star Splitter separates composition, interpretation, performance, and production so a release can be credited for what it actually is—not reduced to a single tool, process, or category.",
+    "eyebrow": "Authenticity",
+    "title": "Each track has a history.",
+    "body": "All releases begin as new compositions. Some reinterpret earlier work. Credits are clear for how it came to exist.",
     "linkLabel": "How authorship is documented",
     "path": "/#authorship"
   },
