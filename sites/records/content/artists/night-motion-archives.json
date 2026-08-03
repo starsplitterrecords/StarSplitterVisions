@@ -9,99 +9,47 @@
   ],
   "tagline": "A song must survive the removal of its surface.",
   "accent": "#C8C3D6",
-  "identityImage": "/images/records/artists/night-motion-archives.webp",
+  "identityImage": "/images/records/chatgpt-image-jun-21-2025-040052-pm.png",
   "worldImage": "/images/records/worlds/night-motion-archives.webp",
   "oneSentenceBio": "Night Motion Archives creates nocturnal indie and alternative songs where durable melodies, lived-in details, and emotional weight remain stronger than the surrounding atmosphere.",
   "threeSentenceBio": "Night Motion Archives is a home for reflective songs shaped by longing, memory, night, and resolve. Indie rock, folk, post-rock, and restrained electronics deepen the mood without replacing the writing at the center. The music feels lived-in and cinematic, but every track is designed to remain meaningful even when stripped back to melody, lyric, and chord movement. Its songs are made for late drives, dim rooms, old memories, and the slow return of determination after loss.",
   "paragraphBio": "Night Motion Archives collects songs that feel as though they have already lived a life before the listener discovers them. The music moves through nocturnal indie rock, restrained electronics, folk intimacy, and post-rock atmosphere, but the writing always remains visible beneath the surface. Durable melodies, specific details, and emotional restraint give the songs their staying power, while production adds depth, distance, and afterimage rather than acting as a substitute for meaning. These are tracks for the hours when memory becomes unusually vivid: late drives, dim rooms, old messages, empty streets, and the moment determination begins to return after loss. Longing is common, but the project is not defined by helplessness. There is often a quiet resolve underneath the melancholy, a sense that the song is preserving something in order to move forward. Night Motion Archives offers atmosphere with a human center - music that can feel cinematic without losing intimacy and expansive without obscuring the simple emotional truth of the composition.",
   "riyl": "The National • Daughter • The War on Drugs • Bon Iver • Phoebe Bridgers • M83",
-  "listenUrl": "",
   "releases": [
     {
       "title": "Hanging on the Edge",
+      "slug": "hanging-on-the-edge",
       "meta": "Selected catalog",
       "image": "/images/records/releases/night-motion-archives-hanging-on-the-edge.webp",
-      "links": [],
-      "slug": "hanging-on-the-edge",
-      "description": "",
       "lineage": {
         "display": "hidden",
-        "publicLabel": "",
         "compositionOrigin": "undocumented",
         "realizationMethod": "undocumented",
-        "versionRelationship": "undocumented",
-        "sourceTitle": "",
-        "sourceArtist": "",
-        "sourceUrl": "",
-        "publicSummary": "",
-        "methodNote": "",
-        "credits": {
-          "composition": "",
-          "lyrics": "",
-          "arrangement": "",
-          "performance": "",
-          "production": "",
-          "finalEditingAndCuration": ""
-        },
-        "relatedReleases": []
+        "versionRelationship": "undocumented"
       }
     },
     {
       "title": "Be Somebody",
+      "slug": "be-somebody",
       "meta": "Selected catalog",
       "image": "/images/records/releases/night-motion-archives-be-somebody.webp",
-      "links": [],
-      "slug": "be-somebody",
-      "description": "",
       "lineage": {
         "display": "hidden",
-        "publicLabel": "",
         "compositionOrigin": "undocumented",
         "realizationMethod": "undocumented",
-        "versionRelationship": "undocumented",
-        "sourceTitle": "",
-        "sourceArtist": "",
-        "sourceUrl": "",
-        "publicSummary": "",
-        "methodNote": "",
-        "credits": {
-          "composition": "",
-          "lyrics": "",
-          "arrangement": "",
-          "performance": "",
-          "production": "",
-          "finalEditingAndCuration": ""
-        },
-        "relatedReleases": []
+        "versionRelationship": "undocumented"
       }
     },
     {
       "title": "Leave the Past Behind",
+      "slug": "leave-the-past-behind",
       "meta": "Selected catalog",
       "image": "/images/records/releases/night-motion-archives-leave-the-past-behind.webp",
-      "links": [],
-      "slug": "leave-the-past-behind",
-      "description": "",
       "lineage": {
         "display": "hidden",
-        "publicLabel": "",
         "compositionOrigin": "undocumented",
         "realizationMethod": "undocumented",
-        "versionRelationship": "undocumented",
-        "sourceTitle": "",
-        "sourceArtist": "",
-        "sourceUrl": "",
-        "publicSummary": "",
-        "methodNote": "",
-        "credits": {
-          "composition": "",
-          "lyrics": "",
-          "arrangement": "",
-          "performance": "",
-          "production": "",
-          "finalEditingAndCuration": ""
-        },
-        "relatedReleases": []
+        "versionRelationship": "undocumented"
       }
     }
   ],
@@ -109,8 +57,6 @@
   "featured": false,
   "seoTitle": "Night Motion Archives — Star Splitter Records",
   "seoDescription": "Night Motion Archives creates nocturnal indie and alternative songs where durable melodies, lived-in details, and emotional weight remain stronger than the surrounding atmosphere.",
-  "platformLinks": [],
-  "motion": {},
   "catalogRole": "Nocturnal alternative songs",
   "roleStatement": "A nocturnal alternative setting for songs strong enough to remain intact after atmosphere and production are stripped away."
 }
