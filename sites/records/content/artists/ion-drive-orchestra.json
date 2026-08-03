@@ -9,7 +9,7 @@
   ],
   "tagline": "The orchestra never stopped evolving.",
   "accent": "#F1B826",
-  "identityImage": "/images/records/artists/ion-drive-orchestra.webp",
+  "identityImage": "/images/records/chatgpt-image-jun-21-2025-042715-pm.png",
   "worldImage": "/images/records/worlds/ion-drive-orchestra.webp",
   "oneSentenceBio": "Ion Drive Orchestra fuses orchestral scale with electronic motion, creating cinematic instrumental music where strings, brass, synthesis, beats, and sound design evolve together.",
   "threeSentenceBio": "Ion Drive Orchestra imagines what symphonic music becomes when electronic instruments are treated as native members of the ensemble. Strings, brass, synthesis, programmed rhythm, sampling, and turntablism share the same dramatic arc rather than occupying separate layers. The result is expansive, propulsive music shaped by wonder, precision, and the feeling of looking outward into impossible scale. Themes develop across large dramatic spaces, giving the spectacle a melodic center and allowing reflection, danger, triumph, and awe to exist within the same journey.",
@@ -19,40 +19,24 @@
   "releases": [
     {
       "title": "Unification Theory",
+      "slug": "unification-theory",
       "meta": "Released · January 16, 2026",
-      "image": "",
       "links": [
         {
           "label": "Listen",
           "url": "https://music.amazon.com/tracks/B0GH1YKSHS"
         }
       ],
-      "slug": "unification-theory",
-      "description": "",
       "lineage": {
         "display": "hidden",
-        "publicLabel": "",
         "compositionOrigin": "undocumented",
         "realizationMethod": "undocumented",
-        "versionRelationship": "undocumented",
-        "sourceTitle": "",
-        "sourceArtist": "",
-        "sourceUrl": "",
-        "publicSummary": "",
-        "methodNote": "",
-        "credits": {
-          "composition": "",
-          "lyrics": "",
-          "arrangement": "",
-          "performance": "",
-          "production": "",
-          "finalEditingAndCuration": ""
-        },
-        "relatedReleases": []
+        "versionRelationship": "undocumented"
       }
     },
     {
       "title": "Freeze Frame",
+      "slug": "freeze-frame",
       "meta": "Released · January 8, 2026",
       "image": "/images/records/releases/ion-drive-orchestra-freeze-frame.webp",
       "links": [
@@ -61,57 +45,23 @@
           "url": "https://music.amazon.com/tracks/B0GH1QC7TF"
         }
       ],
-      "slug": "freeze-frame",
-      "description": "",
       "lineage": {
         "display": "hidden",
-        "publicLabel": "",
         "compositionOrigin": "undocumented",
         "realizationMethod": "undocumented",
-        "versionRelationship": "undocumented",
-        "sourceTitle": "",
-        "sourceArtist": "",
-        "sourceUrl": "",
-        "publicSummary": "",
-        "methodNote": "",
-        "credits": {
-          "composition": "",
-          "lyrics": "",
-          "arrangement": "",
-          "performance": "",
-          "production": "",
-          "finalEditingAndCuration": ""
-        },
-        "relatedReleases": []
+        "versionRelationship": "undocumented"
       }
     },
     {
       "title": "Ignition Sequence (feat. Cheddr)",
+      "slug": "ignition-sequence-feat-cheddr",
       "meta": "Selected catalog",
       "image": "/images/records/releases/ion-drive-orchestra-ignition-sequence-feat-cheddr.webp",
-      "links": [],
-      "slug": "ignition-sequence-feat-cheddr",
-      "description": "",
       "lineage": {
         "display": "hidden",
-        "publicLabel": "",
         "compositionOrigin": "undocumented",
         "realizationMethod": "undocumented",
-        "versionRelationship": "undocumented",
-        "sourceTitle": "",
-        "sourceArtist": "",
-        "sourceUrl": "",
-        "publicSummary": "",
-        "methodNote": "",
-        "credits": {
-          "composition": "",
-          "lyrics": "",
-          "arrangement": "",
-          "performance": "",
-          "production": "",
-          "finalEditingAndCuration": ""
-        },
-        "relatedReleases": []
+        "versionRelationship": "undocumented"
       }
     }
   ],
@@ -133,7 +83,6 @@
       "url": "https://music.amazon.in/artists/B0GCT7W8V2/ion-drive-orchestra"
     }
   ],
-  "motion": {},
   "catalogRole": "Orchestral electronic language",
   "roleStatement": "The orchestral language of the catalog, where acoustic instruments, synthesis, rhythm, and sound design develop as one ensemble."
 }
