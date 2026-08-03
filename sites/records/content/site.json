@@ -33,18 +33,18 @@
   "hero": {
     "eyebrow": "Star Splitter Records",
     "headingLines": [
-      "Every composition begins as an idea.",
-      "Everything else is interpretation."
+      "This is my music.",
+      "In its original form, and also reimagined through a different voice, sound, or point of view."
     ],
     "italicLine": 1,
-    "description": "One evolving catalog, expressed through distinct artist projects. The credits are designed to preserve where the music began, what changed, and who shaped its final form.",
+    "description": "Music by Jeff Hines, released through a range of distinct projects. Each with its own sound, identity, and point of view.",
     "image": "/images/records/worlds/label-hero.webp",
     "primaryAction": {
       "label": "Start with the music",
       "path": "/#releases"
     },
     "secondaryAction": {
-      "label": "Explore artists",
+      "label": "Explore Projects",
       "path": "/#artists"
     }
   },
@@ -59,7 +59,9 @@
           "Unification Theory"
         ],
         "meta": "Latest release · January 16, 2026",
-        "image": "",
+        "artistSlug": "ion-drive-orchestra",
+        "releaseSlug": "unification-theory",
+        "accent": "#F1B826",
         "links": [
           {
             "label": "Listen",
@@ -69,10 +71,7 @@
             "label": "View artist",
             "url": "/artists/ion-drive-orchestra.html"
           }
-        ],
-        "accent": "#F1B826",
-        "artistSlug": "ion-drive-orchestra",
-        "releaseSlug": "unification-theory"
+        ]
       },
       {
         "titleLines": [
@@ -80,16 +79,16 @@
           "I Never Want to Not Do This"
         ],
         "meta": "Catalog release · July 14, 2026",
+        "artistSlug": "pulse-width-codex",
+        "releaseSlug": "i-never-want-to-not-do-this",
         "image": "/images/records/releases/pulse-width-codex-i-never-want-to-not-do-this.webp",
+        "accent": "#F0327F",
         "links": [
           {
             "label": "View artist",
             "url": "/artists/pulse-width-codex.html"
           }
-        ],
-        "accent": "#F0327F",
-        "artistSlug": "pulse-width-codex",
-        "releaseSlug": "i-never-want-to-not-do-this"
+        ]
       },
       {
         "titleLines": [
@@ -97,7 +96,10 @@
           "Freeze Frame"
         ],
         "meta": "Released · January 8, 2026",
-        "image": "/images/records/releases/ion-drive-orchestra-freeze-frame.webp",
+        "artistSlug": "ion-drive-orchestra",
+        "releaseSlug": "freeze-frame",
+        "image": "/images/records/ion-drive-orchestra-x-jeff-hines-freeze-frame-coverart.png",
+        "accent": "#F1B826",
         "links": [
           {
             "label": "Listen",
@@ -107,10 +109,7 @@
             "label": "View artist",
             "url": "/artists/ion-drive-orchestra.html"
           }
-        ],
-        "accent": "#F1B826",
-        "artistSlug": "ion-drive-orchestra",
-        "releaseSlug": "freeze-frame"
+        ]
       },
       {
         "titleLines": [
@@ -118,16 +117,16 @@
           "It’s a Grind (Ghost Mode Remix)"
         ],
         "meta": "Upcoming · August 17, 2026",
+        "artistSlug": "ghost-driver-unit",
+        "releaseSlug": "its-a-grind-ghost-mode-remix",
         "image": "/images/records/releases/ghost-driver-unit-it-s-a-grind-ghost-mode-remix.webp",
+        "accent": "#E8E3D8",
         "links": [
           {
             "label": "View artist",
             "url": "/artists/ghost-driver-unit.html"
           }
-        ],
-        "accent": "#E8E3D8",
-        "artistSlug": "ghost-driver-unit",
-        "releaseSlug": "its-a-grind-ghost-mode-remix"
+        ]
       },
       {
         "titleLines": [
@@ -135,16 +134,16 @@
           "If We Remember It Fondly"
         ],
         "meta": "Upcoming · September 6, 2026",
+        "artistSlug": "phase-redux",
+        "releaseSlug": "if-we-remember-it-fondly",
         "image": "/images/records/releases/phase-redux-if-we-remember-it-fondly.webp",
+        "accent": "#F4A628",
         "links": [
           {
             "label": "View artist",
             "url": "/artists/phase-redux.html"
           }
-        ],
-        "accent": "#F4A628",
-        "artistSlug": "phase-redux",
-        "releaseSlug": "if-we-remember-it-fondly"
+        ]
       },
       {
         "titleLines": [
@@ -152,16 +151,16 @@
           "For All Creative Habits"
         ],
         "meta": "Upcoming · September 9, 2026",
+        "artistSlug": "daisy-grohs",
+        "releaseSlug": "for-all-creative-habits",
         "image": "/images/records/releases/daisy-grohs-for-all-creative-habits.webp",
+        "accent": "#C9C6C0",
         "links": [
           {
             "label": "View artist",
             "url": "/artists/daisy-grohs.html"
           }
-        ],
-        "accent": "#C9C6C0",
-        "artistSlug": "daisy-grohs",
-        "releaseSlug": "for-all-creative-habits"
+        ]
       }
     ]
   },
