@@ -19,6 +19,7 @@
   "releases": [
     {
       "title": "Cheddr",
+      "slug": "cheddr",
       "meta": "Historical catalog · 2020",
       "image": "/images/records/releases/jeff-hines-cheddr.webp",
       "links": [
@@ -27,32 +28,16 @@
           "url": "https://distrokid.com/hyperfollow/cheddr/cheddr"
         }
       ],
-      "slug": "cheddr",
-      "description": "",
       "lineage": {
         "display": "hidden",
-        "publicLabel": "",
         "compositionOrigin": "undocumented",
         "realizationMethod": "undocumented",
-        "versionRelationship": "undocumented",
-        "sourceTitle": "",
-        "sourceArtist": "",
-        "sourceUrl": "",
-        "publicSummary": "",
-        "methodNote": "",
-        "credits": {
-          "composition": "",
-          "lyrics": "",
-          "arrangement": "",
-          "performance": "",
-          "production": "",
-          "finalEditingAndCuration": ""
-        },
-        "relatedReleases": []
+        "versionRelationship": "undocumented"
       }
     },
     {
       "title": "Cheddr-era electronic archive",
+      "slug": "cheddr-era-electronic-archive",
       "meta": "Historical catalog",
       "image": "/images/records/releases/jeff-hines-electronic-music-2125.webp",
       "links": [
@@ -61,67 +46,33 @@
           "url": "https://starsplitterrecords.bandcamp.com/"
         }
       ],
-      "slug": "cheddr-era-electronic-archive",
-      "description": "",
       "lineage": {
         "display": "hidden",
-        "publicLabel": "",
         "compositionOrigin": "undocumented",
         "realizationMethod": "undocumented",
-        "versionRelationship": "undocumented",
-        "sourceTitle": "",
-        "sourceArtist": "",
-        "sourceUrl": "",
-        "publicSummary": "",
-        "methodNote": "",
-        "credits": {
-          "composition": "",
-          "lyrics": "",
-          "arrangement": "",
-          "performance": "",
-          "production": "",
-          "finalEditingAndCuration": ""
-        },
-        "relatedReleases": []
+        "versionRelationship": "undocumented"
       }
     },
     {
       "title": "I’m on My Way (feat. Eric C. Powell & Andrea Powell)",
+      "slug": "im-on-my-way-feat-eric-c-powell-andrea-powell",
       "meta": "Released · 2020",
-      "image": "",
       "links": [
         {
           "label": "Listen",
           "url": "https://distrokid.com/hyperfollow/cheddr/im-on-my-way-feat-eric-c-powell--andrea-powell"
         }
       ],
-      "slug": "im-on-my-way-feat-eric-c-powell-andrea-powell",
-      "description": "",
       "lineage": {
         "display": "hidden",
-        "publicLabel": "",
         "compositionOrigin": "undocumented",
         "realizationMethod": "undocumented",
-        "versionRelationship": "undocumented",
-        "sourceTitle": "",
-        "sourceArtist": "",
-        "sourceUrl": "",
-        "publicSummary": "",
-        "methodNote": "",
-        "credits": {
-          "composition": "",
-          "lyrics": "",
-          "arrangement": "",
-          "performance": "",
-          "production": "",
-          "finalEditingAndCuration": ""
-        },
-        "relatedReleases": []
+        "versionRelationship": "undocumented"
       }
     }
   ],
   "status": "active",
-  "featured": false,
+  "featured": true,
   "seoTitle": "Jeff Hines — Star Splitter Records",
   "seoDescription": "Jeff Hines creates melodic, exploratory electronic music shaped by direct composition, detailed arrangement, and a personal vision that moves freely across mood and form.",
   "platformLinks": [
@@ -138,7 +89,6 @@
       "url": "https://distrokid.com/hyperfollow/cheddr/im-on-my-way-feat-eric-c-powell--andrea-powell"
     }
   ],
-  "motion": {},
   "catalogRole": "Direct artist identity",
   "roleStatement": "The direct artist identity and authorial center of the catalog, including finished electronic work preserved from the Cheddr era."
 }
