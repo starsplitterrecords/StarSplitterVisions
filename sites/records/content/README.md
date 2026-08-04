@@ -4,12 +4,22 @@ Pages CMS edits the JSON files in this directory. The public website is generate
 
 ## Artist records
 
-Each file under `artists/` defines one public project. In addition to bios, images, listening links, and releases, every project includes:
+Each file under `artists/` defines one public project, including its identity, copy, artwork, listening links, releases, and roster settings.
 
-- `catalogRole` — the short listener-facing heading shown under **Role in the catalog**
-- `roleStatement` — the public explanation of what the project contributes to the larger catalog
+### Roster order
 
-These fields describe the creative function of the project. They should not invent a fictional biography or reduce the project to a genre label.
+Roster order is controlled by the numeric value in the Pages CMS **Internal Category** field.
+
+- Lower numbers appear first.
+- Projects with the same number are sorted alphabetically.
+- `1` is reserved for Jeff Hines.
+- `2` is the current priority tier that previously followed the featured toggle.
+- `3` is the initial general roster group.
+- `4` and higher can be used for projects that should appear later, or for any additional manual grouping.
+
+The **Featured** toggle is independent. Changing it does not change roster order and it remains available for other editorial or presentation uses.
+
+Existing descriptive category values are supported for compatibility. Until a project is assigned a numeric category, the site preserves the current grouping: Jeff Hines first, the current priority tier second, and the remaining projects third. Entering a positive whole number overrides that initial grouping.
 
 ## Release records
 
