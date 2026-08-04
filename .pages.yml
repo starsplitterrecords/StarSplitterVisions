@@ -940,7 +940,7 @@ content:
                   - name: path
                     type: string
           - name: releaseSection
-            label: Featured Releases
+            label: Homepage Featured Releases
             type: object
             fields:
               - name: eyebrow
@@ -1097,8 +1097,9 @@ content:
               - name: closing
                 type: text
           - name: releasePage
-            label: Release Page Labels
+            label: Individual Release Page Labels
             type: object
+            description: Shared headings and labels used on the separate detail page generated for each published release. These do not control the homepage release cards.
             fields:
               - name: detailsEyebrow
                 type: string
@@ -1120,28 +1121,6 @@ content:
                 type: string
               - name: relatedTitle
                 type: string
-          - name: journal
-            type: object
-            fields:
-              - name: eyebrow
-                type: string
-              - name: title
-                type: string
-              - name: intro
-                type: text
-              - name: cards
-                type: object
-                list:
-                  collapsible:
-                    collapsed: true
-                    summary: "{title}"
-                fields:
-                  - name: eyebrow
-                    type: string
-                  - name: title
-                    type: string
-                  - name: body
-                    type: text
           - name: licensing
             type: object
             fields:
