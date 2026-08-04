@@ -2,7 +2,7 @@
   "name": "Warm Circuits Rise",
   "slug": "warmcircuitsrise",
   "field": "Jamtronica / psychedelic",
-  "category": "Jamtronica / psychedelic",
+  "category": "3",
   "categories": [
     "rock",
     "electronic",
@@ -15,93 +15,41 @@
   "oneSentenceBio": "Warm Circuits Rise follows improvised grooves through psychedelic guitars, drifting analog synths, ambient space, and patient long-form journeys.",
   "paragraphBio": "Warm Circuits Rise is built around movement that unfolds slowly. Analog synths drift, guitars echo into open space, and rhythms gather before changing direction or dissolving altogether. The music can move between jam-band lift, psychedelic rock, ambient fusion, motorik repetition, and electronic meditation, but the transitions matter as much as the peaks. A groove may circle for several minutes before a small rhythmic or harmonic change opens an entirely new path. The result is exploratory without feeling detached: long-form music for road trips, late-night listening, open skies, and anyone willing to let a piece reveal its shape over time.",
   "riyl": "Grateful Dead • Tame Impala • CAN • Floating Points • Khruangbin • King Gizzard & the Lizard Wizard",
-  "listenUrl": "",
   "releases": [
     {
       "title": "This Path’s for You",
+      "slug": "this-paths-for-you",
       "meta": "Selected catalog",
       "image": "/images/records/releases/warmcircuitsrise-this-path-s-for-you.webp",
-      "links": [],
-      "slug": "this-paths-for-you",
-      "description": "",
       "lineage": {
         "display": "hidden",
-        "publicLabel": "",
         "compositionOrigin": "undocumented",
         "realizationMethod": "undocumented",
-        "versionRelationship": "undocumented",
-        "sourceTitle": "",
-        "sourceArtist": "",
-        "sourceUrl": "",
-        "publicSummary": "",
-        "methodNote": "",
-        "credits": {
-          "composition": "",
-          "lyrics": "",
-          "arrangement": "",
-          "performance": "",
-          "production": "",
-          "finalEditingAndCuration": ""
-        },
-        "relatedReleases": []
+        "versionRelationship": "undocumented"
       }
     },
     {
       "title": "Shine (feat. Cheddr)",
+      "slug": "shine-feat-cheddr",
       "meta": "Selected catalog",
       "image": "/images/records/releases/warmcircuitsrise-shine-feat-cheddr.webp",
-      "links": [],
-      "slug": "shine-feat-cheddr",
-      "description": "",
       "lineage": {
         "display": "hidden",
-        "publicLabel": "",
         "compositionOrigin": "undocumented",
         "realizationMethod": "undocumented",
-        "versionRelationship": "undocumented",
-        "sourceTitle": "",
-        "sourceArtist": "",
-        "sourceUrl": "",
-        "publicSummary": "",
-        "methodNote": "",
-        "credits": {
-          "composition": "",
-          "lyrics": "",
-          "arrangement": "",
-          "performance": "",
-          "production": "",
-          "finalEditingAndCuration": ""
-        },
-        "relatedReleases": []
+        "versionRelationship": "undocumented"
       }
     },
     {
       "title": "feat. Cheddr",
+      "slug": "feat-cheddr",
       "meta": "Selected catalog",
       "image": "/images/records/releases/warmcircuitsrise-feat-cheddr.webp",
-      "links": [],
-      "slug": "feat-cheddr",
-      "description": "",
       "lineage": {
         "display": "hidden",
-        "publicLabel": "",
         "compositionOrigin": "undocumented",
         "realizationMethod": "undocumented",
-        "versionRelationship": "undocumented",
-        "sourceTitle": "",
-        "sourceArtist": "",
-        "sourceUrl": "",
-        "publicSummary": "",
-        "methodNote": "",
-        "credits": {
-          "composition": "",
-          "lyrics": "",
-          "arrangement": "",
-          "performance": "",
-          "production": "",
-          "finalEditingAndCuration": ""
-        },
-        "relatedReleases": []
+        "versionRelationship": "undocumented"
       }
     }
   ],
@@ -109,8 +57,6 @@
   "featured": false,
   "seoTitle": "Warm Circuits Rise — Star Splitter Records",
   "seoDescription": "Warm Circuits Rise follows improvised grooves through psychedelic guitars, analog synths, ambient space, and patient long-form journeys.",
-  "platformLinks": [],
-  "motion": {},
   "catalogRole": "Long-form improvisational language",
   "roleStatement": "The catalog’s long-form improvisational language, following groove, texture, and collective response wherever they lead."
 }
