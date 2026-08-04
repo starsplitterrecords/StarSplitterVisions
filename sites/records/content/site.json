@@ -24,10 +24,6 @@
     {
       "label": "Licensing",
       "path": "/#licensing"
-    },
-    {
-      "label": "Journal",
-      "path": "/#journal"
     }
   ],
   "hero": {
@@ -44,14 +40,14 @@
       "path": "/#releases"
     },
     "secondaryAction": {
-      "label": "Explore Projects",
+      "label": "Explore projects",
       "path": "/#artists"
     }
   },
   "releaseSection": {
     "eyebrow": "Selected releases",
     "title": "Start with the music.",
-    "intro": "This is the composer/producer's body of work, organized into musical identities that make exploration easier and more enjoyable",
+    "intro": "Each project opens a different way into the music. Start wherever your curiosity takes you.",
     "featured": [
       {
         "titleLines": [
@@ -167,7 +163,7 @@
   "artistSection": {
     "eyebrow": "The roster",
     "title": "Explore the projects.",
-    "intro": "Each project has its own musical identity, visual language, and personality. Together they form a single body of work. Think of these are musical lanes, no one is trying to dupe anyone. Pick one you like.",
+    "intro": "Each project has its own sound, visual identity, and point of view. Pick the one that catches your ear.",
     "filters": [
       {
         "label": "All",
@@ -226,9 +222,9 @@
     "eyebrow": "The label",
     "titleLines": [
       "Many projects.",
-      "One Composer/Producer."
+      "One composer and producer."
     ],
-    "body": "Every project exists because some musical ideas simply belong in different worlds."
+    "body": "Some musical ideas belong in different worlds."
   },
   "story": {
     "eyebrow": "The story",
@@ -236,29 +232,7 @@
     "paragraphs": [
       "Star Splitter Records is the home of music written and directed by Jeff Hines. Rather than separating ideas by genre alone, each project explores a distinct musical identity with its own sound, visual language, and creative focus.",
       "Some releases are original works. Others revisit earlier compositions through a new style, arrangement, or production approach. Each project offers another perspective on the same creative voice.",
-      "Where it matters, release notes explain how a piece came to exist. Its origins, its evolution, and the people who shaped the finished recording. They're there for anyone who's curious, without getting in the way of simply enjoying the music."
-    ]
-  },
-  "journal": {
-    "eyebrow": "Journal",
-    "title": "Notes from the catalog.",
-    "intro": "Release notes, composition histories, version relationships, project studies, and the decisions that shaped the finished work.",
-    "cards": [
-      {
-        "eyebrow": "Origins",
-        "title": "Where the music began.",
-        "body": "Source compositions, first recordings, inherited ideas, and the musical material that survives each transformation."
-      },
-      {
-        "eyebrow": "Interpretations",
-        "title": "Why this version exists.",
-        "body": "The project language, arrangement choices, performances, production methods, and edits that gave a release its final identity."
-      },
-      {
-        "eyebrow": "Lineage",
-        "title": "How the catalog connects.",
-        "body": "Remixes, reconstructions, restorations, alternate versions, and recurring compositions traced across the catalog."
-      }
+      "Where it matters, release notes explain how a piece came to exist—its origins, its evolution, and the people who shaped the finished recording. They are there for anyone who is curious, without getting in the way of simply enjoying the music."
     ]
   },
   "licensing": {
@@ -271,9 +245,9 @@
     "tagline": "Music by Jeff Hines. Released through Star Splitter Records."
   },
   "creditNote": {
-    "eyebrow": "Authenticity",
-    "title": "Every piece of music came from a fully produced track, even if its been reinterpreted.",
-    "body": "All releases began as fully produced electronic compositions. Some are reinterpreted into different musical styles, use different instrumentation, arrangements, and other elements. Credits are clear for how it came to exist. Good ethics say I should be clear about when I'm using generative AI. The US copyright office has said that human contributions can be copyright protected.   ",
+    "eyebrow": "How the music was made",
+    "title": "Original compositions. Different realizations.",
+    "body": "Some releases preserve the original production. Others reinterpret the same composition through new instrumentation, arrangements, performances, or production methods. The credits explain what changed and when generative tools were used.",
     "linkLabel": "How authorship is documented",
     "path": "/#authorship"
   },
