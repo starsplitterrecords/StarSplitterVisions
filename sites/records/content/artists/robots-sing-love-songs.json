@@ -2,7 +2,7 @@
   "name": "Robots Sing Love Songs",
   "slug": "robots-sing-love-songs",
   "field": "Speculative pop",
-  "category": "Speculative pop",
+  "category": "4",
   "categories": [
     "songs",
     "electronic",
@@ -15,64 +15,29 @@
   "oneSentenceBio": "Robots Sing Love Songs uses electronic pop, spoken passages, and character-driven writing to explore memory, creativity, inheritance, and machine consciousness.",
   "paragraphBio": "Robots Sing Love Songs treats artificial intelligence as a source of stories rather than a visual gimmick. Songs and monologues move through synthetic pop, intimate electronics, and speculative narration, asking what happens when machines inherit human culture, recognize beauty, or begin to understand devotion. The ideas remain grounded in recognizable emotions—curiosity, loneliness, grief, desire, and wonder—so the project feels personal even when the narrator is not human. It is music for listeners drawn to science fiction, emotionally direct electronic pop, and stories about the things people build and leave behind.",
   "riyl": "The Postal Service • Imogen Heap • Porter Robinson • Janelle Monáe • Hatsune Miku • The 1975",
-  "listenUrl": "",
   "releases": [
     {
       "title": "Perception",
+      "slug": "perception",
       "meta": "Selected catalog",
       "image": "/images/records/releases/robots-sing-love-songs-perception.webp",
-      "links": [],
-      "slug": "perception",
-      "description": "",
       "lineage": {
         "display": "hidden",
-        "publicLabel": "",
         "compositionOrigin": "undocumented",
         "realizationMethod": "undocumented",
-        "versionRelationship": "undocumented",
-        "sourceTitle": "",
-        "sourceArtist": "",
-        "sourceUrl": "",
-        "publicSummary": "",
-        "methodNote": "",
-        "credits": {
-          "composition": "",
-          "lyrics": "",
-          "arrangement": "",
-          "performance": "",
-          "production": "",
-          "finalEditingAndCuration": ""
-        },
-        "relatedReleases": []
+        "versionRelationship": "undocumented"
       }
     },
     {
       "title": "Magnetic",
+      "slug": "magnetic",
       "meta": "Selected catalog",
       "image": "/images/records/releases/robots-sing-love-songs-magnetic.webp",
-      "links": [],
-      "slug": "magnetic",
-      "description": "",
       "lineage": {
         "display": "hidden",
-        "publicLabel": "",
         "compositionOrigin": "undocumented",
         "realizationMethod": "undocumented",
-        "versionRelationship": "undocumented",
-        "sourceTitle": "",
-        "sourceArtist": "",
-        "sourceUrl": "",
-        "publicSummary": "",
-        "methodNote": "",
-        "credits": {
-          "composition": "",
-          "lyrics": "",
-          "arrangement": "",
-          "performance": "",
-          "production": "",
-          "finalEditingAndCuration": ""
-        },
-        "relatedReleases": []
+        "versionRelationship": "undocumented"
       }
     }
   ],
@@ -80,8 +45,6 @@
   "featured": false,
   "seoTitle": "Robots Sing Love Songs — Star Splitter Records",
   "seoDescription": "Robots Sing Love Songs uses electronic pop, spoken passages, and character-driven writing to explore memory, creativity, inheritance, and machine consciousness.",
-  "platformLinks": [],
-  "motion": {},
   "catalogRole": "Narrative song project",
   "roleStatement": "A narrative song project exploring memory, creativity, inheritance, and machine interpretation through emotionally literate voices."
 }
