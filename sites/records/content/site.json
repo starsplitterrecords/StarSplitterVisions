@@ -51,7 +51,7 @@
   "releaseSection": {
     "eyebrow": "Selected releases",
     "title": "Start with the music.",
-    "intro": "Every release opens a different door into the same body of work.",
+    "intro": "This is the composer/producer's body of work, organized into musical identities that make exploration easier and more enjoyable",
     "featured": [
       {
         "titleLines": [
@@ -167,7 +167,7 @@
   "artistSection": {
     "eyebrow": "The roster",
     "title": "Explore the projects.",
-    "intro": "Each project has its own musical identity, visual language, and personality. Together they form a single body of work.",
+    "intro": "Each project has its own musical identity, visual language, and personality. Together they form a single body of work. Think of these are musical lanes, no one is trying to dupe anyone. Pick one you like.",
     "filters": [
       {
         "label": "All",
@@ -228,15 +228,15 @@
       "Many projects.",
       "One Composer/Producer."
     ],
-    "body": "Every project exists because some musical expressions simply belong in different musical lanes."
+    "body": "Every project exists because some musical ideas simply belong in different worlds."
   },
   "story": {
     "eyebrow": "The story",
     "title": "One body of work. Many ways to hear it.",
     "paragraphs": [
       "Star Splitter Records is the home of music written and directed by Jeff Hines. Rather than separating ideas by genre alone, each project explores a distinct musical identity with its own sound, visual language, and creative focus.",
-      "A release may begin as a complete composition, an earlier recording, a new interpretation, a reconstruction, a remix, or a more generative starting point. Those beginnings are not interchangeable, and the credits do not treat them as though they are.",
-      "Release credits separate composition, lyrics, arrangement, performance, production, editing, curation, source material, and related versions whenever those distinctions matter. The purpose is neither to conceal the tools nor to make them the subject. It is to show what actually happened and preserve the lineage of the work."
+      "Some releases are original works. Others revisit earlier compositions through a new style, arrangement, or production approach. Each project offers another perspective on the same creative voice.",
+      "Where it matters, release notes explain how a piece came to exist. Its origins, its evolution, and the people who shaped the finished recording. They're there for anyone who's curious, without getting in the way of simply enjoying the music."
     ]
   },
   "journal": {
@@ -263,24 +263,24 @@
   },
   "licensing": {
     "eyebrow": "Licensing",
-    "title": "A catalog built for many kinds of scenes.",
-    "intro": "Instrumentals, alternate versions, stems, clean versions, and project-specific music support film, television, games, advertising, and other visual work. The catalog is organized around source relationships, version history, and production credits—useful context for licensing conversations."
+    "title": "Music for picture.",
+    "intro": "Many releases are available as instrumentals, alternate mixes, stems, and other production-ready versions for film, television, games, podcasts, advertising, and digital media.\n\nIf you're looking for music with a particular mood or style, we'd love to hear about your project."
   },
   "footer": {
     "copyright": "© 2026 Star Splitter Records",
-    "tagline": "Distinct musical worlds. Clearly preserved lineage."
+    "tagline": "Music by Jeff Hines. Released through Star Splitter Records."
   },
   "creditNote": {
     "eyebrow": "Authenticity",
-    "title": "Each track has a history.",
-    "body": "All releases begin as new compositions. Some reinterpret earlier work. Credits are clear for how it came to exist.",
+    "title": "Every piece of music came from a fully produced track, even if its been reinterpreted.",
+    "body": "All releases began as fully produced electronic compositions. Some are reinterpreted into different musical styles, use different instrumentation, arrangements, and other elements. Credits are clear for how it came to exist. Good ethics say I should be clear about when I'm using generative AI. The US copyright office has said that human contributions can be copyright protected.   ",
     "linkLabel": "How authorship is documented",
     "path": "/#authorship"
   },
   "authorship": {
     "eyebrow": "Authorship and process",
-    "title": "Credit the origin. Credit the transformation.",
-    "intro": "Composition, interpretation, performance, and production are different forms of creative contribution. Star Splitter names them separately so listeners can understand where a work began, what changed, and who shaped the final release.",
+    "title": "Every release tells two stories.",
+    "intro": "The music itself, and how it came to be.\nWhen those details matter, Star Splitter documents them clearly.",
     "principles": [
       {
         "title": "The composition",
@@ -288,18 +288,18 @@
       },
       {
         "title": "The realization",
-        "body": "How the work was arranged, performed, generated, recorded, produced, edited, and selected."
+        "body": "How those ideas became this recording."
       },
       {
         "title": "The lineage",
-        "body": "Which source composition, earlier recording, remix, restoration, or alternate version this release belongs to."
+        "body": "How this version relates to other releases."
       },
       {
         "title": "The final decisions",
-        "body": "Who chose what remained, what changed, and when the work was finished."
+        "body": "Who decided what the finished work would be."
       }
     ],
-    "closing": "The result is specific rather than categorical: not a blanket label, but a record of the work itself."
+    "closing": "Every release deserves to be understood on its own terms."
   },
   "releasePage": {
     "detailsEyebrow": "Release",
