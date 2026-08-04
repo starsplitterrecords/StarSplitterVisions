@@ -2,7 +2,7 @@
   "name": "Supersonic Being",
   "slug": "supersonic-being",
   "field": "Hip-hop / pop spectacle",
-  "category": "Hip-hop / pop spectacle",
+  "category": "3",
   "categories": [
     "songs",
     "electronic"
@@ -19,6 +19,7 @@
   "releases": [
     {
       "title": "Give It Up, Let’s Go",
+      "slug": "give-it-up-lets-go",
       "meta": "Released · 2025",
       "image": "/images/records/releases/supersonic-being-give-it-up-let-s-go.webp",
       "links": [
@@ -27,28 +28,11 @@
           "url": "https://distrokid.com/hyperfollow/supersonicbeing/give-it-up-let-go-feat-cheddr"
         }
       ],
-      "slug": "give-it-up-lets-go",
-      "description": "",
       "lineage": {
         "display": "hidden",
-        "publicLabel": "",
         "compositionOrigin": "undocumented",
         "realizationMethod": "undocumented",
-        "versionRelationship": "undocumented",
-        "sourceTitle": "",
-        "sourceArtist": "",
-        "sourceUrl": "",
-        "publicSummary": "",
-        "methodNote": "",
-        "credits": {
-          "composition": "",
-          "lyrics": "",
-          "arrangement": "",
-          "performance": "",
-          "production": "",
-          "finalEditingAndCuration": ""
-        },
-        "relatedReleases": []
+        "versionRelationship": "undocumented"
       }
     }
   ],
@@ -62,7 +46,6 @@
       "url": "https://distrokid.com/hyperfollow/supersonicbeing/give-it-up-let-go-feat-cheddr"
     }
   ],
-  "motion": {},
   "catalogRole": "Personality-driven hybrid",
   "roleStatement": "The catalog’s most unruly personality-driven project, free to combine hip-hop, pop, dance-rock, comedy, and spectacle."
 }
