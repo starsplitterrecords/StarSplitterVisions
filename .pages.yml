@@ -606,13 +606,11 @@ content:
       - name: oneSentenceBio
         label: Short Introduction
         type: text
-        required: true
-        description: One listener-facing sentence describing the sound and identity of the project.
+        description: Optional listener-facing sentence describing the sound and identity of the project.
       - name: paragraphBio
         label: About the Music
         type: text
-        required: true
-        description: One substantive listener-facing paragraph. Focus on sound, instruments, mood, writing, and the listening experience.
+        description: Optional listener-facing paragraph. Focus on sound, instruments, mood, writing, and the listening experience.
       - name: riyl
         label: Recommended If You Like
         type: text
