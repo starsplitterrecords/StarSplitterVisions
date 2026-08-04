@@ -2,7 +2,7 @@
   "name": "Sun Comes Through the Musical",
   "slug": "sun-comes-through",
   "field": "Theatrical pop",
-  "category": "Theatrical pop",
+  "category": "5",
   "categories": [
     "songs",
     "cinematic"
@@ -10,19 +10,14 @@
   "tagline": "Fictional soundtracks for scenes not yet staged.",
   "accent": "#F9D283",
   "identityImage": "/images/records/artists/sun-comes-through.webp",
-  "worldImage": "",
   "oneSentenceBio": "Sun Comes Through the Musical creates emotionally rich songs from imaginary stages, where every track feels like a scene from a larger story waiting to be discovered.",
   "threeSentenceBio": "Sun Comes Through the Musical writes soundtracks for productions that do not yet exist. Character-driven vocals, expressive piano, and orchestral color make each song feel like a scene entered midway through a larger emotional arc. The music is theatrical without becoming camp, inviting listeners to imagine the characters, rooms, and choices surrounding every lyric. Recurring motifs, dramatic turns, and emotionally precise lyrics suggest relationships and consequences beyond the boundaries of the track.",
   "paragraphBio": "Sun Comes Through the Musical creates songs that feel as though the curtain rose before the listener entered the room. Each track functions like a scene from an unwritten production, with character-driven vocals, expressive piano, melodic development, and orchestral flourishes suggesting a larger story just beyond what is stated. Lyrics carry dramatic purpose: a revelation, an argument, a private decision, a memory returning at the wrong moment. Yet the project does not require a complete plot to work. The songs are designed for headphone listening as much as the stage, allowing listeners to invent the missing characters, locations, and consequences for themselves. Theatricality comes through emotional movement and narrative precision rather than camp or empty grandeur. A small phrase can change the meaning of an entire chorus; a returning motif can reveal what a character is unwilling to say directly. Sun Comes Through the Musical is earnest, intelligent, and ambitious - music for people who love story songs, emotionally articulate pop, and the sensation of discovering a soundtrack to a production that exists only in imagination.",
   "riyl": "Sara Bareilles • Stephen Sondheim • Ben Folds • Jon Brion • Jason Robert Brown • The Last Dinner Party",
-  "listenUrl": "",
-  "releases": [],
   "status": "active",
   "featured": false,
   "seoTitle": "Sun Comes Through the Musical — Star Splitter Records",
   "seoDescription": "Sun Comes Through the Musical creates emotionally rich songs from imaginary stages, where every track feels like a scene from a larger story waiting to be discovered.",
-  "platformLinks": [],
-  "motion": {},
   "catalogRole": "Theatrical song project",
   "roleStatement": "A theatrical song project for scenes, characters, and stories that exist beyond any currently staged production."
 }
