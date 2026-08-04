@@ -10,8 +10,8 @@
   ],
   "tagline": "Scale becomes meaningful when human impact and electronic architecture collide.",
   "accent": "#71E8F5",
-  "identityImage": "/images/records/artists/star-splitter-rex.webp",
-  "worldImage": "/images/records/worlds/star-splitter-rex.webp",
+  "identityImage": "/images/records/chatgpt-image-jun-24-2025-012441-pm.png",
+  "worldImage": "/images/records/chatgpt-image-jun-24-2025-012441-pm-1.png",
   "oneSentenceBio": "Star Splitter Rex combines massive electronic structures with integrated guitar force, creating cinematic music built for adrenaline, danger, triumph, and screen-sized momentum.",
   "threeSentenceBio": "Star Splitter Rex makes cinematic electronic music in which guitars are part of the engine, not decorative additions. Monumental synth structures, hard-driving rhythm, and physical guitar energy create dramatic arcs suited to games, action sequences, and imagined worlds. The result is precise, explosive, and heroic music that balances electronic control with human impact. Themes and transitions provide narrative shape, ensuring the scale feels purposeful rather than simply loud.",
   "paragraphBio": "Star Splitter Rex creates music at the point where electronic precision collides with the physical charge of guitars. Massive synthetic structures, hard-driving beats, cinematic transitions, and carefully integrated riffs produce tracks that feel built for boss fights, launch sequences, impossible escapes, and moments of earned triumph. The guitars are not placed on top of finished electronic arrangements as a gesture toward rock; they participate in the composition, shaping momentum, tension, and release alongside the synths and rhythm programming. The project favors large arcs and immediate impact, but spectacle is controlled by structure. Themes return, energy escalates with purpose, and every major shift should feel like the next stage of a story rather than a collection of effects. Star Splitter Rex is futuristic without becoming bloodless, aggressive without losing clarity, and cinematic without requiring an existing screen. It is music for listeners who want the scale of modern electronic production and the human force of a guitar-driven performance in the same body.",
@@ -20,162 +20,75 @@
   "releases": [
     {
       "title": "Slip Knife (feat. Cheddr)",
+      "slug": "slip-knife-feat-cheddr",
       "meta": "Released · August 15, 2025",
-      "image": "",
       "links": [
         {
           "label": "Listen",
           "url": "https://distrokid.com/hyperfollow/starsplitterrex/slip-knife-feat-cheddr"
         }
       ],
-      "slug": "slip-knife-feat-cheddr",
-      "description": "",
       "lineage": {
         "display": "hidden",
-        "publicLabel": "",
         "compositionOrigin": "undocumented",
         "realizationMethod": "undocumented",
-        "versionRelationship": "undocumented",
-        "sourceTitle": "",
-        "sourceArtist": "",
-        "sourceUrl": "",
-        "publicSummary": "",
-        "methodNote": "",
-        "credits": {
-          "composition": "",
-          "lyrics": "",
-          "arrangement": "",
-          "performance": "",
-          "production": "",
-          "finalEditingAndCuration": ""
-        },
-        "relatedReleases": []
+        "versionRelationship": "undocumented"
       }
     },
     {
       "title": "Say What (feat. Cheddr)",
+      "slug": "say-what-feat-cheddr",
       "meta": "Released · July 14, 2025",
-      "image": "",
       "links": [
         {
           "label": "Listen",
           "url": "https://distrokid.com/hyperfollow/starsplitterrex/say-what-feat-cheddr"
         }
       ],
-      "slug": "say-what-feat-cheddr",
-      "description": "",
       "lineage": {
         "display": "hidden",
-        "publicLabel": "",
         "compositionOrigin": "undocumented",
         "realizationMethod": "undocumented",
-        "versionRelationship": "undocumented",
-        "sourceTitle": "",
-        "sourceArtist": "",
-        "sourceUrl": "",
-        "publicSummary": "",
-        "methodNote": "",
-        "credits": {
-          "composition": "",
-          "lyrics": "",
-          "arrangement": "",
-          "performance": "",
-          "production": "",
-          "finalEditingAndCuration": ""
-        },
-        "relatedReleases": []
+        "versionRelationship": "undocumented"
       }
     },
     {
       "title": "Dominion’s Reach",
+      "slug": "dominions-reach",
       "meta": "Selected catalog",
       "image": "/images/records/releases/star-splitter-rex-dominion-s-reach.webp",
-      "links": [],
-      "slug": "dominions-reach",
-      "description": "",
       "lineage": {
         "display": "hidden",
-        "publicLabel": "",
         "compositionOrigin": "undocumented",
         "realizationMethod": "undocumented",
-        "versionRelationship": "undocumented",
-        "sourceTitle": "",
-        "sourceArtist": "",
-        "sourceUrl": "",
-        "publicSummary": "",
-        "methodNote": "",
-        "credits": {
-          "composition": "",
-          "lyrics": "",
-          "arrangement": "",
-          "performance": "",
-          "production": "",
-          "finalEditingAndCuration": ""
-        },
-        "relatedReleases": []
+        "versionRelationship": "undocumented"
       }
     },
     {
       "title": "Signals and Shadows",
-      "meta": "Upcoming · August 2, 2026",
-      "image": "",
-      "links": [],
       "slug": "signals-and-shadows",
-      "description": "",
+      "meta": "Upcoming · August 2, 2026",
       "lineage": {
         "display": "hidden",
-        "publicLabel": "",
         "compositionOrigin": "undocumented",
         "realizationMethod": "undocumented",
-        "versionRelationship": "undocumented",
-        "sourceTitle": "",
-        "sourceArtist": "",
-        "sourceUrl": "",
-        "publicSummary": "",
-        "methodNote": "",
-        "credits": {
-          "composition": "",
-          "lyrics": "",
-          "arrangement": "",
-          "performance": "",
-          "production": "",
-          "finalEditingAndCuration": ""
-        },
-        "relatedReleases": []
+        "versionRelationship": "undocumented"
       }
     },
     {
       "title": "Graphite",
-      "meta": "Upcoming · November 11, 2026",
-      "image": "",
-      "links": [],
       "slug": "graphite",
-      "description": "",
+      "meta": "Upcoming · November 11, 2026",
       "lineage": {
         "display": "hidden",
-        "publicLabel": "",
         "compositionOrigin": "undocumented",
         "realizationMethod": "undocumented",
-        "versionRelationship": "undocumented",
-        "sourceTitle": "",
-        "sourceArtist": "",
-        "sourceUrl": "",
-        "publicSummary": "",
-        "methodNote": "",
-        "credits": {
-          "composition": "",
-          "lyrics": "",
-          "arrangement": "",
-          "performance": "",
-          "production": "",
-          "finalEditingAndCuration": ""
-        },
-        "relatedReleases": []
+        "versionRelationship": "undocumented"
       }
     }
   ],
   "status": "active",
-  "featured": false,
+  "featured": true,
   "seoTitle": "Star Splitter Rex — Star Splitter Records",
   "seoDescription": "Star Splitter Rex combines massive electronic structures with integrated guitar force, creating cinematic music built for adrenaline, danger, triumph, and screen-sized momentum.",
   "platformLinks": [
