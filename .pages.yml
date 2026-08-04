@@ -536,9 +536,9 @@ content:
     filename: "{fields.slug}.json"
     view:
       primary: name
-      fields: [name, status, field, catalogRole, featured]
+      fields: [name, status, field, featured]
       sort: [name, status]
-      search: [name, slug, field, tagline, catalogRole, roleStatement, oneSentenceBio]
+      search: [name, slug, field, tagline, oneSentenceBio, paragraphBio]
       default:
         sort: name
         order: asc
@@ -585,18 +585,9 @@ content:
             - roots
             - experimental
       - name: tagline
+        label: Tagline
         type: text
         required: true
-      - name: catalogRole
-        label: Role in the Catalog — Heading
-        type: string
-        required: true
-        description: Short listener-facing role label, such as Direct artist identity or Reconstruction project.
-      - name: roleStatement
-        label: Role in the Catalog — Statement
-        type: text
-        required: true
-        description: Explains what this project contributes to the larger catalog without describing fictional biography.
       - name: accent
         label: Accent Color
         type: string
@@ -613,17 +604,15 @@ content:
         options:
           media: records-images
       - name: oneSentenceBio
-        label: One-Sentence Bio
+        label: Short Introduction
         type: text
         required: true
-      - name: threeSentenceBio
-        label: Short Bio
-        type: text
-        required: true
+        description: One listener-facing sentence describing the sound and identity of the project.
       - name: paragraphBio
-        label: Full Bio
+        label: About the Music
         type: text
         required: true
+        description: One substantive listener-facing paragraph. Focus on sound, instruments, mood, writing, and the listening experience.
       - name: riyl
         label: Recommended If You Like
         type: text
@@ -631,7 +620,7 @@ content:
         label: Primary Listening URL
         type: string
       - name: platformLinks
-        label: Artist Listening Links
+        label: Project Listening Links
         type: object
         list:
           collapsible:
@@ -942,6 +931,7 @@ content:
           - name: releaseSection
             label: Homepage Featured Releases
             type: object
+            description: Controls the release cards shown on the Records homepage. Individual artist release records are managed under Records — Artists.
             fields:
               - name: eyebrow
                 type: string
@@ -1099,7 +1089,7 @@ content:
           - name: releasePage
             label: Individual Release Page Labels
             type: object
-            description: Shared headings and labels used on the separate detail page generated for each published release. These do not control the homepage release cards.
+            description: Shared headings used on the separate detail page generated for each release. This does not control the homepage release cards.
             fields:
               - name: detailsEyebrow
                 type: string
