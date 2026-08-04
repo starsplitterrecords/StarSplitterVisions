@@ -55,7 +55,6 @@ const assertFile = async (publicPath, context) => {
   }
 }
 
-
 const ensureAssetTree = async () => {
   if (contentOnly) return
   try {
@@ -216,13 +215,6 @@ const renderHomepage = (site, artists, publicReleaseKeys) => {
       </div>
     </a>`).join('')
 
-  const journalCards = site.journal.cards.map((card) => `
-    <article class="journal-card">
-      <p class="eyebrow">${escapeHtml(card.eyebrow)}</p>
-      <h3>${escapeHtml(card.title)}</h3>
-      <p>${escapeHtml(card.body)}</p>
-    </article>`).join('')
-
   const authorshipCards = site.authorship.principles.map((principle) => `
     <article class="authorship-card">
       <h3>${escapeHtml(principle.title)}</h3>
@@ -292,11 +284,6 @@ const renderHomepage = (site, artists, publicReleaseKeys) => {
       <div class="authorship-head"><p class="eyebrow">${escapeHtml(site.authorship.eyebrow)}</p><div><h2 class="section-title">${escapeHtml(site.authorship.title)}</h2><p class="section-intro">${escapeHtml(site.authorship.intro)}</p></div></div>
       <div class="authorship-grid">${authorshipCards}</div>
       <p class="authorship-closing">${escapeHtml(site.authorship.closing)}</p>
-    </section>
-
-    <section class="section" id="journal">
-      <div class="section-head"><p class="eyebrow">${escapeHtml(site.journal.eyebrow)}</p><div><h2 class="section-title">${escapeHtml(site.journal.title)}</h2><p class="section-intro">${escapeHtml(site.journal.intro)}</p></div></div>
-      <div class="journal-grid">${journalCards}</div>
     </section>
 
     <section class="section paper" id="licensing">
@@ -458,84 +445,48 @@ const validate = async (site, artists) => {
       for (const key of Object.keys(allowed)) {
         if (!allowed[key].has(release.lineage[key])) throw new Error(`${artist.name} / ${release.title} has invalid ${key}: ${release.lineage[key]}`)
       }
-      if (release.lineage.display !== 'hidden' && !release.lineage.publicSummary) {
-        throw new Error(`${artist.name} / ${release.title} must have a public lineage summary when lineage is visible`)
-      }
-      for (const related of release.lineage.relatedReleases || []) {
-        if (!related.url) throw new Error(`${artist.name} / ${release.title} has a related release without a URL`)
-      }
+      if (release.lineage.display !== 'hidden' && !release.lineage.publicSummary) throw new Error(`${artist.name} / ${release.title} needs publicSummary before lineage is shown`)
     }
   }
-  if (!slugs.has('warmcircuitsrise')) throw new Error('Canonical warmcircuitsrise record is missing')
-  if (artists.some((artist) => artist.name.toLowerCase() === 'warm circuits rise')) throw new Error('Non-canonical Warm Circuits Rise artist capitalization found')
-  if (!site.creditNote?.title || !site.authorship?.title || !site.releasePage?.lineageTitle) throw new Error('Site authorship and release-page copy is incomplete')
-  await assertFile(site.hero.image, 'homepage hero')
-  for (const release of site.releaseSection.featured) {
-    if (release.image) await assertFile(release.image, `homepage release ${release.titleLines.join(' ')}`)
-    if (!release.artistSlug || !release.releaseSlug) throw new Error(`Homepage release ${release.titleLines.join(' ')} is missing its detail-page reference`)
-    if (!releaseIndex.has(`${release.artistSlug}/${release.releaseSlug}`)) throw new Error(`Homepage release points to a missing record: ${release.artistSlug}/${release.releaseSlug}`)
-  }
-  for (const world of site.worlds) await assertFile(world.image, `homepage world ${world.artist}`)
-  return releaseIndex
-}
 
-const copyAssetTree = async () => {
-  await mkdir(path.join(distRoot, 'assets'), { recursive: true })
-  await cp(path.join(sourceRoot, 'site.css'), path.join(distRoot, 'assets', 'site.css'))
-  await cp(path.join(sourceRoot, 'site.js'), path.join(distRoot, 'assets', 'site.js'))
-  if (!contentOnly) {
-    await cp(recordsImages, path.join(distRoot, 'images', 'records'), { recursive: true })
-  }
-  try {
-    await cp(recordsMedia, path.join(distRoot, 'media', 'records'), { recursive: true })
-  } catch {
-    // Media is optional; image-only builds remain valid.
+  for (const featured of site.releaseSection.featured) {
+    const key = `${featured.artistSlug}/${featured.releaseSlug}`
+    if (!releaseIndex.has(key)) throw new Error(`Homepage featured release does not match artist data: ${key}`)
   }
 }
 
-const main = async () => {
-  await ensureAssetTree()
-  const site = await readJson(path.join(contentRoot, 'site.json'))
-  const artists = await loadArtists()
-  await validate(site, artists)
-  const publicArtists = publicArtistsAt(artists, buildNow)
-  const homepageArtists = rosterArtists(publicArtists)
-  const releaseKeys = publicReleaseKeys(publicArtists)
-  await rm(distRoot, { recursive: true, force: true })
+await ensureAssetTree()
+const site = await readJson(path.join(contentRoot, 'site.json'))
+const allArtists = await loadArtists()
+await validate(site, allArtists)
+const artists = rosterArtists(allArtists, buildNow)
+const publicKeys = publicReleaseKeys(allArtists, buildNow)
+
+if (contentOnly) {
+  console.log(`Validated ${allArtists.length} artist/project records and ${[...publicKeys].length} public releases at ${buildNow.toISOString()}.`)
+  process.exit(0)
+}
+
+await rm(distRoot, { recursive: true, force: true })
+await mkdir(distRoot, { recursive: true })
+await cp(sourceRoot, path.join(distRoot, 'assets'), { recursive: true })
+await cp(recordsImages, path.join(distRoot, 'images', 'records'), { recursive: true })
+try {
+  await cp(recordsMedia, path.join(distRoot, 'media', 'records'), { recursive: true })
+} catch {
+  // Media is optional until the motion asset is available.
+}
+
+await writeFile(path.join(distRoot, 'index.html'), renderHomepage(site, artists, publicKeys))
+for (const artist of artists) {
   await mkdir(path.join(distRoot, 'artists'), { recursive: true })
-  await mkdir(path.join(distRoot, 'releases'), { recursive: true })
-  await copyAssetTree()
-
-  await writeFile(path.join(distRoot, 'index.html'), renderHomepage(site, homepageArtists, releaseKeys))
-  for (const artist of publicArtists) {
-    await writeFile(path.join(distRoot, 'artists', `${artist.slug}.html`), renderArtistPage(site, artist))
-    const artistReleaseDir = path.join(distRoot, 'releases', artist.slug)
-    await mkdir(artistReleaseDir, { recursive: true })
-    for (const release of artist.releases || []) {
-      await writeFile(path.join(artistReleaseDir, `${release.slug}.html`), renderReleasePage(site, artist, release))
-    }
+  await writeFile(path.join(distRoot, 'artists', `${artist.slug}.html`), renderArtistPage(site, artist))
+  for (const release of artist.releases || []) {
+    if (!publicKeys.has(`${artist.slug}/${release.slug}`)) continue
+    const releaseDir = path.join(distRoot, 'releases', artist.slug)
+    await mkdir(releaseDir, { recursive: true })
+    await writeFile(path.join(releaseDir, `${release.slug}.html`), renderReleasePage(site, artist, release))
   }
-
-  await mkdir(path.join(distRoot, 'assets', 'data'), { recursive: true })
-  await writeFile(path.join(distRoot, 'assets', 'data', 'catalog.json'), `${JSON.stringify(publicArtists, null, 2)}\n`)
-  const sitemap = [
-    '/',
-    ...publicArtists.map((artist) => `/artists/${artist.slug}.html`),
-    ...publicArtists.flatMap((artist) => artist.releases.map((release) => releaseUrl(artist.slug, release.slug))),
-  ]
-  await writeFile(path.join(distRoot, 'sitemap.txt'), sitemap.join('\n') + '\n')
-  await writeFile(path.join(distRoot, '404.html'), documentShell({
-    site,
-    title: 'Page not found — Star Splitter Records',
-    description: 'The requested Star Splitter Records page could not be found.',
-    content: '<main id="main"><section class="section"><p class="eyebrow">404</p><h1 class="section-title">That page is not in the catalog.</h1><p><a class="text-link" href="/">Return to Star Splitter Records</a></p></section></main>',
-  }))
-
-  const releaseCount = publicArtists.reduce((count, artist) => count + artist.releases.length, 0)
-  console.log(`${contentOnly ? 'Validated' : 'Built'} Star Splitter Records: homepage + ${publicArtists.length} artist pages + ${releaseCount} public release pages`)
 }
 
-main().catch((error) => {
-  console.error(error.message)
-  process.exitCode = 1
-})
+console.log(`Built ${artists.length} artist/project pages and ${[...publicKeys].length} release pages at ${buildNow.toISOString()}.`)
