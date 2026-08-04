@@ -2,7 +2,7 @@
   "name": "Ghost Driver Unit",
   "slug": "ghost-driver-unit",
   "field": "Modern rock",
-  "category": "Modern rock",
+  "category": "3",
   "categories": [
     "rock"
   ],
@@ -14,64 +14,29 @@
   "threeSentenceBio": "Ghost Driver Unit makes direct, physical rock music without treating the past as a costume. Strong riffs, memorable choruses, and muscular song structures carry the music, while contemporary production keeps the impact immediate. The project is built for motion, defiance, confidence, and the clean catharsis of a great rock song landing exactly where it should. Its songs favor human force over retro imitation, making familiar rock instincts feel useful, alive, and ready for the present rather than preserved from the past.",
   "paragraphBio": "Ghost Driver Unit is modern rock built on the parts of the form that never stopped working: a riff with identity, a chorus worth returning to, a rhythm section that moves forward, and a song strong enough to survive changes in fashion. The project draws on classic instincts without becoming an exercise in reenactment. Guitars are allowed to sound large and physical, hooks are treated as essential rather than embarrassing, and arrangements favor momentum over ornament. What makes Ghost Driver Unit contemporary is not a layer of fashionable effects but the refusal to mistake nostalgia for substance. The songs can be aggressive, melodic, swaggering, wounded, or triumphant, yet they remain grounded in clear structure and human force. This is rock designed to feel immediate in a car, a club, a festival field, or a pair of headphones - music that invites movement before analysis and earns analysis after the impact. Ghost Driver Unit exists for listeners who still believe a powerful riff and a durable chorus can carry as much emotional weight as any more elaborate form.",
   "riyl": "Foo Fighters • Royal Blood • Queens of the Stone Age • The Killers • Boston • Nothing But Thieves",
-  "listenUrl": "",
   "releases": [
     {
       "title": "It’s a Grind (Ghost Mode Remix)",
+      "slug": "its-a-grind-ghost-mode-remix",
       "meta": "Upcoming · August 17, 2026",
       "image": "/images/records/releases/ghost-driver-unit-it-s-a-grind-ghost-mode-remix.webp",
-      "links": [],
-      "slug": "its-a-grind-ghost-mode-remix",
-      "description": "",
       "lineage": {
         "display": "hidden",
-        "publicLabel": "",
         "compositionOrigin": "undocumented",
         "realizationMethod": "undocumented",
-        "versionRelationship": "undocumented",
-        "sourceTitle": "",
-        "sourceArtist": "",
-        "sourceUrl": "",
-        "publicSummary": "",
-        "methodNote": "",
-        "credits": {
-          "composition": "",
-          "lyrics": "",
-          "arrangement": "",
-          "performance": "",
-          "production": "",
-          "finalEditingAndCuration": ""
-        },
-        "relatedReleases": []
+        "versionRelationship": "undocumented"
       }
     },
     {
       "title": "Watch Out",
+      "slug": "watch-out",
       "meta": "Upcoming · October 10, 2026",
       "image": "/images/records/releases/ghost-driver-unit-watch-out.webp",
-      "links": [],
-      "slug": "watch-out",
-      "description": "",
       "lineage": {
         "display": "hidden",
-        "publicLabel": "",
         "compositionOrigin": "undocumented",
         "realizationMethod": "undocumented",
-        "versionRelationship": "undocumented",
-        "sourceTitle": "",
-        "sourceArtist": "",
-        "sourceUrl": "",
-        "publicSummary": "",
-        "methodNote": "",
-        "credits": {
-          "composition": "",
-          "lyrics": "",
-          "arrangement": "",
-          "performance": "",
-          "production": "",
-          "finalEditingAndCuration": ""
-        },
-        "relatedReleases": []
+        "versionRelationship": "undocumented"
       }
     }
   ],
@@ -79,8 +44,6 @@
   "featured": false,
   "seoTitle": "Ghost Driver Unit — Star Splitter Records",
   "seoDescription": "Ghost Driver Unit delivers modern rock with classic instincts: durable riffs, commanding choruses, forward momentum, and songs built to outlast their production era.",
-  "platformLinks": [],
-  "motion": {},
   "catalogRole": "Modern rock language",
   "roleStatement": "The catalog’s modern rock language, built around durable riffs, decisive choruses, and physical momentum rather than nostalgia."
 }
