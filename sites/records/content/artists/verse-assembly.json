@@ -2,7 +2,7 @@
   "name": "The Verse Assembly",
   "slug": "verse-assembly",
   "field": "Live-band hip-hop",
-  "category": "Live-band hip-hop",
+  "category": "5",
   "categories": [
     "roots",
     "songs",
@@ -11,19 +11,14 @@
   "tagline": "Head-nod philosophies laid down in one-take cipher rooms.",
   "accent": "#E7D5B4",
   "identityImage": "/images/records/artists/verse-assembly.webp",
-  "worldImage": "",
   "oneSentenceBio": "The Verse Assembly brings reflective hip-hop into a live-room setting, where thoughtful verses, jazz-informed grooves, and musical improvisation unfold as one continuous conversation.",
   "threeSentenceBio": "The Verse Assembly joins hip-hop lyricism with the responsiveness of a live ensemble. Boom-bap weight, upright bass, analog drums, jazz color, and melodic improvisation give each verse room to breathe and change direction. The writing is reflective and purpose-driven, creating music with the mind of a poet, the pulse of a cipher, and the soul of a session happening in real time.",
   "paragraphBio": "The Verse Assembly treats hip-hop as a live conversation between voice, rhythm, harmony, and the people making them. Reflective verses move through boom-bap grooves, analog drums, upright bass, jazz-informed harmony, and melodic improvisation, allowing the band to react with the same flexibility normally reserved for another emcee. The result feels grounded in the cipher but open to the looseness of a late-night session, where a verse can unfold like a solo and a groove can change shape because the room demanded it. The writing favors philosophy, observation, memory, and lived experience over empty punchline accumulation. Musical detail matters, but the ensemble never competes with the lyric; it gives the words weight, space, and motion. The Verse Assembly is not interested in making hip-hop respectable by adding instruments. It begins from the understanding that live interaction, sampling traditions, rhythmic invention, and verbal intelligence already belong to the same continuum. This is music for listeners who want thoughtful bars, human groove, and the feeling that no two performances would ever land in exactly the same place.",
   "riyl": "The Roots • A Tribe Called Quest • Kendrick Lamar • Common • Robert Glasper • Little Simz",
-  "listenUrl": "",
-  "releases": [],
   "status": "active",
   "featured": false,
   "seoTitle": "The Verse Assembly — Star Splitter Records",
   "seoDescription": "The Verse Assembly brings reflective hip-hop into a live-room setting, where thoughtful verses, jazz-informed grooves, and musical improvisation unfold as one continuous conversation.",
-  "platformLinks": [],
-  "motion": {},
   "catalogRole": "Live-room hip-hop ensemble",
   "roleStatement": "The catalog’s live-room hip-hop ensemble, joining reflective verses, jazz-informed groove, and improvisation as one conversation."
 }
