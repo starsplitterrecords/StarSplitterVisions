@@ -11,10 +11,24 @@ export const isReleasePublic = (release, now = new Date()) => {
 export const scheduledReleaseKey = (artistSlug, release) =>
   `${artistSlug}/${release.slug}@${release.publishAt}`
 
+const initialRosterCategories = new Map([
+  ['jeff-hines', 1],
+  ['ion-drive-orchestra', 2],
+  ['minor-collapse', 2],
+  ['phase-redux', 2],
+  ['pulse-width-codex', 2],
+  ['star-splitter-rex', 2],
+])
+
+export const rosterCategory = (artist) => {
+  const explicitCategory = Number(artist.category)
+  if (Number.isInteger(explicitCategory) && explicitCategory > 0) return explicitCategory
+  return initialRosterCategories.get(artist.slug) || 3
+}
+
 export const orderArtists = (artists) => [...artists].sort((left, right) => {
-  if (left.slug === 'jeff-hines') return -1
-  if (right.slug === 'jeff-hines') return 1
-  if (left.featured !== right.featured) return left.featured ? -1 : 1
+  const categoryDifference = rosterCategory(left) - rosterCategory(right)
+  if (categoryDifference !== 0) return categoryDifference
   return left.name.localeCompare(right.name, 'en', { sensitivity: 'base' })
 })
 
