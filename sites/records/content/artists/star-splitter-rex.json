@@ -85,17 +85,14 @@
         "realizationMethod": "undocumented",
         "versionRelationship": "undocumented"
       }
-    }
+    },
+    {}
   ],
   "status": "active",
   "featured": true,
   "seoTitle": "Star Splitter Rex — Star Splitter Records",
-  "seoDescription": "Star Splitter Rex combines massive electronic structures with integrated guitar force, creating cinematic music built for adrenaline, danger, triumph, and screen-sized momentum.",
+  "seoDescription": "Star Splitter Rex combines massive electronic muscle with integrated guitar force, creating cinematic music built for adrenaline, danger, triumph, and screen-sized momentum.",
   "platformLinks": [
-    {
-      "label": "Say What",
-      "url": "https://distrokid.com/hyperfollow/starsplitterrex/say-what-feat-cheddr"
-    },
     {
       "label": "Slip Knife",
       "url": "https://distrokid.com/hyperfollow/starsplitterrex/slip-knife-feat-cheddr"
@@ -106,9 +103,7 @@
     }
   ],
   "motion": {
-    "video": "/media/records/star-splitter-rex-motion.mp4",
-    "poster": "/images/records/worlds/star-splitter-rex-motion-poster.jpg",
-    "title": "Cinematic impact at full scale."
+    "video": "/media/records/star-splitter-rex-motion.mp4"
   },
   "catalogRole": "Cinematic electronic scale",
   "roleStatement": "The catalog’s largest-scale electronic language, where guitar force, cinematic architecture, and human stakes collide."
