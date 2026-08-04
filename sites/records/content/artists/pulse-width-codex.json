@@ -18,157 +18,72 @@
   "releases": [
     {
       "title": "Now or Never",
+      "slug": "now-or-never",
       "meta": "Released · November 19, 2025",
-      "image": "",
       "links": [
         {
           "label": "Listen",
           "url": "https://music.amazon.com/albums/B0GWW7Y8TB"
         }
       ],
-      "slug": "now-or-never",
-      "description": "",
       "lineage": {
         "display": "hidden",
-        "publicLabel": "",
         "compositionOrigin": "undocumented",
         "realizationMethod": "undocumented",
-        "versionRelationship": "undocumented",
-        "sourceTitle": "",
-        "sourceArtist": "",
-        "sourceUrl": "",
-        "publicSummary": "",
-        "methodNote": "",
-        "credits": {
-          "composition": "",
-          "lyrics": "",
-          "arrangement": "",
-          "performance": "",
-          "production": "",
-          "finalEditingAndCuration": ""
-        },
-        "relatedReleases": []
+        "versionRelationship": "undocumented"
       }
     },
     {
       "title": "I Never Want to Not Do This",
+      "slug": "i-never-want-to-not-do-this",
       "meta": "Catalog release · July 14, 2026",
       "image": "/images/records/releases/pulse-width-codex-i-never-want-to-not-do-this.webp",
-      "links": [],
-      "slug": "i-never-want-to-not-do-this",
-      "description": "",
       "lineage": {
         "display": "hidden",
-        "publicLabel": "",
         "compositionOrigin": "undocumented",
         "realizationMethod": "undocumented",
-        "versionRelationship": "undocumented",
-        "sourceTitle": "",
-        "sourceArtist": "",
-        "sourceUrl": "",
-        "publicSummary": "",
-        "methodNote": "",
-        "credits": {
-          "composition": "",
-          "lyrics": "",
-          "arrangement": "",
-          "performance": "",
-          "production": "",
-          "finalEditingAndCuration": ""
-        },
-        "relatedReleases": []
+        "versionRelationship": "undocumented"
       }
     },
     {
       "title": "Where the Light Meets the Water",
+      "slug": "where-the-light-meets-the-water",
       "meta": "Selected catalog",
       "image": "/images/records/releases/pulse-width-codex-where-the-light-meets-the-water.webp",
-      "links": [],
-      "slug": "where-the-light-meets-the-water",
-      "description": "",
       "lineage": {
         "display": "hidden",
-        "publicLabel": "",
         "compositionOrigin": "undocumented",
         "realizationMethod": "undocumented",
-        "versionRelationship": "undocumented",
-        "sourceTitle": "",
-        "sourceArtist": "",
-        "sourceUrl": "",
-        "publicSummary": "",
-        "methodNote": "",
-        "credits": {
-          "composition": "",
-          "lyrics": "",
-          "arrangement": "",
-          "performance": "",
-          "production": "",
-          "finalEditingAndCuration": ""
-        },
-        "relatedReleases": []
+        "versionRelationship": "undocumented"
       }
     },
     {
       "title": "Free Mode (feat. Cheddr)",
+      "slug": "free-mode-feat-cheddr",
       "meta": "Selected catalog",
       "image": "/images/records/releases/pulse-width-codex-free-mode-feat-cheddr.webp",
-      "links": [],
-      "slug": "free-mode-feat-cheddr",
-      "description": "",
       "lineage": {
         "display": "hidden",
-        "publicLabel": "",
         "compositionOrigin": "undocumented",
         "realizationMethod": "undocumented",
-        "versionRelationship": "undocumented",
-        "sourceTitle": "",
-        "sourceArtist": "",
-        "sourceUrl": "",
-        "publicSummary": "",
-        "methodNote": "",
-        "credits": {
-          "composition": "",
-          "lyrics": "",
-          "arrangement": "",
-          "performance": "",
-          "production": "",
-          "finalEditingAndCuration": ""
-        },
-        "relatedReleases": []
+        "versionRelationship": "undocumented"
       }
     },
     {
       "title": "Edge Spaces (Epsilon Version)",
+      "slug": "edge-spaces-epsilon-version",
       "meta": "Selected catalog",
       "image": "/images/records/releases/pulse-width-codex-edge-spaces-epsilon-version.webp",
-      "links": [],
-      "slug": "edge-spaces-epsilon-version",
-      "description": "",
       "lineage": {
         "display": "hidden",
-        "publicLabel": "",
         "compositionOrigin": "undocumented",
         "realizationMethod": "undocumented",
-        "versionRelationship": "undocumented",
-        "sourceTitle": "",
-        "sourceArtist": "",
-        "sourceUrl": "",
-        "publicSummary": "",
-        "methodNote": "",
-        "credits": {
-          "composition": "",
-          "lyrics": "",
-          "arrangement": "",
-          "performance": "",
-          "production": "",
-          "finalEditingAndCuration": ""
-        },
-        "relatedReleases": []
+        "versionRelationship": "undocumented"
       }
     }
   ],
   "status": "active",
-  "featured": false,
+  "featured": true,
   "seoTitle": "Pulse Width Codex — Star Splitter Records",
   "seoDescription": "Pulse Width Codex builds uplifting electronic anthems around memorable melody, expansive builds, and the communal release of a drop that feels emotionally earned.",
   "platformLinks": [
@@ -185,7 +100,6 @@
       "url": "https://music.amazon.ca/artists/B0G2L9Y957/pulse-width-codex"
     }
   ],
-  "motion": {},
   "catalogRole": "Open-hearted dance language",
   "roleStatement": "The catalog’s open-hearted dance language, built to make melody, motion, and communal release arrive together."
 }
