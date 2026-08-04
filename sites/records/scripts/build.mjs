@@ -306,15 +306,24 @@ const renderArtistPage = (site, artist) => {
   const releases = artist.releases?.length
     ? `<section class="section paper" id="releases"><div class="section-head"><p class="eyebrow">Selected releases</p><div><h2 class="section-title">Music from ${escapeHtml(artist.name)}.</h2><p class="section-intro">Listen, explore release details, and find related versions.</p></div></div><div class="release-grid">${artist.releases.map((release) => releaseCard(artist, release)).join('')}</div></section>`
     : ''
+  const bioParts = [
+    artist.oneSentenceBio ? `<p class="lead">${escapeHtml(artist.oneSentenceBio)}</p>` : '',
+    artist.paragraphBio ? `<p>${escapeHtml(artist.paragraphBio)}</p>` : '',
+    artist.riyl ? `<p class="riyl"><strong>Recommended if you like:</strong><br />${escapeHtml(artist.riyl)}</p>` : '',
+  ].filter(Boolean).join('')
+  const about = bioParts
+    ? `<section class="section"><div class="artist-layout"><div><p class="artist-label">About the music</p><a class="back-link" href="/#artists">Back to all projects</a></div><div class="artist-copy">${bioParts}</div></div></section>`
+    : `<section class="section"><div class="artist-layout"><div><a class="back-link" href="/#artists">Back to all projects</a></div></div></section>`
   const content = `<main id="main">
     <section class="artist-hero">
       <img alt="${escapeHtml(artist.name)}" src="${escapeHtml(artist.identityImage)}" />
       <div class="artist-hero__copy"><p class="eyebrow">${escapeHtml(artist.field)}</p><h1>${escapeHtml(artist.name)}</h1><p class="tagline">${escapeHtml(artist.tagline)}</p>${platforms}</div>
     </section>
-    <section class="section"><div class="artist-layout"><div><p class="artist-label">About the music</p><a class="back-link" href="/#artists">Back to all projects</a></div><div class="artist-copy"><p class="lead">${escapeHtml(artist.oneSentenceBio)}</p><p>${escapeHtml(artist.paragraphBio)}</p>${artist.riyl ? `<p class="riyl"><strong>Recommended if you like:</strong><br />${escapeHtml(artist.riyl)}</p>` : ''}</div></div></section>
+    ${about}
     ${motion}${world}${releases}
   </main>`
-  return documentShell({ site, title: artist.seoTitle, description: artist.seoDescription, bodyClass: 'artist-page', content, accent: artist.accent })
+  const description = artist.seoDescription || artist.oneSentenceBio || artist.tagline
+  return documentShell({ site, title: artist.seoTitle || `${artist.name} — Star Splitter Records`, description, bodyClass: 'artist-page', content, accent: artist.accent })
 }
 
 const renderCredits = (lineage) => {
@@ -372,6 +381,7 @@ const renderReleasePage = (site, artist, release) => {
   const about = release.description
     ? `<section class="section release-about"><div><p class="eyebrow">${escapeHtml(site.releasePage.aboutEyebrow)}</p></div><p>${escapeHtml(release.description)}</p></section>`
     : ''
+  const projectSummary = artist.oneSentenceBio || artist.tagline
   const content = `<main id="main">
     <section class="release-hero">
       <div class="release-hero__art"><img alt="${escapeHtml(release.title)} artwork" src="${escapeHtml(artwork)}" /></div>
@@ -387,7 +397,7 @@ const renderReleasePage = (site, artist, release) => {
     </section>
     ${about}
     ${renderLineageSection(site, artist, release)}
-    <section class="release-artist-role"><div><p class="eyebrow">More from this project</p><h2>${escapeHtml(artist.name)}</h2></div><div><p>${escapeHtml(artist.oneSentenceBio)}</p><a class="text-link" href="/artists/${escapeHtml(artist.slug)}.html">Explore ${escapeHtml(artist.name)}</a></div></section>
+    <section class="release-artist-role"><div><p class="eyebrow">More from this project</p><h2>${escapeHtml(artist.name)}</h2></div><div>${projectSummary ? `<p>${escapeHtml(projectSummary)}</p>` : ''}<a class="text-link" href="/artists/${escapeHtml(artist.slug)}.html">Explore ${escapeHtml(artist.name)}</a></div></section>
   </main>`
   const description = release.description || `${release.title} by ${artist.name} on Star Splitter Records.`
   return documentShell({ site, title: `${release.title} — ${artist.name} — Star Splitter Records`, description, bodyClass: 'release-page', content, accent: artist.accent })
@@ -413,7 +423,7 @@ const validate = async (site, artists) => {
 
   for (const artist of artists) {
     if (!['active', 'archived'].includes(artist.status)) throw new Error(`${artist.name} has invalid status: ${artist.status}`)
-    for (const field of ['name', 'slug', 'field', 'tagline', 'oneSentenceBio', 'paragraphBio', 'identityImage']) {
+    for (const field of ['name', 'slug', 'field', 'tagline', 'identityImage']) {
       if (!artist[field]) throw new Error(`${artist.slug || artist.name || 'Artist'} is missing ${field}`)
     }
     if (slugs.has(artist.slug)) throw new Error(`Duplicate artist slug: ${artist.slug}`)
