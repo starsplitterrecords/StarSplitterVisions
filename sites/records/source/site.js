@@ -31,3 +31,26 @@ if(document.querySelector('main > .hero')){
 
   document.querySelector('.authorship')?.remove();
 }
+
+const footer=document.querySelector('.footer');
+if(footer){
+  footer.innerHTML=`
+    <div class="footer-credit">
+      <strong>Star Splitter Records</strong>
+      <p>Original music by Jeff Hines (BMI), released through distinct artist projects. Human composition, lyrics, and creative direction, with AI-assisted production where appropriate.</p>
+      <p>Part of the Star Splitter Records catalog—original music for tomorrow’s soundtracks, playlists, and sonic futures.</p>
+      <a href="mailto:starsplitterrecords@outlook.com">starsplitterrecords@outlook.com</a>
+    </div>
+    <div class="footer-bottom"><span>© 2026 Star Splitter Records</span></div>`;
+  const footerStyle=document.createElement('style');
+  footerStyle.textContent=`
+.footer{display:block;padding:3.5rem max(1.5rem,5vw) 2rem}
+.footer-credit{max-width:760px}
+.footer-credit strong{display:block;margin-bottom:1rem;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase}
+.footer-credit p{margin:.45rem 0;max-width:70ch;line-height:1.65}
+.footer-credit a{display:inline-block;margin-top:.8rem;color:inherit;text-underline-offset:.22em}
+.footer-bottom{margin-top:2.25rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,.12);font-size:.78rem;opacity:.72}
+@media(max-width:700px){.footer{padding-top:2.75rem}.footer-credit p{line-height:1.55}}
+`;
+  document.head.appendChild(footerStyle);
+}
