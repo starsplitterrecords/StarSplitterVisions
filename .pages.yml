@@ -1125,3 +1125,322 @@ content:
                 type: string
               - name: tagline
                 type: string
+
+  - name: records-quick-edit
+    label: Records — Quick Edit
+    type: group
+    items:
+      - name: records-release-desk
+        label: Release Desk
+        type: collection
+        path: sites/records/content/artists
+        format: json
+        filename: "{fields.slug}.json"
+        operations:
+          create: false
+          rename: false
+          delete: false
+        view:
+          primary: name
+          fields: [name, status]
+          sort: [name, status]
+          search: [name, slug]
+          default:
+            sort: name
+            order: asc
+        fields:
+          - name: name
+            label: Project
+            type: string
+            required: true
+          - name: slug
+            label: Project Slug
+            type: string
+            required: true
+          - name: releases
+            label: Release Queue — title, status/date, art, links
+            type: object
+            description: Use this view for routine release publishing. Deeper credits and lineage remain available under Records — Artists when you need them.
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{title} — {meta}"
+            fields:
+              - name: title
+                type: string
+                required: true
+              - name: slug
+                label: Release URL Slug
+                type: string
+                required: true
+                pattern:
+                  regex: "^[a-z0-9-]+$"
+                  message: "Use lowercase letters, numbers, and hyphens only."
+              - name: visibility
+                label: Release Status
+                type: select
+                description: Choose Published for live releases, Scheduled for future releases, or Hidden while you are still preparing it.
+                options:
+                  values:
+                    - name: published
+                      label: Published
+                    - name: scheduled
+                      label: Scheduled
+                    - name: hidden
+                      label: Hidden / not ready
+              - name: publishAt
+                label: Go Live At
+                type: string
+                description: Only needed for Scheduled. Use ISO 8601 with an Eastern offset, for example 2026-08-15T09:00:00-04:00.
+              - name: meta
+                label: Public Date / Status Line
+                type: string
+                required: true
+                description: What the listener sees, for example Released · August 15, 2026 or Upcoming · September 6, 2026.
+              - name: image
+                label: Cover Artwork
+                type: image
+                options:
+                  media: records-images
+              - name: links
+                label: Listening Links
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: "{label}"
+                fields:
+                  - name: label
+                    type: string
+                    required: true
+                  - name: url
+                    type: string
+                    required: true
+              - name: description
+                label: Listener Description
+                type: text
+                description: Optional. Add it when the release needs context; it does not need to block scheduling.
+
+      - name: records-homepage-releases
+        label: Homepage — Featured Releases
+        type: file
+        path: sites/records/content/site.json
+        format: json
+        operations:
+          create: false
+          delete: false
+        fields:
+          - name: releaseSection
+            label: Featured Release Cards
+            type: object
+            description: Use after a release is ready or scheduled. This controls only the homepage cards, not the artist release record.
+            fields:
+              - name: eyebrow
+                type: string
+              - name: title
+                type: string
+              - name: intro
+                type: text
+              - name: featured
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: "{meta}"
+                fields:
+                  - name: titleLines
+                    label: Artist and Release Title Lines
+                    type: string
+                    list: true
+                  - name: meta
+                    label: Public Date / Status Line
+                    type: string
+                  - name: artistSlug
+                    label: Project
+                    type: reference
+                    required: true
+                    options:
+                      collection: records-artists
+                      search: "name,slug"
+                      value: "{fields.slug}"
+                      label: "{fields.name}"
+                  - name: releaseSlug
+                    label: Release Slug
+                    type: string
+                    required: true
+                  - name: image
+                    label: Cover Artwork
+                    type: image
+                    options:
+                      media: records-images
+                  - name: accent
+                    type: string
+                  - name: links
+                    label: Buttons / Links
+                    type: object
+                    list:
+                      collapsible:
+                        collapsed: true
+                        summary: "{label}"
+                    fields:
+                      - name: label
+                        type: string
+                      - name: url
+                        type: string
+
+      - name: records-homepage-copy
+        label: Homepage — Main Copy
+        type: file
+        path: sites/records/content/site.json
+        format: json
+        operations:
+          create: false
+          delete: false
+        fields:
+          - name: hero
+            label: Hero
+            type: object
+            fields:
+              - name: eyebrow
+                type: string
+              - name: headingLines
+                type: string
+                list: true
+              - name: italicLine
+                label: Italic Heading Line Index
+                type: number
+              - name: description
+                type: text
+              - name: image
+                type: image
+                options:
+                  media: records-images
+              - name: primaryAction
+                label: Primary Button
+                type: object
+                fields:
+                  - name: label
+                    type: string
+                  - name: path
+                    type: string
+              - name: secondaryAction
+                label: Secondary Button
+                type: object
+                fields:
+                  - name: label
+                    type: string
+                  - name: path
+                    type: string
+          - name: artistSection
+            label: Roster Introduction
+            type: object
+            fields:
+              - name: eyebrow
+                type: string
+              - name: title
+                type: string
+              - name: intro
+                type: text
+              - name: filters
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: "{label}"
+                fields:
+                  - name: label
+                    type: string
+                  - name: value
+                    type: string
+          - name: worlds
+            label: Featured Project Worlds
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{artist}"
+            fields:
+              - name: artist
+                type: string
+              - name: title
+                type: text
+              - name: linkLabel
+                type: string
+              - name: slug
+                type: reference
+                options:
+                  collection: records-artists
+                  search: "name,slug"
+                  value: "{fields.slug}"
+                  label: "{fields.name}"
+              - name: image
+                type: image
+                options:
+                  media: records-images
+          - name: labelSlate
+            label: Label Statement
+            type: object
+            fields:
+              - name: eyebrow
+                type: string
+              - name: titleLines
+                type: string
+                list: true
+              - name: body
+                type: text
+          - name: story
+            label: Story
+            type: object
+            fields:
+              - name: eyebrow
+                type: string
+              - name: title
+                type: string
+              - name: paragraphs
+                type: text
+                list: true
+          - name: licensing
+            label: Licensing
+            type: object
+            fields:
+              - name: eyebrow
+                type: string
+              - name: title
+                type: string
+              - name: intro
+                type: text
+
+      - name: records-release-page-labels
+        label: Release Pages — Labels Only
+        type: file
+        path: sites/records/content/site.json
+        format: json
+        operations:
+          create: false
+          delete: false
+        fields:
+          - name: releasePage
+            label: Shared Release Page Headings
+            type: object
+            description: Rarely changed. These labels apply to every individual release detail page.
+            fields:
+              - name: detailsEyebrow
+                type: string
+              - name: backLabel
+                type: string
+              - name: aboutEyebrow
+                type: string
+              - name: lineageEyebrow
+                type: string
+              - name: lineageTitle
+                type: string
+              - name: lineageIntro
+                type: text
+              - name: sourceTitle
+                type: string
+              - name: creditsTitle
+                type: string
+              - name: processTitle
+                type: string
+              - name: relatedTitle
+                type: string
