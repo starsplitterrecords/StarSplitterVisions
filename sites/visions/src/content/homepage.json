@@ -1,22 +1,22 @@
 {
   "featuredHeading": "Featured Series",
   "featuredSeries": [
+    "rex-fleet",
     "vikings-2026",
-    "azure-reach",
-    "stardust-station"
+    "azure-reach"
   ],
   "moreWorldsHeading": "More Worlds",
   "moreWorlds": [
-    "rex-fleet",
+    "stardust-station",
     "sunforge-outlaw",
     "low-tide-signal"
   ],
   "viewAllLabel": "View All Series →",
   "latestRelease": {
     "heading": "Latest Release",
-    "series": "vikings-2026",
-    "title": "Vikings 2026 — Issue 01",
-    "image": "/images/covers/vikings-2026-issue-01.jpg"
+    "series": "rex-fleet",
+    "title": "Rex Fleet - Issue 01: Green Corridor",
+    "image": "/images/covers/rex-fleet-issue-01-green-corridor.jpg"
   },
   "soundtrackSpotlight": {
     "enabled": true,
