@@ -4,18 +4,18 @@
   "tagline": "The coworkers are the reactor.",
   "atmosphere": "A warm, absurd workplace sitcom about forced proximity in orbit.",
   "description": "A character-driven station comedy where social pressure, proximity, and petty workplace rituals matter more than cosmic mystery.",
-  "status": "coming-soon",
-  "developmentStatus": "In development",
+  "status": "active",
+  "developmentStatus": "Publishing",
   "worldLabel": "Orbital Workplace Sitcom",
-  "currentRelease": "Preview",
-  "hero": "/images/covers/stardust-station-issue-01.png",
+  "currentRelease": "Issue 01: Mandatory Proximity — Production Preview",
+  "hero": "/images/covers/stardust-station-issue-01.jpg",
   "accent": "#FFCE5C",
-  "format": "Workplace sitcom / comic development",
+  "format": "Comic / production preview",
   "worldPremise": "People trapped together in a space workplace discover the real emergency is each other.",
   "homepage": {
-    "issue": "In Development",
+    "issue": "Issue 01",
     "hook": "A character-first workplace sitcom about forced proximity in orbit.",
-    "cover": "/images/covers/stardust-station-issue-01.png"
+    "cover": "/images/covers/stardust-station-issue-01.jpg"
   },
   "narrativeForms": [],
   "themes": [],
@@ -25,11 +25,11 @@
   "audiencePromise": "",
   "releases": [
     {
-      "title": "Issue 01 Preview",
-      "cover": "/images/covers/stardust-station-issue-01.png",
-      "description": "The first public visual signal for Stardust Station.",
-      "releaseType": "Preview",
-      "releaseDate": "",
+      "title": "Issue 01: Mandatory Proximity — Production Preview",
+      "cover": "/images/covers/stardust-station-issue-01.jpg",
+      "description": "A production preview of Stardust Station's first issue, introducing QARB7919-17 and its overbuilt far-future workplace ensemble.",
+      "releaseType": "Production preview",
+      "releaseDate": "2026-08-17",
       "externalLink": ""
     }
   ],
