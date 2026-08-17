@@ -18,18 +18,15 @@ jobs:
         with:
           ref: release/stardust-station-issue-01-preview
           fetch-depth: 0
-      - name: Reconstruct approved release assets
+      - name: Reconstruct approved cover
         shell: bash
         run: |
           set -euo pipefail
           test -f .stardust-transfer/READY || exit 0
           mkdir -p sites/visions/public/images/covers
-          mkdir -p sites/visions/public/issues/stardust-station/issue-01
           cat .stardust-transfer/cover/part-* | base64 -d > sites/visions/public/images/covers/stardust-station-issue-01.jpg
-          cat .stardust-transfer/pdf/part-* | base64 -d > sites/visions/public/issues/stardust-station/issue-01/stardust-station-issue-01-mandatory-proximity-production-preview.pdf
-          echo '6036a919b4adce1e5ac68cb28a92c4c8cccfe70b590ab40f41c1df91d0f7c34d  sites/visions/public/images/covers/stardust-station-issue-01.jpg' | sha256sum -c -
-          echo '96ae61cc5afe443fbcb00917c9fa2fc9b9b980669e3c2c511f5b8cc0f3b7c387  sites/visions/public/issues/stardust-station/issue-01/stardust-station-issue-01-mandatory-proximity-production-preview.pdf' | sha256sum -c -
-      - name: Commit binary assets and remove transfer scaffold
+          echo '7c0bd4917db561cd3894664a081f3e63b6258f42200fb0c872d919da251b048f  sites/visions/public/images/covers/stardust-station-issue-01.jpg' | sha256sum -c -
+      - name: Commit cover and remove transfer scaffold
         shell: bash
         run: |
           set -euo pipefail
@@ -38,6 +35,5 @@ jobs:
           git rm -r .stardust-transfer
           git rm .github/workflows/assemble-stardust-release.yml
           git add sites/visions/public/images/covers/stardust-station-issue-01.jpg
-          git add sites/visions/public/issues/stardust-station/issue-01/stardust-station-issue-01-mandatory-proximity-production-preview.pdf
-          git commit -m 'Assemble Stardust Station Issue 01 release assets'
+          git commit -m 'Assemble Stardust Station Issue 01 cover asset'
           git push origin HEAD:release/stardust-station-issue-01-preview
