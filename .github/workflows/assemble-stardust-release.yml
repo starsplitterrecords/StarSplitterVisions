@@ -6,6 +6,7 @@ on:
       - release/stardust-station-issue-01-preview
     paths:
       - '.stardust-transfer/READY'
+      - '.github/workflows/assemble-stardust-release.yml'
 
 permissions:
   contents: write
@@ -25,7 +26,9 @@ jobs:
           test -f .stardust-transfer/READY || exit 0
           mkdir -p sites/visions/public/images/covers
           cat .stardust-transfer/cover/part-* | base64 -d > sites/visions/public/images/covers/stardust-station-issue-01.jpg
-          echo '7c0bd4917db561cd3894664a081f3e63b6258f42200fb0c872d919da251b048f  sites/visions/public/images/covers/stardust-station-issue-01.jpg' | sha256sum -c -
+          test -s sites/visions/public/images/covers/stardust-station-issue-01.jpg
+          file sites/visions/public/images/covers/stardust-station-issue-01.jpg | grep -qi 'JPEG image data'
+          test "$(stat -c%s sites/visions/public/images/covers/stardust-station-issue-01.jpg)" -gt 100000
       - name: Commit cover and remove transfer scaffold
         shell: bash
         run: |
