@@ -1,5 +1,6 @@
 {
   "slug": "low-tide-signal",
+  "seriesCode": "LTS",
   "title": "Low Tide Signal",
   "tagline": "A quiet coastal signal from a flooded edge of the future.",
   "atmosphere": "Quiet mystery, abandoned infrastructure, and social unease.",
@@ -25,6 +26,10 @@
   "audiencePromise": "",
   "releases": [
     {
+      "catalogId": "LTS-P001-2026-001",
+      "publicationType": "P",
+      "publicationNumber": 1,
+      "catalogSequence": 1,
       "title": "Issue 01 Preview",
       "cover": "/images/covers/low-tide-signal-issue-01-cover.png",
       "description": "The first public visual signal for Low Tide Signal.",
