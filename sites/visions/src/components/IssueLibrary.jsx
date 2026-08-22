@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import ImageWithFallback from './shared/ImageWithFallback'
 import { ISSUE_STATE_STORAGE_KEY, loadIssueStates, toggleIssueState } from '../utils/issueState'
+import './IssueLibrary.css'
 
 const COLLAPSED_ISSUE_COUNT = 3
 
