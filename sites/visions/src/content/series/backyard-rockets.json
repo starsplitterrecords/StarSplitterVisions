@@ -33,20 +33,20 @@
   "audiencePromise": "A bright, tactile science-fiction adventure about audacious machines and the people stubborn enough to build a future of their own.",
   "releases": [
     {
-      "title": "Issue 01",
-      "cover": "/images/covers/backyard-rockets-issue-01.jpg",
-      "description": "Launch-Shop attempts to prove that one homemade rocket can become something much bigger.",
-      "releaseType": "Collected comic issue",
-      "releaseDate": "2026-08-21",
-      "externalLink": "/issues/backyard-rockets/issue-01/backyard-rockets-issue-01.pdf"
-    },
-    {
       "title": "Issue 02: The Copper Lattice",
       "cover": "/images/covers/backyard-rockets-issue-02.jpg",
       "description": "A complete 30-page story that widens the Launch-Shop route and the pressure closing around it.",
       "releaseType": "Collected comic issue",
       "releaseDate": "2026-08-21",
       "externalLink": "/issues/backyard-rockets/issue-02/backyard-rockets-issue-02.pdf"
+    },
+    {
+      "title": "Issue 01",
+      "cover": "/images/covers/backyard-rockets-issue-01.jpg",
+      "description": "Launch-Shop attempts to prove that one homemade rocket can become something much bigger.",
+      "releaseType": "Collected comic issue",
+      "releaseDate": "2026-08-21",
+      "externalLink": "/issues/backyard-rockets/issue-01/backyard-rockets-issue-01.pdf"
     }
   ],
   "dailyPages": [
