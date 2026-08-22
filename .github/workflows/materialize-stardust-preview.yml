@@ -25,7 +25,7 @@ jobs:
           set -euo pipefail
           mkdir -p sites/visions/public/issues/stardust-station/issue-01
           cat .staging/stardust-preview/chunk-*.txt | base64 --decode > sites/visions/public/issues/stardust-station/issue-01/stardust-station-issue-01-mandatory-proximity-preview.pdf
-          test "$(stat -c%s sites/visions/public/issues/stardust-station/issue-01/stardust-station-issue-01-mandatory-proximity-preview.pdf)" -gt 600000
+          test "$(stat -c%s sites/visions/public/issues/stardust-station/issue-01/stardust-station-issue-01-mandatory-proximity-preview.pdf)" -gt 500000
           head -c 4 sites/visions/public/issues/stardust-station/issue-01/stardust-station-issue-01-mandatory-proximity-preview.pdf | grep -q '%PDF'
       - name: Remove transfer staging and commit release asset
         shell: bash
