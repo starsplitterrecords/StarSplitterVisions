@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import ImageWithFallback from './shared/ImageWithFallback'
 import ExtrasRail from './media/ExtrasRail'
 import AudioRail from './media/AudioRail'
+import IssueLibrary from './IssueLibrary'
 import { seriesPages } from '../data/seriesPages'
 import { getEasternDateString, getLatestReleasedPage, getReleasedItems, getReleasedPages } from '../utils/dailyPages'
 
@@ -16,39 +17,6 @@ function EditorialSection({ title, children }) {
 
       <div className="series-editorial-copy">
         <p>{children}</p>
-      </div>
-    </section>
-  )
-}
-
-function ReleaseRail({ releases = [] }) {
-  if (!releases.length) return null
-
-  return (
-    <section className="series-release-section hud-frame">
-      <div className="series-section-header">
-        <h2>Releases</h2>
-        <span>{releases.length} available</span>
-      </div>
-      <div className="series-release-list">
-        {releases.map((release) => (
-          <article className="series-release-row" key={`${release.title}-${release.releaseDate || 'undated'}`}>
-            <div className="series-release-cover">
-              {release.cover ? <ImageWithFallback src={release.cover} alt={`${release.title} cover`} fallbackText="COVER" /> : <div className="series-release-placeholder">RELEASE</div>}
-            </div>
-            <div className="series-release-copy">
-              <p>{release.releaseType || 'Release'}</p>
-              <h3>{release.title}</h3>
-              {release.description && <span>{release.description}</span>}
-            </div>
-            <div className="series-release-meta">
-              <span>{release.releaseDate || 'Available now'}</span>
-            </div>
-            <div className="series-release-actions">
-              {release.externalLink && <a className="text-link" href={release.externalLink} target="_blank" rel="noreferrer">Open release</a>}
-            </div>
-          </article>
-        ))}
       </div>
     </section>
   )
@@ -137,7 +105,7 @@ export default function SeriesPage({ slug, onReadIssue }) {
           {series.worldPremise || series.description}
         </EditorialSection>
 
-        <ReleaseRail releases={seriesReleases} />
+        <IssueLibrary releases={seriesReleases} />
         <ExtrasRail title={series.extrasTitle || 'Recovered Artifacts'} artifacts={seriesExtras} />
         <AudioRail title={series.audioTitle || 'Signal Audio'} tracks={seriesAudio} />
       </main>
@@ -285,7 +253,7 @@ export default function SeriesPage({ slug, onReadIssue }) {
         {series.readerEntry || series.audiencePromise}
       </EditorialSection>
 
-      <ReleaseRail releases={seriesReleases} />
+      <IssueLibrary releases={seriesReleases} />
 
       <section className="series-current-page hud-frame">
         <div className="series-current-copy">

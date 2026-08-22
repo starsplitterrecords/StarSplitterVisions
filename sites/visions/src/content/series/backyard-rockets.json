@@ -1,5 +1,6 @@
 {
   "slug": "backyard-rockets",
+  "seriesCode": "BYR",
   "title": "Backyard Rockets",
   "tagline": "Build another way.",
   "atmosphere": "Sun-baked Mojave science fiction built from improvised machinery, contested water, and stubborn optimism.",
@@ -33,6 +34,11 @@
   "audiencePromise": "A bright, tactile science-fiction adventure about audacious machines and the people stubborn enough to build a future of their own.",
   "releases": [
     {
+      "catalogId": "BYR-E002-2026-002",
+      "publicationType": "E",
+      "publicationNumber": 2,
+      "catalogSequence": 2,
+      "issueNumber": 2,
       "title": "Issue 02: The Copper Lattice",
       "cover": "/images/covers/backyard-rockets-issue-02.jpg",
       "description": "A complete 30-page story that widens the Launch-Shop route and the pressure closing around it.",
@@ -41,6 +47,11 @@
       "externalLink": "/issues/backyard-rockets/issue-02/backyard-rockets-issue-02.pdf"
     },
     {
+      "catalogId": "BYR-E001-2026-001",
+      "publicationType": "E",
+      "publicationNumber": 1,
+      "catalogSequence": 1,
+      "issueNumber": 1,
       "title": "Issue 01",
       "cover": "/images/covers/backyard-rockets-issue-01.jpg",
       "description": "Launch-Shop attempts to prove that one homemade rocket can become something much bigger.",

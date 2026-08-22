@@ -1,5 +1,6 @@
 {
   "slug": "vikings-2026",
+  "seriesCode": "VIK",
   "title": "Vikings 2026!",
   "tagline": "Ancient warriors. Modern bureaucracy. One very confused apartment building.",
   "atmosphere": "Temporal displacement comedy with paperwork, roommates, and bad assumptions.",
@@ -33,6 +34,11 @@
   "audiencePromise": "A sharp, character-led comedy about people trying to make sense of systems built for someone else.",
   "releases": [
     {
+      "catalogId": "VIK-E001-2026-001",
+      "publicationType": "E",
+      "publicationNumber": 1,
+      "catalogSequence": 1,
+      "issueNumber": 1,
       "title": "Issue 01",
       "releaseType": "Collected comic issue",
       "releaseDate": "2026-08-22",
@@ -41,6 +47,11 @@
       "externalLink": "/issues/vikings-2026/issue-01/vikings-2026-issue-01.pdf"
     },
     {
+      "catalogId": "VIK-E002-2026-002",
+      "publicationType": "E",
+      "publicationNumber": 2,
+      "catalogSequence": 2,
+      "issueNumber": 2,
       "title": "Issue 02",
       "releaseType": "Comic Issue",
       "releaseDate": "2026-08-22"

@@ -1,5 +1,6 @@
 {
   "slug": "rex-fleet",
+  "seriesCode": "REX",
   "title": "Rex Fleet",
   "tagline": "Three powers. One frontier.",
   "atmosphere": "A lived-in political space opera about command, memory, and survival after the Shattering.",
@@ -33,6 +34,11 @@
   "audiencePromise": "Cinematic science fiction where political stakes remain inseparable from the people carrying them.",
   "releases": [
     {
+      "catalogId": "REX-E001-2026-001",
+      "publicationType": "E",
+      "publicationNumber": 1,
+      "catalogSequence": 1,
+      "issueNumber": 1,
       "title": "Issue 01: Green Corridor",
       "cover": "/images/covers/rex-fleet-issue-01-green-corridor.jpg",
       "description": "The complete first issue, including the editor's page and all eighteen story pages.",
