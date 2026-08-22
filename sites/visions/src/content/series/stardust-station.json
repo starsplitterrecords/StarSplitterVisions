@@ -1,5 +1,6 @@
 {
   "slug": "stardust-station",
+  "seriesCode": "SDS",
   "title": "Stardust Station",
   "tagline": "The coworkers are the reactor.",
   "atmosphere": "A warm, absurd workplace sitcom about forced proximity in orbit.",
@@ -25,6 +26,10 @@
   "audiencePromise": "",
   "releases": [
     {
+      "catalogId": "SDS-P001-2026-001",
+      "publicationType": "P",
+      "publicationNumber": 1,
+      "catalogSequence": 1,
       "title": "Issue 01: Mandatory Proximity — Production Preview",
       "cover": "/images/covers/stardust-station-issue-01.jpg",
       "description": "A production preview of Stardust Station's first issue, introducing QARB7919-17 and its overbuilt far-future workplace ensemble.",
