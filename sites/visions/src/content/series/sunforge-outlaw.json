@@ -1,5 +1,6 @@
 {
   "slug": "sunforge-outlaw",
+  "seriesCode": "SFO",
   "title": "Sunforge Outlaw",
   "tagline": "A developing frontier signal.",
   "atmosphere": "Heat, pursuit, and outlaw energy inside the Visions portfolio.",
@@ -25,6 +26,10 @@
   "audiencePromise": "",
   "releases": [
     {
+      "catalogId": "SFO-P001-2026-001",
+      "publicationType": "P",
+      "publicationNumber": 1,
+      "catalogSequence": 1,
       "title": "Issue 01 Preview",
       "cover": "/images/covers/sunforge-outlaw-issue-01.png",
       "description": "The first public visual signal for Sunforge Outlaw.",
