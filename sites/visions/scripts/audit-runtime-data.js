@@ -13,6 +13,8 @@ const errors = []
 const warnings = []
 const referencedRuntimeImages = new Set()
 const imageExtensions = new Set(['.jpg', '.jpeg', '.png', '.webp', '.gif', '.svg'])
+const publicationTypes = new Set(['E', 'A', 'C', 'S', 'P'])
+const catalogIdPattern = /^([A-Z0-9]{3})-([A-Z])(\d{3})-(\d{4})-(\d{3})$/
 
 function repoPath(...segments) {
   return path.join(repoRoot, ...segments)
@@ -94,10 +96,13 @@ assertFileExists('src/content/pages/contact.json')
 assertFileExists('src/content/pages/press.json')
 assertFileExists('src/components/SeriesIndex.jsx')
 assertFileExists('src/components/SeriesPage.jsx')
+assertFileExists('src/components/IssueLibrary.jsx')
+assertFileExists('src/components/IssueLibrary.css')
 assertFileExists('src/components/Reader.jsx')
 assertFileExists('src/components/shared/ImageWithFallback.jsx')
 assertFileExists('src/utils/routes.js')
 assertFileExists('src/utils/dailyPages.js')
+assertFileExists('src/utils/issueState.js')
 
 const pagesConfigPath = path.join(monorepoRoot, '.pages.yml')
 if (!fs.existsSync(pagesConfigPath)) errors.push('Root .pages.yml is missing')
@@ -134,6 +139,8 @@ if (seriesFiles.length === 0) {
 
 const seriesCatalog = {}
 const slugSources = new Map()
+const seriesCodeSources = new Map()
+const catalogIdSources = new Map()
 
 seriesFiles.forEach((filePath) => {
   const relativePath = path.relative(repoRoot, filePath).replaceAll(path.sep, '/')
@@ -161,6 +168,14 @@ seriesFiles.forEach((filePath) => {
     errors.push(`${relativePath}.title is required`)
   }
 
+  if (!/^[A-Z0-9]{3}$/.test(series.seriesCode || '')) {
+    errors.push(`${relativePath}.seriesCode must be a stable three-character uppercase code`)
+  } else if (seriesCodeSources.has(series.seriesCode)) {
+    errors.push(`${relativePath}.seriesCode duplicates ${seriesCodeSources.get(series.seriesCode)}`)
+  } else {
+    seriesCodeSources.set(series.seriesCode, relativePath)
+  }
+
   if (!['active', 'coming-soon', 'archived'].includes(series.status)) {
     errors.push(`${relativePath}.status must be active, coming-soon, or archived`)
   }
@@ -168,12 +183,69 @@ seriesFiles.forEach((filePath) => {
   assertRuntimeImagePath(series.hero, `${relativePath}.hero`)
   assertRuntimeImagePath(series.homepage?.cover, `${relativePath}.homepage.cover`)
 
+  const catalogSequences = new Set()
+
   ;(series.releases || []).forEach((release, index) => {
+    const context = `${relativePath}.releases[${index}]`
+
     if (!release.title) {
-      errors.push(`${relativePath}.releases[${index}].title is required`)
+      errors.push(`${context}.title is required`)
     }
-    assertRuntimeImagePath(release.cover, `${relativePath}.releases[${index}].cover`)
-    assertDate(release.releaseDate, `${relativePath}.releases[${index}].releaseDate`, { optional: true })
+
+    if (!publicationTypes.has(release.publicationType)) {
+      errors.push(`${context}.publicationType must be one of ${[...publicationTypes].join(', ')}`)
+    }
+
+    if (!Number.isInteger(release.publicationNumber) || release.publicationNumber < 1) {
+      errors.push(`${context}.publicationNumber must be a positive integer`)
+    }
+
+    if (!Number.isInteger(release.catalogSequence) || release.catalogSequence < 1) {
+      errors.push(`${context}.catalogSequence must be a positive integer`)
+    } else if (catalogSequences.has(release.catalogSequence)) {
+      errors.push(`${context}.catalogSequence duplicates ${release.catalogSequence} within ${series.slug}`)
+    } else {
+      catalogSequences.add(release.catalogSequence)
+    }
+
+    const catalogMatch = typeof release.catalogId === 'string'
+      ? release.catalogId.match(catalogIdPattern)
+      : null
+
+    if (!catalogMatch) {
+      errors.push(`${context}.catalogId must use SER-TNNN-YYYY-NNN format`)
+    } else {
+      const [, idSeriesCode, idPublicationType, idPublicationNumber, , idCatalogSequence] = catalogMatch
+
+      if (idSeriesCode !== series.seriesCode) {
+        errors.push(`${context}.catalogId must start with seriesCode ${series.seriesCode}`)
+      }
+
+      if (idPublicationType !== release.publicationType) {
+        errors.push(`${context}.catalogId publication type must match publicationType`)
+      }
+
+      if (Number(idPublicationNumber) !== release.publicationNumber) {
+        errors.push(`${context}.catalogId publication number must match publicationNumber`)
+      }
+
+      if (Number(idCatalogSequence) !== release.catalogSequence) {
+        errors.push(`${context}.catalogId final sequence must match catalogSequence`)
+      }
+
+      if (catalogIdSources.has(release.catalogId)) {
+        errors.push(`${context}.catalogId duplicates ${catalogIdSources.get(release.catalogId)}`)
+      } else {
+        catalogIdSources.set(release.catalogId, context)
+      }
+    }
+
+    if (release.publicationType === 'E' && (!Number.isInteger(release.issueNumber) || release.issueNumber < 1)) {
+      errors.push(`${context}.issueNumber is required for regular issues`)
+    }
+
+    assertRuntimeImagePath(release.cover, `${context}.cover`)
+    assertDate(release.releaseDate, `${context}.releaseDate`, { optional: true })
   })
 
   const pageNumbers = new Set()
