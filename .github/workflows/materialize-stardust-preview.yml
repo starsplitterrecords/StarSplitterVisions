@@ -1,0 +1,40 @@
+name: Materialize Stardust preview PDF
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.staging/stardust-preview/**'
+      - '.github/workflows/materialize-stardust-preview.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - name: Reconstruct approved PDF
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p sites/visions/public/issues/stardust-station/issue-01
+          cat .staging/stardust-preview/chunk-*.txt | base64 --decode > sites/visions/public/issues/stardust-station/issue-01/stardust-station-issue-01-mandatory-proximity-preview.pdf
+          test "$(stat -c%s sites/visions/public/issues/stardust-station/issue-01/stardust-station-issue-01-mandatory-proximity-preview.pdf)" -gt 600000
+          head -c 4 sites/visions/public/issues/stardust-station/issue-01/stardust-station-issue-01-mandatory-proximity-preview.pdf | grep -q '%PDF'
+      - name: Remove transfer staging and commit release asset
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf .staging/stardust-preview
+          rm -f .github/workflows/materialize-stardust-preview.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add sites/visions/public/issues/stardust-station/issue-01/stardust-station-issue-01-mandatory-proximity-preview.pdf .staging .github/workflows/materialize-stardust-preview.yml
+          git commit -m 'Add approved Stardust Issue 01 preview PDF'
+          git push origin HEAD:${{ github.head_ref }}
