@@ -1,5 +1,6 @@
 {
   "slug": "azure-reach",
+  "seriesCode": "AZR",
   "title": "Azure Reach",
   "tagline": "The wonder is public. The work is invisible.",
   "atmosphere": "Bright marine-park spectacle seen through the exhausted precision of the staff who keep it possible.",
@@ -19,6 +20,10 @@
   },
   "releases": [
     {
+      "catalogId": "AZR-P001-2026-001",
+      "publicationType": "P",
+      "publicationNumber": 1,
+      "catalogSequence": 1,
       "title": "Issue 01 Preview",
       "releaseType": "Preview",
       "releaseDate": "2026-08-02",
