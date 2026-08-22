@@ -1,12 +1,13 @@
 {
   "featuredHeading": "Featured Series",
   "featuredSeries": [
+    "backyard-rockets",
     "rex-fleet",
-    "vikings-2026",
-    "azure-reach"
+    "vikings-2026"
   ],
   "moreWorldsHeading": "More Worlds",
   "moreWorlds": [
+    "azure-reach",
     "stardust-station",
     "sunforge-outlaw",
     "low-tide-signal"
@@ -14,9 +15,9 @@
   "viewAllLabel": "View All Series →",
   "latestRelease": {
     "heading": "Latest Release",
-    "series": "rex-fleet",
-    "title": "Rex Fleet - Issue 01: Green Corridor",
-    "image": "/images/covers/rex-fleet-issue-01-green-corridor.jpg"
+    "series": "backyard-rockets",
+    "title": "Backyard Rockets - Issue 02: The Copper Lattice",
+    "image": "/images/covers/backyard-rockets-issue-02.jpg"
   },
   "soundtrackSpotlight": {
     "enabled": true,
