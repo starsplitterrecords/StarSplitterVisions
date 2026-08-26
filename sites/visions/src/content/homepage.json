@@ -15,9 +15,9 @@
   "viewAllLabel": "View All Series →",
   "latestRelease": {
     "heading": "Latest Release",
-    "series": "backyard-rockets",
-    "title": "Backyard Rockets - Issue 02: The Copper Lattice",
-    "image": "/images/covers/backyard-rockets-issue-02.jpg"
+    "series": "azure-reach",
+    "title": "Azure Reach - Issue 01: Sea Turtle Thursdays",
+    "image": "/images/covers/azure-reach-issue-01-cover.jpg"
   },
   "soundtrackSpotlight": {
     "enabled": true,
