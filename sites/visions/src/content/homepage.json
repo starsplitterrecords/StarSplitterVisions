@@ -15,9 +15,9 @@
   "viewAllLabel": "View All Series →",
   "latestRelease": {
     "heading": "Latest Release",
-    "series": "azure-reach",
-    "title": "Azure Reach - Issue 01: Sea Turtle Thursdays",
-    "image": "/images/covers/azure-reach-issue-01-cover.jpg"
+    "series": "stardust-station",
+    "title": "Stardust Station - Issue 01: Mandatory Proximity",
+    "image": "/images/covers/stardust-station-issue-01.jpg"
   },
   "soundtrackSpotlight": {
     "enabled": true,
