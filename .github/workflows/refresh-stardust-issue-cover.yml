@@ -1,0 +1,77 @@
+name: Refresh Stardust Issue 01 cover
+
+on:
+  push:
+    branches:
+      - agent/stardust-station-cover-refresh
+    paths:
+      - '.github/workflows/refresh-stardust-issue-cover.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/stardust-station-cover-refresh
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install PDF tools
+        run: pip install pypdf reportlab pillow
+      - name: Replace issue cover with canonical Visions cover
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          from pypdf import PdfReader, PdfWriter
+          from reportlab.pdfgen import canvas
+          from reportlab.lib.utils import ImageReader
+
+          cover = Path('sites/visions/public/images/covers/stardust-station-issue-01.jpg')
+          issue = Path('sites/visions/public/issues/stardust-station/issue-01/stardust-station-issue-01-mandatory-proximity.pdf')
+          temp_cover = Path('/tmp/stardust-cover.pdf')
+          temp_issue = Path('/tmp/stardust-issue.pdf')
+
+          reader = PdfReader(str(issue))
+          if len(reader.pages) != 23:
+              raise SystemExit(f'Expected 23 pages, found {len(reader.pages)}')
+
+          width = float(reader.pages[0].mediabox.width)
+          height = float(reader.pages[0].mediabox.height)
+
+          c = canvas.Canvas(str(temp_cover), pagesize=(width, height))
+          c.drawImage(ImageReader(str(cover)), 0, 0, width=width, height=height, preserveAspectRatio=False, mask='auto')
+          c.showPage()
+          c.save()
+
+          cover_reader = PdfReader(str(temp_cover))
+          writer = PdfWriter()
+          writer.add_page(cover_reader.pages[0])
+          for page in reader.pages[1:]:
+              writer.add_page(page)
+          with temp_issue.open('wb') as fh:
+              writer.write(fh)
+
+          verify = PdfReader(str(temp_issue))
+          if len(verify.pages) != 23:
+              raise SystemExit('Cover replacement changed page count')
+
+          temp_issue.replace(issue)
+          print(f'Rebuilt {issue} with canonical cover; pages={len(verify.pages)}')
+          PY
+      - name: Commit durable release asset
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f .github/workflows/refresh-stardust-issue-cover.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Refresh Stardust Station Issue 01 cover'
+          git push origin HEAD:agent/stardust-station-cover-refresh
