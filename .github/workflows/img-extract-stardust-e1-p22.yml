@@ -1,0 +1,27 @@
+name: IMG extract Stardust E1 P22
+
+on:
+  push:
+    branches:
+      - img-extract-stardust-e1-p22-20260906
+    paths:
+      - '.github/workflows/img-extract-stardust-e1-p22.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  export-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Visions
+        uses: actions/checkout@v4
+      - name: Verify target exists
+        run: test -f sites/visions/public/images/pages/stardust-station/issue-01/page-022.jpg
+      - name: Upload canonical page
+        uses: actions/upload-artifact@v4
+        with:
+          name: stardust-station-issue-01-page-022
+          path: sites/visions/public/images/pages/stardust-station/issue-01/page-022.jpg
+          if-no-files-found: error
+          retention-days: 1
