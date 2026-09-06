@@ -1,4 +1,4 @@
-name: IMG extract Rex Fleet I01 P019
+name: IMG extract Rex Fleet I01 references
 
 on:
   push:
@@ -16,12 +16,18 @@ jobs:
     steps:
       - name: Check out Visions
         uses: actions/checkout@v4
-      - name: Verify target exists
-        run: test -f sites/visions/public/images/pages/rex-fleet/issue-01/page-019.jpg
-      - name: Upload canonical page
+      - name: Verify targets exist
+        run: |
+          test -f sites/visions/public/images/pages/rex-fleet/issue-01/page-005.jpg
+          test -f sites/visions/public/images/pages/rex-fleet/issue-01/page-006.jpg
+          test -f sites/visions/public/images/pages/rex-fleet/issue-01/page-019.jpg
+      - name: Upload canonical references
         uses: actions/upload-artifact@v4
         with:
-          name: rex-fleet-issue-01-page-019
-          path: sites/visions/public/images/pages/rex-fleet/issue-01/page-019.jpg
+          name: rex-fleet-issue-01-selected-references
+          path: |
+            sites/visions/public/images/pages/rex-fleet/issue-01/page-005.jpg
+            sites/visions/public/images/pages/rex-fleet/issue-01/page-006.jpg
+            sites/visions/public/images/pages/rex-fleet/issue-01/page-019.jpg
           if-no-files-found: error
           retention-days: 1
