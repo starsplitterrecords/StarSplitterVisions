@@ -1,0 +1,27 @@
+name: IMG extract Rex Fleet I01 P019
+
+on:
+  push:
+    branches:
+      - img-extract-rex-fleet-i01-p019-20260906
+    paths:
+      - '.github/workflows/img-extract-rex-fleet-i01-p019.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  export-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Visions
+        uses: actions/checkout@v4
+      - name: Verify target exists
+        run: test -f sites/visions/public/images/pages/rex-fleet/issue-01/page-019.jpg
+      - name: Upload canonical page
+        uses: actions/upload-artifact@v4
+        with:
+          name: rex-fleet-issue-01-page-019
+          path: sites/visions/public/images/pages/rex-fleet/issue-01/page-019.jpg
+          if-no-files-found: error
+          retention-days: 1
