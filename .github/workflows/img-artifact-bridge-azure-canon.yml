@@ -27,3 +27,4 @@ jobs:
             sites/visions/public/images/pages/azure-reach/issue-01/page-010.jpg
             sites/visions/public/images/pages/azure-reach/issue-01/page-014.jpg
           retention-days: 1
+# trigger readback
