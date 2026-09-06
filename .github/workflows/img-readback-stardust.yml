@@ -18,9 +18,8 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p readback
-          cp sites/visions/public/images/pages/stardust-station/issue-01/page-022.jpg readback/page-022.jpg
-          cp sites/visions/public/images/pages/stardust-station/issue-01/page-005.jpg readback/page-005.jpg
-          cp sites/visions/public/images/pages/stardust-station/issue-01/page-002.jpg readback/page-002.jpg
+          cp sites/visions/public/images/pages/stardust-station/issue-01/page-001.jpg readback/page-001.jpg
+          cp sites/visions/public/images/pages/stardust-station/issue-01/page-004.jpg readback/page-004.jpg
           sha1sum readback/*
       - name: Upload exact pixels
         uses: actions/upload-artifact@v4
