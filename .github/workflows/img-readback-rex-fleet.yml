@@ -1,0 +1,29 @@
+name: IMG Readback Rex Fleet
+
+on:
+  push:
+    paths:
+      - '.github/workflows/img-readback-rex-fleet.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  readback:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare exact released references
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p readback
+          cp sites/visions/public/images/pages/rex-fleet/issue-01/page-{002..019}.jpg readback/
+          sha1sum readback/*
+      - name: Upload exact pixels
+        uses: actions/upload-artifact@v4
+        with:
+          name: rex-fleet-released-reference-readback
+          path: readback/
+          if-no-files-found: error
+          retention-days: 1
