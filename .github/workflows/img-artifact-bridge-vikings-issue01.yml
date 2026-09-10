@@ -1,0 +1,30 @@
+name: IMG artifact bridge Vikings Issue 1
+
+on:
+  push:
+    branches:
+      - img-artifact-bridge-azure-canon
+    paths:
+      - '.github/workflows/img-artifact-bridge-vikings-issue01.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  export-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify Issue 1 assets exist
+        run: |
+          test -f sites/visions/public/issues/vikings-2026/issue-01/vikings-2026-issue-01.pdf
+          test -f sites/visions/public/images/pages/vikings-2026/issue-01/page-001.jpg
+          test -f sites/visions/public/images/pages/vikings-2026/issue-01/page-026.jpg
+      - name: Upload Vikings Issue 1 canon
+        uses: actions/upload-artifact@v4
+        with:
+          name: vikings-issue01-canon-readback
+          path: |
+            sites/visions/public/issues/vikings-2026/issue-01/vikings-2026-issue-01.pdf
+            sites/visions/public/images/pages/vikings-2026/issue-01/*.jpg
+          retention-days: 1
