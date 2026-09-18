@@ -1,0 +1,40 @@
+{
+  "slug": "division-threshold",
+  "title": "Division Threshold",
+  "tagline": "We were not built to survive. We were built to be worth saving.",
+  "atmosphere": "Industrial biotech, field operations, and moral pressure at the edge of survivability.",
+  "description": "A science-fiction series about organosynthetic life built for impossible hazards—and the people forced to decide whether purpose is assigned or chosen.",
+  "status": "coming-soon",
+  "developmentStatus": "In production",
+  "worldLabel": "Biotech Science Fiction",
+  "currentRelease": "Issue 01: Purpose Updated",
+  "hero": null,
+  "accent": "#2FA8FF",
+  "format": "Comic series / issue in production",
+  "worldPremise": "An organosynthetic intelligence created to endure environments no human can survive begins asking questions its makers never planned to answer.",
+  "homepage": {
+    "issue": "Issue 01 — In Production",
+    "hook": "An organosynthetic intelligence built for impossible hazards begins rewriting the purpose it was given.",
+    "cover": null
+  },
+  "narrativeForms": [
+    "biotech science fiction",
+    "field-operations drama",
+    "artificial-life thriller"
+  ],
+  "themes": [
+    "Purpose and autonomy",
+    "Creation and responsibility",
+    "Survival and personhood"
+  ],
+  "seriesEngine": "Every threshold event tests whether a created life can remain a tool once it begins making choices of its own.",
+  "coreConflict": "The mission requires control; the life they created requires freedom.",
+  "readerEntry": "Issue 01: Purpose Updated begins with the decision to keep an impossible life alive.",
+  "audiencePromise": "Grounded, high-pressure science fiction where survival technology becomes a question of personhood.",
+  "releases": [],
+  "dailyPages": [],
+  "extrasTitle": "Recovered Artifacts",
+  "extras": [],
+  "audioTitle": "Signal Audio",
+  "audio": []
+}
