@@ -45,45 +45,139 @@
       "cover": "/images/covers/vikings-2026-issue-01.jpg",
       "description": "The complete first issue, including the municipal editorial page and credits.",
       "externalLink": "/issues/vikings-2026/issue-01/vikings-2026-issue-01.pdf"
-    },
-    {
-      "catalogId": "VIK-E002-2026-002",
-      "publicationType": "E",
-      "publicationNumber": 2,
-      "catalogSequence": 2,
-      "issueNumber": 2,
-      "title": "Issue 02",
-      "releaseType": "Comic Issue",
-      "releaseDate": "2026-08-22"
     }
   ],
   "dailyPages": [
-    { "pageNumber": 1, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-001.jpg" },
-    { "pageNumber": 2, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-002.jpg" },
-    { "pageNumber": 3, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-003.jpg" },
-    { "pageNumber": 4, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-004.jpg" },
-    { "pageNumber": 5, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-005.jpg" },
-    { "pageNumber": 6, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-006.jpg" },
-    { "pageNumber": 7, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-007.jpg" },
-    { "pageNumber": 8, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-008.jpg" },
-    { "pageNumber": 9, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-009.jpg" },
-    { "pageNumber": 10, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-010.jpg" },
-    { "pageNumber": 11, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-011.jpg" },
-    { "pageNumber": 12, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-012.jpg" },
-    { "pageNumber": 13, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-013.jpg" },
-    { "pageNumber": 14, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-014.jpg" },
-    { "pageNumber": 15, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-015.jpg" },
-    { "pageNumber": 16, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-016.jpg" },
-    { "pageNumber": 17, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-017.jpg" },
-    { "pageNumber": 18, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-018.jpg" },
-    { "pageNumber": 19, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-019.jpg" },
-    { "pageNumber": 20, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-020.jpg" },
-    { "pageNumber": 21, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-021.jpg" },
-    { "pageNumber": 22, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-022.jpg" },
-    { "pageNumber": 23, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-023.jpg" },
-    { "pageNumber": 24, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-024.jpg" },
-    { "pageNumber": 25, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-025.jpg" },
-    { "pageNumber": 26, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-026.jpg" }
+    {
+      "pageNumber": 1,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-001.jpg"
+    },
+    {
+      "pageNumber": 2,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-002.jpg"
+    },
+    {
+      "pageNumber": 3,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-003.jpg"
+    },
+    {
+      "pageNumber": 4,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-004.jpg"
+    },
+    {
+      "pageNumber": 5,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-005.jpg"
+    },
+    {
+      "pageNumber": 6,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-006.jpg"
+    },
+    {
+      "pageNumber": 7,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-007.jpg"
+    },
+    {
+      "pageNumber": 8,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-008.jpg"
+    },
+    {
+      "pageNumber": 9,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-009.jpg"
+    },
+    {
+      "pageNumber": 10,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-010.jpg"
+    },
+    {
+      "pageNumber": 11,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-011.jpg"
+    },
+    {
+      "pageNumber": 12,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-012.jpg"
+    },
+    {
+      "pageNumber": 13,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-013.jpg"
+    },
+    {
+      "pageNumber": 14,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-014.jpg"
+    },
+    {
+      "pageNumber": 15,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-015.jpg"
+    },
+    {
+      "pageNumber": 16,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-016.jpg"
+    },
+    {
+      "pageNumber": 17,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-017.jpg"
+    },
+    {
+      "pageNumber": 18,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-018.jpg"
+    },
+    {
+      "pageNumber": 19,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-019.jpg"
+    },
+    {
+      "pageNumber": 20,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-020.jpg"
+    },
+    {
+      "pageNumber": 21,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-021.jpg"
+    },
+    {
+      "pageNumber": 22,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-022.jpg"
+    },
+    {
+      "pageNumber": 23,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-023.jpg"
+    },
+    {
+      "pageNumber": 24,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-024.jpg"
+    },
+    {
+      "pageNumber": 25,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-025.jpg"
+    },
+    {
+      "pageNumber": 26,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-026.jpg"
+    }
   ],
   "extrasTitle": "Recovered Artifacts",
   "audioTitle": "Signal Audio"
