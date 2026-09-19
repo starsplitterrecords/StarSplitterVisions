@@ -1,36 +1,36 @@
 {
   "slug": "division-threshold",
   "title": "Division Threshold",
-  "tagline": "We were not built to survive. We were built to be worth saving.",
-  "atmosphere": "Industrial biotech, field operations, and moral pressure at the edge of survivability.",
-  "description": "A science-fiction series about organosynthetic life built for impossible hazards—and the people forced to decide whether purpose is assigned or chosen.",
+  "tagline": "Who gets to count as a person—and who gets to decide?",
+  "atmosphere": "A sophisticated, glamorous, dangerous vertical city where legal status, bodily autonomy, access, and public treatment make social hierarchy visible.",
+  "description": "A prestige science-fiction political thriller set in the Stack, where Baseline Humans, Augments, Organics, and Intelligences share one society while fighting over personhood, bodily autonomy, and the thresholds that determine what each is owed.",
   "status": "coming-soon",
   "developmentStatus": "In production",
-  "worldLabel": "Biotech Science Fiction",
-  "currentRelease": "Issue 01: Purpose Updated",
+  "worldLabel": "Political Science Fiction",
+  "currentRelease": "Issue 01: Purpose Updated — In Production",
   "hero": null,
   "accent": "#2FA8FF",
   "format": "Comic series / issue in production",
-  "worldPremise": "An organosynthetic intelligence created to endure environments no human can survive begins asking questions its makers never planned to answer.",
+  "worldPremise": "The Stack is a vertically layered megacity where four adjacent forms of personhood live together under unequal legal and social rules.",
   "homepage": {
     "issue": "Issue 01 — In Production",
-    "hook": "An organosynthetic intelligence built for impossible hazards begins rewriting the purpose it was given.",
+    "hook": "Four kinds of people share one city. The line between them decides who is trusted, controlled, protected, or owned.",
     "cover": null
   },
   "narrativeForms": [
-    "biotech science fiction",
-    "field-operations drama",
-    "artificial-life thriller"
+    "political thriller",
+    "prestige science fiction",
+    "action drama"
   ],
   "themes": [
-    "Purpose and autonomy",
-    "Creation and responsibility",
-    "Survival and personhood"
+    "Legal personhood",
+    "Bodily autonomy",
+    "Coalition politics"
   ],
-  "seriesEngine": "Every threshold event tests whether a created life can remain a tool once it begins making choices of its own.",
-  "coreConflict": "The mission requires control; the life they created requires freedom.",
-  "readerEntry": "Issue 01: Purpose Updated begins with the decision to keep an impossible life alive.",
-  "audiencePromise": "Grounded, high-pressure science fiction where survival technology becomes a question of personhood.",
+  "seriesEngine": "Each crisis forces characters and institutions to redraw the threshold between person, property, citizen, and controlled body.",
+  "coreConflict": "People with overlapping interests and real differences must form shifting alliances while institutions turn bodily difference into legal hierarchy and control.",
+  "readerEntry": "Issue 01: Purpose Updated centers on Ostra-9's unauthorized rescue and the political machinery activated by it.",
+  "audiencePromise": "Grounded political science fiction where action exposes questions of personhood, law, autonomy, and coalition rather than replacing them.",
   "releases": [],
   "dailyPages": [],
   "extrasTitle": "Recovered Artifacts",
