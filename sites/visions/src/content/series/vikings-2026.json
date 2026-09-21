@@ -2,9 +2,9 @@
   "slug": "vikings-2026",
   "seriesCode": "VIK",
   "title": "Vikings 2026!",
-  "tagline": "Ancient warriors. Modern bureaucracy. One very confused apartment building.",
-  "atmosphere": "Temporal displacement comedy with paperwork, roommates, and bad assumptions.",
-  "description": "A time-displaced Viking crew collides with present-day systems, apartments, transit, and paperwork.",
+  "tagline": "Actual Vikings. Modern New York. A city full of systems they never agreed to.",
+  "atmosphere": "Grounded temporal-displacement comedy about municipal bureaucracy, neighborhood life, autonomy, and belonging.",
+  "description": "Actual 9th-century Vikings displaced into present-day New York become the responsibility of the city's underfunded Department of Temporal Integration. What begins as a collision with housing, transit, money, and paperwork becomes a story about building an ordinary life without being reduced to a case file—or to one another.",
   "status": "active",
   "developmentStatus": "Publishing / active polish",
   "worldLabel": "Temporal Comedy",
@@ -12,26 +12,26 @@
   "hero": "/images/series/vikings-2026/card.png",
   "accent": "#BAFF00",
   "format": "Daily comic / issue release",
-  "worldPremise": "People from another age survive less by conquering the present than by misunderstanding it with total confidence.",
+  "worldPremise": "Time slips are legally recognized. The hard part is not arriving in the future; it is becoming legible to a city without surrendering dignity, autonomy, or the relationships that make a life.",
   "homepage": {
     "issue": "Issue 01",
-    "hook": "Temporal bureaucracy, apartment life, and ancient warriors processing modern systems.",
+    "hook": "Actual Vikings in modern New York, learning that surviving the future is easier than being processed by it.",
     "cover": "/images/covers/vikings-2026-issue-01.jpg"
   },
   "narrativeForms": [
-    "daily comic",
-    "workplace-adjacent comedy",
-    "temporal fish-out-of-water"
+    "serialized neighborhood comedy",
+    "civic-bureaucratic comedy",
+    "ensemble character drama"
   ],
   "themes": [
-    "Bureaucracy",
-    "Misread systems",
-    "Found family under pressure"
+    "Integration versus assimilation",
+    "Autonomy and care",
+    "Work, usefulness, and belonging"
   ],
-  "seriesEngine": "Ancient worldview versus modern systems.",
-  "coreConflict": "Survival depends on learning systems nobody explains clearly.",
-  "readerEntry": "Start with page one and let the procedural confusion build panel by panel.",
-  "audiencePromise": "A sharp, character-led comedy about people trying to make sense of systems built for someone else.",
+  "seriesEngine": "Modern systems create pressure, but each issue turns on a specific want, relationship, disagreement, or choice as the household becomes more capable and less dependent.",
+  "coreConflict": "They need the city's systems to build a life, but successful integration cannot require becoming simpler, more dependent, or more alike.",
+  "readerEntry": "Start with Issue 01: arrival and intake establish the absurd premise, then the story widens into apartment life, neighborhood relationships, work, autonomy, and belonging.",
+  "audiencePromise": "A grounded ensemble comedy about smart, dignified people confronting systems nobody designed for them, with the humor coming from mismatch rather than caricature.",
   "releases": [
     {
       "catalogId": "VIK-E001-2026-001",
@@ -48,32 +48,136 @@
     }
   ],
   "dailyPages": [
-    { "pageNumber": 1, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-001.jpg" },
-    { "pageNumber": 2, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-002.jpg" },
-    { "pageNumber": 3, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-003.jpg" },
-    { "pageNumber": 4, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-004.jpg" },
-    { "pageNumber": 5, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-005.jpg" },
-    { "pageNumber": 6, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-006.jpg" },
-    { "pageNumber": 7, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-007.jpg" },
-    { "pageNumber": 8, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-008.jpg" },
-    { "pageNumber": 9, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-009.jpg" },
-    { "pageNumber": 10, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-010.jpg" },
-    { "pageNumber": 11, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-011.jpg" },
-    { "pageNumber": 12, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-012.jpg" },
-    { "pageNumber": 13, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-013.jpg" },
-    { "pageNumber": 14, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-014.jpg" },
-    { "pageNumber": 15, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-015.jpg" },
-    { "pageNumber": 16, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-016.jpg" },
-    { "pageNumber": 17, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-017.jpg" },
-    { "pageNumber": 18, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-018.jpg" },
-    { "pageNumber": 19, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-019.jpg" },
-    { "pageNumber": 20, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-020.jpg" },
-    { "pageNumber": 21, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-021.jpg" },
-    { "pageNumber": 22, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-022.jpg" },
-    { "pageNumber": 23, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-023.jpg" },
-    { "pageNumber": 24, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-024.jpg" },
-    { "pageNumber": 25, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-025.jpg" },
-    { "pageNumber": 26, "releaseDate": "2026-08-22", "image": "/images/pages/vikings-2026/issue-01/page-026.jpg" }
+    {
+      "pageNumber": 1,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-001.jpg"
+    },
+    {
+      "pageNumber": 2,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-002.jpg"
+    },
+    {
+      "pageNumber": 3,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-003.jpg"
+    },
+    {
+      "pageNumber": 4,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-004.jpg"
+    },
+    {
+      "pageNumber": 5,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-005.jpg"
+    },
+    {
+      "pageNumber": 6,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-006.jpg"
+    },
+    {
+      "pageNumber": 7,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-007.jpg"
+    },
+    {
+      "pageNumber": 8,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-008.jpg"
+    },
+    {
+      "pageNumber": 9,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-009.jpg"
+    },
+    {
+      "pageNumber": 10,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-010.jpg"
+    },
+    {
+      "pageNumber": 11,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-011.jpg"
+    },
+    {
+      "pageNumber": 12,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-012.jpg"
+    },
+    {
+      "pageNumber": 13,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-013.jpg"
+    },
+    {
+      "pageNumber": 14,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-014.jpg"
+    },
+    {
+      "pageNumber": 15,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-015.jpg"
+    },
+    {
+      "pageNumber": 16,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-016.jpg"
+    },
+    {
+      "pageNumber": 17,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-017.jpg"
+    },
+    {
+      "pageNumber": 18,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-018.jpg"
+    },
+    {
+      "pageNumber": 19,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-019.jpg"
+    },
+    {
+      "pageNumber": 20,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-020.jpg"
+    },
+    {
+      "pageNumber": 21,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-021.jpg"
+    },
+    {
+      "pageNumber": 22,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-022.jpg"
+    },
+    {
+      "pageNumber": 23,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-023.jpg"
+    },
+    {
+      "pageNumber": 24,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-024.jpg"
+    },
+    {
+      "pageNumber": 25,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-025.jpg"
+    },
+    {
+      "pageNumber": 26,
+      "releaseDate": "2026-08-22",
+      "image": "/images/pages/vikings-2026/issue-01/page-026.jpg"
+    }
   ],
   "extrasTitle": "Recovered Artifacts",
   "audioTitle": "Signal Audio"
