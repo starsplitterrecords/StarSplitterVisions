@@ -1,6 +1,8 @@
 name: Deep Release Validation and Source Forensics
 on:
   workflow_dispatch:
+permissions:
+  contents: read
 jobs:
   forensic-audit:
     runs-on: ubuntu-latest
