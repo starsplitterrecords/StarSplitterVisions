@@ -1,0 +1,32 @@
+name: Audit released JPEG completeness
+on:
+  pull_request:
+    paths:
+      - 'sites/visions/public/images/pages/**'
+      - 'sites/visions/public/images/covers/**'
+      - 'sites/visions/scripts/audit-published-jpegs.cjs'
+      - '.github/workflows/audit-published-jpegs.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'sites/visions/public/images/pages/**'
+      - 'sites/visions/public/images/covers/**'
+      - 'sites/visions/scripts/audit-published-jpegs.cjs'
+      - '.github/workflows/audit-published-jpegs.yml'
+  workflow_dispatch:
+jobs:
+  jpeg-integrity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check sites/visions/scripts/audit-published-jpegs.cjs
+      - run: node sites/visions/scripts/audit-published-jpegs.cjs --json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: published-jpeg-audit
+          path: sites/visions/published-jpeg-audit.json
+          if-no-files-found: warn
