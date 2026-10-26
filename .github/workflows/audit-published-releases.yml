@@ -40,5 +40,11 @@ jobs:
           node-version: '24'
       - run: node --check scripts/audit-published-releases.js
       - run: node scripts/audit-published-releases.js
-      - if: ${{ github.event_name == 'workflow_dispatch' && inputs.probe_live }}
-        run: node scripts/audit-published-releases.js --live
+      - name: Probe deployed series/reader routes and assets (advisory before merge)
+        if: ${{ github.event_name == 'pull_request' }}
+        timeout-minutes: 5
+        continue-on-error: true
+        run: node scripts/audit-published-releases.js --live --live-strict
+      - name: Probe deployed routes on demand
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.probe_live }}
+        run: node scripts/audit-published-releases.js --live --live-strict
