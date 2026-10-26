@@ -4,11 +4,15 @@
 // Source is StarSplitterVisions, never RexPrompt approved-unpublished drafts.
 import fs from 'node:fs';
 import path from 'node:path';
+import crypto from 'node:crypto';
+import process from 'node:process';
 import {fileURLToPath} from 'node:url';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const pub=path.join(root,'public'),content=path.join(root,'src/content/series');
-const args=process.argv.slice(2),live=args.includes('--live'),json=args.includes('--json');
-if(args.some(x=>!['--live','--json'].includes(x)))throw Error('Unknown argument; use --live and/or --json');
+const args=process.argv.slice(2),live=args.includes('--live'),json=args.includes('--json'),strict=args.includes('--strict');
+if(args.some(x=>!['--live','--json','--strict'].includes(x)))throw Error('Unknown argument; use --live, --json, and/or --strict');
+const baseline=JSON.parse(fs.readFileSync(path.join(root,'scripts/known-release-defects.json'),'utf8'));
+const waivers=baseline.defects||{};
 const errs=[],warnings=[],records=[],catalogIds=new Set();
 const kindOf=b=>b.length>=8&&b.toString('ascii',0,4)==='%PDF'?'pdf':
  (b.length>=4&&b[0]===255&&b[1]===216&&b[b.length-2]===255&&b[b.length-1]===217?'jpeg':
@@ -23,7 +27,13 @@ function inspect(p,what,expected){
  if(!file){errs.push(what+': unsafe public path '+String(p));return false}
  if(!fs.existsSync(file)||!fs.statSync(file).isFile()){errs.push(what+': missing public file '+p);return false}
  const b=fs.readFileSync(file),kind=kindOf(b);
- if(!expected.includes(kind)){errs.push(what+': invalid file signature '+kind+' at '+p);return false}
+ if(!expected.includes(kind)){
+  const record=waivers[p],gitSha=crypto.createHash('sha1').update('blob '+b.length+'\0').update(b).digest('hex');
+  if(!strict&&record?.gitBlobSha===gitSha&&record?.observedSignature===kind){
+    warnings.push(what+': known damaged legacy binary, tracked for replacement: '+p);return false;
+  }
+  errs.push(what+': invalid file signature '+kind+' at '+p);return false;
+}
  if(b.length<100)errs.push(what+': improbably small published binary '+p);
  return true;
 }
