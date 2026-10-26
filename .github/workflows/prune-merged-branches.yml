@@ -30,13 +30,17 @@ jobs:
             pr_sha="$(jq -r '.head.sha' <<<"$details")"
             pr_repo="$(jq -r '.head.repo.full_name // ""' <<<"$details")"
             actual_sha="$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/$branch" --jq '.object.sha' 2>/dev/null || true)"
+            if [[ -z "$actual_sha" ]]; then
+              # Some older slash-named refs are not returned by the single-ref endpoint.
+              actual_sha="$(git ls-remote "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "refs/heads/$branch" | awk '{print $1}' || true)"
+            fi
             if [[ "$merged" == true && "$pr_repo" == "$GITHUB_REPOSITORY" &&
                   "$pr_branch" == "$branch" && "$pr_sha" == "$expected_sha" &&
                   "$actual_sha" == "$expected_sha" ]]; then
               gh api -X DELETE "repos/$GITHUB_REPOSITORY/git/refs/heads/$branch"
               echo "Pruned merged #$pr: $branch"
             else
-              echo "Preserved #$pr $branch (not present, not merged, or tip changed)"
+              echo "Preserved #$pr $branch (merged=$merged, repo_ok=$([[ "$pr_repo" == "$GITHUB_REPOSITORY" ]] && echo yes || echo no), name_ok=$([[ "$pr_branch" == "$branch" ]] && echo yes || echo no), pr_sha_ok=$([[ "$pr_sha" == "$expected_sha" ]] && echo yes || echo no), tip_ok=$([[ "$actual_sha" == "$expected_sha" ]] && echo yes || echo no))"
             fi
           done <<'VERIFIED_MERGED_BRANCHES'
           146|audit/c3-jpeg-completeness-20261026|da2621c49cde7c840c5e6a99efd7b8ec52cd92be
