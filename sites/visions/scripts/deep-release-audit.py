@@ -105,6 +105,8 @@ def check_pdf(url,slug,num,pages,align):
                         dest.mkdir(parents=True,exist_ok=True)
                         target=dest/("page-%03d."%(i+1)+ext)
                         target.write_bytes(data)
+                        if different_valid_reader:
+                            (dest/("reader-current-page-%03d."%(i+1)+"jpg")).write_bytes(original)
                         out["pdfCandidates"].append({"reader":x["url"],"candidate":str(target),"reviewReason":"reader-versus-PDF content difference" if different_valid_reader else "truncated published reader JPEG","sourcePdf":url,
                             "pdfPage":j+1,"xref":xref,"dimensions":dim,"sha256":digest(data),
                             "visualDistanceToPDF":round(delta,3),"isBrokenJPEGExactPrefix":data.startswith(original),
