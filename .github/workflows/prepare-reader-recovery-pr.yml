@@ -1,0 +1,51 @@
+name: Prepare PDF-Sourced Reader Recovery Review PR
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'sites/visions/scripts/prepare-reader-recovery-pr.py'
+      - '.github/workflows/prepare-reader-recovery-pr.yml'
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  create-review-candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pillow pymupdf
+      - name: Create separate review branch with exact collected-PDF images
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          branch="review/d3-original-pdf-reader-pages-20261025"
+          if git ls-remote --heads origin "$branch" | grep -q "$branch"; then
+            echo "Review branch already exists; do not overwrite"
+            exit 0
+          fi
+          git switch -c "$branch"
+          cd sites/visions
+          python scripts/prepare-reader-recovery-pr.py > /tmp/recovery-source-provenance.json
+          cd ../..
+          git add sites/visions/public/images/pages/rex-fleet/issue-01/page-002.jpg \
+            sites/visions/public/images/pages/rex-fleet/issue-01/page-004.jpg \
+            sites/visions/public/images/pages/rex-fleet/issue-01/page-009.jpg \
+            sites/visions/public/images/pages/rex-fleet/issue-01/page-011.jpg \
+            sites/visions/public/images/pages/rex-fleet/issue-01/page-015.jpg \
+            sites/visions/public/images/pages/stardust-station/issue-01/page-020.jpg
+          test "$(git diff --cached --name-only | wc -l)" -eq 6
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Review source-verbatim reader art recovery from current collected PDFs"
+          git push -u origin "$branch"
+          gh pr create --draft --head "$branch" --base main \
+            --title "REVIEW REQUIRED: restore six truncated reader pages from published collected PDFs" \
+            --body "Source-verbatim image candidates only; not approved publication. All six original JPEG binaries extracted without re-encoding, alteration or upscaling from the actual published collected PDFs, with exact PDF hash, embedded-page xref and image SHA256 pinned in prepare-reader-recovery-pr.py. Rex Fleet reader 002/004/009/011/015: 864x1296; Stardust Station reader 020: 1600x2400. Require human pixel, identity, lettering, continuity and native print-resolution review before merge; the 864-wide Rex sources are not print-master quality. If approved, rebuild collected PDFs only if replacements change their already embedded content (these copies came directly from current PDFs), rerun strict audit and live probes, remove six corresponding exceptions from known-release-defects.json in the same approval change. THIS PR MUST NOT AUTO-MERGE."
