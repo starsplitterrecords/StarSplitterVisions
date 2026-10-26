@@ -48,7 +48,7 @@ jobs:
           144|audit/d3-edition-reader-correlation-20261025|92f7fe8685cb24e36b8102874f750d3319cf3f64
           141|audit/c3-released-image-geometry-20261025|6e8f43d6f12fe690f2fd89498daed0adc27405da
           142|tools/d3-source-verified-recovery-20261025|32629c43090a0388120315ef336e823c8b96e56e
-          140|audit/d3-full-release-forensics-20261025|d824f05de0d333082a31eec532ac1c79a35e432
+          140|audit/d3-full-release-forensics-20261025|d824f05de0d333082a31eec532ac1c79a35e4322
           139|fix/d3-vercel-reader-deep-links-20261025|9aa450aa043cdc65c76bf8dd3c607b360650496f
           138|feature/d3-live-reader-validation-20261025|b317a2e7231a047a94793e2c9d4f9070139dfe6d
           136|feature/d3-release-audit-20261025|e9e65794b71942516a04729a71810e1b9e04bdbd
