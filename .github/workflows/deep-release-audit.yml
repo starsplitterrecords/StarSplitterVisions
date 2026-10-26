@@ -1,22 +1,6 @@
 name: Deep Release Validation and Source Forensics
 on:
-  pull_request:
-    paths:
-      - 'sites/visions/scripts/deep-release-audit.py'
-      - '.github/workflows/deep-release-audit.yml'
-      - 'sites/visions/src/content/series/**'
-      - 'sites/visions/public/images/pages/**'
-      - 'sites/visions/public/images/covers/**'
-      - 'sites/visions/public/issues/**'
-  push:
-    branches: [main]
-    paths:
-      - 'sites/visions/scripts/deep-release-audit.py'
-      - '.github/workflows/deep-release-audit.yml'
-      - 'sites/visions/src/content/series/**'
-      - 'sites/visions/public/images/pages/**'
-      - 'sites/visions/public/images/covers/**'
-      - 'sites/visions/public/issues/**'
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:

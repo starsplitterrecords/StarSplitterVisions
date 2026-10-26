@@ -1,18 +1,5 @@
 name: Audit released JPEG completeness
 on:
-  pull_request:
-    paths:
-      - 'sites/visions/public/images/pages/**'
-      - 'sites/visions/public/images/covers/**'
-      - 'sites/visions/scripts/audit-published-jpegs.cjs'
-      - '.github/workflows/audit-published-jpegs.yml'
-  push:
-    branches: [main]
-    paths:
-      - 'sites/visions/public/images/pages/**'
-      - 'sites/visions/public/images/covers/**'
-      - 'sites/visions/scripts/audit-published-jpegs.cjs'
-      - '.github/workflows/audit-published-jpegs.yml'
   workflow_dispatch:
 jobs:
   jpeg-integrity:

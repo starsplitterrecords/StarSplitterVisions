@@ -1,10 +1,6 @@
 name: Prepare PDF-Sourced Reader Recovery Review PR
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'sites/visions/scripts/prepare-reader-recovery-pr.py'
-      - '.github/workflows/prepare-reader-recovery-pr.yml'
+  workflow_dispatch:
 permissions:
   contents: write
   pull-requests: write
