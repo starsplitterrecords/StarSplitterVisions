@@ -1,0 +1,34 @@
+name: Verify published comic image geometry
+on:
+  pull_request:
+    paths:
+      - 'sites/visions/public/images/pages/**'
+      - 'sites/visions/public/issues/**'
+      - 'sites/visions/src/content/series/**'
+      - 'sites/visions/scripts/audit-published-page-geometry.js'
+      - '.github/workflows/audit-published-page-geometry.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'sites/visions/public/images/pages/**'
+      - 'sites/visions/public/issues/**'
+      - 'sites/visions/src/content/series/**'
+      - 'sites/visions/scripts/audit-published-page-geometry.js'
+      - '.github/workflows/audit-published-page-geometry.yml'
+  workflow_dispatch:
+jobs:
+  released-page-geometry:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check sites/visions/scripts/audit-published-page-geometry.js
+      - run: node sites/visions/scripts/audit-published-page-geometry.js --out /tmp/released-page-geometry.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: released-page-geometry-inventory
+          path: /tmp/released-page-geometry.json
+          if-no-files-found: error
