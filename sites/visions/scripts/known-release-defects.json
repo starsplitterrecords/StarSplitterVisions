@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "description": "Byte-locked pre-existing released-page defects found by D3 validation. These are NOT healthy images and not mastering approvals. A new defect or changed binary fails; --strict fails all. Replace each with validated native page artwork and remove the matching exception.",
+  "defects": {
+    "/images/pages/rex-fleet/issue-01/page-002.jpg": {
+      "gitBlobSha": "944851d92068060425c104cdc1ccf1ab2248963a",
+      "observedSignature": "unknown",
+      "reason": "JPEG lacks valid closing FF D9 marker"
+    },
+    "/images/pages/rex-fleet/issue-01/page-004.jpg": {
+      "gitBlobSha": "504913e6160417848a724908fdefd5a8d19ccb07",
+      "observedSignature": "unknown",
+      "reason": "JPEG lacks valid closing FF D9 marker"
+    },
+    "/images/pages/rex-fleet/issue-01/page-009.jpg": {
+      "gitBlobSha": "46a937e305c1a813b5e765a44fe005d7d4d403f7",
+      "observedSignature": "unknown",
+      "reason": "JPEG lacks valid closing FF D9 marker"
+    },
+    "/images/pages/rex-fleet/issue-01/page-011.jpg": {
+      "gitBlobSha": "17e64b76dbdee4d9de757a5f298bc1a07ba982c2",
+      "observedSignature": "unknown",
+      "reason": "JPEG lacks valid closing FF D9 marker"
+    },
+    "/images/pages/rex-fleet/issue-01/page-015.jpg": {
+      "gitBlobSha": "82d1f166e0167be00bb40466e9695669932ff182",
+      "observedSignature": "unknown",
+      "reason": "JPEG lacks valid closing FF D9 marker"
+    },
+    "/images/pages/stardust-station/issue-01/page-020.jpg": {
+      "gitBlobSha": "62cf90a2a29b6024a2ff4b0744f76e67c75fc966",
+      "observedSignature": "unknown",
+      "reason": "JPEG lacks valid closing FF D9 marker"
+    }
+  }
+}
