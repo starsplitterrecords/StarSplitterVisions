@@ -65,7 +65,7 @@ def check_pdf(url,slug,num,pages,align):
             for page in doc:
                 pix=page.get_pixmap(matrix=fitz.Matrix(.5,.5),alpha=False)
                 fingerprints.append(d_hash(Image.open(io.BytesIO(pix.tobytes("png")))))
-            if align and pages:
+            if pages:
                 nearest=[]
                 for i,x in enumerate(pages):
                     if not x["valid"]:continue
@@ -75,14 +75,17 @@ def check_pdf(url,slug,num,pages,align):
                 offset=(counts.most_common(1)[0][0] if counts else None)
                 aligned=sum(1 for i,j,d in nearest if offset is not None and j-i==offset and d<=.31)
                 confidence=round(aligned/max(len(nearest),1),3)
-                r["alignment"]={"offset":offset,"confidence":confidence,"matched":aligned,"validPages":len(nearest),
+                pdf_coverage=round(aligned/max(1,len(doc)-1),3)
+                r["alignment"]={"offset":offset,"confidence":confidence,"matched":aligned,"validPages":len(nearest),"pdfInteriorCoverage":pdf_coverage,
                                 "outliers":[[i+1,j+1,d] for i,j,d in nearest if offset is None or j-i!=offset or d>.31][:20]}
-                if confidence<.75:out["warnings"].append("PDF/reader mapping not established: "+url+" confidence "+str(confidence))
-                if a.candidates and offset is not None and confidence>=.75:
+                if max(confidence,pdf_coverage)<.75:out["warnings"].append("PDF/reader mapping not established: "+url+" reader confidence "+str(confidence)+" pdf coverage "+str(pdf_coverage))
+                if a.candidates and offset is not None and max(confidence,pdf_coverage)>=.75:
                     for i,x in enumerate(pages):
-                        if x["valid"] or x["url"] not in known:continue
                         j=i+offset
                         if j<0 or j>=len(doc):continue
+                        different_valid_reader=bool(x["valid"] and distance(x["fingerprint"],fingerprints[j])>.31)
+                        damaged=bool(not x["valid"] and x["url"] in known)
+                        if not (damaged or different_valid_reader):continue
                         original=locate(x["url"]).read_bytes()
                         options=[]
                         for image in doc[j].get_images(full=True):
@@ -102,7 +105,7 @@ def check_pdf(url,slug,num,pages,align):
                         dest.mkdir(parents=True,exist_ok=True)
                         target=dest/("page-%03d."%(i+1)+ext)
                         target.write_bytes(data)
-                        out["pdfCandidates"].append({"reader":x["url"],"candidate":str(target),"sourcePdf":url,
+                        out["pdfCandidates"].append({"reader":x["url"],"candidate":str(target),"reviewReason":"reader-versus-PDF content difference" if different_valid_reader else "truncated published reader JPEG","sourcePdf":url,
                             "pdfPage":j+1,"xref":xref,"dimensions":dim,"sha256":digest(data),
                             "visualDistanceToPDF":round(delta,3),"isBrokenJPEGExactPrefix":data.startswith(original),
                             "requiresCreativeApproval":True})
