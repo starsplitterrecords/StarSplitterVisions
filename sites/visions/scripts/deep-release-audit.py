@@ -129,8 +129,16 @@ for p in files:
     for release in s.get("releases",[]):
         cover=release.get("cover")
         if cover and cover not in covers:covers[cover]=check_image(cover,"cover")
+    sizes=Counter(tuple(x["dimensions"]) for x in verified if x.get("valid") and x.get("dimensions"))
+    native_widths=[x["dimensions"][0] for x in verified if x.get("valid") and x.get("dimensions")]
+    native_heights=[x["dimensions"][1] for x in verified if x.get("valid") and x.get("dimensions")]
     out["series"].append({"slug":slug,"status":s.get("status"),"readerPages":len(pages),
-       "collectedEditions":len(collected),"previewCount":len(s.get("releases",[]))-len(collected)})
+       "collectedEditions":len(collected),"previewCount":len(s.get("releases",[]))-len(collected),
+       "nativeReaderDimensions":{"distribution":[{"width":w,"height":h,"count":n} for (w,h),n in sizes.most_common()],
+                                 "minimum":[min(native_widths),min(native_heights)] if native_widths else None,
+                                 "maximum":[max(native_widths),max(native_heights)] if native_widths else None,
+                                 "embeddedIccCount":sum(bool(x.get("icc")) for x in verified if x.get("valid"))},
+       "currentReleaseMetadataMatches":s.get("currentRelease") in [r.get("title") for r in s.get("releases",[])] if collected else None})
     for release in collected:
         if release["catalogId"] in seen:out["otherErrors"].append("duplicate collected catalog ID "+release["catalogId"])
         seen.add(release["catalogId"])
