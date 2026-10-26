@@ -2,6 +2,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import crypto from 'node:crypto'
+import {Buffer} from 'node:buffer'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 const site=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..')
@@ -14,7 +15,9 @@ function walk(dir){
  return fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(dir,e.name)):[path.join(dir,e.name)])
 }
 function sizeOfJpeg(b,file){
- if(b.length<64||b[0]!==255||b[1]!==216||b.at(-2)!==255||b.at(-1)!==217){failures.push(file+': invalid JPEG SOI/EOI');return null}
+ if(b.length<64||b[0]!==255||b[1]!==216){failures.push(file+': invalid JPEG SOI header');return null}
+ const missingEOI=b.at(-2)!==255||b.at(-1)!==217
+ if(missingEOI)warnings.push(file+': absent JPEG EOI marker (possible truncation; original source must be inspected, no automatic image edits)')
  let at=2,profile=false,dimensions=null
  while(at<b.length-4){
   if(b[at]!==255){at++;continue}
