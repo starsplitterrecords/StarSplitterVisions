@@ -15,7 +15,7 @@ parser.add_argument("--strict",action="store_true")
 parser.add_argument("--expect-known",action="store_true")
 a=parser.parse_args()
 known=json.loads((ROOT/"scripts/known-release-defects.json").read_text())["defects"]
-out={"series":[],"editions":[],"corrupt":[],"otherErrors":[],"warnings":[],"pdfCandidates":[],"live":[]}
+out={"series":[],"editions":[],"corrupt":[],"otherErrors":[],"warnings":[],"pdfCandidates":[],"contentMismatches":[],"live":[]}
 seen=set()
 targets={"/","/series"}
 def locate(url):
@@ -76,7 +76,8 @@ def check_pdf(url,slug,num,pages,align):
                 aligned=sum(1 for i,j,d in nearest if offset is not None and j-i==offset and d<=.31)
                 confidence=round(aligned/max(len(nearest),1),3)
                 pdf_coverage=round(aligned/max(1,len(doc)-1),3)
-                r["alignment"]={"offset":offset,"confidence":confidence,"matched":aligned,"validPages":len(nearest),"pdfInteriorCoverage":pdf_coverage,
+                in_issue_mismatches=[[i+1,round(d,3)] for i,j,d in nearest if offset is not None and 0<=i+offset<len(doc) and (j!=i+offset or d>.31)]
+                r["alignment"]={"offset":offset,"confidence":confidence,"matched":aligned,"validPages":len(nearest),"pdfInteriorCoverage":pdf_coverage,"inIssueMismatches":in_issue_mismatches,
                                 "outliers":[[i+1,j+1,d] for i,j,d in nearest if offset is None or j-i!=offset or d>.31][:20]}
                 if max(confidence,pdf_coverage)<.75:out["warnings"].append("PDF/reader mapping not established: "+url+" reader confidence "+str(confidence)+" pdf coverage "+str(pdf_coverage))
                 if a.candidates and offset is not None and max(confidence,pdf_coverage)>=.75:
@@ -87,6 +88,17 @@ def check_pdf(url,slug,num,pages,align):
                         damaged=bool(not x["valid"] and x["url"] in known)
                         if not (damaged or different_valid_reader):continue
                         original=locate(x["url"]).read_bytes()
+                        if different_valid_reader:
+                            folder=pathlib.Path(a.candidates)/slug/("issue-%02d"%num)
+                            folder.mkdir(parents=True,exist_ok=True)
+                            original_file=folder/("reader-current-page-%03d.jpg"%(i+1))
+                            original_file.write_bytes(original)
+                            pdf_file=folder/("pdf-visual-comparison-page-%03d.png"%(i+1))
+                            doc[j].get_pixmap(matrix=fitz.Matrix(1,1),alpha=False).save(str(pdf_file))
+                            out["contentMismatches"].append({"reader":x["url"],"pdf":url,"pdfPage":j+1,
+                               "readerSha256":digest(original),"pdfRenderedImage":str(pdf_file),
+                               "readerReviewImage":str(original_file),
+                               "meaning":"healthy reader binary, artwork differs from collected PDF; creative review required"})
                         options=[]
                         for image in doc[j].get_images(full=True):
                             obj=doc.extract_image(image[0]);data=obj.get("image",b"")
@@ -153,6 +165,7 @@ for p in files:
             "issueNumber":num,"releaseDate":release.get("releaseDate"),"historicalPublished":True,
             "readerPages":len(verified),"damagedReaderPages":damaged,"cover":{k:v for k,v in cover.items() if k!="fingerprint"},
             "pdf":pdf,"technicalHealthy":bool(pdf["valid"] and cover.get("valid") and not damaged),
+            "readerPdfConsistency":None if damaged else not bool(pdf.get("alignment",{}).get("inIssueMismatches")),
             "masteringCertified":False})
 def probe(url):
     base=os.environ.get("VISIONS_PUBLIC_SITE_URL","https://star-splitter-visions.vercel.app").rstrip("/")
