@@ -7,10 +7,12 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import process from 'node:process';
 import {fileURLToPath} from 'node:url';
+import {buildReaderPath,buildSeriesPath,parseReaderPath} from '../src/utils/routes.js';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const pub=path.join(root,'public'),content=path.join(root,'src/content/series');
-const args=process.argv.slice(2),live=args.includes('--live'),json=args.includes('--json'),strict=args.includes('--strict');
-if(args.some(x=>!['--live','--json','--strict'].includes(x)))throw Error('Unknown argument; use --live, --json, and/or --strict');
+const args=process.argv.slice(2),live=args.includes('--live'),liveStrict=args.includes('--live-strict'),json=args.includes('--json'),strict=args.includes('--strict');
+if(args.some(x=>!['--live','--live-strict','--json','--strict'].includes(x)))throw Error('Unknown argument; use --live, --live-strict, --json, or --strict');
+if(liveStrict&&!live)throw Error('--live-strict requires --live');
 const baseline=JSON.parse(fs.readFileSync(path.join(root,'scripts/known-release-defects.json'),'utf8'));
 const waivers=baseline.defects||{};
 const errs=[],warnings=[],records=[],catalogIds=new Set();
@@ -38,7 +40,7 @@ function inspect(p,what,expected){
  return true;
 }
 const metadata=fs.readdirSync(content).filter(x=>x.endsWith('.json')).sort();
-const currentPages=new Map();
+const currentPages=new Map(),readerAssetSamples=new Set();
 for(const filename of metadata){
  const s=JSON.parse(fs.readFileSync(path.join(content,filename),'utf8')),slug=s.slug;
  if(slug!==filename.replace(/\.json$/,''))errs.push('Filename slug mismatch '+filename);
@@ -53,6 +55,9 @@ for(const filename of metadata){
    inspect(page.image,slug+' reader page '+num,['jpeg','png','webp']);
  }
  currentPages.set(slug,pages.length);
+ if(pages.length){readerAssetSamples.add(pages[0].image);readerAssetSamples.add(pages[pages.length-1].image)}
+ if(pages.length){const path=buildReaderPath(slug,1),route=parseReaderPath(path);if(route?.seriesSlug!==slug||route.pageNumber!==1)errs.push(slug+': reader route contract broken')}
+ if(buildSeriesPath(slug)!=='/series/'+slug)errs.push(slug+': series route contract broken');
  for(const release of editions){
    const name=slug+' '+release.title;
    if(catalogIds.has(release.catalogId))errs.push('Duplicate release catalog ID '+release.catalogId);
@@ -70,21 +75,30 @@ for(const filename of metadata){
  if(editions.length&&pages.length===0)warnings.push(slug+': collected edition exists but no reader pages are listed');
 }
 async function inspectLive(){
- const base=process.env.VISIONS_PUBLIC_SITE_URL||'https://star-splitter-visions.vercel.app';
+ const base=(process.env.VISIONS_PUBLIC_SITE_URL||'https://star-splitter-visions.vercel.app').replace(/\/$/,'');
  const results=[];
+ const routes=new Set(['/','/series']);
  for(const x of records){
-   for(const resource of [x.cover,x.pdf]){
-     const url=base+resource;
-     try{
-       const r=await fetch(url,{redirect:'follow',signal:AbortSignal.timeout(15000),headers:{'Range':'bytes=0-63'}});
-       const type=r.headers.get('content-type')||'';
-       const ok=r.status===200||r.status===206;
-       if(!ok)warnings.push('Live deployment '+r.status+' for '+url);
-       else if(type.includes('text/html'))warnings.push('Live deployment returned HTML for binary asset '+url);
-       results.push({url,status:r.status,contentType:type,ok:ok&&!type.includes('text/html')});
-       await r.arrayBuffer();
-     }catch(e){warnings.push('Live deployment unreachable '+url+': '+e.message);results.push({url,ok:false,error:e.message})}
-   }
+   routes.add(buildSeriesPath(x.series));
+   if(currentPages.get(x.series)>0)routes.add(buildReaderPath(x.series,1));
+ }
+ const assets=new Set([...records.flatMap(x=>[x.cover,x.pdf]),...readerAssetSamples].filter(Boolean));
+ const targets=[...routes].map(p=>({p,kind:'html'})).concat([...assets].map(p=>({p,kind:'binary'})));
+ for(const {p,kind} of targets){
+   const url=base+p;
+   try{
+     const r=await fetch(url,{redirect:'follow',signal:AbortSignal.timeout(7000),headers:kind==='binary'?{'Range':'bytes=0-63'}:{}});
+     const type=r.headers.get('content-type')||'',reachable=(r.status===200||r.status===206);
+     const acceptable=kind==='html'?type.includes('text/html'):!type.includes('text/html')&&!type.includes('text/plain');
+     let hasAppShell=true;
+     if(kind==='html'&&reachable&&acceptable){
+       const body=await r.text();
+       hasAppShell=body.includes('id="root"')||body.includes("id='root'");
+     }else await r.body?.cancel();
+     const ok=reachable&&acceptable&&hasAppShell;
+     if(!ok)warnings.push('Live deployment invalid route/asset: '+url+' (HTTP '+r.status+', '+type+', shell='+hasAppShell+')');
+     results.push({url,kind,status:r.status,contentType:type,ok});
+   }catch(e){warnings.push('Live deployment unreachable '+url+': '+e.message);results.push({url,kind,ok:false,error:e.message})}
  }
  return results;
 }
@@ -98,4 +112,4 @@ else{
  warnings.forEach(x=>console.warn('RELEASE WARNING '+x));
  console.log('Audit: '+errs.length+' integrity errors; '+warnings.length+' advisories');
 }
-if(errs.length)process.exitCode=1;
+if(errs.length||(liveStrict&&liveResults?.some(x=>!x.ok)))process.exitCode=1;
