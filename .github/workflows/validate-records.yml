@@ -1,0 +1,50 @@
+name: Validate Records site
+
+on:
+  pull_request:
+    paths:
+      - 'sites/records/content/**'
+      - 'sites/records/public/**'
+      - 'sites/records/source/**'
+      - 'sites/records/.published-schedule.json'
+      - 'sites/records/package.json'
+      - 'sites/records/package-lock.json'
+      - 'sites/records/scripts/build.mjs'
+      - 'sites/records/scripts/publishing.mjs'
+      - 'sites/records/vercel.json'
+      - '.github/workflows/validate-records.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'sites/records/content/**'
+      - 'sites/records/public/**'
+      - 'sites/records/source/**'
+      - 'sites/records/.published-schedule.json'
+      - 'sites/records/package.json'
+      - 'sites/records/package-lock.json'
+      - 'sites/records/scripts/build.mjs'
+      - 'sites/records/scripts/publishing.mjs'
+      - 'sites/records/vercel.json'
+      - '.github/workflows/validate-records.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  records:
+    name: Star Splitter Records content
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: sites/records
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: sites/records/package-lock.json
+      - run: npm ci
+      - run: npm run check
+      - run: npm run build

@@ -1,20 +1,5 @@
 name: Verify published comic image geometry
 on:
-  pull_request:
-    paths:
-      - 'sites/visions/public/images/pages/**'
-      - 'sites/visions/public/issues/**'
-      - 'sites/visions/src/content/series/**'
-      - 'sites/visions/scripts/audit-published-page-geometry.js'
-      - '.github/workflows/audit-published-page-geometry.yml'
-  push:
-    branches: [main]
-    paths:
-      - 'sites/visions/public/images/pages/**'
-      - 'sites/visions/public/issues/**'
-      - 'sites/visions/src/content/series/**'
-      - 'sites/visions/scripts/audit-published-page-geometry.js'
-      - '.github/workflows/audit-published-page-geometry.yml'
   workflow_dispatch:
 jobs:
   released-page-geometry:

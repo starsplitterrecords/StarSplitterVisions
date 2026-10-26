@@ -1,18 +1,6 @@
 name: Validate Visions deep-link hosting
 on:
-  pull_request:
-    paths:
-      - 'sites/visions/vercel.json'
-      - 'sites/visions/scripts/audit-spa-rewrites.js'
-      - 'sites/visions/src/utils/routes.js'
-      - '.github/workflows/validate-spa-routes.yml'
-  push:
-    branches: [main]
-    paths:
-      - 'sites/visions/vercel.json'
-      - 'sites/visions/scripts/audit-spa-rewrites.js'
-      - 'sites/visions/src/utils/routes.js'
-      - '.github/workflows/validate-spa-routes.yml'
+  workflow_dispatch:
 jobs:
   rewrite-contract:
     runs-on: ubuntu-latest

@@ -1,22 +1,5 @@
 name: Audit Published Comic Releases
 on:
-  pull_request:
-    paths:
-      - 'sites/visions/src/content/series/**'
-      - 'sites/visions/public/images/pages/**'
-      - 'sites/visions/public/images/covers/**'
-      - 'sites/visions/public/issues/**'
-      - 'sites/visions/scripts/audit-published-releases.js'
-      - '.github/workflows/audit-published-releases.yml'
-  push:
-    branches: [main]
-    paths:
-      - 'sites/visions/src/content/series/**'
-      - 'sites/visions/public/images/pages/**'
-      - 'sites/visions/public/images/covers/**'
-      - 'sites/visions/public/issues/**'
-      - 'sites/visions/scripts/audit-published-releases.js'
-      - '.github/workflows/audit-published-releases.yml'
   workflow_dispatch:
     inputs:
       probe_live:

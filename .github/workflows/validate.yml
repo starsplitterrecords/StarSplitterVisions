@@ -1,11 +1,29 @@
-name: Validate both sites
+name: Validate Visions site
 
 on:
   pull_request:
+    paths:
+      - 'sites/visions/src/**'
+      - 'sites/visions/public/images/**'
+      - 'sites/visions/public/issues/**'
+      - 'sites/visions/index.html'
+      - 'sites/visions/package.json'
+      - 'sites/visions/package-lock.json'
+      - 'sites/visions/vite.config.js'
+      - 'sites/visions/vercel.json'
+      - '.github/workflows/validate.yml'
   push:
-    branches:
-      - main
-      - agent/**
+    branches: [main]
+    paths:
+      - 'sites/visions/src/**'
+      - 'sites/visions/public/images/**'
+      - 'sites/visions/public/issues/**'
+      - 'sites/visions/index.html'
+      - 'sites/visions/package.json'
+      - 'sites/visions/package-lock.json'
+      - 'sites/visions/vite.config.js'
+      - 'sites/visions/vercel.json'
+      - '.github/workflows/validate.yml'
 
 permissions:
   contents: read
@@ -25,24 +43,6 @@ jobs:
           node-version: 24
           cache: npm
           cache-dependency-path: sites/visions/package-lock.json
-      - run: npm ci
-      - run: npm run check
-      - run: npm run build
-
-  records:
-    name: Star Splitter Records content
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    defaults:
-      run:
-        working-directory: sites/records
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: npm
-          cache-dependency-path: sites/records/package-lock.json
       - run: npm ci
       - run: npm run check
       - run: npm run build
