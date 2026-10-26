@@ -1,0 +1,44 @@
+name: Audit Published Comic Releases
+on:
+  pull_request:
+    paths:
+      - 'sites/visions/src/content/series/**'
+      - 'sites/visions/public/images/pages/**'
+      - 'sites/visions/public/images/covers/**'
+      - 'sites/visions/public/issues/**'
+      - 'sites/visions/scripts/audit-published-releases.js'
+      - '.github/workflows/audit-published-releases.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'sites/visions/src/content/series/**'
+      - 'sites/visions/public/images/pages/**'
+      - 'sites/visions/public/images/covers/**'
+      - 'sites/visions/public/issues/**'
+      - 'sites/visions/scripts/audit-published-releases.js'
+      - '.github/workflows/audit-published-releases.yml'
+  workflow_dispatch:
+    inputs:
+      probe_live:
+        description: 'Check deployed cover/PDF HTTP responses (advisory)'
+        required: false
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  releases:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: sites/visions
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: node --check scripts/audit-published-releases.js
+      - run: node scripts/audit-published-releases.js
+      - if: ${{ github.event_name == 'workflow_dispatch' && inputs.probe_live }}
+        run: node scripts/audit-published-releases.js --live
