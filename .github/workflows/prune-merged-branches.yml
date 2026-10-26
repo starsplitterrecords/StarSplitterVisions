@@ -1,0 +1,78 @@
+name: Prune merged topic branches
+
+# Keep unmerged drafts and their binary review assets untouched.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/prune-merged-branches.yml'
+  pull_request:
+    types: [closed]
+
+permissions:
+  contents: write
+
+jobs:
+  prune-reviewed:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Remove only verified merged branch tips
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS='|' read -r pr branch expected_sha; do
+            details="$(gh api "repos/$GITHUB_REPOSITORY/pulls/$pr")"
+            merged="$(jq -r '.merged' <<<"$details")"
+            pr_branch="$(jq -r '.head.ref' <<<"$details")"
+            pr_sha="$(jq -r '.head.sha' <<<"$details")"
+            pr_repo="$(jq -r '.head.repo.full_name // ""' <<<"$details")"
+            actual_sha="$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/$branch" --jq '.object.sha' 2>/dev/null || true)"
+            if [[ "$merged" == true && "$pr_repo" == "$GITHUB_REPOSITORY" &&
+                  "$pr_branch" == "$branch" && "$pr_sha" == "$expected_sha" &&
+                  "$actual_sha" == "$expected_sha" ]]; then
+              gh api -X DELETE "repos/$GITHUB_REPOSITORY/git/refs/heads/$branch"
+              echo "Pruned merged #$pr: $branch"
+            else
+              echo "Preserved #$pr $branch (not present, not merged, or tip changed)"
+            fi
+          done <<'VERIFIED_MERGED_BRANCHES'
+          146|audit/c3-jpeg-completeness-20261026|da2621c49cde7c840c5e6a99efd7b8ec52cd92be
+          145|audit/d3-vikings-reader-pdf-evidence-20261025|ce0cef829f625c9ab79f0e3dabe15561fd21fdf2
+          144|audit/d3-edition-reader-correlation-20261025|92f7fe8685cb24e36b8102874f750d3319cf3f64
+          141|audit/c3-released-image-geometry-20261025|6e8f43d6f12fe690f2fd89498daed0adc27405da
+          142|tools/d3-source-verified-recovery-20261025|32629c43090a0388120315ef336e823c8b96e56e
+          140|audit/d3-full-release-forensics-20261025|d824f05de0d333082a31eec532ac1c79a35e432
+          139|fix/d3-vercel-reader-deep-links-20261025|9aa450aa043cdc65c76bf8dd3c607b360650496f
+          138|feature/d3-live-reader-validation-20261025|b317a2e7231a047a94793e2c9d4f9070139dfe6d
+          136|feature/d3-release-audit-20261025|e9e65794b71942516a04729a71810e1b9e04bdbd
+          135|fix/division-threshold-series-code-div|0db8db0a593122087831ffbe5e9f581704173af7
+          147|ops/vercel-build-dedup-20261026|2c6a5d29597c1167febc2842f82d7e85c470f817
+          VERIFIED_MERGED_BRANCHES
+
+  prune-future-merges:
+    if: github.event_name == 'pull_request' && github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prune a merged same-repository PR only if its tip is unchanged
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          HEAD_BRANCH: ${{ github.event.pull_request.head.ref }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "$HEAD_REPO" != "$GITHUB_REPOSITORY" || "$HEAD_BRANCH" == "main" ]]; then
+            echo "Not a same-repository topic branch"
+            exit 0
+          fi
+          current="$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/$HEAD_BRANCH" --jq '.object.sha' 2>/dev/null || true)"
+          if [[ "$current" != "$HEAD_SHA" ]]; then
+            echo "Branch absent or changed since merge; preserve it"
+            exit 0
+          fi
+          gh api -X DELETE "repos/$GITHUB_REPOSITORY/git/refs/heads/$HEAD_BRANCH"
+          echo "Pruned merged branch: $HEAD_BRANCH"
