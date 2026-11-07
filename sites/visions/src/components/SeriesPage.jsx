@@ -73,7 +73,7 @@ export default function SeriesPage({ slug, onReadIssue }) {
     const statusLabel = series.status === 'archived' ? 'Archived' : 'Coming Soon'
 
     return (
-      <main className={`series-page world-themed ${slug === 'vikings-2026' ? 'series-page-vikings' : ''}`.trim()} style={worldStyle}>
+      <main className={`series-page world-themed ${slug === 'rex-fleet' ? 'series-page-rex' : ''}`.trim()} style={worldStyle}>
         <section className="series-world-header hud-frame">
           <div>
             <p className="eyebrow">SIGNAL DETECTED //</p>
@@ -144,7 +144,7 @@ export default function SeriesPage({ slug, onReadIssue }) {
   }
 
   return (
-    <main className={`series-page world-themed ${slug === 'vikings-2026' ? 'series-page-vikings' : ''}`.trim()} style={worldStyle}>
+    <main className={`series-page world-themed ${slug === 'rex-fleet' ? 'series-page-rex' : ''}`.trim()} style={worldStyle}>
       <section className="series-world-header series-world-header-featured hud-frame">
         <div>
           <p className="eyebrow">SERIES //</p>

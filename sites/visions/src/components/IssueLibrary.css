@@ -7,7 +7,8 @@
 .issue-library-grid{display:grid;gap:.9rem;grid-template-columns:repeat(3,minmax(0,1fr))}
 .issue-library-card{background:rgba(5,9,16,.54);border:1px solid var(--line-soft);display:grid;min-width:0;overflow:hidden}
 .issue-cover-link{background:#03060c;display:block;min-width:0;text-decoration:none}
-.issue-cover-link img,.issue-cover-link .image-fallback,.issue-cover-link>.series-release-placeholder{aspect-ratio:2/3;border:0;height:auto;object-fit:contain;width:100%}
+.issue-cover-link img{aspect-ratio:auto;border:0;height:auto;object-fit:contain;width:100%}
+.issue-cover-link .image-fallback,.issue-cover-link>.series-release-placeholder{aspect-ratio:2/3;border:0;object-fit:contain;width:100%}
 .issue-cover-link:not(.issue-cover-link-disabled):hover img,.issue-cover-link:not(.issue-cover-link-disabled):focus-visible img{filter:brightness(1.06)}
 .issue-cover-link:focus-visible{outline:2px solid var(--world-accent);outline-offset:-2px}
 .issue-library-copy{display:grid;gap:.35rem;padding:.7rem .72rem .72rem}

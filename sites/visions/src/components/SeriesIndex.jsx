@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import ImageWithFallback from './shared/ImageWithFallback'
 import siteContent from '../content/site.json'
+import homepageContent from '../content/homepage.json'
 import { seriesPages } from '../data/seriesPages'
 
 const statusFilters = [
@@ -8,6 +9,12 @@ const statusFilters = [
   { label: 'Active', value: 'active' },
   { label: 'In Development', value: 'coming-soon' },
 ]
+
+const promotionTierBySlug = new Map(
+  (homepageContent.promotionTiers || []).flatMap((tier, index) =>
+    tier.map((slug) => [slug, index]),
+  ),
+)
 
 const statusLabels = {
   active: 'Active',
@@ -23,11 +30,14 @@ export default function SeriesIndex({ onOpenSeries }) {
     return Object.values(seriesPages)
       .filter((series) => activeFilter === 'all' || series.status === activeFilter)
       .sort((a, b) => {
-        const statusRank = { active: 0, 'coming-soon': 1, archived: 2 }
-        const rankA = statusRank[a.status] ?? 3
-        const rankB = statusRank[b.status] ?? 3
+        const tierA = promotionTierBySlug.get(a.slug) ?? Number.MAX_SAFE_INTEGER
+        const tierB = promotionTierBySlug.get(b.slug) ?? Number.MAX_SAFE_INTEGER
+        if (tierA !== tierB) return tierA - tierB
 
-        if (rankA !== rankB) return rankA - rankB
+        const statusRank = { active: 0, 'coming-soon': 1, archived: 2 }
+        const statusA = statusRank[a.status] ?? 3
+        const statusB = statusRank[b.status] ?? 3
+        if (statusA !== statusB) return statusA - statusB
 
         return a.title.localeCompare(b.title)
       })

@@ -26,14 +26,14 @@
       "path": "/press"
     }
   ],
-  "defaultSeriesSlug": "vikings-2026",
+  "defaultSeriesSlug": "rex-fleet",
   "hero": {
     "eyebrow": "STAR SPLITTER VISIONS",
     "headingLines": [
       "COMICS AND MUSIC.",
       "STRANGE WORLDS."
     ],
-    "description": "Ninth-century Vikings navigate New York. Desert builders challenge a water monopoly. A frontier rescue risks a war. Independent comics about people finding their way through extraordinary worlds.",
+    "description": "Commodore Ella Venn must keep a frontier rescue from starting a war. Ninth-century Vikings build a life in modern New York. On a distant frontier, an outlaw fights to survive. Comics about people facing extraordinary choices.",
     "primaryAction": "Start Reading",
     "secondaryAction": "Explore Series"
   },
@@ -42,7 +42,7 @@
     "items": [
       {
         "label": "Flagship Release",
-        "value": "VIKINGS 2026"
+        "value": "REX FLEET"
       },
       {
         "label": "Active Series",
@@ -50,7 +50,7 @@
       },
       {
         "label": "Developing Worlds",
-        "value": "AZURE / STARDUST"
+        "value": "SUNFORGE OUTLAW"
       },
       {
         "label": "Companion Music",
