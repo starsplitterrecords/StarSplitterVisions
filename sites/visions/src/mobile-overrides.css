@@ -85,11 +85,18 @@
 .small-rail .mini-card img,
 .panel img,
 .series-index-card img,
-.series-cover-lockup img,
-.series-release-cover img,
 .issue-cover-link img {
   display:block;
   width:100%;
+  height:auto;
+  aspect-ratio:auto;
+  object-fit:contain;
+  object-position:center;
+  max-height:none;
+}
+
+.series-cover-lockup img,
+.series-release-cover img {
   height:auto;
   aspect-ratio:auto;
   object-fit:contain;
