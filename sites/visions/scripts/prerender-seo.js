@@ -14,9 +14,11 @@ import { createServer } from 'vite'
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const dist = path.join(root, 'dist')
 const origin = 'https://star-splitter-visions.vercel.app'
-const publishedOn = new Intl.DateTimeFormat('en-CA', {
+const dateParts = new Intl.DateTimeFormat('en-US', {
   year: 'numeric', month: '2-digit', day: '2-digit', timeZone: 'America/New_York',
-}).format(new Date())
+}).formatToParts(new Date())
+const localDate = Object.fromEntries(dateParts.map((part) => [part.type, part.value]))
+const publishedOn = `${localDate.year}-${localDate.month}-${localDate.day}`
 const readJSON = async (relativePath) => JSON.parse(await fs.readFile(path.join(root, relativePath), 'utf8'))
 const site = await readJSON('src/content/site.json')
 const homepage = await readJSON('src/content/homepage.json')
