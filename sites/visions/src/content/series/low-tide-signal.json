@@ -4,7 +4,7 @@
   "title": "Low Tide Signal",
   "tagline": "A quiet coastal signal from a flooded edge of the future.",
   "atmosphere": "Quiet mystery, abandoned infrastructure, and social unease.",
-  "description": "A developing coastal sci-fi mystery in the Star Splitter Visions portfolio.",
+  "description": "On a flooded coast, abandoned infrastructure and an uneasy community set the stage for a quiet science-fiction mystery. The first story is in development.",
   "status": "coming-soon",
   "developmentStatus": "In development",
   "worldLabel": "Coastal Sci-Fi Mystery",
@@ -12,10 +12,10 @@
   "hero": "/images/covers/low-tide-signal-issue-01-cover.png",
   "accent": "#78D7FF",
   "format": "Limited series development",
-  "worldPremise": "Public-facing details are still being locked.",
+  "worldPremise": "Water has redrawn the edges of this coastal world. What remains—places, people, and the things they have left behind—forms the mystery at its heart.",
   "homepage": {
     "issue": "In Development",
-    "hook": "A quiet coastal mystery from a flooded edge of the future.",
+    "hook": "A flooded coast. Abandoned places. A quiet mystery at the water's edge.",
     "cover": "/images/covers/low-tide-signal-issue-01-cover.png"
   },
   "narrativeForms": [],
