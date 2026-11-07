@@ -1,16 +1,16 @@
 {
   "featuredHeading": "Featured Series",
   "featuredSeries": [
-    "backyard-rockets",
     "rex-fleet",
-    "vikings-2026"
+    "vikings-2026",
+    "sunforge-outlaw"
   ],
   "moreWorldsHeading": "More Worlds",
   "moreWorlds": [
-    "division-threshold",
     "azure-reach",
     "stardust-station",
-    "sunforge-outlaw",
+    "backyard-rockets",
+    "division-threshold",
     "low-tide-signal"
   ],
   "viewAllLabel": "View All Series →",
@@ -24,5 +24,30 @@
     "enabled": true,
     "heading": "Soundtrack Spotlight",
     "title": "Sequence Drive // Vol. 01"
-  }
+  },
+  "promotionTiers": [
+    [
+      "rex-fleet"
+    ],
+    [
+      "vikings-2026"
+    ],
+    [
+      "sunforge-outlaw"
+    ],
+    [
+      "shattering-of-the-corridors"
+    ],
+    [
+      "azure-reach",
+      "stardust-station"
+    ],
+    [
+      "backyard-rockets"
+    ],
+    [
+      "division-threshold",
+      "low-tide-signal"
+    ]
+  ]
 }
