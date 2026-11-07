@@ -65,7 +65,6 @@ export default function SeriesPage({ slug, onReadIssue }) {
     '--world-accent': series.accent || '#BAFF00',
   }
   const narrativeForms = series.narrativeForms || []
-  const themes = series.themes || []
   const seriesReleases = getReleasedItems(series.releases || [], todayString)
   const seriesExtras = getReleasedItems(series.extras || [], todayString)
   const seriesAudio = getReleasedItems(series.audio || [], todayString)
@@ -101,7 +100,7 @@ export default function SeriesPage({ slug, onReadIssue }) {
           </div>
         </section>
 
-        <EditorialSection title="About This World">
+        <EditorialSection title="The Premise">
           {series.worldPremise || series.description}
         </EditorialSection>
 
@@ -148,7 +147,7 @@ export default function SeriesPage({ slug, onReadIssue }) {
     <main className={`series-page world-themed ${slug === 'vikings-2026' ? 'series-page-vikings' : ''}`.trim()} style={worldStyle}>
       <section className="series-world-header series-world-header-featured hud-frame">
         <div>
-          <p className="eyebrow">FLAGSHIP SERIES //</p>
+          <p className="eyebrow">SERIES //</p>
           <h1>{series.title}</h1>
           <p className="series-tagline">{series.tagline}</p>
           <p className="series-atmosphere">{series.atmosphere}</p>
@@ -186,70 +185,24 @@ export default function SeriesPage({ slug, onReadIssue }) {
             Read From Page 001
           </button>
           <button disabled={!latestPage} onClick={() => latestPage && onReadIssue?.(latestPage.pageNumber)}>
-            Open Latest Daily
+            Read Latest Page
           </button>
         </div>
       </section>
 
       <section className="series-editorial-grid">
-        <EditorialSection title="About This World">
+        <EditorialSection title="The Story">
           {series.worldPremise || series.description}
         </EditorialSection>
 
-        <section className="series-dna-panel hud-frame">
-          <div className="series-section-header">
-            <h2>Narrative DNA</h2>
-          </div>
-
-          <div className="series-dna-grid">
-            {series.format && (
-              <div>
-                <span>Format</span>
-                <strong>{series.format}</strong>
-              </div>
-            )}
-
-            {series.seriesEngine && (
-              <div>
-                <span>Series Engine</span>
-                <strong>{series.seriesEngine}</strong>
-              </div>
-            )}
-
-            {series.coreConflict && (
-              <div>
-                <span>Core Conflict</span>
-                <strong>{series.coreConflict}</strong>
-              </div>
-            )}
-
-            {series.developmentStatus && (
-              <div>
-                <span>Status</span>
-                <strong>{series.developmentStatus}</strong>
-              </div>
-            )}
-          </div>
-        </section>
+        {series.coreConflict && (
+          <EditorialSection title="What's at Stake">
+            {series.coreConflict}
+          </EditorialSection>
+        )}
       </section>
 
-      {themes.length > 0 && (
-        <section className="series-theme-section hud-frame">
-          <div className="series-section-header">
-            <h2>Themes & Concerns</h2>
-          </div>
-
-          <div className="series-theme-grid">
-            {themes.map((theme) => (
-              <article key={theme}>
-                <span>{theme}</span>
-              </article>
-            ))}
-          </div>
-        </section>
-      )}
-
-      <EditorialSection title="Reader Orientation">
+      <EditorialSection title="Where to Begin">
         {series.readerEntry || series.audiencePromise}
       </EditorialSection>
 
@@ -257,7 +210,7 @@ export default function SeriesPage({ slug, onReadIssue }) {
 
       <section className="series-current-page hud-frame">
         <div className="series-current-copy">
-          <p className="eyebrow">LATEST DAILY PAGE //</p>
+          <p className="eyebrow">PAGE PREVIEW //</p>
           <h2>Page {String(currentPreviewPage).padStart(3, '0')}</h2>
           <p className="series-description">{series.description}</p>
         </div>
