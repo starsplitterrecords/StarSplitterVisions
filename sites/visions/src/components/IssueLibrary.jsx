@@ -26,7 +26,12 @@ function isTrackableRelease(release) {
 export default function IssueLibrary({ releases = [] }) {
   const [newestFirst, setNewestFirst] = useState(true)
   const [expanded, setExpanded] = useState(false)
-  const [issueStates, setIssueStates] = useState(loadIssueStates)
+  const [issueStates, setIssueStates] = useState({})
+
+  // Load browser-local reading state only after hydration to avoid mismatches.
+  useEffect(() => {
+    setIssueStates(loadIssueStates())
+  }, [])
 
   useEffect(() => {
     const handleStorage = (event) => {

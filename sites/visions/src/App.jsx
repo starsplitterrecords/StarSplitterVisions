@@ -30,12 +30,13 @@ const navigationItems = siteContent.navigation || [
 const defaultSeriesSlug = siteContent.defaultSeriesSlug || Object.keys(seriesPages)[0]
 const footerLinks = siteContent.footer?.links || navigationItems.filter((item) => item.path !== '/')
 
-function App() {
-  const initialReaderPath = parseReaderPath(window.location.pathname || '/')
+function App({ initialPath } = {}) {
+  const initialRoute = initialPath || (typeof window !== 'undefined' ? window.location.pathname || '/' : '/')
+  const initialReaderPath = parseReaderPath(initialRoute)
   const initialReaderSeries = initialReaderPath?.seriesSlug || defaultSeriesSlug
   const initialReaderPage = initialReaderPath?.pageNumber || 1
 
-  const [route, setRoute] = useState(window.location.pathname || '/')
+  const [route, setRoute] = useState(initialRoute)
   const [isReaderOpen, setIsReaderOpen] = useState(Boolean(initialReaderPath))
   const [currentPage, setCurrentPage] = useState(Math.max(initialReaderPage - 1, 0))
   const [activeReaderSeriesSlug, setActiveReaderSeriesSlug] = useState(initialReaderSeries)
@@ -307,7 +308,11 @@ function App() {
 
                 <div className="card-copy">
                   <p>{series.issue}</p>
-                  <h3>{series.title}</h3>
+                  <h3>
+                    <a href={buildSeriesPath(series.slug)} onClick={(event) => { event.preventDefault(); event.stopPropagation(); openSeries(series.slug) }}>
+                      {series.title}
+                    </a>
+                  </h3>
                   <span>{series.hook}</span>
 
                   <div>
@@ -341,7 +346,7 @@ function App() {
                 tabIndex={0}
               >
                 <ImageWithFallback src={world.cover} alt={world.title} fallbackText="ART INBOUND" />
-                <p>{world.title}</p>
+                <p><a href={buildSeriesPath(world.slug)} onClick={(event) => { event.preventDefault(); event.stopPropagation(); openSeries(world.slug) }}>{world.title}</a></p>
               </article>
             ))}
 

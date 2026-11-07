@@ -1,30 +1,6 @@
 {
   "version": 2,
-  "rewrites": [
-    {
-      "source": "/series",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/series/:slug",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/read/:slug/:page",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/about",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/contact",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/press",
-      "destination": "/index.html"
-    }
-  ],
-  "ignoreCommand": "git diff --quiet \"${VERCEL_GIT_PREVIOUS_SHA:-HEAD^}\" HEAD -- src public/images public/issues index.html package.json package-lock.json vite.config.js vercel.json"
+  "ignoreCommand": "git diff --quiet \"${VERCEL_GIT_PREVIOUS_SHA:-HEAD^}\" HEAD -- src scripts public/robots.txt public/images public/issues index.html package.json package-lock.json vite.config.js vercel.json",
+  "cleanUrls": true,
+  "trailingSlash": false
 }
