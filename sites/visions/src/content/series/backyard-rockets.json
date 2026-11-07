@@ -4,7 +4,7 @@
   "title": "Backyard Rockets",
   "tagline": "Build another way.",
   "atmosphere": "Bright, sun-baked Mojave science fiction built from handmade retro-aerospace hardware, contested water infrastructure, practical salvage, and stubborn optimism.",
-  "description": "Arvin, Lucia, and Milo operate Launch-Shop, a mobile desert workshop that turns salvaged aerospace hardware into homemade rockets, relays, and repairable systems. Their growing independent network gives desert communities another way to move water and information beyond Tethergrid control.",
+  "description": "Arvin, Lucia, and Milo run Launch-Shop, a mobile workshop in the Mojave where salvaged aerospace parts become homemade rockets and working relays. Every launch helps desert communities move water and information without Tethergrid—and makes the crew harder for the company to ignore.",
   "status": "active",
   "developmentStatus": "Publishing",
   "worldLabel": "Desert Science Fiction",
@@ -12,10 +12,10 @@
   "hero": "/images/covers/backyard-rockets-issue-01.jpg",
   "accent": "#E58A2B",
   "format": "Comic series / collected issues",
-  "worldPremise": "In the near-future Mojave, water and communications depend on infrastructure controlled from outside the communities that need it. Launch-Shop—a mobile crew of builders, salvagers, and engineers—uses practical rockets, relay hardware, and field-repairable systems to create a community-controlled alternative.",
+  "worldPremise": "Desert towns depend on water and communication systems controlled from outside their communities. Arvin, Lucia, and Milo believe they can build another way, one launch, repair, and hard-won connection at a time.",
   "homepage": {
     "issue": "Issues 01–02",
-    "hook": "Homemade rockets, contested water, and a future no corporation can switch off.",
+    "hook": "Arvin, Lucia, and Milo build homemade rockets to keep desert towns connected. Tethergrid controls the existing network.",
     "cover": "/images/covers/backyard-rockets-issue-01.jpg"
   },
   "narrativeForms": [
@@ -31,7 +31,7 @@
   ],
   "seriesEngine": "Each mission asks the crew to build, launch, repair, or recover something that extends the independent network, while every success makes Launch-Shop more visible to Tethergrid.",
   "coreConflict": "Launch-Shop is proving essential infrastructure can belong to the communities that depend on it; Tethergrid's control depends on keeping that alternative from becoming durable.",
-  "readerEntry": "Begin with Issue 01: The Oxidizer Gap, then continue through The Copper Lattice in the Issues 01–02 Combined Edition. The opening arc establishes Launch-Shop, Tethergrid, and the fight to build a water-and-communications network communities can operate for themselves.",
+  "readerEntry": "Start with The Oxidizer Gap, then continue into The Copper Lattice. Together they follow Launch-Shop's first attempts to build an independent water-and-communications network.",
   "audiencePromise": "A bright, tactile retro-aerospace adventure about audacious machines, readable engineering, close human stakes, danger, humor, and the stubborn work of building a future that can be repaired instead of switched off.",
   "releases": [
     {

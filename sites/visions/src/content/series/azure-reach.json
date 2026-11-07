@@ -4,7 +4,7 @@
   "title": "Azure Reach",
   "tagline": "The wonder is public. The work is invisible.",
   "atmosphere": "Bright marine-park spectacle seen through the exhausted precision of the staff who keep it possible.",
-  "description": "A workplace comedy about competent people holding together a social-media-famous marine park without ever putting animals at risk.",
+  "description": "At Azure Reach, a social-media-famous marine park, the staff must pull off a public sea-turtle event while keeping the animals safe and the work invisible. The guests come for a perfect day; the people behind the scenes have to make it happen.",
   "status": "active",
   "developmentStatus": "Publishing",
   "worldLabel": "Workplace Comedy",
@@ -12,10 +12,10 @@
   "hero": "/images/covers/azure-reach-issue-01-cover.jpg",
   "accent": "#3BE7FF",
   "format": "Comic series / collected issues",
-  "worldPremise": "Behind every effortless moment of public wonder is an invisible system of people solving problems before anyone notices.",
+  "worldPremise": "Everyone sees the spectacle at Azure Reach. The staff sees the schedules, last-minute fixes, difficult decisions, and teamwork it takes to protect the animals and keep the place running.",
   "homepage": {
     "issue": "Issue 01",
-    "hook": "A workplace comedy inside the invisible systems that keep wonder alive.",
+    "hook": "On Sea Turtle Thursday, visitors see effortless wonder. The Azure Reach staff sees everything that could go wrong.",
     "cover": "/images/covers/azure-reach-issue-01-cover.jpg"
   },
   "releases": [
@@ -29,7 +29,7 @@
       "releaseType": "Collected comic issue",
       "releaseDate": "2026-08-26",
       "cover": "/images/covers/azure-reach-issue-01-cover.jpg",
-      "description": "The complete first issue, following the Azure Reach staff through a very public sea-turtle event and the invisible work required to keep it effortless.",
+      "description": "Sea Turtle Thursday puts the Azure Reach staff under a very public spotlight, with a great deal of unseen work between them and a successful day.",
       "externalLink": "/issues/azure-reach/issue-01/azure-reach-issue-01-sea-turtle-thursdays.pdf"
     },
     {
