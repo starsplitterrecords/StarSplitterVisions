@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /intake/
+Sitemap: https://star-splitter-visions.vercel.app/sitemap.xml
