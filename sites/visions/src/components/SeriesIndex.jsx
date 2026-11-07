@@ -82,7 +82,11 @@ export default function SeriesIndex({ onOpenSeries }) {
                   {series.format && <span>{series.format}</span>}
                 </div>
 
-                <h2>{series.title}</h2>
+                <h2>
+                  <a href={`/series/${series.slug}`} onClick={(event) => { event.preventDefault(); event.stopPropagation(); onOpenSeries?.(series.slug) }}>
+                    {series.title}
+                  </a>
+                </h2>
                 <p>{series.description}</p>
 
                 <button
