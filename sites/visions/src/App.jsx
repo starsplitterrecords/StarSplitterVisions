@@ -19,6 +19,7 @@ import './styles.css'
 import './mobile-overrides.css'
 import './public-shell.css'
 import './brand-presentation.css'
+import './cosmic-atmosphere.css'
 
 const navigationItems = siteContent.navigation || [
   { label: 'Home', path: '/' },
