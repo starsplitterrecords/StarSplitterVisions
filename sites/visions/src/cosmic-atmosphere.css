@@ -1,0 +1,175 @@
+/*
+ * Star Splitter Visions — atmospheric publisher layer.
+ * Retains the reader-first storefront while restoring the original nebula field.
+ * Existing brand art is referenced, never re-encoded or rescaled as a comic asset.
+ */
+
+:root {
+  --cosmic-violet:rgba(112,79,190,.26);
+  --cosmic-blue:rgba(56,105,199,.24);
+  --cosmic-teal:rgba(38,152,164,.18);
+}
+
+body {
+  background-color:#05070b;
+  background-image:
+    radial-gradient(ellipse 64% 32% at 15% 8%,rgba(90,55,166,.34),transparent 78%),
+    radial-gradient(ellipse 55% 39% at 88% 21%,rgba(35,112,161,.25),transparent 78%),
+    radial-gradient(ellipse 58% 32% at 22% 73%,rgba(101,43,123,.21),transparent 78%),
+    radial-gradient(ellipse 62% 38% at 83% 90%,rgba(23,108,125,.19),transparent 80%),
+    linear-gradient(180deg,#05070d 0%,#080d19 43%,#050710 100%);
+  background-attachment:fixed;
+}
+
+/* A restrained full-page nebula and star layer; nothing covers reading surfaces. */
+body::before,
+body::after {
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+}
+
+body::before {
+  background:
+    linear-gradient(180deg,rgba(5,7,13,.48),rgba(5,7,14,.77)),
+    url('/images/brand/hero.png') center 24%/cover no-repeat;
+  opacity:.43;
+}
+
+body::after {
+  background-image:
+    radial-gradient(circle at 13% 18%,rgba(211,227,255,.75) 0 1px,transparent 1.5px),
+    radial-gradient(circle at 69% 34%,rgba(198,220,255,.72) 0 1px,transparent 1.5px),
+    radial-gradient(circle at 84% 76%,rgba(235,229,255,.55) 0 1px,transparent 1.5px),
+    radial-gradient(circle at 31% 83%,rgba(175,223,248,.45) 0 1px,transparent 1.5px);
+  background-size:430px 480px,570px 620px,690px 530px,520px 710px;
+  opacity:.31;
+}
+
+.site-shell {
+  position:relative;
+  z-index:1;
+}
+
+/* Restore the colorful nebula hero without making text harder to read. */
+.home-hero.hud-frame {
+  background-image:
+    linear-gradient(95deg,rgba(3,7,18,.86) 0%,rgba(5,10,23,.61) 58%,rgba(5,8,19,.37) 100%),
+    radial-gradient(ellipse 72% 100% at 76% 35%,rgba(104,58,185,.29),transparent 73%),
+    url('/images/brand/hero.png');
+  background-position:center,center,center 42%;
+  background-size:cover;
+  background-repeat:no-repeat;
+  border-color:rgba(135,155,225,.31);
+  box-shadow:0 18px 52px rgba(1,4,12,.34),inset 0 0 90px rgba(26,37,83,.21);
+}
+
+.home-hero.hud-frame::before {
+  background:
+    radial-gradient(circle at 78% 23%,rgba(238,246,255,.68) 0 1px,transparent 1.5px),
+    radial-gradient(circle at 62% 67%,rgba(192,231,255,.6) 0 1px,transparent 1.5px),
+    radial-gradient(circle at 89% 64%,rgba(240,229,255,.52) 0 1px,transparent 1.5px),
+    repeating-linear-gradient(0deg,rgba(239,246,255,.012) 0,rgba(239,246,255,.012) 1px,transparent 1px,transparent 4px);
+  opacity:.58;
+}
+
+.home-hero.hud-frame::after {
+  border-color:rgba(152,163,238,.19);
+}
+
+.home-hero-copy {
+  text-shadow:0 2px 18px rgba(0,0,0,.76);
+}
+
+/* Color separates discovery sections, not individual comic artwork. */
+.home-content > .home-story-section {
+  position:relative;
+  isolation:isolate;
+  padding:clamp(.85rem,1.7vw,1.35rem);
+  border:1px solid rgba(122,147,203,.14);
+  border-radius:9px;
+  box-shadow:inset 0 1px 0 rgba(212,229,255,.035),0 16px 42px rgba(1,4,13,.18);
+}
+
+.home-content > #start-reading {
+  background:
+    radial-gradient(ellipse 60% 90% at 0% 0%,rgba(76,97,190,.21),transparent 76%),
+    radial-gradient(ellipse 50% 75% at 100% 100%,rgba(40,110,154,.15),transparent 74%),
+    rgba(6,10,22,.45);
+}
+
+.home-content > .home-story-section[aria-labelledby="home-next-heading"] {
+  background:
+    radial-gradient(ellipse 68% 100% at 96% 8%,rgba(130,62,164,.22),transparent 72%),
+    radial-gradient(ellipse 58% 98% at 4% 100%,rgba(54,86,166,.13),transparent 74%),
+    rgba(8,9,23,.49);
+}
+
+.home-content > .home-story-section[aria-labelledby="home-more-heading"] {
+  background:
+    radial-gradient(ellipse 74% 92% at 6% 5%,rgba(29,131,149,.19),transparent 73%),
+    radial-gradient(ellipse 62% 92% at 100% 95%,rgba(76,84,171,.14),transparent 76%),
+    rgba(5,13,22,.46);
+}
+
+.home-content > .home-story-section .home-section-heading h2 {
+  text-shadow:0 0 24px rgba(120,149,228,.12);
+}
+
+.home-catalog-footer.hud-frame {
+  border-color:rgba(99,132,183,.25);
+  background:
+    radial-gradient(ellipse 78% 140% at 100% 0%,rgba(91,66,154,.16),transparent 75%),
+    radial-gradient(ellipse 65% 120% at 0% 100%,rgba(26,122,150,.12),transparent 76%),
+    rgba(6,11,23,.81);
+}
+
+/* Publisher shell: atmosphere stays behind dark, legible navigation and text. */
+.top-nav.hud-frame,
+.footer.hud-frame {
+  background:
+    radial-gradient(ellipse 66% 150% at 92% 0%,rgba(64,71,146,.16),transparent 75%),
+    linear-gradient(180deg,rgba(10,16,31,.92),rgba(5,10,21,.94));
+  border-color:rgba(90,112,164,.28);
+}
+
+.series-index-hero.hud-frame,
+.about-hero.hud-frame,
+.info-hero.hud-frame {
+  background:
+    radial-gradient(ellipse 72% 145% at 100% 8%,rgba(81,55,158,.18),transparent 75%),
+    radial-gradient(ellipse 72% 140% at 0% 100%,rgba(29,111,147,.14),transparent 72%),
+    linear-gradient(130deg,rgba(9,16,31,.93),rgba(4,9,19,.96));
+  border-color:rgba(103,126,184,.29);
+}
+
+/* Artwork and the actual page reader remain untouched and fully opaque. */
+.reader-stage,
+.series-reader-preview,
+.home-story-cover,
+.home-upcoming-cover {
+  background-color:#03060c;
+}
+
+@media (max-width:700px) {
+  body::before {
+    background-position:center,58% 16%;
+    opacity:.34;
+  }
+
+  body::after {opacity:.21}
+
+  .home-hero.hud-frame {
+    background-position:center,center,58% 38%;
+  }
+
+  .home-content > .home-story-section {
+    padding:.72rem;
+  }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  /* No animated parallax, glow, or other moving background effects. */
+}
