@@ -142,3 +142,74 @@
     max-height:none;
   }
 }
+
+/* Reader page scale modes: contain the full page, or inspect native pixels by scrolling. */
+.reader-header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: .65rem;
+}
+.reader-shortcuts {
+  color: #a9b7cb;
+  font-size: .78rem;
+}
+.reader-view-modes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .4rem;
+}
+.reader-view-modes button,
+.reader-header-actions > button {
+  min-height: 44px;
+  padding: .6rem .8rem;
+}
+.reader-view-modes button[aria-pressed="true"] {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(186,255,0,.08);
+}
+.reader .reader-stage-fit > img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: min(72dvh, 1050px);
+  object-fit: contain;
+}
+.reader .reader-stage-full {
+  display: block;
+  max-height: 76dvh;
+  overflow: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+.reader .reader-stage-full > img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  aspect-ratio: auto;
+  object-fit: initial;
+}
+.reader .reader-stage-full:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+@media (max-width:640px) {
+  .reader-header-actions {
+    justify-content: flex-start;
+    width: 100%;
+  }
+  .reader-shortcuts {
+    order: 3;
+    flex-basis: 100%;
+  }
+  .reader .reader-stage-fit > img {
+    width: auto;
+    max-width: 100%;
+    max-height: 72dvh;
+  }
+}
