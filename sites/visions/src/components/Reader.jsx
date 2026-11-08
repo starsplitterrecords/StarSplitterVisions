@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import ImageWithFallback from './shared/ImageWithFallback'
 
 export default function Reader({
@@ -8,6 +8,8 @@ export default function Reader({
   onPageChange,
   onClose,
 }) {
+  const [viewMode, setViewMode] = useState('fit')
+  const stageRef = useRef(null)
   const currentPageNumber = currentPage + 1
   const isFirstPage = currentPage === 0
   const isLastPage = currentPage === pages.length - 1
@@ -28,6 +30,14 @@ export default function Reader({
       onPageChange(currentPage + 1)
     }
   }
+
+  // When changing pages or magnification, start at the top-left of the image.
+  useEffect(() => {
+    if (stageRef.current) {
+      stageRef.current.scrollTop = 0
+      stageRef.current.scrollLeft = 0
+    }
+  }, [currentPage, viewMode])
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -74,7 +84,23 @@ export default function Reader({
             ← → navigate • space next • esc close
           </span>
 
-          <button onClick={onClose}>Back to Series</button>
+          <div className="reader-view-modes" role="group" aria-label="Page image size">
+            <button
+              type="button"
+              aria-pressed={viewMode === 'fit'}
+              onClick={() => setViewMode('fit')}
+            >
+              Fit to Screen
+            </button>
+            <button
+              type="button"
+              aria-pressed={viewMode === 'full'}
+              onClick={() => setViewMode('full')}
+            >
+              Full Size
+            </button>
+          </div>
+          <button type="button" onClick={onClose}>Back to Series</button>
         </div>
       </header>
 
@@ -85,13 +111,22 @@ export default function Reader({
         />
       </div>
 
-      <div className="reader-stage">
-        <button
-          className="reader-tap-zone reader-tap-zone-left"
-          aria-label="Previous page"
-          onClick={goPrevious}
-          disabled={isFirstPage}
-        />
+      <div
+        ref={stageRef}
+        className={`reader-stage reader-stage-${viewMode}`}
+        tabIndex={viewMode === 'full' ? 0 : undefined}
+        role={viewMode === 'full' ? 'region' : undefined}
+        aria-label={viewMode === 'full' ? 'Full-size comic page; scroll to inspect details' : undefined}
+      >
+        {viewMode === 'fit' && (
+          <button
+            type="button"
+            className="reader-tap-zone reader-tap-zone-left"
+            aria-label="Previous page"
+            onClick={goPrevious}
+            disabled={isFirstPage}
+          />
+        )}
 
         <ImageWithFallback
           src={pages[currentPage]}
@@ -99,12 +134,15 @@ export default function Reader({
           fallbackText={`PAGE ${String(currentPageNumber).padStart(3, '0')} INBOUND`}
         />
 
-        <button
-          className="reader-tap-zone reader-tap-zone-right"
-          aria-label="Next page"
-          onClick={goNext}
-          disabled={isLastPage}
-        />
+        {viewMode === 'fit' && (
+          <button
+            type="button"
+            className="reader-tap-zone reader-tap-zone-right"
+            aria-label="Next page"
+            onClick={goNext}
+            disabled={isLastPage}
+          />
+        )}
       </div>
 
       <div className="reader-controls">

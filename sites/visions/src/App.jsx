@@ -207,17 +207,15 @@ function App({ initialPath } = {}) {
   )
 
   if (isReaderOpen && activeReaderSeries) {
-    return (
-      <div className="site-shell">
-        <Reader
-          title={`${activeReaderSeries.title} — ${activeReaderSeries.currentRelease}`}
-          pages={readerPages}
-          currentPage={currentPage}
-          onPageChange={updateReaderPage}
-          onClose={() => openSeries(activeReaderSeries.slug)}
-        />
-      </div>
-    )
+    return renderShellPage('Series', (
+      <Reader
+        title={`${activeReaderSeries.title} — ${activeReaderSeries.currentRelease}`}
+        pages={readerPages}
+        currentPage={currentPage}
+        onPageChange={updateReaderPage}
+        onClose={() => openSeries(activeReaderSeries.slug)}
+      />
+    ))
   }
 
   if (route === '/about') {
