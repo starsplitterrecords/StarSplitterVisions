@@ -1,14 +1,13 @@
-import { Fragment, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import AboutPage from './components/AboutPage'
 import ContactPage from './components/ContactPage'
+import HomePage from './components/HomePage'
 import PressPage from './components/PressPage'
 import Reader from './components/Reader'
 import SeriesIndex from './components/SeriesIndex'
 import SeriesPage from './components/SeriesPage'
 import ImageWithFallback from './components/shared/ImageWithFallback'
-import homepageContent from './content/homepage.json'
 import siteContent from './content/site.json'
-import { featuredSeries, moreWorlds } from './data/homepageSeries'
 import { seriesPages } from './data/seriesPages'
 import {
   buildReaderPath,
@@ -143,13 +142,6 @@ function App({ initialPath } = {}) {
     navigateToConfiguredPath(item.path)
   }
 
-  const handleSeriesCardKeyDown = (event, slug) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault()
-      openSeries(slug)
-    }
-  }
-
   const renderHeader = (activeNav) => (
     <header className="top-nav hud-frame">
       <button className="brand brand-button" onClick={goHome} type="button">
@@ -255,130 +247,11 @@ function App({ initialPath } = {}) {
   return (
     <div className="site-shell">
       {renderHeader('Home')}
-
-      <section className="hero hud-frame">
-        <div className="hero-main">
-          <p className="eyebrow">{siteContent.hero?.eyebrow}</p>
-          <h1>
-            {(siteContent.hero?.headingLines || []).map((line, index, lines) => (
-              <Fragment key={line}>
-                {line}
-                {index < lines.length - 1 && <br />}
-              </Fragment>
-            ))}
-          </h1>
-          <p>{siteContent.hero?.description}</p>
-
-          <div className="cta-row">
-            <button className="primary" onClick={() => openReader(1, defaultSeriesSlug)}>
-              {siteContent.hero?.primaryAction}
-            </button>
-            <button onClick={openSeriesIndex}>{siteContent.hero?.secondaryAction}</button>
-          </div>
-        </div>
-
-        <aside className="status-panel">
-          <h3>{siteContent.statusPanel?.title}</h3>
-          <ul>
-            {(siteContent.statusPanel?.items || []).map((item) => (
-              <li key={`${item.label}-${item.value}`}>
-                <span>{item.label}</span>
-                <strong>{item.value}</strong>
-              </li>
-            ))}
-          </ul>
-        </aside>
-      </section>
-
-      <main className="content-grid">
-        <section>
-          <h2>{homepageContent.featuredHeading}</h2>
-
-          <div className="rail large-rail">
-            {featuredSeries.map((series) => (
-              <article
-                className="series-card clickable-card"
-                key={series.slug}
-                onClick={() => openSeries(series.slug)}
-                onKeyDown={(event) => handleSeriesCardKeyDown(event, series.slug)}
-                role="button"
-                tabIndex={0}
-              >
-                <ImageWithFallback src={series.cover} alt={series.title} fallbackText="ART INBOUND" />
-
-                <div className="card-copy">
-                  <p>{series.issue}</p>
-                  <h3>
-                    <a href={buildSeriesPath(series.slug)} onClick={(event) => { event.preventDefault(); event.stopPropagation(); openSeries(series.slug) }}>
-                      {series.title}
-                    </a>
-                  </h3>
-                  <span>{series.hook}</span>
-
-                  <div>
-                    <button
-                      className="inline-link"
-                      onClick={(event) => {
-                        event.stopPropagation()
-                        openSeries(series.slug)
-                      }}
-                    >
-                      View Series
-                    </button>
-
-                    <span className="disabled-link">Soundtrack Soon</span>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-
-          <h2>{homepageContent.moreWorldsHeading}</h2>
-
-          <div className="rail small-rail">
-            {moreWorlds.map((world) => (
-              <article
-                key={world.slug}
-                className="mini-card clickable-card"
-                onClick={() => openSeries(world.slug)}
-                onKeyDown={(event) => handleSeriesCardKeyDown(event, world.slug)}
-                role="button"
-                tabIndex={0}
-              >
-                <ImageWithFallback src={world.cover} alt={world.title} fallbackText="ART INBOUND" />
-                <p><a href={buildSeriesPath(world.slug)} onClick={(event) => { event.preventDefault(); event.stopPropagation(); openSeries(world.slug) }}>{world.title}</a></p>
-              </article>
-            ))}
-
-            <button className="mini-card view-all" onClick={openSeriesIndex}>
-              {homepageContent.viewAllLabel}
-            </button>
-          </div>
-        </section>
-
-        <aside className="sidebar">
-          {homepageContent.latestRelease && (
-            <article className="panel hud-frame">
-              <h3>{homepageContent.latestRelease.heading}</h3>
-              <p>{homepageContent.latestRelease.title}</p>
-              <ImageWithFallback
-                src={homepageContent.latestRelease.image}
-                alt={homepageContent.latestRelease.title}
-                fallbackText="LATEST RELEASE"
-              />
-            </article>
-          )}
-
-          {homepageContent.soundtrackSpotlight?.enabled && (
-            <article className="panel hud-frame soundtrack">
-              <h3>{homepageContent.soundtrackSpotlight.heading}</h3>
-              <p>{homepageContent.soundtrackSpotlight.title}</p>
-              <div className="wave" />
-            </article>
-          )}
-        </aside>
-      </main>
-
+      <HomePage
+        onOpenSeries={openSeries}
+        onOpenSeriesIndex={openSeriesIndex}
+        onRead={openReader}
+      />
       {renderFooter()}
     </div>
   )
