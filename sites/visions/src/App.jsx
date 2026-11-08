@@ -18,6 +18,7 @@ import {
 import './styles.css'
 import './mobile-overrides.css'
 import './public-shell.css'
+import './brand-presentation.css'
 
 const navigationItems = siteContent.navigation || [
   { label: 'Home', path: '/' },
@@ -150,12 +151,6 @@ function App({ initialPath } = {}) {
           src={siteContent.brand?.logo}
           alt={siteContent.brand?.name || 'Star Splitter Visions'}
           fallbackText="STAR SPLITTER VISIONS"
-        />
-        <ImageWithFallback
-          className="brand-icon"
-          src={siteContent.brand?.icon}
-          alt={`${siteContent.brand?.name || 'Star Splitter Visions'} mark`}
-          fallbackText="✦"
         />
       </button>
 
