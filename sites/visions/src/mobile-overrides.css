@@ -171,6 +171,10 @@
   border-color: var(--accent);
   background: rgba(186,255,0,.08);
 }
+.reader {
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr);
+}
 .reader .reader-stage-fit > img {
   width: auto;
   height: auto;
@@ -180,6 +184,9 @@
 }
 .reader .reader-stage-full {
   display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
   max-height: 76dvh;
   overflow: auto;
   overscroll-behavior: contain;
