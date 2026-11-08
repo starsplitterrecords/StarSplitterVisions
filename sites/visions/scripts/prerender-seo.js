@@ -36,20 +36,46 @@ const trimmed = (value, max = 180) => {
   const text = String(value || '').replace(/\s+/g, ' ').trim()
   return text.length > max ? text.slice(0, max - 1).replace(/\s+\S*$/, '') + '…' : text
 }
-const publisher = { '@type': 'Organization', name: site.brand.name, url: origin + '/' }
+const publisher = { '@type': 'Organization', name: site.brand.name, url: origin + '/', logo: absolute(site.brand.logo) }
+const catalogItems = series.map((item) => ({
+  '@type': 'ListItem',
+  position: 0,
+  name: item.title,
+  url: absolute('/series/' + item.slug),
+}))
+const featured = (homepage.leadSeries || [])
+  .map((slug) => series.find((item) => item.slug === slug))
+  .find((item) => item && (item.homepage?.cover || item.hero))
+const featureImage = featured?.homepage?.cover || featured?.hero || site.brand.logo
+const breadcrumbs = (parts) => ({
+  '@type': 'BreadcrumbList',
+  itemListElement: parts.map(([name, pathname], index) => ({
+    '@type': 'ListItem', position: index + 1, name, item: absolute(pathname),
+  })),
+})
 const published = (item) => !item.releaseDate || item.releaseDate <= publishedOn
 const routes = [{
   pathname: '/',
   title: 'Star Splitter Visions | Independent Comics & Graphic Stories',
   description: site.hero.description,
-  image: homepage.latestRelease?.image || site.brand.logo,
+  image: featureImage,
   schema: { '@type': 'WebSite', name: site.brand.name, url: origin + '/', publisher },
 }, {
   pathname: '/series',
   title: 'Read Comics & Explore Series | Star Splitter Visions',
   description: site.seriesCatalog?.description,
-  image: homepage.latestRelease?.image || site.brand.logo,
-  schema: { '@type': 'CollectionPage', name: 'Star Splitter Visions Series', url: absolute('/series'), isPartOf: { '@type': 'WebSite', url: origin + '/' } },
+  image: featureImage,
+  schema: {
+    '@type': 'CollectionPage',
+    name: 'Star Splitter Visions Series',
+    url: absolute('/series'),
+    description: site.seriesCatalog?.description,
+    isPartOf: { '@type': 'WebSite', url: origin + '/' },
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: catalogItems.map((item, index) => ({ ...item, position: index + 1 })),
+    },
+  },
 }, ...[
   ['/about', 'About', about.intro],
   ['/contact', 'Contact', contact.intro],
@@ -66,10 +92,11 @@ for (const item of series) {
   const pathname = '/series/' + item.slug
   const description = item.description || item.worldPremise || item.tagline
   const releasedIssues = (item.releases || []).filter((release) => published(release) && release.externalLink)
-  const pageImage = item.hero || item.homepage?.cover || site.brand.logo
+  const pageImage = item.homepage?.cover || item.hero || site.brand.logo
+  const seriesTitle = [item.title, item.worldLabel ? item.worldLabel + ' Comic' : 'Comic Series', 'Star Splitter Visions'].join(' | ')
   routes.push({
     pathname,
-    title: item.title + ' | Comics | Star Splitter Visions',
+    title: seriesTitle,
     description,
     image: pageImage,
     schema: {
@@ -80,6 +107,7 @@ for (const item of series) {
       genre: item.worldLabel,
       image: absolute(pageImage),
       publisher,
+      mainEntityOfPage: absolute(pathname),
       hasPart: releasedIssues.map((release) => ({
         '@type': 'Book',
         name: release.title,
@@ -91,6 +119,7 @@ for (const item of series) {
         inLanguage: 'en',
       })),
     },
+    breadcrumbs: breadcrumbs([['Home', '/'], ['Series', '/series'], [item.title, pathname]]),
   })
 
   // Materialize released reader URLs for social previews and direct deep links.
@@ -115,6 +144,7 @@ for (const item of series) {
           isPartOf: { '@type': 'CreativeWorkSeries', name: item.title, url: absolute(pathname) },
           publisher,
         },
+        breadcrumbs: breadcrumbs([['Home', '/'], ['Series', '/series'], [item.title, pathname], ['Page ' + pageNumber, readerPath]]),
       })
     }
   }
@@ -135,7 +165,7 @@ try {
   }
 
   for (const route of routes) {
-    const { pathname, title, description, image, schema, indexable = true } = route
+    const { pathname, title, description, image, schema, breadcrumbs: routeBreadcrumbs, indexable = true } = route
     const canonical = absolute(pathname)
     const metadata = [
       '<meta name="description" content="' + escapeHTML(trimmed(description)) + '">',
@@ -147,11 +177,15 @@ try {
       '<meta property="og:description" content="' + escapeHTML(trimmed(description)) + '">',
       '<meta property="og:url" content="' + escapeHTML(canonical) + '">',
       '<meta property="og:image" content="' + escapeHTML(absolute(image)) + '">',
+      '<meta property="og:image:alt" content="' + escapeHTML(pathname.startsWith('/read/') ? title : (pathname.startsWith('/series/') ? title + ' cover art' : site.brand.name + ' artwork')) + '">',
       '<meta name="twitter:card" content="summary_large_image">',
       '<meta name="twitter:title" content="' + escapeHTML(title) + '">',
       '<meta name="twitter:description" content="' + escapeHTML(trimmed(description)) + '">',
       '<meta name="twitter:image" content="' + escapeHTML(absolute(image)) + '">',
-      '<script type="application/ld+json">' + JSON.stringify({ '@context': 'https://schema.org', ...schema }).replace(/</g, '\\u003c') + '</script>',
+      '<script type="application/ld+json">' + JSON.stringify({
+        '@context': 'https://schema.org',
+        '@graph': [schema, ...(routeBreadcrumbs ? [routeBreadcrumbs] : [])],
+      }).replace(/</g, '\\u003c') + '</script>',
     ].join('\n    ')
     const markup = renderToString(createElement(App, { initialPath: pathname }))
     const html = template
