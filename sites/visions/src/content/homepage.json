@@ -1,30 +1,27 @@
 {
-  "featuredHeading": "Featured Series",
-  "featuredSeries": [
+  "readNowHeading": "Start reading",
+  "readNowDescription": "Pick a story and begin with its first page.",
+  "leadSeries": [
     "rex-fleet",
-    "vikings-2026",
+    "vikings-2026"
+  ],
+  "comingNextHeading": "Coming next",
+  "comingNextDescription": "A developing story worth keeping an eye on.",
+  "comingNext": [
     "sunforge-outlaw"
   ],
-  "moreWorldsHeading": "More Worlds",
-  "moreWorlds": [
+  "moreReadingHeading": "More stories to read",
+  "moreReadingDescription": "Different crews. Different problems. Complete first issues ready to open.",
+  "moreReading": [
     "azure-reach",
-    "stardust-station",
-    "backyard-rockets",
-    "division-threshold",
-    "low-tide-signal"
+    "stardust-station"
   ],
-  "viewAllLabel": "View All Series →",
-  "latestRelease": {
-    "heading": "Latest Release",
-    "series": "stardust-station",
-    "title": "Stardust Station - Issue 01: Mandatory Proximity",
-    "image": "/images/covers/stardust-station-issue-01.jpg"
-  },
-  "soundtrackSpotlight": {
-    "enabled": true,
-    "heading": "Soundtrack Spotlight",
-    "title": "Sequence Drive // Vol. 01"
-  },
+  "catalogHeading": "Keep exploring",
+  "catalogDescription": "For more published comics and works in development, explore the full series catalog.",
+  "catalogSeries": [
+    "backyard-rockets"
+  ],
+  "viewAllLabel": "Browse all series",
   "promotionTiers": [
     [
       "rex-fleet"
