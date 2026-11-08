@@ -30,33 +30,12 @@
   "hero": {
     "eyebrow": "STAR SPLITTER VISIONS",
     "headingLines": [
-      "COMICS AND MUSIC.",
-      "STRANGE WORLDS."
+      "STRANGE WORLDS.",
+      "HUMAN STORIES."
     ],
-    "description": "Commodore Ella Venn must keep a frontier rescue from starting a war. Ninth-century Vikings build a life in modern New York. On a distant frontier, an outlaw fights to survive. Comics about people facing extraordinary choices.",
-    "primaryAction": "Start Reading",
-    "secondaryAction": "Explore Series"
-  },
-  "statusPanel": {
-    "title": "Current Shelf",
-    "items": [
-      {
-        "label": "Flagship Release",
-        "value": "REX FLEET"
-      },
-      {
-        "label": "Active Series",
-        "value": "5 TITLES"
-      },
-      {
-        "label": "Developing Worlds",
-        "value": "SUNFORGE OUTLAW"
-      },
-      {
-        "label": "Companion Music",
-        "value": "IN PROGRESS"
-      }
-    ]
+    "description": "Independent comics about people caught between extraordinary circumstances and ordinary lives. Political space opera, displaced Vikings, workplace chaos, and worlds still taking shape.",
+    "primaryAction": "Find a comic",
+    "secondaryAction": "All series"
   },
   "footer": {
     "links": [
