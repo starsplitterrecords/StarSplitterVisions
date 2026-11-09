@@ -11,6 +11,9 @@ on:
       - 'sites/visions/package-lock.json'
       - 'sites/visions/vite.config.js'
       - 'sites/visions/vercel.json'
+      - 'sites/visions/scripts/prerender-seo.js'
+      - 'sites/visions/public/robots.txt'
+      - '.github/workflows/visions-seo-check.yml'
       - '.github/workflows/validate.yml'
   push:
     branches: [main]
@@ -23,6 +26,9 @@ on:
       - 'sites/visions/package-lock.json'
       - 'sites/visions/vite.config.js'
       - 'sites/visions/vercel.json'
+      - 'sites/visions/scripts/prerender-seo.js'
+      - 'sites/visions/public/robots.txt'
+      - '.github/workflows/visions-seo-check.yml'
       - '.github/workflows/validate.yml'
 
 permissions:
@@ -46,3 +52,12 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm run build
+      - name: Validate crawlable SEO output
+        run: |
+          test -f dist/robots.txt
+          test -f dist/sitemap.xml
+          test -f dist/series/rex-fleet.html
+          grep -q 'rel="canonical"' dist/series/rex-fleet.html
+          grep -q 'application/ld+json' dist/series/rex-fleet.html
+          grep -q 'Commodore Ella Venn' dist/series/rex-fleet.html
+          grep -q 'https://star-splitter-visions.vercel.app/series/rex-fleet' dist/sitemap.xml

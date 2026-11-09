@@ -1,3 +1,9 @@
 {
-  "ignoreCommand": "git diff --quiet \"${VERCEL_GIT_PREVIOUS_SHA:-HEAD^}\" HEAD -- content public source .published-schedule.json package.json package-lock.json scripts/build.mjs scripts/publishing.mjs vercel.json"
+  "ignoreCommand": "git diff --quiet \"${VERCEL_GIT_PREVIOUS_SHA:-HEAD^}\" HEAD -- content public source .published-schedule.json package.json package-lock.json scripts/build.mjs scripts/publishing.mjs vercel.json",
+  "git": {
+    "deploymentEnabled": {
+      "**": false,
+      "main": true
+    }
+  }
 }
