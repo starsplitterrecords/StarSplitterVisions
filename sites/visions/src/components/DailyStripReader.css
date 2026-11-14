@@ -1,0 +1,20 @@
+.fod-reader{--fod-gold:#f0bc4e;max-width:1400px;margin:1rem auto;padding:clamp(.7rem,2vw,1.5rem);border-top:3px solid var(--fod-gold);background:#140f1a;color:#f9e6ed}
+.fod-reader button{min-height:42px;cursor:pointer;background:#291826;border:1px solid #785968;color:#fff0ca;padding:.65rem .8rem;font-weight:650}
+.fod-reader button:disabled{opacity:.42;cursor:not-allowed}.fod-reader button:hover:not(:disabled),.fod-reader button:focus-visible:not(:disabled){border-color:var(--fod-gold);outline:1px solid var(--fod-gold);outline-offset:2px}
+.fod-reader-head{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap}.fod-reader-head h1{font-family:Georgia,serif;font-size:clamp(1.45rem,3vw,2.2rem);color:#fff0ca;margin:.35rem 0}.fod-reader-head p:not(.fod-reader-kicker){color:#c9b7c6;font-size:.85rem}
+.fod-reader-kicker{color:var(--fod-gold);font-size:.7rem;letter-spacing:.15em;font-weight:800}
+.fod-reader-track{height:3px;background:#483248;margin:1rem 0}.fod-reader-track>div{height:100%;background:var(--fod-gold)}
+.fod-reader-master{display:flex;justify-content:center;background:#0b0910;border:1px solid #443043;overflow:hidden}.fod-reader-master img{width:100%;height:auto;aspect-ratio:2/1;object-fit:contain}
+.fod-reader-master.zoomed{overflow:auto;justify-content:flex-start}.fod-reader-master.zoomed img{width:max(100%,1600px);max-width:none}
+.fod-reader-zoom{display:flex;justify-content:flex-end;margin:.8rem 0}
+.fod-reader-nav{display:flex;justify-content:center;flex-wrap:wrap;gap:.6rem;padding:1rem 0}
+.fod-reader-mobile{display:none}
+@media(max-width:720px){.fod-reader-master,.fod-reader-zoom{display:none}.fod-reader-mobile{display:grid;gap:.7rem}.fod-reader-mobile-caption{display:flex;justify-content:space-between;gap:.7rem;color:#ecc883;font-size:.78rem}
+.fod-reader-panel-container{width:min(100%,530px);margin:0 auto;overflow:hidden;border:1px solid #59405a;background:#0b0910;touch-action:pan-y}
+.fod-reader-panel-container img,.fod-reader-panel-crop{width:100%;aspect-ratio:4/5;display:block;object-fit:contain}
+.fod-reader-panel-crop{background-repeat:no-repeat;background-size:300% 120%;background-position-y:100%}
+.fod-reader-panel-controls{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.4rem}
+.fod-reader-panel-dots{display:flex;gap:.3rem}.fod-reader-panel-dots button{min-width:37px;padding:.55rem}
+.fod-reader-panel-dots button.active{background:var(--fod-gold);border-color:var(--fod-gold);color:#23131b}
+.fod-reader-nav button{flex:1 1 25%;min-width:88px}
+}
