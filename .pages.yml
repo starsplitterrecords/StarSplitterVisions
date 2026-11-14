@@ -180,6 +180,8 @@ content:
                   label: Draft — hidden
                 - name: hidden
                   label: Hidden
+                - name: staged
+                  label: Staged — hidden
                 - name: scheduled
                   label: Scheduled — release on date
                 - name: published
