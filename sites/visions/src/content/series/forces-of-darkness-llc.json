@@ -1,0 +1,40 @@
+{
+  "slug": "forces-of-darkness-llc",
+  "seriesCode": "FOD",
+  "title": "The Forces of Darkness, LLC.",
+  "tagline": "Spreading darkness. Missing targets.",
+  "atmosphere": "Evil enterprise meets everyday office dysfunction.",
+  "description": "Raids, curses, dungeons, and impossible growth targets. An orc workforce, a dragon manager, necromancer HR, and one reluctant knight try to keep a genuinely evil fantasy enterprise running.",
+  "status": "coming-soon",
+  "developmentStatus": "Daily comic production",
+  "worldLabel": "Dark Fantasy Workplace Comedy",
+  "currentRelease": "Volume 01 — Daily Strips",
+  "hero": "/images/series/forces-of-darkness-llc/wordmark.svg",
+  "accent": "#F2BF55",
+  "format": "Daily three-panel strip",
+  "worldPremise": "At the Forces of Darkness, LLC., conquest is a business. Kingdoms must be subdued, captives processed, spells audited, and every employee is still required to complete the annual performance review.",
+  "seriesEngine": "Real fantasy evil collides with middle-office systems and ordinary people struggling with extraordinary immorality.",
+  "coreConflict": "The Dark Lord expects competent growth in darkness; everyone below him just wants to survive another working day.",
+  "readerEntry": "Read the newest daily strip, or start with number one and work through the archive. Unreleased strips never appear in the public reader.",
+  "audiencePromise": "Deadpan fantasy workplace satire grounded in actual dark operations.",
+  "homepage": {
+    "issue": "Daily comic • Volume 01",
+    "hook": "Village raids, HR complaints, and a dragon manager who says the office is a family.",
+    "cover": "/images/series/forces-of-darkness-llc/wordmark.svg"
+  },
+  "narrativeForms": [
+    "Daily comic",
+    "Fantasy office satire"
+  ],
+  "themes": [
+    "Bureaucracy",
+    "Conquest",
+    "Middle management"
+  ],
+  "releases": [],
+  "dailyPages": [],
+  "extrasTitle": "Corporate Archives",
+  "extras": [],
+  "audioTitle": "Company Soundtrack",
+  "audio": []
+}
