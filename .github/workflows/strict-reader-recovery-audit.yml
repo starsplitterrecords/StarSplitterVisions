@@ -1,0 +1,25 @@
+name: Strict published-reader recovery audit
+on:
+  pull_request:
+    paths:
+      - 'sites/visions/public/images/pages/**'
+      - 'sites/visions/scripts/known-release-defects.json'
+      - 'sites/visions/scripts/deep-release-audit.py'
+      - '.github/workflows/strict-reader-recovery-audit.yml'
+permissions:
+  contents: read
+jobs:
+  strict-reader-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install Pillow PyMuPDF
+      - run: python sites/visions/scripts/deep-release-audit.py --strict --report reader-recovery-audit.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reader-recovery-audit
+          path: reader-recovery-audit.json
