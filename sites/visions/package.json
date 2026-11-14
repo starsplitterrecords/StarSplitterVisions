@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && node scripts/prerender-seo.js",
-    "check": "eslint . && node scripts/audit-runtime-data.js && node scripts/audit-spa-rewrites.js",
+    "check": "eslint . && node scripts/audit-runtime-data.js && node scripts/audit-spa-rewrites.js && node --test scripts/test-fod-release.js",
     "audit:data": "node scripts/audit-runtime-data.js",
     "preview": "vite preview"
   },
