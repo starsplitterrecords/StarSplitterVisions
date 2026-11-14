@@ -6,6 +6,9 @@ import PressPage from './components/PressPage'
 import Reader from './components/Reader'
 import SeriesIndex from './components/SeriesIndex'
 import SeriesPage from './components/SeriesPage'
+import ForcesOfDarknessPage from './components/ForcesOfDarknessPage'
+import DailyStripReader from './components/DailyStripReader'
+import { getEasternDateString, getReleasedPages } from './utils/dailyPages'
 import ImageWithFallback from './components/shared/ImageWithFallback'
 import siteContent from './content/site.json'
 import { seriesPages } from './data/seriesPages'
@@ -41,6 +44,19 @@ function App({ initialPath } = {}) {
   const [isReaderOpen, setIsReaderOpen] = useState(Boolean(initialReaderPath))
   const [currentPage, setCurrentPage] = useState(Math.max(initialReaderPage - 1, 0))
   const [activeReaderSeriesSlug, setActiveReaderSeriesSlug] = useState(initialReaderSeries)
+  const [today, setToday] = useState(getEasternDateString())
+
+  useEffect(() => {
+    const refreshToday = () => setToday(getEasternDateString())
+    window.addEventListener('focus', refreshToday)
+    document.addEventListener('visibilitychange', refreshToday)
+    const interval = window.setInterval(refreshToday, 60000)
+    return () => {
+      window.removeEventListener('focus', refreshToday)
+      document.removeEventListener('visibilitychange', refreshToday)
+      window.clearInterval(interval)
+    }
+  }, [])
 
   useEffect(() => {
     const handlePopState = () => {
@@ -67,9 +83,31 @@ function App({ initialPath } = {}) {
 
   const activeReaderSeries = seriesPages[activeReaderSeriesSlug] || seriesPages[defaultSeriesSlug]
 
-  const readerPages = useMemo(() => {
-    return activeReaderSeries?.dailyPages?.map((page) => page.image) || []
-  }, [activeReaderSeries])
+  const releasedReaderPages = useMemo(() => getReleasedPages(activeReaderSeries?.dailyPages || [], today), [activeReaderSeries, today])
+  const readerPages = useMemo(() => releasedReaderPages.map((page) => page.image), [releasedReaderPages])
+
+  // Apply the same release gate to direct /read links, not only the series preview.
+  useEffect(() => {
+    if (!isReaderOpen) return
+    const requested = parseReaderPath(route)
+    if (!requested || requested.seriesSlug !== activeReaderSeriesSlug) return
+    if (releasedReaderPages.length === 0) {
+      const seriesPath = buildSeriesPath(activeReaderSeriesSlug)
+      window.history.replaceState({}, '', seriesPath)
+      setRoute(seriesPath)
+      setIsReaderOpen(false)
+      return
+    }
+    const exactIndex = releasedReaderPages.findIndex((page) => page.pageNumber === requested.pageNumber)
+    const safeIndex = exactIndex >= 0 ? exactIndex : Math.min(Math.max(requested.pageNumber - 1, 0), releasedReaderPages.length - 1)
+    const safePageNumber = releasedReaderPages[safeIndex].pageNumber
+    if (safePageNumber !== requested.pageNumber) {
+      const safePath = buildReaderPath(activeReaderSeriesSlug, safePageNumber)
+      window.history.replaceState({}, '', safePath)
+      setRoute(safePath)
+    }
+    setCurrentPage((previous) => previous === safeIndex ? previous : safeIndex)
+  }, [route, activeReaderSeriesSlug, isReaderOpen, releasedReaderPages])
 
   const navigate = (path) => {
     window.history.pushState({}, '', path)
@@ -84,14 +122,15 @@ function App({ initialPath } = {}) {
   const openReader = (pageNumber = 1, seriesSlug = defaultSeriesSlug) => {
     const series = seriesPages[seriesSlug] || seriesPages[defaultSeriesSlug]
 
-    if (!series || series.dailyPages.length === 0) {
-      return
-    }
+    const available = getReleasedPages(series?.dailyPages || [], getEasternDateString())
+    if (!series || available.length === 0) return
 
-    const safePage = clampPageNumber(pageNumber, series.dailyPages.length)
+    const exactIndex = available.findIndex((page) => page.pageNumber === pageNumber)
+    const safeIndex = exactIndex >= 0 ? exactIndex : clampPageNumber(pageNumber, available.length) - 1
+    const safePage = available[safeIndex].pageNumber
 
     setActiveReaderSeriesSlug(series.slug)
-    setCurrentPage(safePage - 1)
+    setCurrentPage(safeIndex)
     setIsReaderOpen(true)
 
     navigate(buildReaderPath(series.slug, safePage))
@@ -114,7 +153,8 @@ function App({ initialPath } = {}) {
 
   const updateReaderPage = (nextPageIndex) => {
     const safePageIndex = Math.min(Math.max(nextPageIndex, 0), Math.max(readerPages.length - 1, 0))
-    const pageNumber = safePageIndex + 1
+    const pageNumber = releasedReaderPages[safePageIndex]?.pageNumber
+    if (!pageNumber) return
 
     setCurrentPage(safePageIndex)
     replaceRoute(buildReaderPath(activeReaderSeries.slug, pageNumber))
@@ -206,12 +246,23 @@ function App({ initialPath } = {}) {
     </div>
   )
 
-  if (isReaderOpen && activeReaderSeries) {
+  if (isReaderOpen && activeReaderSeries && readerPages.length > 0) {
+    if (activeReaderSeries.slug === 'forces-of-darkness-llc') {
+      return renderShellPage('Series', (
+        <DailyStripReader
+          title={activeReaderSeries.title}
+          strips={releasedReaderPages}
+          currentIndex={Math.min(currentPage, releasedReaderPages.length - 1)}
+          onStripChange={updateReaderPage}
+          onClose={() => openSeries(activeReaderSeries.slug)}
+        />
+      ))
+    }
     return renderShellPage('Series', (
       <Reader
-        title={`${activeReaderSeries.title} — ${activeReaderSeries.currentRelease}`}
+        title={activeReaderSeries.title + ' — ' + activeReaderSeries.currentRelease}
         pages={readerPages}
-        currentPage={currentPage}
+        currentPage={Math.min(currentPage, readerPages.length - 1)}
         onPageChange={updateReaderPage}
         onClose={() => openSeries(activeReaderSeries.slug)}
       />
@@ -235,7 +286,9 @@ function App({ initialPath } = {}) {
   }
 
   if (route.startsWith('/series/')) {
-    return renderShellPage('Series', <SeriesPage slug={activeSeriesSlug} onReadIssue={(pageNumber) => openReader(pageNumber, activeSeriesSlug)} />)
+    return renderShellPage('Series', activeSeriesSlug === 'forces-of-darkness-llc'
+      ? <ForcesOfDarknessPage series={seriesPages[activeSeriesSlug]} onReadIssue={(pageNumber) => openReader(pageNumber, activeSeriesSlug)} />
+      : <SeriesPage slug={activeSeriesSlug} onReadIssue={(pageNumber) => openReader(pageNumber, activeSeriesSlug)} />)
   }
 
   return (
