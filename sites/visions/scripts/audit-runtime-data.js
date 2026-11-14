@@ -261,6 +261,18 @@ seriesFiles.forEach((filePath) => {
     pageNumbers.add(page.pageNumber)
     assertDate(page.releaseDate, `${relativePath}.dailyPages[${index}].releaseDate`)
     assertRuntimeImagePath(page.image, `${relativePath}.dailyPages[${index}].image`)
+    if (page.publicationState && !['draft', 'hidden', 'staged', 'scheduled', 'published'].includes(page.publicationState)) {
+      errors.push(`${relativePath}.dailyPages[${index}].publicationState is not a known publishing state`)
+    }
+    if (page.panelImages !== undefined) {
+      if (!Array.isArray(page.panelImages) || page.panelImages.length !== 3) {
+        errors.push(`${relativePath}.dailyPages[${index}].panelImages must contain exactly three mobile crops`)
+      } else {
+        page.panelImages.forEach((panel, panelIndex) => {
+          assertRuntimeImagePath(panel, `${relativePath}.dailyPages[${index}].panelImages[${panelIndex}]`)
+        })
+      }
+    }
   })
 
   ;(series.extras || []).forEach((artifact, index) => {

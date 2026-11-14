@@ -157,7 +157,7 @@ content:
             label: External Link
             type: string
       - name: dailyPages
-        label: Daily Comic Pages
+        label: Daily Comic Pages / Strips
         type: object
         list:
           collapsible:
@@ -165,18 +165,43 @@ content:
             summary: "Page {pageNumber} — {releaseDate}"
         fields:
           - name: pageNumber
-            label: Page Number
+            label: Page / Strip Number
             type: number
             required: true
+          - name: title
+            label: Strip Title (Optional)
+            type: string
+          - name: publicationState
+            label: Publishing State
+            type: select
+            options:
+              values:
+                - name: draft
+                  label: Draft — hidden
+                - name: hidden
+                  label: Hidden
+                - name: staged
+                  label: Staged — hidden
+                - name: scheduled
+                  label: Scheduled — release on date
+                - name: published
+                  label: Published — release date still enforced
           - name: releaseDate
-            label: Release Date
+            label: Release Date (US Eastern)
             type: date
             required: true
           - name: image
+            label: Complete Comic / Master
             type: image
             options:
               media: visions-images
             required: true
+          - name: panelImages
+            label: Three Mobile Panel Images (Optional)
+            type: image
+            list: true
+            options:
+              media: visions-images
       - name: extrasTitle
         label: Extras Section Title
         type: string
