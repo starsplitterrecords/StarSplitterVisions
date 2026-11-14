@@ -14,7 +14,7 @@ export default function ForcesOfDarknessPage({ series, onReadIssue }) {
   const first = strips[0]
   const latest = strips.at(-1)
   const nextDate = (series.dailyPages || [])
-    .filter((strip) => !['draft', 'hidden'].includes(strip.publicationState) && strip.releaseDate > today)
+    .filter((strip) => (!strip.publicationState || ['scheduled', 'published'].includes(strip.publicationState)) && strip.releaseDate > today)
     .sort((a, b) => a.releaseDate.localeCompare(b.releaseDate))[0]?.releaseDate
 
   return (
