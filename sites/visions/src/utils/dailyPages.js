@@ -10,7 +10,7 @@ export function getEasternDateString(date = new Date()) {
 }
 
 function isVisible(item, todayString) {
-  if (!item || ['draft', 'hidden'].includes(item.publicationState)) return false
+  if (!item || (item.publicationState && !['scheduled', 'published'].includes(item.publicationState))) return false
   // For daily comics a release date is mandatory. Missing dates never go live by accident.
   return typeof item.releaseDate === 'string' && item.releaseDate.length === 10 && item.releaseDate <= todayString
 }
@@ -23,7 +23,7 @@ export function getReleasedPages(pages = [], todayString = getEasternDateString(
 
 export function getReleasedItems(items = [], todayString = getEasternDateString()) {
   return items
-    .filter((item) => item && !['draft', 'hidden'].includes(item.publicationState) && (!item.releaseDate || item.releaseDate <= todayString))
+    .filter((item) => item && (!item.publicationState || ['scheduled', 'published'].includes(item.publicationState)) && (!item.releaseDate || item.releaseDate <= todayString))
     .sort((a, b) => (a.releaseDate || '').localeCompare(b.releaseDate || ''))
 }
 
